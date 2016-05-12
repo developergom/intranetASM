@@ -30,7 +30,7 @@ class CreateUsersTable extends Migration
             $table->enum('active', ['0','1'])->default('1');
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();
-            $table->rememberToken();
+            $table->rememberToken()->nullable();
             $table->timestamps();
             $table->index(['user_firstname','user_phone','user_birthdate']);
         });
