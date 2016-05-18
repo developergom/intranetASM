@@ -7,6 +7,8 @@ use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Carbon\Carbon;
+use Auth;
 
 class AuthController extends Controller
 {
@@ -28,7 +30,9 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/home';
+    protected $username = 'user_name';
+    protected $loginView = 'vendor.material.auth.login';
 
     /**
      * Create a new authentication controller instance.
@@ -49,9 +53,14 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'user_name' => 'required|max:255',
+            'user_email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
+            'user_firstname' => 'required|min:1|max:100',
+            'user_lastname' => 'max:100',
+            'user_phone' => 'max:15|unique:users',
+            'user_gender' => 'required',
+            'religion_id' => 'required',
         ]);
     }
 
@@ -64,9 +73,21 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
+            'user_name' => $data['user_name'],
+            'user_email' => $data['user_email'],
             'password' => bcrypt($data['password']),
+            'user_firstname' => $data['user_firstname'],
+            'user_lastname' => $data['user_lastname'],
+            'user_phone' => $data['user_phone'],
+            'user_gender' => $data['user_gender'],
+            'religion_id' => $data['religion_id'],
+            'user_birthdate' => Carbon::parse($data['user_birthdate']),
+            'user_avatar' => 'avatar.jpg',
+            'user_status' => 'ACTIVE',
+            'active' => '1',
+            'created_by' => '',
         ]);
     }
+
+    
 }
