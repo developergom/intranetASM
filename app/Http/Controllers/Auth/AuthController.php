@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Carbon\Carbon;
 use Auth;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -85,9 +86,22 @@ class AuthController extends Controller
             'user_avatar' => 'avatar.jpg',
             'user_status' => 'ACTIVE',
             'active' => '1',
-            'created_by' => '',
+            'created_by' => Auth::user()->user_id,
         ]);
     }
 
-    
+    /*public function login(Request $request) {
+        //dd($request->all());
+
+        $user_name = $request->input('user_name');
+        $password = $request->input('password');
+        if (Auth::attempt(['user_name' => $user_name, 'password' => $password])) {
+            // Authentication passed...
+            //dd($request->all());
+            //dd(Auth::guard('web')->guest());
+            //dd(Auth::guard('web'));
+
+            return redirect()->intended('home');
+        }
+    }*/
 }

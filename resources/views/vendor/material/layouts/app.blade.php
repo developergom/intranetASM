@@ -32,7 +32,7 @@
                 </li>
 
                 <li class="logo hidden-xs">
-                    <a href="index-2.html">Material Admin</a>
+                    <a href="#">Intranet ASM</a>
                 </li>
 
                 <li class="pull-right">
@@ -310,11 +310,11 @@
                 <div class="profile-menu">
                     <a href="#">
                         <div class="profile-pic">
-                            <img src="img/profile-pics/1.jpg" alt="">
+                            <img src="img/avatar/{{ Auth::user()->user_avatar }}" alt="">
                         </div>
 
                         <div class="profile-info">
-                            Malinda Hollaway
+                            {{ Auth::user()->user_firstname . ' ' . Auth::user()->user_lastname }}
 
                             <i class="zmdi zmdi-caret-down"></i>
                         </div>
@@ -331,7 +331,7 @@
                             <a href="#"><i class="zmdi zmdi-settings"></i> Settings</a>
                         </li>
                         <li>
-                            <a href="#"><i class="zmdi zmdi-time-restore"></i> Logout</a>
+                            <a href="{{ url('logout') }}"><i class="zmdi zmdi-time-restore"></i> Logout</a>
                         </li>
                     </ul>
                 </div>
@@ -590,7 +590,7 @@
         </section>
         
         <footer id="footer">
-            Copyright &copy; 2015 Material Admin
+            Copyright &copy; 2016 Gramedia Majalah IT
             
             <ul class="f-menu">
                 <li><a href="#">Home</a></li>

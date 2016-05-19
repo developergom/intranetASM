@@ -21,18 +21,30 @@
     <body class="login-content">
         <!-- Login -->
         <div class="lc-block toggled" id="l-login">
-            <div class="input-group m-b-20">
+            <form method="POST" action="{{ url('/login') }}" id="form-login">
+            {{ csrf_field() }}
+            <div class="input-group m-b-20 {{ $errors->has('user_name') ? ' has-error' : '' }}">
                 <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
                 <div class="fg-line">
                     <input type="text" class="form-control" placeholder="Username" name="user_name">
                 </div>
+                @if ($errors->has('user_name'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('user_name') }}</strong>
+                    </span>
+                @endif
             </div>
             
-            <div class="input-group m-b-20">
+            <div class="input-group m-b-20 {{ $errors->has('password') ? ' has-error' : '' }}">
                 <span class="input-group-addon"><i class="zmdi zmdi-male"></i></span>
                 <div class="fg-line">
                     <input type="password" class="form-control" placeholder="Password" name="password">
                 </div>
+                @if ($errors->has('password'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('password') }}</strong>
+                    </span>
+                @endif
             </div>
             
             <div class="clearfix"></div>
@@ -46,6 +58,8 @@
             </div>
             
             <a href="#" class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></a>
+
+            </form>
             
             <ul class="login-navigation">
                 <!-- <li data-block="#l-register" class="bgm-red">Register</li> -->
@@ -167,6 +181,14 @@
         <![endif]-->
         
         <script src="{{ url('js/functions.js') }}"></script>
+
+        <script type="text/javascript">
+        $(document).ready(function(){
+            $('.btn-login').click(function(){
+                $('#form-login').submit();
+            });
+        });
+        </script>
         
     </body>
 
