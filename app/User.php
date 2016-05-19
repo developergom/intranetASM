@@ -39,4 +39,12 @@ class User extends Authenticatable
     ];
 
     protected $primaryKey = 'user_id';
+
+    public function roles() {
+        return $this->belongsToMany('App\Role','users_roles');
+    }
+
+    public function religion() {
+        return $this->hasOne('App\Religion', 'religion_id');
+    }
 }
