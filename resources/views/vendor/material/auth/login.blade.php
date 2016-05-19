@@ -6,7 +6,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Material Admin</title>
+        <title>Intranet ASM Apps</title>
         
         <!-- Vendor CSS -->
         <link href="{{ url('css/animate.min.css') }}" rel="stylesheet">
@@ -48,7 +48,7 @@
             <a href="#" class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></a>
             
             <ul class="login-navigation">
-                <li data-block="#l-register" class="bgm-red">Register</li>
+                <!-- <li data-block="#l-register" class="bgm-red">Register</li> -->
                 <li data-block="#l-forget-password" class="bgm-orange">Forgot Password?</li>
             </ul>
         </div>
@@ -109,7 +109,7 @@
             
             <ul class="login-navigation">
                 <li data-block="#l-login" class="bgm-green">Login</li>
-                <li data-block="#l-register" class="bgm-red">Register</li>
+                <!-- <li data-block="#l-register" class="bgm-red">Register</li> -->
             </ul>
         </div>
         

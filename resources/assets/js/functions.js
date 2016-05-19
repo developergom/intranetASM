@@ -563,7 +563,7 @@ $(document).ready(function () {
      * Bootstrap Growl - Notifications popups
      */
     function notify(message, type) {
-        $.growl({
+        $.notify({
             message: message
         }, {
             type: type,

@@ -28,3 +28,4 @@ $(window).load(function(){
         notify('Welcome back Mallinda Hollaway', 'inverse');
     } 
 });
+//# sourceMappingURL=demo.js.map

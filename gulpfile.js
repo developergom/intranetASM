@@ -25,19 +25,35 @@ elixir(function(mix) {
 //js
 elixir(function(mix) {
 	mix.scripts('functions.js');
+	mix.scripts('demo.js');
+	mix.scripts('charts.js');
+	mix.scripts('flot-charts/curved-line-chart.js');
+	mix.scripts('flot-charts/line-chart.js');
 });
 
 //vendor css
 elixir(function(mix) {
 	mix.copy(bowerComponent + 'animate.css/animate.min.css', 'public/css/animate.min.css');
+	mix.copy(bowerComponent + 'fullcalendar/dist/fullcalendar.min.css', 'public/css/fullcalendar.min.css');
+	mix.copy(bowerComponent + 'bootstrap-sweetalert/lib/sweet-alert.css', 'public/css/sweet-alert.min.css');
+	mix.copy(bowerComponent + 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css', 'public/css/jquery.mCustomScrollbar.min.css');
 	mix.copy(bowerComponent + 'material-design-iconic-font/dist/css/material-design-iconic-font.min.css', 'public/css/material-design-iconic-font.min.css');
 });
 
 //vendor js
 elixir(function(mix) {
 	mix.copy(bowerComponent + 'jquery/dist/jquery.min.js', 'public/js/jquery.min.js');
-	mix.copy(bowerComponent + 'bootstrap/dist/bootstrap.min.js', 'public/js/bootstrap.min.js');
+	mix.copy(bowerComponent + 'bootstrap/dist/js/bootstrap.min.js', 'public/js/bootstrap.min.js');
 	mix.copy(bowerComponent + 'Waves/dist/waves.min.js', 'public/js/waves.min.js');
+	mix.copy(bowerComponent + 'flot/jquery.flot.js', 'public/js/jquery.flot.js');
+	mix.copy(bowerComponent + 'flot/jquery.flot.resize.js', 'public/js/jquery.flot.resize.js');
+	mix.copy(bowerComponent + 'flot.curvedlines/curvedLines.js', 'public/js/curvedlines.js');
+	mix.copy(bowerComponent + 'moment/min/moment.min.js', 'public/js/moment.min.js');
+	mix.copy(bowerComponent + 'fullcalendar/dist/fullcalendar.min.js', 'public/js/fullcalendar.min.js');
+	mix.copy(bowerComponent + 'simpleWeather/jquery.simpleWeather.min.js', 'public/js/jquery.simpleWeather.min.js');
+	mix.copy(bowerComponent + 'bootstrap-sweetalert/lib/sweet-alert.min.js', 'public/js/sweet-alert.min.js');
+	mix.copy(bowerComponent + 'remarkable-bootstrap-notify/dist/bootstrap-notify.min.js', 'public/js/bootstrap-notify.min.js');
+	mix.copy(bowerComponent + 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js', 'public/js/jquery.mCustomScrollbar.concat.min.js');
 });
 
 //vendor font
@@ -47,4 +63,6 @@ elixir(function(mix) {
 	mix.copy(bowerComponent + 'material-design-iconic-font/dist/fonts/Material-Design-Iconic-Font.ttf', 'public/fonts/Material-Design-Iconic-Font.ttf');
 	mix.copy(bowerComponent + 'material-design-iconic-font/dist/fonts/Material-Design-Iconic-Font.woff', 'public/fonts/Material-Design-Iconic-Font.woff');
 	mix.copy(bowerComponent + 'material-design-iconic-font/dist/fonts/Material-Design-Iconic-Font.woff2', 'public/fonts/Material-Design-Iconic-Font.woff2');
+
+	mix.copy('resources/assets/fonts/**','public/fonts');
 });
