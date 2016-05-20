@@ -6,6 +6,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Intranet ASM Apps</title>
 
         <!-- Vendor CSS -->
@@ -13,6 +14,7 @@
         <link href="{{ url('css/animate.min.css') }}" rel="stylesheet">
         <link href="{{ url('css/sweet-alert.min.css') }}" rel="stylesheet">
         <link href="{{ url('css/jquery.mCustomScrollbar.min.css') }}" rel="stylesheet">
+        <link href="{{ url('css/jquery.bootgrid.min.css') }}" rel="stylesheet">
         <link href="{{ url('css/material-design-iconic-font.min.css') }}" rel="stylesheet">
             
         <!-- CSS -->
@@ -310,7 +312,7 @@
                 <div class="profile-menu">
                     <a href="#">
                         <div class="profile-pic">
-                            <img src="img/avatar/{{ Auth::user()->user_avatar }}" alt="">
+                            <img src="{{ url('/') }}/img/avatar/{{ Auth::user()->user_avatar }}" alt="">
                         </div>
 
                         <div class="profile-info">
@@ -549,39 +551,6 @@
             
             <section id="content">
                 <div class="container">
-                    <div class="block-header">
-                        <h2>Dashboard</h2>
-                        
-                        <ul class="actions">
-                            <li>
-                                <a href="#">
-                                    <i class="zmdi zmdi-trending-up"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="zmdi zmdi-check-all"></i>
-                                </a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" data-toggle="dropdown">
-                                    <i class="zmdi zmdi-more-vert"></i>
-                                </a>
-                                
-                                <ul class="dropdown-menu dropdown-menu-right">
-                                    <li>
-                                        <a href="#">Refresh</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Manage Widgets</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Widgets Settings</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
 
                     @yield('content')
 
@@ -654,6 +623,9 @@
                 <p>Sorry for the inconvenience!</p>
             </div>   
         <![endif]-->
+        <script type="text/javascript">
+        var base_url = '{{ url('/') }}/';
+        </script>
 
         
         <!-- Javascript Libraries -->
@@ -670,6 +642,7 @@
         <script src="{{ url('js/bootstrap-notify.min.js') }}"></script>
         <script src="{{ url('js/sweet-alert.min.js') }}"></script>
         <script src="{{ url('js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+        <script src="{{ url('js/jquery.bootgrid.min.js') }}"></script>
         
         <!-- Placeholder for IE9 -->
         <!--[if IE 9 ]>
@@ -682,6 +655,16 @@
         <script src="{{ url('js/functions.js') }}"></script>
         <script src="{{ url('js/demo.js') }}"></script>
 
+        <!-- for notification -->
+        @if(Session::has('status'))
+        <script type="text/javascript">
+        $(window).load(function(){
+            swal("{{ Session::get('status') }}");
+        });
+        </script>
+        @endif
+
+        @yield('customjs')
     </body>
   
 <!-- Mirrored from byrushan.com/projects/ma/1-5-2/jquery/index.html by HTTrack Website Copier/3.x [XR&CO'2013], Wed, 11 May 2016 10:14:19 GMT -->

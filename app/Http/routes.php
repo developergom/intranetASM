@@ -22,3 +22,12 @@ Route::get('/test', 'Test@index');
 Route::auth();
 
 Route::get('/home', 'HomeController@index');
+
+Route::group(['middleware' => 'auth'], function() {
+    //
+    Route::group(['prefix' => 'master'], function() {
+        //
+        Route::post('role/apiList', 'RoleController@apiList');
+        Route::resource('role', 'RoleController');
+    });
+});
