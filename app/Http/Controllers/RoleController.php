@@ -80,6 +80,9 @@ class RoleController extends Controller
     public function edit($id)
     {
         //
+        $data = array();
+        $data['role'] = Role::where('active','1')->find($id);
+        return view('vendor.material.master.role.edit', $data);
     }
 
     /**
@@ -92,6 +95,22 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $this->validate($request, [
+            'role_name' => 'required|max:100',
+            'role_desc' => 'required',
+        ]);
+
+        $role = Role::find($id);
+
+        $role->role_name = $request->input('role_name');
+        $role->role_desc = $request->input('role_desc');
+        $role->updated_by = $request->user()->user_id;
+
+        $role->save();
+
+        $request->session()->flash('status', 'Data has been updated!');
+
+        return redirect('master/role');
     }
 
     /**
