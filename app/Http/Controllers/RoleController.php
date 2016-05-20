@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 use App\Role;
+use DB;
 
 class RoleController extends Controller
 {
@@ -104,13 +105,37 @@ class RoleController extends Controller
         //
     }
 
-    public function apiList()
+    public function apiList(Request $request)
     {
-        $data = array();
-        $data['current'] = 1;
-        $data['rowCount'] = 10;
+        $current = $request->input('current') or 1;
+        $rowCount = $request->input('rowCount') or 10;
+        $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
+        $searchPhrase = $request->input('searchPhrase') or '';
+        //$sort = $request->input('sort.role_name') or 'asc';
+        $sort_column = 'role_id';
+        $sort_type = 'asc';
 
-        $data['rows'] = Role::where('active','1')->get();
+        if(is_array($request->input('sort'))) {
+            foreach($request->input('sort') as $key => $value)
+            {
+                $sort_column = $key;
+                $sort_type = $value;
+            }
+        }
+
+        $data = array();
+        $data['current'] = $current;
+        $data['rowCount'] = $rowCount;
+        $data['searchPhrase'] = $searchPhrase;
+
+        //$data['rows'] = Role::getApiList($current,$rowCount,$searchPhrase)->get();
+        //$data['rows'] = DB::table('roles')->where('active','1')->where('role_name','like','%$searchPhrase%')->skip($current)->take($rowCount)->get();
+        $data['rows'] = Role::where('active','1')
+                            ->where('role_name','like','%' . $searchPhrase . '%')
+                            ->orWhere('role_desc','like','%' . $searchPhrase . '%')
+                            ->skip($skip)->take($rowCount)
+                            ->orderBy($sort_column, $sort_type)->get();
+        //dd($data['rows']);
         $data['total'] = Role::where('active','1')->count();
 
         //return $data->toJson();
