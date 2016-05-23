@@ -26,9 +26,15 @@ Route::get('/home', 'HomeController@index');
 Route::group(['middleware' => 'auth'], function() {
     //
     Route::group(['prefix' => 'master'], function() {
-        //
+        
+        //Role
         Route::post('role/apiList', 'RoleController@apiList');
         Route::post('role/apiEdit', 'RoleController@apiEdit');
         Route::resource('role', 'RoleController');
+
+        //Religion
+        Route::post('religion/apiList', 'ReligionController@apiList');
+        Route::post('religion/apiEdit', 'ReligionController@apiEdit');
+        Route::resource('religion', 'ReligionController');
     });
 });

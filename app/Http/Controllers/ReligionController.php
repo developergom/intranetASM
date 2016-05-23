@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-use App\Role;
-use DB;
+use App\Http\Requests;
+use App\Religion;
 
-class RoleController extends Controller
+class ReligionController extends Controller
 {
-    protected $searchPhrase;
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +18,7 @@ class RoleController extends Controller
     public function index()
     {
         //
-        return view('vendor.material.master.role.list');
+        return view('vendor.material.master.religion.list');
     }
 
     /**
@@ -30,7 +29,7 @@ class RoleController extends Controller
     public function create()
     {
         //
-        return view('vendor.material.master.role.create');
+        return view('vendor.material.master.religion.create');
     }
 
     /**
@@ -43,22 +42,20 @@ class RoleController extends Controller
     {
         //
         $this->validate($request, [
-            'role_name' => 'required|max:100',
-            'role_desc' => 'required',
+            'religion_name' => 'required|max:100'
         ]);
 
-        $role = new Role;
+        $obj = new Religion;
 
-        $role->role_name = $request->input('role_name');
-        $role->role_desc = $request->input('role_desc');
-        $role->active = '1';
-        $role->created_by = $request->user()->user_id;
+        $obj->religion_name = $request->input('religion_name');
+        $obj->active = '1';
+        $obj->created_by = $request->user()->user_id;
 
-        $role->save();
+        $obj->save();
 
         $request->session()->flash('status', 'Data has been saved!');
 
-        return redirect('master/role');
+        return redirect('master/religion');
     }
 
     /**
@@ -71,8 +68,8 @@ class RoleController extends Controller
     {
         //
         $data = array();
-        $data['role'] = Role::where('active','1')->find($id);
-        return view('vendor.material.master.role.show', $data);
+        $data['religion'] = Religion::where('active','1')->find($id);
+        return view('vendor.material.master.religion.show', $data);
     }
 
     /**
@@ -85,8 +82,8 @@ class RoleController extends Controller
     {
         //
         $data = array();
-        $data['role'] = Role::where('active','1')->find($id);
-        return view('vendor.material.master.role.edit', $data);
+        $data['religion'] = Religion::where('active','1')->find($id);
+        return view('vendor.material.master.religion.edit', $data);
     }
 
     /**
@@ -100,21 +97,19 @@ class RoleController extends Controller
     {
         //
         $this->validate($request, [
-            'role_name' => 'required|max:100',
-            'role_desc' => 'required',
+            'religion_name' => 'required|max:100',
         ]);
 
-        $role = Role::find($id);
+        $obj = Religion::find($id);
 
-        $role->role_name = $request->input('role_name');
-        $role->role_desc = $request->input('role_desc');
-        $role->updated_by = $request->user()->user_id;
+        $obj->religion_name = $request->input('religion_name');
+        $obj->updated_by = $request->user()->user_id;
 
-        $role->save();
+        $obj->save();
 
         $request->session()->flash('status', 'Data has been updated!');
 
-        return redirect('master/role');
+        return redirect('master/religion');
     }
 
     /**
@@ -128,6 +123,7 @@ class RoleController extends Controller
         //
     }
 
+
     public function apiList(Request $request)
     {
         $current = $request->input('current') or 1;
@@ -135,7 +131,7 @@ class RoleController extends Controller
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
         $this->searchPhrase = $request->input('searchPhrase') or '';
         
-        $sort_column = 'role_id';
+        $sort_column = 'religion_id';
         $sort_type = 'asc';
 
         if(is_array($request->input('sort'))) {
@@ -150,32 +146,31 @@ class RoleController extends Controller
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
         $data['searchPhrase'] = $this->searchPhrase;
-        $data['rows'] = Role::where('active','1')
+        $data['rows'] = Religion::where('active','1')
                             ->where(function($query) {
-                                $query->where('role_name','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('role_desc','like','%' . $this->searchPhrase . '%');
+                                $query->where('religion_name','like','%' . $this->searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
-        $data['total'] = Role::where('active','1')
+        $data['total'] = Religion::where('active','1')
                                 ->where(function($query) {
-                                    $query->where('role_name','like','%' . $this->searchPhrase . '%')
-                                            ->orWhere('role_desc','like','%' . $this->searchPhrase . '%');
+                                    $query->where('religion_name','like','%' . $this->searchPhrase . '%');
                                 })->count();
 
         return response()->json($data);
     }
 
+
     public function apiEdit(Request $request)
     {
-        $role_id = $request->input('role_id');
+        $id = $request->input('religion_id');
 
-        $role = Role::find($role_id);
+        $obj = Religion::find($id);
 
-        $role->active = '0';
-        $role->updated_by = $request->user()->user_id;
+        $obj->active = '0';
+        $obj->updated_by = $request->user()->user_id;
 
-        if($role->save())
+        if($obj->save())
         {
             return response()->json(100); //success
         }else{
