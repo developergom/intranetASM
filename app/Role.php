@@ -10,11 +10,11 @@ class Role extends Model{
 	protected $primaryKey = 'role_id';
 
 	protected $fillable = [
-				'role_name', 'role_desc'
+				'role_name', 'role_desc', 'active'
 	];
 
 	protected $hidden = [
-				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
+				'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
 
 	public function users() {

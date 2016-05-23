@@ -10,6 +10,7 @@ use DB;
 
 class RoleController extends Controller
 {
+    protected $searchPhrase;
     /**
      * Display a listing of the resource.
      *
@@ -129,8 +130,8 @@ class RoleController extends Controller
         $current = $request->input('current') or 1;
         $rowCount = $request->input('rowCount') or 10;
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
-        $searchPhrase = $request->input('searchPhrase') or '';
-        //$sort = $request->input('sort.role_name') or 'asc';
+        $this->searchPhrase = $request->input('searchPhrase') or '';
+        
         $sort_column = 'role_id';
         $sort_type = 'asc';
 
@@ -145,19 +146,35 @@ class RoleController extends Controller
         $data = array();
         $data['current'] = $current;
         $data['rowCount'] = $rowCount;
-        $data['searchPhrase'] = $searchPhrase;
+        $data['searchPhrase'] = $this->searchPhrase;
 
-        //$data['rows'] = Role::getApiList($current,$rowCount,$searchPhrase)->get();
-        //$data['rows'] = DB::table('roles')->where('active','1')->where('role_name','like','%$searchPhrase%')->skip($current)->take($rowCount)->get();
         $data['rows'] = Role::where('active','1')
-                            ->where('role_name','like','%' . $searchPhrase . '%')
-                            ->orWhere('role_desc','like','%' . $searchPhrase . '%')
+                            ->where(function($query) {
+                                $query->where('role_name','like','%' . $this->searchPhrase . '%')
+                                        ->orWhere('role_desc','like','%' . $this->searchPhrase . '%');
+                            })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
         //dd($data['rows']);
         $data['total'] = Role::where('active','1')->count();
 
-        //return $data->toJson();
         return response()->json($data);
+    }
+
+    public function apiEdit(Request $request)
+    {
+        $role_id = $request->input('role_id');
+
+        $role = Role::find($role_id);
+
+        $role->active = '0';
+        $role->updated_by = $request->user()->user_id;
+
+        if($role->save())
+        {
+            return response()->json(100); //success
+        }else{
+            return response()->json(200); //failed
+        }
     }
 }

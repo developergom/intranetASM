@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::group(['prefix' => 'master'], function() {
         //
         Route::post('role/apiList', 'RoleController@apiList');
+        Route::post('role/apiEdit', 'RoleController@apiEdit');
         Route::resource('role', 'RoleController');
     });
 });
