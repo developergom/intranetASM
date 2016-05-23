@@ -659,7 +659,8 @@
         @if(Session::has('status'))
         <script type="text/javascript">
         $(window).load(function(){
-            swal("{{ Session::get('status') }}");
+            //swal("{{ Session::get('status') }}");
+            swal("Success", "{{ Session::get('status') }}", "success");
         });
         </script>
         @endif

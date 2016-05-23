@@ -70,6 +70,9 @@ class RoleController extends Controller
     public function show($id)
     {
         //
+        $data = array();
+        $data['role'] = Role::where('active','1')->find($id);
+        return view('vendor.material.master.role.show', $data);
     }
 
     /**
