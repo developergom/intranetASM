@@ -1,4 +1,5 @@
 $("#grid-data").bootgrid({
+    rowCount: [5, 10, 25, 50],
     ajax: true,
     post: function ()
     {

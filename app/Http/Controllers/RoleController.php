@@ -131,7 +131,7 @@ class RoleController extends Controller
     public function apiList(Request $request)
     {
         $current = $request->input('current') or 1;
-        $rowCount = $request->input('rowCount') or 10;
+        $rowCount = $request->input('rowCount') or 5;
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
         $this->searchPhrase = $request->input('searchPhrase') or '';
         
