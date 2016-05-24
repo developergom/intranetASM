@@ -39,6 +39,7 @@ elixir(function(mix) {
 	mix.copy(bowerComponent + 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css', 'public/css/jquery.mCustomScrollbar.min.css');
 	mix.copy(bowerComponent + 'material-design-iconic-font/dist/css/material-design-iconic-font.min.css', 'public/css/material-design-iconic-font.min.css');
 	mix.copy(bowerComponent + 'jquery.bootgrid/dist/jquery.bootgrid.min.css', 'public/css/jquery.bootgrid.min.css');
+	mix.copy(bowerComponent + 'chosen/chosen.css', 'public/css/chosen.css');
 });
 
 //vendor js
@@ -56,6 +57,8 @@ elixir(function(mix) {
 	mix.copy(bowerComponent + 'remarkable-bootstrap-notify/dist/bootstrap-notify.min.js', 'public/js/bootstrap-notify.min.js');
 	mix.copy(bowerComponent + 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js', 'public/js/jquery.mCustomScrollbar.concat.min.js');
 	mix.copy(bowerComponent + 'jquery.bootgrid/dist/jquery.bootgrid.min.js', 'public/js/jquery.bootgrid.min.js');
+	mix.copy(bowerComponent + 'input-mask/input-mask.min.js', 'public/js/input-mask.min.js');
+	mix.copy(bowerComponent + 'chosen/chosen.jquery.js', 'public/js/chosen.jquery.js');
 });
 
 //vendor font

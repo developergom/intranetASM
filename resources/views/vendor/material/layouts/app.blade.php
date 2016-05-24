@@ -16,10 +16,13 @@
         <link href="{{ url('css/jquery.mCustomScrollbar.min.css') }}" rel="stylesheet">
         <link href="{{ url('css/jquery.bootgrid.min.css') }}" rel="stylesheet">
         <link href="{{ url('css/material-design-iconic-font.min.css') }}" rel="stylesheet">
+        @yield('vendorcss')
+
             
         <!-- CSS -->
         <link href="{{ url('css/app.min.1.css') }}" rel="stylesheet">
         <link href="{{ url('css/app.min.2.css') }}" rel="stylesheet">
+        @yield('customcss')
         
     </head>
     <body>
@@ -546,6 +549,7 @@
         <script src="{{ url('js/sweet-alert.min.js') }}"></script>
         <script src="{{ url('js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
         <script src="{{ url('js/jquery.bootgrid.min.js') }}"></script>
+        @yield('vendorjs')
         
         <!-- Placeholder for IE9 -->
         <!--[if IE 9 ]>

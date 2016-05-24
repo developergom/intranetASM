@@ -43,6 +43,11 @@ class UserController extends Controller
     public function create()
     {
         //
+        $data = array();
+        $data['religion'] = Religion::where('active','1')->get();
+        $data['roles'] = Role::where('active','1')->get();
+
+        return view('vendor.material.user.create', $data);
     }
 
     /**

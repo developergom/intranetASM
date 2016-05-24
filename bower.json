@@ -28,6 +28,7 @@
     "sparklines": "^1.0.0",
     "moment": "^2.13.0",
     "simpleWeather": "^3.1.0",
-    "remarkable-bootstrap-notify": "remarkable-bootstrap-growl#^3.1.3"
+    "remarkable-bootstrap-notify": "remarkable-bootstrap-growl#^3.1.3",
+    "chosen": "^1.5.1"
   }
 }
