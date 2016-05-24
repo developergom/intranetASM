@@ -59,6 +59,49 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //
+        $this->validate($request, [
+            'user_name' => 'required|unique:users,user_name|max:100|min:6',
+            'user_firstname' => 'required|max:100',
+            'user_birthdate' => 'required',
+            'user_gender' => 'required',
+            'religion_id' => 'required',
+            'user_email' => 'required|unique:users,user_email|max:100',
+            'user_phone' => 'digits_between:10, 14',
+            'role_id[]' => 'array',
+        ]);
+
+        //dd($request->all());
+
+        $obj = new User;
+        $obj->user_name = $request->input('user_name');
+        $obj->user_firstname = $request->input('user_firstname');
+        $obj->user_lastname = $request->input('user_lastname');
+        $obj->user_gender = $request->input('user_gender');
+        $obj->religion_id = $request->input('religion_id');
+        $obj->user_email = $request->input('user_email');
+        $obj->user_phone = $request->input('user_phone');
+        $obj->password = bcrypt('password');
+        $obj->user_avatar = 'avatar.jpg';
+        $obj->user_status = 'ACTIVE';
+        $obj->active = '1';
+        $obj->created_by = $request->user()->user_id;
+
+        $obj->save();
+
+        //dd($request->input('role_id'));
+
+        User::find($obj->user_id)->roles()->sync($request->input('role_id'));
+
+        /*dd($obj->user_id);
+
+        $insertedID = $obj->user_id;
+        foreach ($request->input('role_id[]') as $key => $value) {
+            $role = new Role;
+        }*/
+
+        $request->session()->flash('status', 'Data has been saved!');
+
+        return redirect('user');
     }
 
     /**

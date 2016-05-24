@@ -140,16 +140,16 @@
 	                <label for="role_id" class="col-sm-2 control-label">Role</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="role_id" id="role_id" class="chosen" multiple required="true">
+	                        <select name="role_id[]" id="role_id" class="chosen" multiple required="true">
 	                        	<option value=""></option>
                                 @foreach ($roles as $row)
 								    <option value="{{ $row->role_id }}">{{ $row->role_name }}</option>
 								@endforeach
                             </select>
 	                    </div>
-	                    @if ($errors->has('religion_id'))
+	                    @if ($errors->has('role_id'))
 			                <span class="help-block">
-			                    <strong>{{ $errors->first('religion_id') }}</strong>
+			                    <strong>{{ $errors->first('role_id') }}</strong>
 			                </span>
 			            @endif
 	                </div>

@@ -16,9 +16,6 @@ class CreateUsersRolesTable extends Migration
         Schema::create('users_roles', function (Blueprint $table) {
             $table->integer('user_id');
             $table->integer('role_id');
-            $table->integer('created_by');
-            $table->integer('updated_by')->nullable();
-            $table->timestamps();
             //
         });
     }
