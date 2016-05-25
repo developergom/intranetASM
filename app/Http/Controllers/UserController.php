@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Carbon\Carbon;
 
 use App\Http\Requests;
 use App\User;
@@ -70,13 +71,12 @@ class UserController extends Controller
             'role_id[]' => 'array',
         ]);
 
-        //dd($request->all());
-
         $obj = new User;
         $obj->user_name = $request->input('user_name');
         $obj->user_firstname = $request->input('user_firstname');
         $obj->user_lastname = $request->input('user_lastname');
         $obj->user_gender = $request->input('user_gender');
+        $obj->user_birthdate = Carbon::createFromFormat('d/m/Y', $request->input('user_birthdate'))->toDateString();
         $obj->religion_id = $request->input('religion_id');
         $obj->user_email = $request->input('user_email');
         $obj->user_phone = $request->input('user_phone');
@@ -88,16 +88,7 @@ class UserController extends Controller
 
         $obj->save();
 
-        //dd($request->input('role_id'));
-
         User::find($obj->user_id)->roles()->sync($request->input('role_id'));
-
-        /*dd($obj->user_id);
-
-        $insertedID = $obj->user_id;
-        foreach ($request->input('role_id[]') as $key => $value) {
-            $role = new Role;
-        }*/
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -113,6 +104,12 @@ class UserController extends Controller
     public function show($id)
     {
         //
+        $data = array();
+        $data['user'] = User::with('religion')->find($id);
+        $birthdate = Carbon::createFromFormat('Y-m-d', ($data['user']->user_birthdate==null) ? date('Y-m-d') : $data['user']->user_birthdate);
+        $data['birthdate'] = $birthdate->format('d/m/Y');
+        $data['roles'] = Role::where('active','1')->get();
+        return view('vendor.material.user.show', $data);
     }
 
     /**
@@ -124,6 +121,13 @@ class UserController extends Controller
     public function edit($id)
     {
         //
+        $data = array();
+        $data['user'] = User::find($id);
+        $birthdate = Carbon::createFromFormat('Y-m-d', ($data['user']->user_birthdate==null) ? date('Y-m-d') : $data['user']->user_birthdate);
+        $data['birthdate'] = $birthdate->format('d/m/Y');
+        $data['religion'] = Religion::where('active','1')->get();
+        $data['roles'] = Role::where('active','1')->get();
+        return view('vendor.material.user.edit', $data);
     }
 
     /**
@@ -136,6 +140,36 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $this->validate($request, [
+            'user_name' => 'required|unique:users,user_name,'.$id.',user_id|max:100|min:6',
+            'user_firstname' => 'required|max:100',
+            'user_birthdate' => 'required',
+            'user_gender' => 'required',
+            'religion_id' => 'required',
+            'user_email' => 'required|unique:users,user_email,'.$id.',user_id|max:100',
+            'user_phone' => 'digits_between:10, 14',
+            'role_id[]' => 'array',
+        ]);
+
+        $obj = User::find($id);
+
+        $obj->user_name = $request->input('user_name');
+        $obj->user_firstname = $request->input('user_firstname');
+        $obj->user_lastname = $request->input('user_lastname');
+        $obj->user_gender = $request->input('user_gender');
+        $obj->user_birthdate = Carbon::createFromFormat('d/m/Y', $request->input('user_birthdate'))->toDateString();
+        $obj->religion_id = $request->input('religion_id');
+        $obj->user_email = $request->input('user_email');
+        $obj->user_phone = $request->input('user_phone');
+        $obj->updated_by = $request->user()->user_id;
+
+        $obj->save();
+
+        User::find($id)->roles()->sync($request->input('role_id'));
+
+        $request->session()->flash('status', 'Data has been updated!');
+
+        return redirect('user');
     }
 
     /**
@@ -191,5 +225,23 @@ class UserController extends Controller
                                 })->count();
 
         return response()->json($data);
+    }
+
+    public function apiDelete(Request $request)
+    {
+        $user_id = $request->input('user_id');
+
+        $obj = User::find($user_id);
+
+        $obj->user_status = 'INACTIVE';
+        $obj->active = '0';
+        $obj->updated_by = $request->user()->user_id;
+
+        if($obj->save())
+        {
+            return response()->json(100); //success
+        }else{
+            return response()->json(200); //failed
+        }
     }
 }

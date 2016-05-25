@@ -6,15 +6,16 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>User Management<small>Create New User</small></h2></div>
+        <div class="card-header"><h2>User Management<small>Edit User</small></h2></div>
         <div class="card-body card-padding">
-        	<form class="form-horizontal" role="form" method="POST" action="{{ url('user') }}">
+        	<form class="form-horizontal" role="form" method="POST" action="{{ url('user/'.$user->user_id) }}">
         		{{ csrf_field() }}
+        		<input type="hidden" name="_method" value="PUT">
 	            <div class="form-group">
 	                <label for="user_name" class="col-sm-2 control-label">User Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="user_name" id="user_name" placeholder="User Name" required="true" maxlength="100" value="{{ old('user_name') }}">
+	                        <input type="text" class="form-control input-sm" name="user_name" id="user_name" placeholder="User Name" required="true" maxlength="100" value="{{ $user->user_name }}">
 	                    </div>
 	                    @if ($errors->has('user_name'))
 			                <span class="help-block">
@@ -27,7 +28,7 @@
 	                <label for="user_firstname" class="col-sm-2 control-label">First Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="user_firstname" id="user_firstname" placeholder="First Name" required="true" maxlength="100" value="{{ old('user_firstname') }}">
+	                        <input type="text" class="form-control input-sm" name="user_firstname" id="user_firstname" placeholder="First Name" required="true" maxlength="100" value="{{ $user->user_firstname }}">
 	                    </div>
 	                    @if ($errors->has('user_firstname'))
 			                <span class="help-block">
@@ -40,7 +41,7 @@
 	                <label for="user_lastname" class="col-sm-2 control-label">Last Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="user_lastname" id="user_lastname" placeholder="Last Name" maxlength="100" value="{{ old('user_lastname') }}">
+	                        <input type="text" class="form-control input-sm" name="user_lastname" id="user_lastname" placeholder="Last Name" maxlength="100" value="{{ $user->user_lastname }}">
 	                    </div>
 	                    @if ($errors->has('user_lastname'))
 			                <span class="help-block">
@@ -53,7 +54,7 @@
 	                <label for="user_birthdate" class="col-sm-2 control-label">Birthdate</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="user_birthdate" id="user_birthdate" placeholder="e.g 17/08/1945" required="true" maxlength="10" value="{{ old('user_birthdate') }}" autocomplete="off" data-mask="00/00/0000">
+	                        <input type="text" class="form-control input-sm input-mask" name="user_birthdate" id="user_birthdate" placeholder="e.g 17/08/1945" required="true" maxlength="10" value="{{ $birthdate }}" autocomplete="off" data-mask="00/00/0000">
 	                    </div>
 	                    @if ($errors->has('user_birthdate'))
 			                <span class="help-block">
@@ -68,14 +69,14 @@
 	                    <div class="fg-line">
 	                    	<div class="radio m-b-15">
 	                    		<label>
-		                        	<input type="radio" name="user_gender" value="1" {{ (old('user_gender')=='1') ? 'checked' : '' }}>
+		                        	<input type="radio" name="user_gender" value="1" {{ ($user->user_gender=='1') ? 'checked' : '' }}>
 		                        	<i class="input-helper"></i>
 		                        	Male
 		                        </label>
 	                    	</div>
 	                    	<div class="radio m-b-15">
 	                    		<label>
-		                        	<input type="radio" name="user_gender" value="2" {{ (old('user_gender')=='2') ? 'checked' : '' }}>
+		                        	<input type="radio" name="user_gender" value="2" {{ ($user->user_gender=='2') ? 'checked' : '' }}>
 		                        	<i class="input-helper"></i>
 		                        	Female
 		                        </label>
@@ -96,7 +97,7 @@
 	                        	<option value=""></option>
                                 @foreach ($religion as $row)
                                 	{!! $selected = '' !!}
-                                	@if($row->religion_id==old('religion_id'))
+                                	@if($row->religion_id==$user->religion_id)
                                 		{!! $selected = 'selected' !!}
                                 	@endif
 								    <option value="{{ $row->religion_id }}" {{ $selected }}>{{ $row->religion_name }}</option>
@@ -114,7 +115,7 @@
 	                <label for="user_email" class="col-sm-2 control-label">Email</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="user_email" id="user_email" placeholder="Email" required="true" maxlength="100" value="{{ old('user_email') }}">
+	                        <input type="text" class="form-control input-sm" name="user_email" id="user_email" placeholder="Email" required="true" maxlength="100" value="{{ $user->user_email }}">
 	                    </div>
 	                    @if ($errors->has('user_email'))
 			                <span class="help-block">
@@ -127,7 +128,7 @@
 	                <label for="user_phone" class="col-sm-2 control-label">Phone No</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-mask" name="user_phone" id="user_phone" placeholder="Phone No" maxlength="14" value="{{ old('user_phone') }}" autocomplete="off" data-mask="000000000000">
+	                        <input type="text" class="form-control input-mask" name="user_phone" id="user_phone" placeholder="Phone No" maxlength="14" value="{{ $user->user_phone }}" autocomplete="off" data-mask="000000000000">
 	                    </div>
 	                    @if ($errors->has('user_phone'))
 			                <span class="help-block">
@@ -144,8 +145,8 @@
 	                        	<option value=""></option>
                                 @foreach ($roles as $row)
                                 	{!! $selected = '' !!}
-                                	@foreach (old('role_id') as $key => $value)
-                                		@if($value==$row->role_id)
+                                	@foreach ($user->roles as $role)
+                                		@if($role->role_id==$row->role_id)
                                 			{!! $selected = 'selected' !!}
                                 		@endif
                                 	@endforeach
@@ -177,5 +178,5 @@
 @endsection
 
 @section('customjs')
-<script src="{{ url('js/app/user-create.js') }}"></script>
+<script src="{{ url('js/app/user-edit.js') }}"></script>
 @endsection

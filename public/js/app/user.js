@@ -13,6 +13,7 @@ $("#grid-data").bootgrid({
         "link": function(column, row)
         {
             return '<a title="View User" href="' + base_url + 'user/' + row.user_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.user_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit User" href="' + base_url + 'user/' + row.user_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.user_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
                     +'<a title="Delete User" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.user_id + '"><span class="zmdi zmdi-delete"></span></a>';
         }
     }
@@ -34,10 +35,10 @@ $("#grid-data").bootgrid({
         },
         function(){
           $.ajax({
-            url: base_url + 'user/apiEdit',
+            url: base_url + 'user/apiDelete',
             type: 'POST',
             data: {
-                'role_id' : delete_id,
+                'user_id' : delete_id,
                 '_token' : $('meta[name="csrf-token"]').attr('content')
             },
             dataType: 'json',

@@ -45,6 +45,6 @@ class User extends Authenticatable
     }
 
     public function religion() {
-        return $this->hasOne('App\Religion', 'religion_id');
+        return $this->belongsTo('App\Religion', 'religion_id');
     }
 }

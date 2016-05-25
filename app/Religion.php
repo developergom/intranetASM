@@ -16,7 +16,7 @@ class Religion extends Model{
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
 
-	public function user() {
-		return $this->belongsTo('App\User');
+	public function users() {
+		return $this->hasMany('App\User','user_id');
 	}
 }

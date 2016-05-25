@@ -25,7 +25,7 @@ Route::get('/home', 'HomeController@index');
 
 //Role
 Route::post('user/apiList', 'UserController@apiList');
-Route::post('user/apiEdit', 'UserController@apiEdit');
+Route::post('user/apiDelete', 'UserController@apiDelete');
 Route::resource('user', 'UserController');
 
 Route::group(['middleware' => 'auth'], function() {
