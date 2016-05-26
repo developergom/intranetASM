@@ -31,6 +31,11 @@ Route::resource('user', 'UserController');
 Route::group(['middleware' => 'auth'], function() {
     //
     Route::group(['prefix' => 'master'], function() {
+
+        //Action Control
+        Route::post('action/apiList', 'ActionController@apiList');
+        Route::post('action/apiDelete', 'ActionController@apiDelete');
+        Route::resource('action', 'ActionController');
         
         //Role
         Route::post('role/apiList', 'RoleController@apiList');

@@ -349,6 +349,7 @@
                         <a href="#"><i class="zmdi zmdi-view-list"></i> Master Data</a>
 
                         <ul>
+                            <li class="{{ (Request::segment(2)=='action') ? 'active' : ''  }}"><a href="{{ url('master/action') }}">Action Controls Management</a></li>
                             <li class="{{ (Request::segment(2)=='religion') ? 'active' : ''  }}"><a href="{{ url('master/religion') }}">Religion Management</a></li>
                             <li><a href="{{ (Request::segment(2)=='role') ? 'active' : ''  }}">Roles Management</a></li>
                         </ul>

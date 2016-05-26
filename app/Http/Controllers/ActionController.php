@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 use App\Http\Requests;
-use App\Religion;
+use App\Action;
 
-class ReligionController extends Controller
+class ActionController extends Controller
 {
-    protected $searchPhrase = '';
+	protected $searchPhrase = '';
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +19,7 @@ class ReligionController extends Controller
     public function index()
     {
         //
-        return view('vendor.material.master.religion.list');
+        return view('vendor.material.master.action.list');
     }
 
     /**
@@ -30,7 +30,7 @@ class ReligionController extends Controller
     public function create()
     {
         //
-        return view('vendor.material.master.religion.create');
+        return view('vendor.material.master.action.create');
     }
 
     /**
@@ -43,12 +43,15 @@ class ReligionController extends Controller
     {
         //
         $this->validate($request, [
-            'religion_name' => 'required|max:100'
+            'action_name' => 'required|max:100',
+            'action_alias' => 'required|max:50',
         ]);
 
-        $obj = new Religion;
+        $obj = new Action;
 
-        $obj->religion_name = $request->input('religion_name');
+        $obj->action_name = $request->input('action_name');
+        $obj->action_alias = $request->input('action_alias');
+        $obj->action_desc = $request->input('action_desc');
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
 
@@ -56,7 +59,7 @@ class ReligionController extends Controller
 
         $request->session()->flash('status', 'Data has been saved!');
 
-        return redirect('master/religion');
+        return redirect('master/action');
     }
 
     /**
@@ -69,8 +72,8 @@ class ReligionController extends Controller
     {
         //
         $data = array();
-        $data['religion'] = Religion::where('active','1')->find($id);
-        return view('vendor.material.master.religion.show', $data);
+        $data['action'] = Action::where('active','1')->find($id);
+        return view('vendor.material.master.action.show', $data);
     }
 
     /**
@@ -83,8 +86,8 @@ class ReligionController extends Controller
     {
         //
         $data = array();
-        $data['religion'] = Religion::where('active','1')->find($id);
-        return view('vendor.material.master.religion.edit', $data);
+        $data['action'] = Action::where('active','1')->find($id);
+        return view('vendor.material.master.action.edit', $data);
     }
 
     /**
@@ -98,19 +101,22 @@ class ReligionController extends Controller
     {
         //
         $this->validate($request, [
-            'religion_name' => 'required|max:100',
+            'action_name' => 'required|max:100',
+            'action_alias' => 'required|max:50',
         ]);
 
-        $obj = Religion::find($id);
+        $obj = Action::find($id);
 
-        $obj->religion_name = $request->input('religion_name');
+        $obj->action_name = $request->input('action_name');
+        $obj->action_alias = $request->input('action_alias');
+        $obj->action_desc = $request->input('action_desc');
         $obj->updated_by = $request->user()->user_id;
 
         $obj->save();
 
         $request->session()->flash('status', 'Data has been updated!');
 
-        return redirect('master/religion');
+        return redirect('master/action');
     }
 
     /**
@@ -124,7 +130,6 @@ class ReligionController extends Controller
         //
     }
 
-
     public function apiList(Request $request)
     {
         $current = $request->input('current') or 1;
@@ -132,7 +137,7 @@ class ReligionController extends Controller
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
         $this->searchPhrase = $request->input('searchPhrase') or '';
         
-        $sort_column = 'religion_id';
+        $sort_column = 'action_id';
         $sort_type = 'asc';
 
         if(is_array($request->input('sort'))) {
@@ -147,26 +152,30 @@ class ReligionController extends Controller
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
         $data['searchPhrase'] = $this->searchPhrase;
-        $data['rows'] = Religion::where('active','1')
+        $data['rows'] = Action::where('active','1')
                             ->where(function($query) {
-                                $query->where('religion_name','like','%' . $this->searchPhrase . '%');
+                                $query->where('action_name','like','%' . $this->searchPhrase . '%')
+                                		->orWhere('action_alias','like','%' . $this->searchPhrase . '%')
+                                		->orWhere('action_desc','like','%' . $this->searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
-        $data['total'] = Religion::where('active','1')
+        $data['total'] = Action::where('active','1')
                                 ->where(function($query) {
-                                    $query->where('religion_name','like','%' . $this->searchPhrase . '%');
+                                    $query->where('action_name','like','%' . $this->searchPhrase . '%')
+                                		->orWhere('action_alias','like','%' . $this->searchPhrase . '%')
+                                		->orWhere('action_desc','like','%' . $this->searchPhrase . '%');
                                 })->count();
 
         return response()->json($data);
     }
 
 
-    public function apiEdit(Request $request)
+    public function apiDelete(Request $request)
     {
-        $id = $request->input('religion_id');
+        $id = $request->input('action_id');
 
-        $obj = Religion::find($id);
+        $obj = Action::find($id);
 
         $obj->active = '0';
         $obj->updated_by = $request->user()->user_id;
