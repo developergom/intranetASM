@@ -36,6 +36,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('action/apiList', 'ActionController@apiList');
         Route::post('action/apiDelete', 'ActionController@apiDelete');
         Route::resource('action', 'ActionController');
+
+        //Module
+        Route::post('module/apiList', 'ModuleController@apiList');
+        Route::post('module/apiDelete', 'ModuleController@apiDelete');
+        Route::resource('module', 'ModuleController');
         
         //Role
         Route::post('role/apiList', 'RoleController@apiList');

@@ -144,11 +144,13 @@
 	                        	<option value=""></option>
                                 @foreach ($roles as $row)
                                 	{!! $selected = '' !!}
-                                	@foreach (old('role_id') as $key => $value)
-                                		@if($value==$row->role_id)
-                                			{!! $selected = 'selected' !!}
-                                		@endif
-                                	@endforeach
+                                	@if(old('role_id'))
+	                                	@foreach (old('role_id') as $key => $value)
+	                                		@if($value==$row->role_id)
+	                                			{!! $selected = 'selected' !!}
+	                                		@endif
+	                                	@endforeach
+                                	@endif
 								    <option value="{{ $row->role_id }}" {{ $selected }}>{{ $row->role_name }}</option>
 								@endforeach
                             </select>
