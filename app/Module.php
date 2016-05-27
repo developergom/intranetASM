@@ -21,4 +21,8 @@ class Module extends Model
 	public function actions() {
         return $this->belongsToMany('App\Action','actions_modules');
     }
+
+    public function menu() {
+    	return $this->belongsTo('App\Module','module_id');
+    }
 }

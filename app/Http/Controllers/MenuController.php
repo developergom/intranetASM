@@ -1,0 +1,193 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
+use App\Http\Requests;
+use App\Menu;
+use App\Module;
+
+class MenuController extends Controller
+{
+    protected $searchPhrase = '';
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+        return view('vendor.material.master.menu.list');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+        $data = array();
+
+        $data['modules'] = Module::where('active','1')->get();
+
+        return view('vendor.material.master.menu.create', $data);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+        $this->validate($request, [
+            'menu_name' => 'required|max:100',
+            'module_id' => 'required|unique:menus,module_id',
+            'menu_parent' => 'required|numeric',
+            'menu_order' => 'required|numeric',
+        ]);
+
+        $obj = new Menu;
+        $obj->menu_name = $request->input('menu_name');
+        $obj->module_id = $request->input('module_id');
+        $obj->menu_parent = $request->input('menu_parent');
+        $obj->menu_order = $request->input('menu_order');
+        $obj->menu_desc = $request->input('menu_desc');
+        $obj->active = '1';
+        $obj->created_by = $request->user()->user_id;
+
+        $obj->save();
+
+        $request->session()->flash('status', 'Data has been saved!');
+
+        return redirect('master/menu');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+
+    public function apiList(Request $request)
+    {
+        $current = $request->input('current') or 1;
+        $rowCount = $request->input('rowCount') or 5;
+        $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
+        $this->searchPhrase = $request->input('searchPhrase') or '';
+        
+        $sort_column = 'menu_id';
+        $sort_type = 'asc';
+
+        if(is_array($request->input('sort'))) {
+            foreach($request->input('sort') as $key => $value)
+            {
+                $sort_column = $key;
+                $sort_type = $value;
+            }
+        }
+
+        $data = array();
+        $data['current'] = intval($current);
+        $data['rowCount'] = $rowCount;
+        $data['searchPhrase'] = $this->searchPhrase;
+        $data['rows'] = Menu::join('modules','modules.module_id','=','menus.module_id')
+                            ->where('menus.active','1')
+                            ->where(function($query) {
+                                $query->where('menu_name','like','%' . $this->searchPhrase . '%')
+                                        ->orWhere('module_url','like','%' . $this->searchPhrase . '%')
+                                        ->orWhere('menu_desc','like','%' . $this->searchPhrase . '%')
+                                        ->orWhere('menu_order','like','%' . $this->searchPhrase . '%')
+                                        ->orWhere('menu_parent','like','%' . $this->searchPhrase . '%');
+                            })
+                            ->skip($skip)->take($rowCount)
+                            ->orderBy($sort_column, $sort_type)->get();
+        $data['total'] = Menu::join('modules','modules.module_id','=','menus.module_id')
+                                ->where('menus.active','1')
+                                ->where(function($query) {
+                                    $query->where('menu_name','like','%' . $this->searchPhrase . '%')
+                                        ->orWhere('module_url','like','%' . $this->searchPhrase . '%')
+                                        ->orWhere('menu_desc','like','%' . $this->searchPhrase . '%')
+                                        ->orWhere('menu_order','like','%' . $this->searchPhrase . '%')
+                                        ->orWhere('menu_parent','like','%' . $this->searchPhrase . '%');
+                                })->count();
+
+        return response()->json($data);
+    }
+
+
+    public function apiDelete(Request $request)
+    {
+        $id = $request->input('menu_id');
+
+        $obj = Menu::find($id);
+
+        $obj->active = '0';
+        $obj->updated_by = $request->user()->user_id;
+
+        if($obj->save())
+        {
+            return response()->json(100); //success
+        }else{
+            return response()->json(200); //failed
+        }
+    }
+
+
+    public function generateMenu()
+    {
+        $s = Menu::where('active','1')->get();
+        dd($s);
+    }
+
+    private function menu_recursive()
+    {
+        
+    }
+}

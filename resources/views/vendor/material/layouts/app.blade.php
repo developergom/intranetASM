@@ -349,10 +349,11 @@
                         <a href="#"><i class="zmdi zmdi-view-list"></i> Master Data</a>
 
                         <ul>
-                            <li class="{{ (Request::segment(2)=='action') ? 'active' : ''  }}"><a href="{{ url('master/action') }}">Action Controls Management</a></li>
-                            <li class="{{ (Request::segment(2)=='module') ? 'active' : ''  }}"><a href="{{ url('master/module') }}">Module Management</a></li>
-                            <li class="{{ (Request::segment(2)=='religion') ? 'active' : ''  }}"><a href="{{ url('master/religion') }}">Religion Management</a></li>
-                            <li class="{{ (Request::segment(2)=='role') ? 'active' : ''  }}"><a href="{{ url('master/role') }}">Roles Management</a></li>
+                            <li><a class="{{ (Request::segment(2)=='action') ? 'active' : ''  }}" href="{{ url('master/action') }}">Action Controls Management</a></li>
+                            <li><a class="{{ (Request::segment(2)=='menu') ? 'active' : ''  }}" href="{{ url('master/menu') }}">Menu Management</a></li>
+                            <li><a class="{{ (Request::segment(2)=='module') ? 'active' : ''  }}" href="{{ url('master/module') }}">Module Management</a></li>
+                            <li><a class="{{ (Request::segment(2)=='religion') ? 'active' : ''  }}" href="{{ url('master/religion') }}">Religion Management</a></li>
+                            <li><a class="{{ (Request::segment(2)=='role') ? 'active' : ''  }}" href="{{ url('master/role') }}">Roles Management</a></li>
                         </ul>
                     </li>
                 </ul>

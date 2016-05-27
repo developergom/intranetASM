@@ -37,6 +37,12 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('action/apiDelete', 'ActionController@apiDelete');
         Route::resource('action', 'ActionController');
 
+        //Menu
+        Route::post('menu/apiList', 'MenuController@apiList');
+        Route::post('menu/apiDelete', 'MenuController@apiDelete');
+        Route::get('menu/generateMenu', 'MenuController@generateMenu');
+        Route::resource('menu', 'MenuController');
+
         //Module
         Route::post('module/apiList', 'ModuleController@apiList');
         Route::post('module/apiDelete', 'ModuleController@apiDelete');
