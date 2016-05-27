@@ -183,11 +183,10 @@ class MenuController extends Controller
     public function generateMenu()
     {
         $s = Menu::where('active','1')->get();
-        dd($s);
     }
 
     private function menu_recursive()
     {
-        
+
     }
 }
