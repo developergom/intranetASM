@@ -40,6 +40,7 @@ Route::group(['middleware' => 'auth'], function() {
         //Menu
         Route::post('menu/apiList', 'MenuController@apiList');
         Route::post('menu/apiDelete', 'MenuController@apiDelete');
+        Route::post('menu/apiCountChild', 'MenuController@apiCountChild');
         Route::get('menu/generateMenu', 'MenuController@generateMenu');
         Route::resource('menu', 'MenuController');
 

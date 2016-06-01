@@ -51,8 +51,10 @@
 	                    <div class="fg-line">
 	                        <select name="menu_parent" id="menu_parent" class="chosen" required="true">
 	                        	<option value=""></option>
-	                        	<option value="0">root</option>
-	                        	<option value="3">Master</option>
+	                        	<option value="0">ROOT</option>
+	                        	@foreach($parents as $key => $val)
+	                        		<option value="{{ $key }}">{{ $val }}</option>
+	                        	@endforeach
                             </select>
 	                    </div>
 	                    @if ($errors->has('menu_parent'))
@@ -66,7 +68,12 @@
 	                <label for="menu_order" class="col-sm-2 control-label">Order</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="number" name="menu_order" id="menu_order" class="form-control input-sm" placeholder="Menu Order" min="1" max="10" required="true" value="{{ old('menu_order') }}">
+	                        <!-- <input type="number" name="menu_order" id="menu_order" class="form-control input-sm" placeholder="Menu Order" min="1" max="10" required="true" value="{{ old('menu_order') }}"> -->
+	                        <div class="select">
+		                        <select name="menu_order" id="menu_order" class="form-control" required="true">
+		                        	<option value="">SELECT AN OPTION</option>
+		                        </select>
+	                        </div>
 	                    </div>
 	                    @if ($errors->has('menu_order'))
 			                <span class="help-block">

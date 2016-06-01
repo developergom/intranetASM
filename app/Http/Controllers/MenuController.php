@@ -9,6 +9,8 @@ use App\Http\Requests;
 use App\Menu;
 use App\Module;
 
+use App\Ibrol\Libraries\Recursive;
+
 class MenuController extends Controller
 {
     protected $searchPhrase = '';
@@ -34,6 +36,7 @@ class MenuController extends Controller
         $data = array();
 
         $data['modules'] = Module::where('active','1')->get();
+        $data['parents'] = $this->generateParentOption();
 
         return view('vendor.material.master.menu.create', $data);
     }
@@ -53,6 +56,9 @@ class MenuController extends Controller
             'menu_parent' => 'required|numeric',
             'menu_order' => 'required|numeric',
         ]);
+
+        //reorder menu
+        $this->reorderMenu($request, 'ADD', $request->input('menu_parent'), $request->input('menu_order'));
 
         $obj = new Menu;
         $obj->menu_name = $request->input('menu_name');
@@ -168,6 +174,9 @@ class MenuController extends Controller
 
         $obj = Menu::find($id);
 
+        //reorder menu
+        $this->reorderMenu($request, 'ADD', $obj->menu_parent, $obj->menu_order);
+
         $obj->active = '0';
         $obj->updated_by = $request->user()->user_id;
 
@@ -179,14 +188,77 @@ class MenuController extends Controller
         }
     }
 
+    /**
+    * 
+    * @param int parent_id
+    *
+    * @return json
+    *
+    **/
+    public function apiCountChild(Request $request)
+    {
+        $result = array();
+
+        /*if(!$request->input('parent_id'))
+            return;*/
+
+        //$parent = Menu::find($request->input('parent_id'));
+        $result['count'] = Menu::where('active', '1')->where('menu_parent', $request->input('parent_id'))->count();
+
+        return response()->json($result);
+    }
+
+    private function generateParentOption()
+    {
+        $data = Menu::where('active','1')->orderBy('menu_order','asc')->get();
+        $recursive = new Recursive;
+        $tmp = $recursive->data_recursive($data, 'menu_id', 'menu_parent', 0);
+        $options = $recursive->option_recursive($tmp,'menu_id','menu_name',NULL,[],0);
+        return $options;   
+    }
 
     public function generateMenu()
     {
-        $s = Menu::where('active','1')->get();
+        $data = Menu::where('active','1')->orderBy('menu_order','asc')->get();
+        $recursive = new Recursive;
+        $tmp = $recursive->data_recursive($data, 'menu_id', 'menu_parent', 0);
+        $options = $recursive->option_recursive($tmp,'menu_id','menu_name',NULL,[],0);
+        dd($options);
     }
 
-    private function menu_recursive()
+    /**
+    * 
+    * @param string $method (ADD, UPDATE, DELETE)
+    * @param int $parent_id
+    * @param int $order
+    *
+    * @return void()
+    **/
+    private function reorderMenu(Request $request, $method, $parent_id, $order)
     {
+        if($method == 'ADD')
+        {
+            $menus = Menu::where('active','1')->where('menu_parent', $parent_id)->where('menu_order', '>=', $order)->get();
 
+            foreach($menus as $menu)
+            {
+                $update = Menu::find($menu->menu_id);
+                $update->menu_order = $menu->menu_order + 1;
+                $update->updated_by = $request->user()->user_id;
+                $update->save();
+            }
+        }elseif($method == 'UPDATE'){
+            
+        }elseif($method == 'DELETE'){
+            $menus = Menu::where('active','1')->where('menu_parent', $parent_id)->where('menu_order', '>=', $order)->get();
+
+            foreach($menus as $menu)
+            {
+                $update = Menu::find($menu->menu_id);
+                $update->menu_order = $menu->menu_order - 1;
+                $update->updated_by = $request->user()->user_id;
+                $update->save();
+            }
+        }
     }
 }

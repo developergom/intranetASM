@@ -14,8 +14,6 @@
                     <th data-column-id="menu_name" data-order="asc">Menu Name</th>
                     <th data-column-id="module_url" data-order="asc">URL</th>
                     <th data-column-id="menu_desc" data-order="asc">Description</th>
-                    <th data-column-id="menu_order" data-order="asc">Order</th>
-                    <th data-column-id="menu_parent" data-order="asc">Parent</th>
                     <th data-column-id="link" data-formatter="link" data-sortable="false">Action</th>
                 </tr>
             </thead>
