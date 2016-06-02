@@ -34,6 +34,43 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	            	<div class="col-sm-12">
+	            		<table class="table table-bordered table-hover table-striped">
+	            			<thead>
+	            				<tr>
+	            					<th>Menu Name</th>
+	            					@foreach($actions as $action)
+	            						<th><center>{{ $action->action_name }}</center></th>
+	            					@endforeach
+	            				</tr>
+	            			</thead>
+	            			<tbody>
+	            			@foreach($menus as $menu)
+	            				<tr>
+	            					<td>{{ $menu['menu_name'] }}</td>
+	            					@foreach($actions as $action)
+	            						@if(in_array($action->action_id, $menu['action']))
+	            							<td>
+	            								<center>
+	            									<div class="checkbox m-b-15">
+	            										<label>
+	            											<input type="checkbox" value="{{ $action->action_id }}">
+	            											<i class="input-helper"></i>
+	            										</label>
+	            									</div>
+	            								</center>
+	            							</td>
+	            						@else
+	            							<td>&nbsp;</td>
+	            						@endif
+	            					@endforeach
+	            				</tr>
+	            			@endforeach
+	            			</tbody>
+	            		</table>
+	            	</div>
+	            </div>
+	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
 	                    <a href="{{ url('master/role') }}" class="btn btn-danger btn-sm">Back</a>

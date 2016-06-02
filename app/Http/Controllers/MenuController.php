@@ -10,10 +10,17 @@ use App\Menu;
 use App\Module;
 
 use App\Ibrol\Libraries\Recursive;
+use App\Ibrol\Libraries\MenuLibrary;
 
 class MenuController extends Controller
 {
     protected $searchPhrase = '';
+    protected $menulibrary;
+
+    public function __construct(){
+        $this->menulibrary = new MenuLibrary;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -36,7 +43,7 @@ class MenuController extends Controller
         $data = array();
 
         $data['modules'] = Module::where('active','1')->get();
-        $data['parents'] = $this->generateParentOption();
+        $data['parents'] = $this->menulibrary->generateListMenu();
 
         return view('vendor.material.master.menu.create', $data);
     }
@@ -89,7 +96,7 @@ class MenuController extends Controller
 
         $data['menu'] = Menu::find($id);
         $data['modules'] = Module::where('active','1')->get();
-        $data['parents'] = $this->generateParentOption();
+        $data['parents'] = $this->menulibrary->generateListMenu();
         $data['count'] = Menu::where('active', '1')->where('menu_parent', $data['menu']->menu_parent)->count();
 
         return view('vendor.material.master.menu.show', $data);
@@ -108,7 +115,7 @@ class MenuController extends Controller
 
         $data['menu'] = Menu::find($id);
         $data['modules'] = Module::where('active','1')->get();
-        $data['parents'] = $this->generateParentOption();
+        $data['parents'] = $this->menulibrary->generateListMenu();
         $data['count'] = Menu::where('active', '1')->where('menu_parent', $data['menu']->menu_parent)->count();
 
         return view('vendor.material.master.menu.edit', $data);
@@ -256,30 +263,6 @@ class MenuController extends Controller
         $result['count'] = Menu::where('active', '1')->where('menu_parent', $request->input('parent_id'))->count();
 
         return response()->json($result);
-    }
-
-    /**
-    *
-    * @param int $default
-    *
-    * @return array
-    **/
-    private function generateParentOption()
-    {
-        $data = Menu::where('active','1')->orderBy('menu_order','asc')->get();
-        $recursive = new Recursive;
-        $tmp = $recursive->data_recursive($data, 'menu_id', 'menu_parent', 0);
-        $options = $recursive->option_recursive($tmp,'menu_id','menu_name',NULL,[],0);
-        return $options;   
-    }
-
-    public function generateMenu()
-    {
-        $data = Menu::where('active','1')->orderBy('menu_order','asc')->get();
-        $recursive = new Recursive;
-        $tmp = $recursive->data_recursive($data, 'menu_id', 'menu_parent', 0);
-        $options = $recursive->option_recursive($tmp,'menu_id','menu_name',NULL,[],0);
-        dd($options);
     }
 
     /**

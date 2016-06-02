@@ -33,6 +33,51 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	            	<div class="col-sm-12">
+	            		<table class="table table-bordered table-hover table-striped">
+	            			<thead>
+	            				<tr>
+	            					<th>Menu Name</th>
+	            					@foreach($actions as $action)
+	            						<th><center>{{ $action->action_name }}</center></th>
+	            					@endforeach
+	            				</tr>
+	            			</thead>
+	            			<tbody>
+	            			@foreach($menus as $menu)
+	            				<tr>
+	            					<td>
+	            						<div class="checkbox m-b-15">
+    										<label>
+    											<input name="module_id[{{ $menu['module_id'] }}]" type="checkbox" class="checkbox-check-all" data-parent="{{ $menu['menu_parent'] }}" data-module="{{ $menu['module_id'] }}" value="{{ $menu['module_id'] }}">
+    											<i class="input-helper"></i>
+    											{{ $menu['menu_name'] }}
+    										</label>
+    									</div>
+    								</td>
+	            					@foreach($actions as $action)
+	            						@if(in_array($action->action_id, $menu['action']))
+	            							<td>
+	            								<center>
+	            									<div class="checkbox m-b-15">
+	            										<label>
+	            											<input name="module_id[{{ $menu['module_id'] }}][{{ $action->action_id }}]" type="checkbox" class="checkbox-item-{{ $menu['module_id'] }}" data-parent="{{ $menu['menu_parent'] }}" data-module="{{ $menu['module_id'] }}" value="1">
+	            											<i class="input-helper"></i>
+	            										</label>
+	            									</div>
+	            								</center>
+	            							</td>
+	            						@else
+	            							<td>&nbsp;</td>
+	            						@endif
+	            					@endforeach
+	            				</tr>
+	            			@endforeach
+	            			</tbody>
+	            		</table>
+	            	</div>
+	            </div>
+	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
 	                    <a href="{{ url('master/role') }}" class="btn btn-danger btn-sm">Back</a>
@@ -41,4 +86,8 @@
 	        </form>
         </div>
     </div>
+@endsection
+
+@section('customjs')
+<script src="{{ url('js/master/role-create.js') }}"></script>
 @endsection

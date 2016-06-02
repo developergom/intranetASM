@@ -76,7 +76,7 @@ class Recursive{
 	{
 		$separator = NULL;
 		for($i = 0; $i < $depth; $i++)
-			$separator .= '--';
+			$separator .= '---';
 
 		if(!empty($default_option))
 		{

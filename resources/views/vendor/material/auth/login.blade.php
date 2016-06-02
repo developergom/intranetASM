@@ -21,7 +21,7 @@
     <body class="login-content">
         <!-- Login -->
         <div class="lc-block toggled" id="l-login">
-            <form method="POST" action="{{ url('/login') }}" id="form-login">
+            <form method="POST" role="form" action="{{ url('/login') }}" id="form-login">
             {{ csrf_field() }}
             <div class="input-group m-b-20 {{ $errors->has('user_name') ? ' has-error' : '' }}">
                 <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
@@ -57,7 +57,7 @@
                 </label>
             </div>
             
-            <a href="#" class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></a>
+            <button type="submit" class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></button>
 
             </form>
             

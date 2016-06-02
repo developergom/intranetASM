@@ -5,12 +5,22 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+use App\Action;
+use App\Menu;
 use App\Role;
+
 use DB;
+use App\Ibrol\Libraries\MenuLibrary;
+use App\Ibrol\Libraries\Recursive;
 
 class RoleController extends Controller
 {
     protected $searchPhrase;
+    protected $menulibrary;
+
+    public function __construct(){
+        $this->menulibrary = new MenuLibrary;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -30,7 +40,10 @@ class RoleController extends Controller
     public function create()
     {
         //
-        return view('vendor.material.master.role.create');
+        $data = array();
+        $data['actions'] = Action::where('active','1')->get();
+        $data['menus'] = $this->menulibrary->generateListModule();
+        return view('vendor.material.master.role.create', $data);
     }
 
     /**
@@ -71,6 +84,7 @@ class RoleController extends Controller
     {
         //
         $data = array();
+        $data['actions'] = Action::where('active','1')->get();
         $data['role'] = Role::where('active','1')->find($id);
         return view('vendor.material.master.role.show', $data);
     }
@@ -84,8 +98,12 @@ class RoleController extends Controller
     public function edit($id)
     {
         //
+        $module = $this->menulibrary->generateListModule();
+
         $data = array();
+        $data['actions'] = Action::where('active','1')->get();
         $data['role'] = Role::where('active','1')->find($id);
+        $data['menus'] = $this->menulibrary->generateListModule();
         return view('vendor.material.master.role.edit', $data);
     }
 
