@@ -96,6 +96,14 @@ class MenuController extends Controller
     public function edit($id)
     {
         //
+        $data = array();
+
+        $data['menu'] = Menu::find($id);
+        $data['modules'] = Module::where('active','1')->get();
+        $data['parents'] = $this->generateParentOption();
+        $data['count'] = Menu::where('active', '1')->where('menu_parent', $data['menu']->menu_parent)->count();
+
+        return view('vendor.material.master.menu.edit', $data);
     }
 
     /**
@@ -108,6 +116,40 @@ class MenuController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $this->validate($request, [
+            'menu_name' => 'required|max:100',
+            'module_id' => 'required|unique:menus,module_id,'.$id.',menu_id',
+            'menu_parent' => 'required|numeric',
+            'menu_order' => 'required|numeric',
+        ]);
+
+
+        $obj = Menu::find($id);
+
+        //reorder menu
+        if($request->input('menu_order') > $obj->menu_order)
+        {
+            $direction = 'TOUPPER';
+        }
+        else
+        {
+            $direction = 'TOLOWER';
+        }
+
+        $this->reorderMenu($request, 'UPDATE', $request->input('menu_parent'), $request->input('menu_order'), $direction, $obj->menu_order);
+
+        $obj->menu_name = $request->input('menu_name');
+        $obj->module_id = $request->input('module_id');
+        $obj->menu_parent = $request->input('menu_parent');
+        $obj->menu_order = $request->input('menu_order');
+        $obj->menu_desc = $request->input('menu_desc');
+        $obj->updated_by = $request->user()->user_id;
+
+        $obj->save();
+
+        $request->session()->flash('status', 'Data has been updated!');
+
+        return redirect('master/menu');
     }
 
     /**
@@ -175,7 +217,7 @@ class MenuController extends Controller
         $obj = Menu::find($id);
 
         //reorder menu
-        $this->reorderMenu($request, 'ADD', $obj->menu_parent, $obj->menu_order);
+        $this->reorderMenu($request, 'DELETE', $obj->menu_parent, $obj->menu_order);
 
         $obj->active = '0';
         $obj->updated_by = $request->user()->user_id;
@@ -208,6 +250,12 @@ class MenuController extends Controller
         return response()->json($result);
     }
 
+    /**
+    *
+    * @param int $default
+    *
+    * @return array
+    **/
     private function generateParentOption()
     {
         $data = Menu::where('active','1')->orderBy('menu_order','asc')->get();
@@ -234,7 +282,7 @@ class MenuController extends Controller
     *
     * @return void()
     **/
-    private function reorderMenu(Request $request, $method, $parent_id, $order)
+    private function reorderMenu(Request $request, $method, $parent_id, $order, $direction = NULL, $old_order = NULL)
     {
         if($method == 'ADD')
         {
@@ -248,9 +296,32 @@ class MenuController extends Controller
                 $update->save();
             }
         }elseif($method == 'UPDATE'){
-            
+            if($direction == 'TOLOWER')
+            {
+                $menus = Menu::where('active','1')->where('menu_parent', $parent_id)->where('menu_order', '>=', $order)->where('menu_order', '<=', $old_order)->get();
+
+                foreach($menus as $menu)
+                {
+                    $update = Menu::find($menu->menu_id);
+                    $update->menu_order = $menu->menu_order + 1;
+                    $update->updated_by = $request->user()->user_id;
+                    $update->save();
+                }
+            }
+            elseif($direction == 'TOUPPER')
+            {
+                $menus = Menu::where('active','1')->where('menu_parent', $parent_id)->where('menu_order', '<=', $order)->where('menu_order', '>=', $old_order)->get();
+
+                foreach($menus as $menu)
+                {
+                    $update = Menu::find($menu->menu_id);
+                    $update->menu_order = $menu->menu_order - 1;
+                    $update->updated_by = $request->user()->user_id;
+                    $update->save();
+                }
+            }
         }elseif($method == 'DELETE'){
-            $menus = Menu::where('active','1')->where('menu_parent', $parent_id)->where('menu_order', '>=', $order)->get();
+            $menus = Menu::where('active','1')->where('menu_parent', $parent_id)->where('menu_order', '>', $order)->get();
 
             foreach($menus as $menu)
             {
