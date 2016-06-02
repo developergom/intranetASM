@@ -19,6 +19,6 @@ class Menu extends Model
 	];
 
 	public function module() {
-        return $this->hasOne('App\Module','module_id','menu_id');
+        return $this->hasOne('App\Module','module_id','module_id');
     }
 }

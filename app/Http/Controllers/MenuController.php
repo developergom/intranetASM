@@ -85,6 +85,14 @@ class MenuController extends Controller
     public function show($id)
     {
         //
+        $data = array();
+
+        $data['menu'] = Menu::find($id);
+        $data['modules'] = Module::where('active','1')->get();
+        $data['parents'] = $this->generateParentOption();
+        $data['count'] = Menu::where('active', '1')->where('menu_parent', $data['menu']->menu_parent)->count();
+
+        return view('vendor.material.master.menu.show', $data);
     }
 
     /**

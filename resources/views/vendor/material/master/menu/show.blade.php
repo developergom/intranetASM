@@ -6,47 +6,51 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Module Management<small>View Module</small></h2></div>
+        <div class="card-header"><h2>Menu Management<small>View Menu</small></h2></div>
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form">
 	            <div class="form-group">
-	                <label for="module_url" class="col-sm-2 control-label">Module URL</label>
+	                <label for="menu_name" class="col-sm-2 control-label">Menu Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="module_url" id="module_url" placeholder="Module URL" required="true" maxlength="100" value="{{ $module->module_url }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="menu_name" id="menu_name" placeholder="Menu Name" required="true" maxlength="100" value="{{ $menu->menu_name }}" disabled="true">
 	                    </div>
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="module_desc" class="col-sm-2 control-label">Description</label>
+	                <label for="module_id" class="col-sm-2 control-label">URL</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="module_desc" id="module_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $module->module_desc }}</textarea>
+	                    	<input type="text" class="form-control input-sm" placeholder="Module URL" required="true" maxlength="100" value="{{ $menu->module->module_url }}" disabled="true">
 	                    </div>
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="action_id" class="col-sm-2 control-label">Action(s)</label>
+	                <label for="menu_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="action_id[]" id="action_id" class="chosen" multiple required="true" disabled="true">
-	                        	<option value=""></option>
-                                @foreach ($actions as $row)
-                                	{!! $selected = '' !!}
-                                	@foreach ($module->actions as $action)
-                                		@if($action->action_id==$row->action_id)
-                                			{!! $selected = 'selected' !!}
-                                		@endif
-                                	@endforeach
-								    <option value="{{ $row->action_id }}" {{ $selected }}>{{ $row->action_name }}</option>
-								@endforeach
-                            </select>
+	                        <textarea name="menu_desc" id="menu_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $menu->menu_desc }}</textarea>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="menu_parent" class="col-sm-2 control-label">Menu Structures</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                    	@foreach($parents as $key => $val)
+	                        	@if($menu->menu_id == $key)
+	                        		<b>{{ $val }}</b>
+								@else
+									{{ $val }}
+	                        	@endif
+	                        	<br/>
+                        	@endforeach
 	                    </div>
 	                </div>
 	            </div>
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
-	                    <a href="{{ url('master/module') }}" class="btn btn-danger btn-sm">Back</a>
+	                    <a href="{{ url('master/menu') }}" class="btn btn-danger btn-sm">Back</a>
 	                </div>
 	            </div>
 	        </form>
@@ -57,4 +61,7 @@
 @section('vendorjs')
 <script src="{{ url('js/chosen.jquery.js') }}"></script>
 <script src="{{ url('js/input-mask.min.js') }}"></script>
+@endsection
+
+@section('customjs')
 @endsection

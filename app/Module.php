@@ -23,6 +23,6 @@ class Module extends Model
     }
 
     public function menu() {
-    	return $this->belongsTo('App\Module','module_id');
+    	return $this->belongsTo('App\Module','module_id','module_id');
     }
 }
