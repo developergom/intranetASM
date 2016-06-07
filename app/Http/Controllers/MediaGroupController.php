@@ -5,22 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-use App\Action;
-use App\Menu;
-use App\Role;
+use App\Http\Requests;
+use App\MediaGroup;
 
-use DB;
-use App\Ibrol\Libraries\MenuLibrary;
-use App\Ibrol\Libraries\Recursive;
-
-class RoleController extends Controller
+class MediaGroupController extends Controller
 {
-    protected $searchPhrase;
-    protected $menulibrary;
-
-    public function __construct(){
-        $this->menulibrary = new MenuLibrary;
-    }
+	protected $searchPhrase = '';
     /**
      * Display a listing of the resource.
      *
@@ -28,8 +18,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
-        return view('vendor.material.master.role.list');
+        return view('vendor.material.master.mediagroup.list');
     }
 
     /**
@@ -39,11 +28,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
-        $data = array();
-        $data['actions'] = Action::where('active','1')->get();
-        $data['menus'] = $this->menulibrary->generateListModule();
-        return view('vendor.material.master.role.create', $data);
+        return view('vendor.material.master.mediagroup.create');
     }
 
     /**
@@ -54,26 +39,24 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        dd($request->input('module_id'));
-
         $this->validate($request, [
-            'role_name' => 'required|max:100',
-            'role_desc' => 'required',
+            'media_group_code' => 'required|max:5|unique:media_groups,media_group_code',
+            'media_group_name' => 'required|max:100',
         ]);
 
-        $role = new Role;
+        $obj = new MediaGroup;
 
-        $role->role_name = $request->input('role_name');
-        $role->role_desc = $request->input('role_desc');
-        $role->active = '1';
-        $role->created_by = $request->user()->user_id;
+        $obj->media_group_code = $request->input('media_group_code');
+        $obj->media_group_name = $request->input('media_group_name');
+        $obj->media_group_desc = $request->input('media_group_desc');
+        $obj->active = '1';
+        $obj->created_by = $request->user()->user_id;
 
-        $role->save();
+        $obj->save();
 
         $request->session()->flash('status', 'Data has been saved!');
 
-        return redirect('master/role');
+        return redirect('master/mediagroup');
     }
 
     /**
@@ -84,11 +67,9 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        //
         $data = array();
-        $data['actions'] = Action::where('active','1')->get();
-        $data['role'] = Role::where('active','1')->find($id);
-        return view('vendor.material.master.role.show', $data);
+        $data['mediagroup'] = MediaGroup::where('active','1')->find($id);
+        return view('vendor.material.master.mediagroup.show', $data);
     }
 
     /**
@@ -99,14 +80,9 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        //
-        $module = $this->menulibrary->generateListModule();
-
         $data = array();
-        $data['actions'] = Action::where('active','1')->get();
-        $data['role'] = Role::where('active','1')->find($id);
-        $data['menus'] = $this->menulibrary->generateListModule();
-        return view('vendor.material.master.role.edit', $data);
+        $data['mediagroup'] = MediaGroup::where('active','1')->find($id);
+        return view('vendor.material.master.mediagroup.edit', $data);
     }
 
     /**
@@ -118,23 +94,23 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
         $this->validate($request, [
-            'role_name' => 'required|max:100',
-            'role_desc' => 'required',
+            'media_group_code' => 'required|max:5|unique:media_groups,media_group_code,'.$id.',media_group_id',
+            'media_group_name' => 'required|max:100',
         ]);
 
-        $role = Role::find($id);
+        $obj = MediaGroup::find($id);
 
-        $role->role_name = $request->input('role_name');
-        $role->role_desc = $request->input('role_desc');
-        $role->updated_by = $request->user()->user_id;
+        $obj->media_group_code = $request->input('media_group_code');
+        $obj->media_group_name = $request->input('media_group_name');
+        $obj->media_group_desc = $request->input('media_group_desc');
+        $obj->updated_by = $request->user()->user_id;
 
-        $role->save();
+        $obj->save();
 
         $request->session()->flash('status', 'Data has been updated!');
 
-        return redirect('master/role');
+        return redirect('master/mediagroup');
     }
 
     /**
@@ -155,7 +131,7 @@ class RoleController extends Controller
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
         $this->searchPhrase = $request->input('searchPhrase') or '';
         
-        $sort_column = 'role_id';
+        $sort_column = 'media_group_id';
         $sort_type = 'asc';
 
         if(is_array($request->input('sort'))) {
@@ -170,32 +146,35 @@ class RoleController extends Controller
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
         $data['searchPhrase'] = $this->searchPhrase;
-        $data['rows'] = Role::where('active','1')
+        $data['rows'] = MediaGroup::where('active','1')
                             ->where(function($query) {
-                                $query->where('role_name','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('role_desc','like','%' . $this->searchPhrase . '%');
+                                $query->where('media_group_code','like','%' . $this->searchPhrase . '%')
+                                        ->orWhere('media_group_name','like','%' . $this->searchPhrase . '%')
+                                        ->orWhere('media_group_desc','like','%' . $this->searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
-        $data['total'] = Role::where('active','1')
+        $data['total'] = MediaGroup::where('active','1')
                                 ->where(function($query) {
-                                    $query->where('role_name','like','%' . $this->searchPhrase . '%')
-                                            ->orWhere('role_desc','like','%' . $this->searchPhrase . '%');
+                                    $query->where('media_group_code','like','%' . $this->searchPhrase . '%')
+                                        ->orWhere('media_group_name','like','%' . $this->searchPhrase . '%')
+                                        ->orWhere('media_group_desc','like','%' . $this->searchPhrase . '%');
                                 })->count();
 
         return response()->json($data);
     }
 
-    public function apiEdit(Request $request)
+
+    public function apiDelete(Request $request)
     {
-        $role_id = $request->input('role_id');
+        $id = $request->input('media_group_id');
 
-        $role = Role::find($role_id);
+        $obj = MediaGroup::find($id);
 
-        $role->active = '0';
-        $role->updated_by = $request->user()->user_id;
+        $obj->active = '0';
+        $obj->updated_by = $request->user()->user_id;
 
-        if($role->save())
+        if($obj->save())
         {
             return response()->json(100); //success
         }else{

@@ -350,6 +350,7 @@
 
                         <ul>
                             <li><a class="{{ (Request::segment(2)=='action') ? 'active' : ''  }}" href="{{ url('master/action') }}">Action Controls Management</a></li>
+                            <li><a class="{{ (Request::segment(2)=='mediagroup') ? 'active' : ''  }}" href="{{ url('master/mediagroup') }}">Media Group Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='menu') ? 'active' : ''  }}" href="{{ url('master/menu') }}">Menu Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='module') ? 'active' : ''  }}" href="{{ url('master/module') }}">Module Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='religion') ? 'active' : ''  }}" href="{{ url('master/religion') }}">Religion Management</a></li>
