@@ -58,15 +58,20 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('module/apiList', 'ModuleController@apiList');
         Route::post('module/apiDelete', 'ModuleController@apiDelete');
         Route::resource('module', 'ModuleController');
-        
-        //Role
-        Route::post('role/apiList', 'RoleController@apiList');
-        Route::post('role/apiEdit', 'RoleController@apiEdit');
-        Route::resource('role', 'RoleController');
 
         //Religion
         Route::post('religion/apiList', 'ReligionController@apiList');
         Route::post('religion/apiEdit', 'ReligionController@apiEdit');
         Route::resource('religion', 'ReligionController');
+
+        //Role
+        Route::post('role/apiList', 'RoleController@apiList');
+        Route::post('role/apiEdit', 'RoleController@apiEdit');
+        Route::resource('role', 'RoleController');
+
+        //Unit
+        Route::post('unit/apiList', 'UnitController@apiList');
+        Route::post('unit/apiDelete', 'UnitController@apiDelete');
+        Route::resource('unit', 'UnitController');
     });
 });
