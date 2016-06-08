@@ -18,4 +18,9 @@ class Unit extends Model
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
+
+	public function papers()
+	{
+		return $this->hasMany('App\Paper','paper_id');
+	}
 }

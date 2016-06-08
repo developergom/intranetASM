@@ -59,6 +59,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('module/apiDelete', 'ModuleController@apiDelete');
         Route::resource('module', 'ModuleController');
 
+        //Paper Type
+        Route::post('paper/apiList', 'PaperController@apiList');
+        Route::post('paper/apiDelete', 'PaperController@apiDelete');
+        Route::resource('paper', 'PaperController');
+
         //Religion
         Route::post('religion/apiList', 'ReligionController@apiList');
         Route::post('religion/apiEdit', 'ReligionController@apiEdit');
