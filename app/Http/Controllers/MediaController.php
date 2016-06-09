@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Carbon\Carbon;
 
 use App\Http\Requests;
 use App\Media;
@@ -48,7 +49,22 @@ class MediaController extends Controller
             'media_category_id' => 'required',
             'media_code' => 'required|max:12|unique:medias,media_code',
             'media_name' => 'required|max:100',
+            'media_logo' => 'image|size:2000',
         ]);
+
+        if ($request->hasFile('media_logo')) {
+            if ($request->file('media_logo')->isValid()) {
+                $uploaded = $request->file('media_logo');
+                $media_logo = Carbon::now()->format('YmdHis') . $uploaded->getClientOriginalName();
+                $uploaded->move(
+                    base_path() . '/public/img/media/logo/', $media_logo
+                );
+            }else{
+                $media_logo = 'logo.jpg';    
+            }
+        }else{
+            $media_logo = 'logo.jpg';
+        }
 
         $obj = new Media;
 
@@ -56,6 +72,7 @@ class MediaController extends Controller
         $obj->media_group_id = $request->input('media_group_id');
         $obj->media_code = $request->input('media_code');
         $obj->media_name = $request->input('media_name');
+        $obj->media_logo = $media_logo;
         $obj->media_desc = $request->input('media_desc');
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
@@ -119,6 +136,19 @@ class MediaController extends Controller
         $obj->media_name = $request->input('media_name');
         $obj->media_desc = $request->input('media_desc');
         $obj->updated_by = $request->user()->user_id;
+
+        if ($request->hasFile('media_logo')) {
+            if ($request->file('media_logo')->isValid()) {
+                $uploaded = $request->file('media_logo');
+                $media_logo = Carbon::now()->format('YmdHis') . $uploaded->getClientOriginalName();
+                $uploaded->move(
+                    base_path() . '/public/img/media/logo/', $media_logo
+                );
+
+                $obj->media_logo = $media_logo;
+
+            }
+        }
 
         $obj->save();
 

@@ -38,6 +38,12 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="media_desc" class="col-sm-2 control-label">Logo</label>
+	                <div class="col-sm-10">
+	                	<img src="{{ url('/img/media/logo/' . $media->media_logo) }}" class="img" width="200">
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="media_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">

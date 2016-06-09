@@ -8,7 +8,7 @@
     <div class="card">
         <div class="card-header"><h2>Media Management<small>Create New Media</small></h2></div>
         <div class="card-body card-padding">
-        	<form class="form-horizontal" role="form" method="POST" action="{{ url('master/media') }}">
+        	<form class="form-horizontal" role="form" method="POST" action="{{ url('master/media') }}" enctype="multipart/form-data">
         		{{ csrf_field() }}
 	            <div class="form-group">
 	                <label for="media_code" class="col-sm-2 control-label">Code</label>
@@ -81,6 +81,25 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="media_desc" class="col-sm-2 control-label">Logo</label>
+	                <div class="col-sm-10">
+	                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                            <div class="fileinput-preview thumbnail" data-trigger="fileinput"></div>
+                            <div>
+                                <span class="btn btn-info btn-file">
+                                    <span class="fileinput-new">Select image</span>
+                                    <span class="fileinput-exists">Change</span>
+                                    <input type="file" name="media_logo">
+                                </span>
+                                <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
+                            </div>
+                        </div>
+                        <span class="help-block">
+		                    Allowed File Types: *.jpg, *.jpeg, *.gif, *.png , Max Size: 2 MB
+		                </span>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="media_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
@@ -106,4 +125,5 @@
 
 @section('vendorjs')
 <script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/fileinput.min.js') }}"></script>
 @endsection

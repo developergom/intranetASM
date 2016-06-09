@@ -8,7 +8,7 @@
     <div class="card">
         <div class="card-header"><h2>Media Management<small>Edit Media</small></h2></div>
         <div class="card-body card-padding">
-        	<form class="form-horizontal" role="form" method="POST" action="{{ url('master/media/' . $media->media_id) }}">
+        	<form class="form-horizontal" role="form" method="POST" action="{{ url('master/media/' . $media->media_id) }}" enctype="multipart/form-data">
         		{{ csrf_field() }}
         		<input type="hidden" name="_method" value="PUT">
 	            <div class="form-group">
@@ -82,6 +82,26 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="media_desc" class="col-sm-2 control-label">Logo</label>
+	                <div class="col-sm-10">
+	                    <div class="fileinput fileinput-new" data-provides="fileinput">
+	                    	<div class="thumbnail"><img src="{{ url('/img/media/logo/' . $media->media_logo) }}" width="200" title="Current Logo"></div>
+                            <div class="fileinput-preview thumbnail" data-trigger="fileinput"></div>
+                            <div>
+                                <span class="btn btn-info btn-file">
+                                    <span class="fileinput-new">Select image</span>
+                                    <span class="fileinput-exists">Change</span>
+                                    <input type="file" name="media_logo">
+                                </span>
+                                <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
+                            </div>
+                        </div>
+                        <span class="help-block">
+		                    Allowed File Types: *.jpg, *.jpeg, *.gif, *.png , Max Size: 2 MB
+		                </span>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="media_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
@@ -107,4 +127,5 @@
 
 @section('vendorjs')
 <script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/fileinput.min.js') }}"></script>
 @endsection
