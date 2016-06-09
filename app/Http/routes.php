@@ -37,6 +37,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('action/apiDelete', 'ActionController@apiDelete');
         Route::resource('action', 'ActionController');
 
+        //Holiday
+        Route::post('holiday/apiList', 'HolidayController@apiList');
+        Route::post('holiday/apiDelete', 'HolidayController@apiDelete');
+        Route::resource('holiday', 'HolidayController');
+
         //Media Category
         Route::post('mediacategory/apiList', 'MediaCategoryController@apiList');
         Route::post('mediacategory/apiDelete', 'MediaCategoryController@apiDelete');
