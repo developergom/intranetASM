@@ -19,6 +19,7 @@ class CreateMediasTable extends Migration
             $table->integer('media_category_id');
             $table->char('media_code', 12);
             $table->string('media_name', 100);
+            $table->string('media_logo', 255);
             $table->text('media_desc')->nullable();
             $table->enum('active', ['0', '1'])->default('1');
             $table->integer('created_by');

@@ -18,4 +18,9 @@ class MediaGroup extends Model
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
+
+	public function media()
+	{
+		return $this->hasMany('App\Media','media_id');
+	}
 }
