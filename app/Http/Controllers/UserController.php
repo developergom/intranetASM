@@ -13,8 +13,6 @@ use App\Role;
 
 class UserController extends Controller
 {
-    protected $searchPhrase;
-
     /**
      * Create a new controller instance.
      *
@@ -188,7 +186,7 @@ class UserController extends Controller
         $current = $request->input('current') or 1;
         $rowCount = $request->input('rowCount') or 10;
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
-        $this->searchPhrase = $request->input('searchPhrase') or '';
+        $searchPhrase = $request->input('searchPhrase') or '';
         
         $sort_column = 'user_id';
         $sort_type = 'asc';
@@ -204,24 +202,24 @@ class UserController extends Controller
         $data = array();
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
-        $data['searchPhrase'] = $this->searchPhrase;
+        $data['searchPhrase'] = $searchPhrase;
         $data['rows'] = User::where('active','1')
-                            ->where(function($query) {
-                                $query->where('user_name','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('user_email','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('user_firstname','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('user_lastname','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('user_phone','like','%' . $this->searchPhrase . '%');
+                            ->where(function($query) use($searchPhrase) {
+                                $query->where('user_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('user_email','like','%' . $searchPhrase . '%')
+                                        ->orWhere('user_firstname','like','%' . $searchPhrase . '%')
+                                        ->orWhere('user_lastname','like','%' . $searchPhrase . '%')
+                                        ->orWhere('user_phone','like','%' . $searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
         $data['total'] = User::where('active','1')
-                                ->where(function($query) {
-                                    $query->where('user_name','like','%' . $this->searchPhrase . '%')
-                                            ->orWhere('user_email','like','%' . $this->searchPhrase . '%')
-                                            ->orWhere('user_firstname','like','%' . $this->searchPhrase . '%')
-                                            ->orWhere('user_lastname','like','%' . $this->searchPhrase . '%')
-                                            ->orWhere('user_phone','like','%' . $this->searchPhrase . '%');
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->where('user_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('user_email','like','%' . $searchPhrase . '%')
+                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%')
+                                            ->orWhere('user_lastname','like','%' . $searchPhrase . '%')
+                                            ->orWhere('user_phone','like','%' . $searchPhrase . '%');
                                 })->count();
 
         return response()->json($data);

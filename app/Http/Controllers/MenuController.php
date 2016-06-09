@@ -14,7 +14,6 @@ use App\Ibrol\Libraries\MenuLibrary;
 
 class MenuController extends Controller
 {
-    protected $searchPhrase = '';
     protected $menulibrary;
 
     public function __construct(){
@@ -183,7 +182,7 @@ class MenuController extends Controller
         $current = $request->input('current') or 1;
         $rowCount = $request->input('rowCount') or 5;
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
-        $this->searchPhrase = $request->input('searchPhrase') or '';
+        $searchPhrase = $request->input('searchPhrase') or '';
         
         $sort_column = 'menu_id';
         $sort_type = 'asc';
@@ -199,26 +198,26 @@ class MenuController extends Controller
         $data = array();
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
-        $data['searchPhrase'] = $this->searchPhrase;
+        $data['searchPhrase'] = $searchPhrase;
         $data['rows'] = Menu::join('modules','modules.module_id','=','menus.module_id')
                             ->where('menus.active','1')
-                            ->where(function($query) {
-                                $query->where('menu_name','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('module_url','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('menu_desc','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('menu_order','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('menu_parent','like','%' . $this->searchPhrase . '%');
+                            ->where(function($query) use($searchPhrase) {
+                                $query->where('menu_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('module_url','like','%' . $searchPhrase . '%')
+                                        ->orWhere('menu_desc','like','%' . $searchPhrase . '%')
+                                        ->orWhere('menu_order','like','%' . $searchPhrase . '%')
+                                        ->orWhere('menu_parent','like','%' . $searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
         $data['total'] = Menu::join('modules','modules.module_id','=','menus.module_id')
                                 ->where('menus.active','1')
-                                ->where(function($query) {
-                                    $query->where('menu_name','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('module_url','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('menu_desc','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('menu_order','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('menu_parent','like','%' . $this->searchPhrase . '%');
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->where('menu_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('module_url','like','%' . $searchPhrase . '%')
+                                        ->orWhere('menu_desc','like','%' . $searchPhrase . '%')
+                                        ->orWhere('menu_order','like','%' . $searchPhrase . '%')
+                                        ->orWhere('menu_parent','like','%' . $searchPhrase . '%');
                                 })->count();
 
         return response()->json($data);

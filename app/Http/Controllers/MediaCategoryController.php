@@ -10,7 +10,6 @@ use App\MediaCategory;
 
 class MediaCategoryController extends Controller
 {
-    protected $searchPhrase = '';
     /**
      * Display a listing of the resource.
      *
@@ -125,7 +124,7 @@ class MediaCategoryController extends Controller
         $current = $request->input('current') or 1;
         $rowCount = $request->input('rowCount') or 5;
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
-        $this->searchPhrase = $request->input('searchPhrase') or '';
+        $searchPhrase = $request->input('searchPhrase') or '';
         
         $sort_column = 'media_category_id';
         $sort_type = 'asc';
@@ -141,18 +140,18 @@ class MediaCategoryController extends Controller
         $data = array();
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
-        $data['searchPhrase'] = $this->searchPhrase;
+        $data['searchPhrase'] = $searchPhrase;
         $data['rows'] = MediaCategory::where('active','1')
-                            ->where(function($query) {
-                                $query->where('media_category_name','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('media_category_desc','like','%' . $this->searchPhrase . '%');
+                            ->where(function($query) use($searchPhrase){
+                                $query->where('media_category_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('media_category_desc','like','%' . $searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
         $data['total'] = MediaCategory::where('active','1')
-                                ->where(function($query) {
-                                    $query->where('media_category_name','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('media_category_desc','like','%' . $this->searchPhrase . '%');
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->where('media_category_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('media_category_desc','like','%' . $searchPhrase . '%');
                                 })->count();
 
         return response()->json($data);

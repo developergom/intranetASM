@@ -11,7 +11,6 @@ use App\Module;
 
 class ModuleController extends Controller
 {
-    protected $searchPhrase = '';
     /**
      * Display a listing of the resource.
      *
@@ -142,7 +141,7 @@ class ModuleController extends Controller
         $current = $request->input('current') or 1;
         $rowCount = $request->input('rowCount') or 5;
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
-        $this->searchPhrase = $request->input('searchPhrase') or '';
+        $searchPhrase = $request->input('searchPhrase') or '';
         
         $sort_column = 'module_id';
         $sort_type = 'asc';
@@ -158,18 +157,18 @@ class ModuleController extends Controller
         $data = array();
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
-        $data['searchPhrase'] = $this->searchPhrase;
+        $data['searchPhrase'] = $searchPhrase;
         $data['rows'] = Module::where('active','1')
-                            ->where(function($query) {
-                                $query->where('module_url','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('module_desc','like','%' . $this->searchPhrase . '%');
+                            ->where(function($query) use($searchPhrase) {
+                                $query->where('module_url','like','%' . $searchPhrase . '%')
+                                        ->orWhere('module_desc','like','%' . $searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
         $data['total'] = Module::where('active','1')
-                                ->where(function($query) {
-                                    $query->where('module_url','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('module_desc','like','%' . $this->searchPhrase . '%');
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->where('module_url','like','%' . $searchPhrase . '%')
+                                        ->orWhere('module_desc','like','%' . $searchPhrase . '%');
                                 })->count();
 
         return response()->json($data);

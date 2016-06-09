@@ -11,7 +11,6 @@ use App\Unit;
 
 class PaperController extends Controller
 {
-    protected $searchPhrase = '';
     /**
      * Display a listing of the resource.
      *
@@ -141,7 +140,7 @@ class PaperController extends Controller
         $current = $request->input('current') or 1;
         $rowCount = $request->input('rowCount') or 5;
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
-        $this->searchPhrase = $request->input('searchPhrase') or '';
+        $searchPhrase = $request->input('searchPhrase') or '';
         
         $sort_column = 'paper_id';
         $sort_type = 'asc';
@@ -157,24 +156,24 @@ class PaperController extends Controller
         $data = array();
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
-        $data['searchPhrase'] = $this->searchPhrase;
+        $data['searchPhrase'] = $searchPhrase;
         $data['rows'] = Paper::join('units','units.unit_id','=','papers.unit_id')
                             ->where('papers.active','1')
-                            ->where(function($query) {
-                                $query->where('paper_name','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('paper_width','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('paper_length','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('unit_code','like','%' . $this->searchPhrase . '%');
+                            ->where(function($query) use($searchPhrase) {
+                                $query->where('paper_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('paper_width','like','%' . $searchPhrase . '%')
+                                        ->orWhere('paper_length','like','%' . $searchPhrase . '%')
+                                        ->orWhere('unit_code','like','%' . $searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
         $data['total'] = Paper::join('units','units.unit_id','=','papers.unit_id')
                                 ->where('papers.active','1')
-                                ->where(function($query) {
-                                    $query->where('paper_name','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('paper_width','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('paper_length','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('unit_code','like','%' . $this->searchPhrase . '%');
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->where('paper_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('paper_width','like','%' . $searchPhrase . '%')
+                                        ->orWhere('paper_length','like','%' . $searchPhrase . '%')
+                                        ->orWhere('unit_code','like','%' . $searchPhrase . '%');
                                 })->count();
 
         return response()->json($data);

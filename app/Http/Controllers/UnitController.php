@@ -10,7 +10,6 @@ use App\Unit;
 
 class UnitController extends Controller
 {
-    protected $searchPhrase = '';
     /**
      * Display a listing of the resource.
      *
@@ -129,7 +128,7 @@ class UnitController extends Controller
         $current = $request->input('current') or 1;
         $rowCount = $request->input('rowCount') or 5;
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
-        $this->searchPhrase = $request->input('searchPhrase') or '';
+        $searchPhrase = $request->input('searchPhrase') or '';
         
         $sort_column = 'unit_id';
         $sort_type = 'asc';
@@ -145,20 +144,20 @@ class UnitController extends Controller
         $data = array();
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
-        $data['searchPhrase'] = $this->searchPhrase;
+        $data['searchPhrase'] = $searchPhrase;
         $data['rows'] = Unit::where('active','1')
-                            ->where(function($query) {
-                                $query->where('unit_code','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('unit_name','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('unit_desc','like','%' . $this->searchPhrase . '%');
+                            ->where(function($query) use($searchPhrase) {
+                                $query->where('unit_code','like','%' . $searchPhrase . '%')
+                                        ->orWhere('unit_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('unit_desc','like','%' . $searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
         $data['total'] = Unit::where('active','1')
-                                ->where(function($query) {
-                                    $query->where('unit_code','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('unit_name','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('unit_desc','like','%' . $this->searchPhrase . '%');
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->where('unit_code','like','%' . $searchPhrase . '%')
+                                        ->orWhere('unit_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('unit_desc','like','%' . $searchPhrase . '%');
                                 })->count();
 
         return response()->json($data);

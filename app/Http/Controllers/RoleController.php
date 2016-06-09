@@ -15,7 +15,6 @@ use App\Ibrol\Libraries\Recursive;
 
 class RoleController extends Controller
 {
-    protected $searchPhrase;
     protected $menulibrary;
 
     public function __construct(){
@@ -153,7 +152,7 @@ class RoleController extends Controller
         $current = $request->input('current') or 1;
         $rowCount = $request->input('rowCount') or 5;
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
-        $this->searchPhrase = $request->input('searchPhrase') or '';
+        $searchPhrase = $request->input('searchPhrase') or '';
         
         $sort_column = 'role_id';
         $sort_type = 'asc';
@@ -169,18 +168,18 @@ class RoleController extends Controller
         $data = array();
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
-        $data['searchPhrase'] = $this->searchPhrase;
+        $data['searchPhrase'] = $searchPhrase;
         $data['rows'] = Role::where('active','1')
-                            ->where(function($query) {
-                                $query->where('role_name','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('role_desc','like','%' . $this->searchPhrase . '%');
+                            ->where(function($query) use($searchPhrase) {
+                                $query->where('role_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('role_desc','like','%' . $searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
         $data['total'] = Role::where('active','1')
-                                ->where(function($query) {
-                                    $query->where('role_name','like','%' . $this->searchPhrase . '%')
-                                            ->orWhere('role_desc','like','%' . $this->searchPhrase . '%');
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->where('role_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('role_desc','like','%' . $searchPhrase . '%');
                                 })->count();
 
         return response()->json($data);

@@ -10,7 +10,6 @@ use App\Religion;
 
 class ReligionController extends Controller
 {
-    protected $searchPhrase = '';
     /**
      * Display a listing of the resource.
      *
@@ -130,7 +129,7 @@ class ReligionController extends Controller
         $current = $request->input('current') or 1;
         $rowCount = $request->input('rowCount') or 5;
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
-        $this->searchPhrase = $request->input('searchPhrase') or '';
+        $searchPhrase = $request->input('searchPhrase') or '';
         
         $sort_column = 'religion_id';
         $sort_type = 'asc';
@@ -146,16 +145,16 @@ class ReligionController extends Controller
         $data = array();
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
-        $data['searchPhrase'] = $this->searchPhrase;
+        $data['searchPhrase'] = $searchPhrase;
         $data['rows'] = Religion::where('active','1')
-                            ->where(function($query) {
-                                $query->where('religion_name','like','%' . $this->searchPhrase . '%');
+                            ->where(function($query) use($searchPhrase) {
+                                $query->where('religion_name','like','%' . $searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
         $data['total'] = Religion::where('active','1')
-                                ->where(function($query) {
-                                    $query->where('religion_name','like','%' . $this->searchPhrase . '%');
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->where('religion_name','like','%' . $searchPhrase . '%');
                                 })->count();
 
         return response()->json($data);

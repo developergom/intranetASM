@@ -11,7 +11,6 @@ use App\Holiday;
 
 class HolidayController extends Controller
 {
-    protected $searchPhrase = '';
     /**
      * Display a listing of the resource.
      *
@@ -135,7 +134,7 @@ class HolidayController extends Controller
         $current = $request->input('current') or 1;
         $rowCount = $request->input('rowCount') or 5;
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
-        $this->searchPhrase = $request->input('searchPhrase') or '';
+        $searchPhrase = $request->input('searchPhrase') or '';
         
         $sort_column = 'holiday_id';
         $sort_type = 'asc';
@@ -151,18 +150,18 @@ class HolidayController extends Controller
         $data = array();
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
-        $data['searchPhrase'] = $this->searchPhrase;
+        $data['searchPhrase'] = $searchPhrase;
         $data['rows'] = Holiday::where('active','1')
-                            ->where(function($query) {
-                                $query->where('holiday_name','like','%' . $this->searchPhrase . '%')
-                                    ->orWhere('holiday_date','like','%' . $this->searchPhrase . '%');
+                            ->where(function($query) use($searchPhrase) {
+                                $query->where('holiday_name','like','%' . $searchPhrase . '%')
+                                    ->orWhere('holiday_date','like','%' . $searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
         $data['total'] = Holiday::where('active','1')
-                                ->where(function($query) {
-                                    $query->where('holiday_name','like','%' . $this->searchPhrase . '%')
-                                        ->orWhere('holiday_date','like','%' . $this->searchPhrase . '%');
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->where('holiday_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('holiday_date','like','%' . $searchPhrase . '%');
                                 })->count();
 
         return response()->json($data);
