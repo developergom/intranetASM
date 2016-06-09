@@ -49,7 +49,7 @@ class MediaController extends Controller
             'media_category_id' => 'required',
             'media_code' => 'required|max:12|unique:medias,media_code',
             'media_name' => 'required|max:100',
-            'media_logo' => 'image|size:2000',
+            'media_logo' => 'image|max:2000',
         ]);
 
         if ($request->hasFile('media_logo')) {
@@ -126,6 +126,7 @@ class MediaController extends Controller
             'media_category_id' => 'required',
             'media_code' => 'required|max:12|unique:medias,media_code,' . $id . ',media_id',
             'media_name' => 'required|max:100',
+            'media_logo' => 'image|max:2000',
         ]);
 
         $obj = Media::find($id);

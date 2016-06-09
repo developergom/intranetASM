@@ -97,6 +97,11 @@
                         <span class="help-block">
 		                    Allowed File Types: *.jpg, *.jpeg, *.gif, *.png , Max Size: 2 MB
 		                </span>
+		                @if ($errors->has('media_logo'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('media_logo') }}</strong>
+			                </span>
+			            @endif
 	                </div>
 	            </div>
 	            <div class="form-group">
