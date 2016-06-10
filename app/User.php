@@ -44,6 +44,10 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Role','users_roles');
     }
 
+    public function medias() {
+        return $this->belongsToMany('App\Media','users_medias');
+    }
+
     public function religion() {
         return $this->belongsTo('App\Religion', 'religion_id');
     }

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 
 use App\Http\Requests;
 use App\User;
+use App\Media;
 use App\Religion;
 use App\Role;
 
@@ -45,6 +46,7 @@ class UserController extends Controller
         $data = array();
         $data['religion'] = Religion::where('active','1')->get();
         $data['roles'] = Role::where('active','1')->get();
+        $data['medias'] = Media::where('active','1')->get();
 
         return view('vendor.material.user.create', $data);
     }
@@ -67,6 +69,7 @@ class UserController extends Controller
             'user_email' => 'required|unique:users,user_email|max:100',
             'user_phone' => 'digits_between:10, 14',
             'role_id[]' => 'array',
+            'media_id[]' => 'array',
         ]);
 
         $obj = new User;
@@ -87,6 +90,7 @@ class UserController extends Controller
         $obj->save();
 
         User::find($obj->user_id)->roles()->sync($request->input('role_id'));
+        User::find($obj->user_id)->medias()->sync($request->input('media_id'));
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -107,6 +111,7 @@ class UserController extends Controller
         $birthdate = Carbon::createFromFormat('Y-m-d', ($data['user']->user_birthdate==null) ? date('Y-m-d') : $data['user']->user_birthdate);
         $data['birthdate'] = $birthdate->format('d/m/Y');
         $data['roles'] = Role::where('active','1')->get();
+        $data['medias'] = Media::where('active','1')->get();
         return view('vendor.material.user.show', $data);
     }
 
@@ -125,6 +130,7 @@ class UserController extends Controller
         $data['birthdate'] = $birthdate->format('d/m/Y');
         $data['religion'] = Religion::where('active','1')->get();
         $data['roles'] = Role::where('active','1')->get();
+        $data['medias'] = Media::where('active','1')->get();
         return view('vendor.material.user.edit', $data);
     }
 
@@ -147,6 +153,7 @@ class UserController extends Controller
             'user_email' => 'required|unique:users,user_email,'.$id.',user_id|max:100',
             'user_phone' => 'digits_between:10, 14',
             'role_id[]' => 'array',
+            'media_id[]' => 'array',
         ]);
 
         $obj = User::find($id);
@@ -164,6 +171,7 @@ class UserController extends Controller
         $obj->save();
 
         User::find($id)->roles()->sync($request->input('role_id'));
+        User::find($id)->medias()->sync($request->input('media_id'));
 
         $request->session()->flash('status', 'Data has been updated!');
 

@@ -162,6 +162,30 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="media_id" class="col-sm-2 control-label">Media</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <select name="media_id[]" id="media_id" class="chosen" multiple required="true">
+	                        	<option value=""></option>
+                                @foreach ($medias as $row)
+                                	{!! $selected = '' !!}
+                                	@foreach ($user->medias as $media)
+                                		@if($media->media_id==$row->media_id)
+                                			{!! $selected = 'selected' !!}
+                                		@endif
+                                	@endforeach
+								    <option value="{{ $row->media_id }}" {{ $selected }}>{{ $row->media_name }}</option>
+								@endforeach
+                            </select>
+	                    </div>
+	                    @if ($errors->has('media_id'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('media_id') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
 	                    <a href="{{ url('user') }}" class="btn btn-danger btn-sm">Back</a>

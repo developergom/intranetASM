@@ -31,4 +31,8 @@ class Media extends Model
 	{
 		return $this->belongsTo('App\MediaGroup','media_group_id');
 	}
+
+	public function users() {
+        return $this->belongsToMany('App\User','users_medias');
+    }
 }
