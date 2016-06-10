@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use App\Http\Requests;
 use App\Media;
 use App\MediaCategory;
+use App\MediaEdition;
 use App\MediaGroup;
 
 class MediaController extends Controller

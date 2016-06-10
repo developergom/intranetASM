@@ -85,7 +85,12 @@
 	                <label for="media_desc" class="col-sm-2 control-label">Logo</label>
 	                <div class="col-sm-10">
 	                    <div class="fileinput fileinput-new" data-provides="fileinput">
-	                    	<div class="thumbnail"><img src="{{ url('/img/media/logo/' . $media->media_logo) }}" width="200" title="Current Logo"></div>
+	                    	<div class="thumbnail">
+	                    		<img src="{{ url('/img/media/logo/' . $media->media_logo) }}" width="200" title="Current Logo">
+	                    		<div class="caption">
+	                    			<h6>Current Logo</h6>
+	                    		</div>
+	                    	</div>
                             <div class="fileinput-preview thumbnail" data-trigger="fileinput"></div>
                             <div>
                                 <span class="btn btn-info btn-file">

@@ -57,6 +57,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('mediacategory/apiDelete', 'MediaCategoryController@apiDelete');
         Route::resource('mediacategory', 'MediaCategoryController');
 
+        //Media Edition
+        Route::post('mediaedition/apiSave', 'MediaEditionController@apiSave');
+        Route::post('mediaedition/apiDelete', 'MediaEditionController@apiDelete');
+        Route::post('mediaedition/apiList/{id}', 'MediaEditionController@apiList');
+
         //Media Group
         Route::post('mediagroup/apiList', 'MediaGroupController@apiList');
         Route::post('mediagroup/apiDelete', 'MediaGroupController@apiDelete');

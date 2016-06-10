@@ -9,6 +9,7 @@
 	                <label for="media_code" class="col-sm-2 control-label">Code</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
+	                    	<input type="hidden" name="_media_id" value="{{ $media->media_id }}">
 	                        <input type="text" class="form-control input-sm" name="media_code" id="media_code" placeholder="Media Code" required="true" maxlength="12" value="{{ $media->media_code }}" disabled="true">
 	                    </div>
 	                </div>
@@ -17,7 +18,7 @@
 	                <label for="media_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="media_name" id="media_name" placeholder="Media Name" required="true" maxlength="100" value="{{ $media->media_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="media_name" id="_media_name" placeholder="Media Name" required="true" maxlength="100" value="{{ $media->media_name }}" disabled="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -52,11 +53,41 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	            	<div class="col-sm-12">
+	            		<div class="table-responsive">
+					        <table id="grid-data" class="table table-striped">
+					            <thead>
+					                <tr>
+					                    <th data-column-id="media_edition_no" data-order="asc">Edition No</th>
+					                    <th data-column-id="media_edition_publish_date" data-order="asc">Publish Date</th>
+					                    <th data-column-id="media_edition_deadline_date" data-order="asc">Deadline</th>
+					                    <th data-column-id="link" data-formatter="link" data-sortable="false">Action</th>
+					                </tr>
+					            </thead>
+					            <tbody>
+					            </tbody>
+					        </table>
+					    </div>
+	            	</div>
+	            </div>
+	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
-	                    <a href="{{ url('master/media') }}" class="btn btn-danger btn-sm">Back</a>
+	                    <a href="javascript:void(0)" class="btn btn-primary btn-sm waves-effect command-add-edition" data-row-media="{{ $media->media_name }}" data-row-id="{{ $media->media_id }}">Add Edition</a>
+	                    <a href="{{ url('master/media') }}" class="btn btn-danger btn-sm waves-effect">Back</a>
 	                </div>
 	            </div>
 	        </form>
         </div>
     </div>
+
+   	@include('vendor.material.master.media.modal')
+@endsection
+
+@section('vendorjs')
+<script src="{{ url('js/input-mask.min.js') }}"></script>
+@endsection
+
+@section('customjs')
+<script src="{{ url('js/master/mediaedition-list.js') }}"></script>
+<script src="{{ url('js/master/mediaedition.js') }}"></script>
 @endsection

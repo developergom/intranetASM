@@ -22,9 +22,17 @@
             </tbody>
         </table>
     </div>
-</div>    
+</div>
+
+@include('vendor.material.master.media.modal')
+
+@endsection
+
+@section('vendorjs')
+<script src="{{ url('js/input-mask.min.js') }}"></script>
 @endsection
 
 @section('customjs')
+<script src="{{ url('js/master/mediaedition.js') }}"></script>
 <script src="{{ url('js/master/media.js') }}"></script>
 @endsection

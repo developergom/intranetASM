@@ -32,7 +32,13 @@ class Media extends Model
 		return $this->belongsTo('App\MediaGroup','media_group_id');
 	}
 
-	public function users() {
+	public function users()
+	{
         return $this->belongsToMany('App\User','users_medias');
+    }
+
+    public function mediaedition()
+    {
+    	return $this->hasMany('App\MediaEdition','media_edition_id');
     }
 }
