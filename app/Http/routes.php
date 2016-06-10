@@ -37,6 +37,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('action/apiDelete', 'ActionController@apiDelete');
         Route::resource('action', 'ActionController');
 
+        //Group
+        Route::post('group/apiList', 'GroupController@apiList');
+        Route::post('group/apiDelete', 'GroupController@apiDelete');
+        Route::resource('group', 'GroupController');
+
         //Holiday
         Route::post('holiday/apiList', 'HolidayController@apiList');
         Route::post('holiday/apiDelete', 'HolidayController@apiDelete');
