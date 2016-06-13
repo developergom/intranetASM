@@ -12,7 +12,7 @@ class CreateActionsModulesTable extends Migration
      */
     public function up()
     {
-        Schema::table('actions_modules', function (Blueprint $table) {
+        Schema::create('actions_modules', function (Blueprint $table) {
             //
             $table->integer('action_id');
             $table->integer('module_id');
