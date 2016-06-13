@@ -12,7 +12,7 @@ class ActionsTableSeeder extends Seeder
     public function run()
     {
         //
-        DB::table('action')->insert([
+        DB::table('actions')->insert([
             'action_name' => 'Create',
         	'action_alias' => 'C',
             'action_desc' => 'Action Control to Create New Item',
@@ -23,7 +23,7 @@ class ActionsTableSeeder extends Seeder
         	'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
-        DB::table('action')->insert([
+        DB::table('actions')->insert([
             'action_name' => 'Read',
             'action_alias' => 'R',
             'action_desc' => 'Action Control to Read/View Item',
@@ -34,7 +34,7 @@ class ActionsTableSeeder extends Seeder
             'updated_at' => date('Y-m-d H:i:s'),
         ]);             
 
-        DB::table('action')->insert([
+        DB::table('actions')->insert([
             'action_name' => 'Update',
             'action_alias' => 'U',
             'action_desc' => 'Action Control to Update Item',
@@ -45,7 +45,7 @@ class ActionsTableSeeder extends Seeder
             'updated_at' => date('Y-m-d H:i:s'),
         ]);        
 
-        DB::table('action')->insert([
+        DB::table('actions')->insert([
             'action_name' => 'Delete',
             'action_alias' => 'D',
             'action_desc' => 'Action Control to Delete Item',
@@ -56,7 +56,7 @@ class ActionsTableSeeder extends Seeder
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
-        DB::table('action')->insert([
+        DB::table('actions')->insert([
             'action_name' => 'Download',
             'action_alias' => 'DL',
             'action_desc' => 'Action Control to Download Item',
@@ -67,7 +67,7 @@ class ActionsTableSeeder extends Seeder
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
-        DB::table('action')->insert([
+        DB::table('actions')->insert([
             'action_name' => 'Upload',
             'action_alias' => 'UL',
             'action_desc' => 'Action Control to Upload Item',
