@@ -60,7 +60,8 @@ Route::group(['middleware' => 'auth'], function() {
         //Media Edition
         Route::post('mediaedition/apiSave', 'MediaEditionController@apiSave');
         Route::post('mediaedition/apiDelete', 'MediaEditionController@apiDelete');
-        Route::post('mediaedition/apiList/{id}', 'MediaEditionController@apiList');
+        Route::post('mediaedition/apiList', 'MediaEditionController@apiList');
+        Route::post('mediaedition/apiEdit', 'MediaEditionController@apiEdit');
 
         //Media Group
         Route::post('mediagroup/apiList', 'MediaGroupController@apiList');

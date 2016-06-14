@@ -59,8 +59,8 @@
 					            <thead>
 					                <tr>
 					                    <th data-column-id="media_edition_no" data-order="asc">Edition No</th>
-					                    <th data-column-id="media_edition_publish_date" data-order="asc">Publish Date</th>
-					                    <th data-column-id="media_edition_deadline_date" data-order="asc">Deadline</th>
+					                    <th data-column-id="media_edition_publish_date" data-converter="datetime" data-order="asc">Publish Date</th>
+					                    <th data-column-id="media_edition_deadline_date" data-converter="datetime" data-order="asc">Deadline</th>
 					                    <th data-column-id="link" data-formatter="link" data-sortable="false">Action</th>
 					                </tr>
 					            </thead>

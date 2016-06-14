@@ -1,24 +1,50 @@
 $("#grid-data").bootgrid({
-    rowCount: [10, 25, 50],
+    rowCount: [5, 10, 25, 50],
     ajax: true,
     post: function ()
     {
         /* To accumulate custom parameter with the request object */
         return {
-            '_token': $('meta[name="csrf-token"]').attr('content')
+            '_token': $('meta[name="csrf-token"]').attr('content'),
+            'id': $('input[name="_media_id"]').val()
         };
     },
-    url: base_url + "master/mediaedition/apiList/" + $('input[name="_media_id"]').val(),
+    url: base_url + "master/mediaedition/apiList",
     formatters: {
         "link": function(column, row)
         {
             return '<a title="Edit Edition" href="javascript:void(0)" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
                     +'<a title="Delete Edition" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-delete"></span></a>';
         }
+    },
+    converters: {
+        datetime: {
+            from: function (value) { return moment(value); },
+            to: function (value) { return moment(value).format("DD/MM/YYYY"); }
+        }
     }
 }).on("loaded.rs.jquery.bootgrid", function()
 {
-    /* Executes after data is loaded and rendered */
+    $("#grid-data").find(".command-edit").on("click", function(e)
+    {
+        /*var media_id = $(this).data('row-id');
+        var media_name = $(this).data('row-media');*/
+        var page_data = $('#grid-data').bootgrid("getCurrentRows");
+        var row_id = $(this).parent().parent().data('row-id'); 
+        var current = page_data[row_id];
+
+        //console.log(current);
+
+        $('input[name="edit_media_edition_id"]').val(current.media_edition_id);
+        $('#edit_media_name').val(current.media_name);
+        $('#edit_media_edition_no').val(current.media_edition_no);
+        $('#edit_media_edition_publish_date').val(moment(current.media_edition_publish_date).format("DD/MM/YYYY"));
+        $('#edit_media_edition_deadline_date').val(moment(current.media_edition_deadline_date).format("DD/MM/YYYY"));
+        $('#edit_media_edition_desc').val(current.media_edition_desc);
+
+        $('#modalEditMediaEdition').modal();
+    });
+
     $("#grid-data").find(".command-delete").on("click", function(e)
     {
         var delete_id = $(this).data('row-id');
