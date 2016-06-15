@@ -6,18 +6,10 @@
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form">
 	            <div class="form-group">
-	                <label for="group_code" class="col-sm-2 control-label">Code</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="group_code" id="group_code" placeholder="Media Group Code" required="true" maxlength="5" value="{{ $group->group_code }}" disabled="true">
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="form-group">
 	                <label for="group_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="group_name" id="group_name" placeholder="Media Group Name" required="true" maxlength="100" value="{{ $group->group_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="group_name" id="group_name" placeholder="Group Name" required="true" maxlength="100" value="{{ $group->group_name }}" disabled="true">
 	                    </div>
 	                </div>
 	            </div>

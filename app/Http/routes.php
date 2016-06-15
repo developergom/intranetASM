@@ -37,6 +37,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('action/apiDelete', 'ActionController@apiDelete');
         Route::resource('action', 'ActionController');
 
+        //Advertise Position
+        Route::post('advertiseposition/apiList', 'AdvertisePositionController@apiList');
+        Route::post('advertiseposition/apiDelete', 'AdvertisePositionController@apiDelete');
+        Route::resource('advertiseposition', 'AdvertisePositionController');
+
         //Advertise Size
         Route::post('advertisesize/apiList', 'AdvertiseSizeController@apiList');
         Route::post('advertisesize/apiDelete', 'AdvertiseSizeController@apiDelete');
