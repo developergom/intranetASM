@@ -115,6 +115,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('role/apiEdit', 'RoleController@apiEdit');
         Route::resource('role', 'RoleController');
 
+        //Sub Industry
+        Route::post('subindustry/apiList', 'SubIndustryController@apiList');
+        Route::post('subindustry/apiDelete', 'SubIndustryController@apiDelete');
+        Route::resource('subindustry', 'SubIndustryController');
+
         //Unit
         Route::post('unit/apiList', 'UnitController@apiList');
         Route::post('unit/apiDelete', 'UnitController@apiDelete');

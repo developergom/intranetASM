@@ -7,8 +7,9 @@ use Illuminate\Http\Response;
 
 use App\Http\Requests;
 use App\Industry;
+use App\SubIndustry;
 
-class IndustryController extends Controller
+class SubIndustryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +18,7 @@ class IndustryController extends Controller
      */
     public function index()
     {
-        return view('vendor.material.master.industry.list');
+        return view('vendor.material.master.subindustry.list');
     }
 
     /**
@@ -27,7 +28,9 @@ class IndustryController extends Controller
      */
     public function create()
     {
-        return view('vendor.material.master.industry.create');
+        $data = array();
+        $data['industry'] = Industry::where('active','1')->orderBy('industry_code')->get();
+        return view('vendor.material.master.subindustry.create', $data);
     }
 
     /**
@@ -39,15 +42,17 @@ class IndustryController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'industry_code' => 'required|max:5|unique:industries,industry_code',
-            'industry_name' => 'required|max:100',
+            'industry_id' => 'required',
+            'subindustry_code' => 'required|max:10|unique:subindustries,subindustry_code',
+            'subindustry_name' => 'required|max:100'
         ]);
 
-        $obj = new Industry;
+        $obj = new SubIndustry;
 
-        $obj->industry_code = $request->input('industry_code');
-        $obj->industry_name = $request->input('industry_name');
-        $obj->industry_desc = $request->input('industry_desc');
+        $obj->industry_id = $request->input('industry_id');
+        $obj->subindustry_code = $request->input('subindustry_code');
+        $obj->subindustry_name = $request->input('subindustry_name');
+        $obj->subindustry_desc = $request->input('subindustry_desc');
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
 
@@ -55,7 +60,7 @@ class IndustryController extends Controller
 
         $request->session()->flash('status', 'Data has been saved!');
 
-        return redirect('master/industry');
+        return redirect('master/subindustry');
     }
 
     /**
@@ -67,8 +72,8 @@ class IndustryController extends Controller
     public function show($id)
     {
         $data = array();
-        $data['industry'] = Industry::where('active','1')->find($id);
-        return view('vendor.material.master.industry.show', $data);
+        $data['subindustry'] = SubIndustry::where('active','1')->find($id);
+        return view('vendor.material.master.subindustry.show', $data);
     }
 
     /**
@@ -80,8 +85,9 @@ class IndustryController extends Controller
     public function edit($id)
     {
         $data = array();
-        $data['industry'] = Industry::where('active','1')->find($id);
-        return view('vendor.material.master.industry.edit', $data);
+        $data['industry'] = Industry::where('active','1')->orderBy('industry_code')->get();
+        $data['subindustry'] = SubIndustry::where('active','1')->find($id);
+        return view('vendor.material.master.subindustry.edit', $data);
     }
 
     /**
@@ -94,22 +100,24 @@ class IndustryController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'industry_code' => 'required|max:5|unique:industries,industry_code,'.$id.',industry_id',
-            'industry_name' => 'required|max:100',
+            'industry_id' => 'required',
+            'subindustry_code' => 'required|max:10|unique:subindustries,subindustry_code,'.$id.',subindustry_id',
+            'subindustry_name' => 'required|max:100',
         ]);
 
-        $obj = Industry::find($id);
+        $obj = SubIndustry::find($id);
 
-        $obj->industry_code = $request->input('industry_code');
-        $obj->industry_name = $request->input('industry_name');
-        $obj->industry_desc = $request->input('industry_desc');
+        $obj->industry_id = $request->input('industry_id');
+        $obj->subindustry_code = $request->input('subindustry_code');
+        $obj->subindustry_name = $request->input('subindustry_name');
+        $obj->subindustry_desc = $request->input('subindustry_desc');
         $obj->updated_by = $request->user()->user_id;
 
         $obj->save();
 
         $request->session()->flash('status', 'Data has been updated!');
 
-        return redirect('master/industry');
+        return redirect('master/subindustry');
     }
 
     /**
@@ -126,11 +134,11 @@ class IndustryController extends Controller
     public function apiList(Request $request)
     {
         $current = $request->input('current') or 1;
-        $rowCount = $request->input('rowCount') or 5;
+        $rowCount = $request->input('rowCount') or 10;
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
         $searchPhrase = $request->input('searchPhrase') or '';
         
-        $sort_column = 'industry_id';
+        $sort_column = 'subindustry_id';
         $sort_type = 'asc';
 
         if(is_array($request->input('sort'))) {
@@ -145,20 +153,26 @@ class IndustryController extends Controller
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
         $data['searchPhrase'] = $searchPhrase;
-        $data['rows'] = Industry::where('active','1')
+        $data['rows'] = SubIndustry::join('industries','industries.industry_id', '=', 'subindustries.industry_id')
+                            ->where('subindustries.active','1')
                             ->where(function($query) use($searchPhrase) {
                                 $query->where('industry_code','like','%' . $searchPhrase . '%')
                                         ->orWhere('industry_name','like','%' . $searchPhrase . '%')
-                                        ->orWhere('industry_desc','like','%' . $searchPhrase . '%');
+                                        ->orWhere('subindustry_code','like','%' . $searchPhrase . '%')
+                                        ->orWhere('subindustry_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('subindustry_desc','like','%' . $searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
-        $data['total'] = Industry::where('active','1')
-                                ->where(function($query) use($searchPhrase) {
-                                    $query->where('industry_code','like','%' . $searchPhrase . '%')
+        $data['total'] = SubIndustry::join('industries','industries.industry_id', '=', 'subindustries.industry_id')
+                            ->where('subindustries.active','1')
+                            ->where(function($query) use($searchPhrase) {
+                                $query->where('industry_code','like','%' . $searchPhrase . '%')
                                         ->orWhere('industry_name','like','%' . $searchPhrase . '%')
-                                        ->orWhere('industry_desc','like','%' . $searchPhrase . '%');
-                                })->count();
+                                        ->orWhere('subindustry_code','like','%' . $searchPhrase . '%')
+                                        ->orWhere('subindustry_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('subindustry_desc','like','%' . $searchPhrase . '%');
+                            })->count();
 
         return response()->json($data);
     }
@@ -166,9 +180,9 @@ class IndustryController extends Controller
 
     public function apiDelete(Request $request)
     {
-        $id = $request->input('industry_id');
+        $id = $request->input('subindustry_id');
 
-        $obj = Industry::find($id);
+        $obj = SubIndustry::find($id);
 
         $obj->active = '0';
         $obj->updated_by = $request->user()->user_id;

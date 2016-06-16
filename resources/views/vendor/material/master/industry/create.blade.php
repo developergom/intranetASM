@@ -10,7 +10,7 @@
 	                <label for="industry_code" class="col-sm-2 control-label">Code</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="industry_code" id="industry_code" placeholder="Industry Code" required="true" maxlength="10" value="{{ old('industry_code') }}">
+	                        <input type="text" class="form-control input-sm" name="industry_code" id="industry_code" placeholder="Industry Code" required="true" maxlength="5" value="{{ old('industry_code') }}">
 	                    </div>
 	                    @if ($errors->has('industry_code'))
 			                <span class="help-block">

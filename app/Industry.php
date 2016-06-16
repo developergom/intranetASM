@@ -16,4 +16,9 @@ class Industry extends Model
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
+
+	public function subindustry()
+	{
+		return $this->hasMany('App\SubIndustry', 'subindustry_id');
+	}
 }
