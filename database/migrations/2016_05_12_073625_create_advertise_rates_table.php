@@ -19,8 +19,8 @@ class CreateAdvertiseRatesTable extends Migration
             $table->integer('advertise_position_id');
             $table->integer('advertise_size_id');
             $table->char('advertise_rate_code', 15);
-            $table->float('advertise_rate_normal');
-            $table->float('advertise_rate_discount');
+            $table->double('advertise_rate_normal', 15, 8);
+            $table->double('advertise_rate_discount', 15, 8);
             $table->enum('active', ['0', '1'])->default('1');
             $table->integer('created_by');
             $table->integer('updated_by');

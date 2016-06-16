@@ -59,6 +59,7 @@ elixir(function(mix) {
 	mix.copy(bowerComponent + 'jquery.bootgrid/dist/jquery.bootgrid.min.js', 'public/js/jquery.bootgrid.min.js');
 	mix.copy(bowerComponent + 'input-mask/input-mask.min.js', 'public/js/input-mask.min.js');
 	mix.copy(bowerComponent + 'chosen/chosen.jquery.js', 'public/js/chosen.jquery.js');
+	mix.copy(bowerComponent + 'jquery.price_format/jquery.price_format.min.js', 'public/js/jquery.price_format.min.js');
 });
 
 //vendor font

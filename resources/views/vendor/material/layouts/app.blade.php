@@ -351,6 +351,7 @@
                         <ul>
                             <li><a class="{{ (Request::segment(2)=='action') ? 'active' : ''  }}" href="{{ url('master/action') }}">Action Controls Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='advertiseposition') ? 'active' : ''  }}" href="{{ url('master/advertiseposition') }}">Advertise Positions Management</a></li>
+                            <li><a class="{{ (Request::segment(2)=='advertiserate') ? 'active' : ''  }}" href="{{ url('master/advertiserate') }}">Advertise Rates Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='advertisesize') ? 'active' : ''  }}" href="{{ url('master/advertisesize') }}">Advertise Sizes Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='group') ? 'active' : ''  }}" href="{{ url('master/group') }}">Groups Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='holiday') ? 'active' : ''  }}" href="{{ url('master/holiday') }}">Holidays Management</a></li>

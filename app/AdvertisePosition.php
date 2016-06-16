@@ -16,4 +16,9 @@ class AdvertisePosition extends Model
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
+
+	public function advertiserate()
+    {
+    	return $this->hasMany('App\AdvertiseRate','advertise_rate_id');
+    }
 }
