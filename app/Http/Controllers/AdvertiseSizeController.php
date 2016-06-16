@@ -29,7 +29,7 @@ class AdvertiseSizeController extends Controller
     public function create()
     {
         $data = array();
-        $data['unit'] = Unit::where('active','1')->get();
+        $data['unit'] = Unit::where('active','1')->orderBy('unit_name')->get();
         return view('vendor.material.master.advertise_size.create', $data);
     }
 

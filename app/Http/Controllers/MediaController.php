@@ -32,8 +32,8 @@ class MediaController extends Controller
     public function create()
     {
         $data = array();
-        $data['mediagroup'] = MediaGroup::where('active','1')->get();
-        $data['mediacategory'] = MediaCategory::where('active','1')->get();
+        $data['mediagroup'] = MediaGroup::where('active','1')->orderBy('media_group_name')->get();
+        $data['mediacategory'] = MediaCategory::where('active','1')->orderBy('media_category_name')->get();
         return view('vendor.material.master.media.create', $data);
     }
 
@@ -107,8 +107,8 @@ class MediaController extends Controller
     public function edit($id)
     {
         $data = array();
-        $data['mediagroup'] = MediaGroup::where('active','1')->get();
-        $data['mediacategory'] = MediaCategory::where('active','1')->get();
+        $data['mediagroup'] = MediaGroup::where('active','1')->orderBy('media_group_name')->get();
+        $data['mediacategory'] = MediaCategory::where('active','1')->orderBy('media_category_name')->get();
         $data['media'] = Media::where('active','1')->find($id);
         return view('vendor.material.master.media.edit', $data);
     }

@@ -41,7 +41,7 @@ class MenuController extends Controller
         //
         $data = array();
 
-        $data['modules'] = Module::where('active','1')->get();
+        $data['modules'] = Module::where('active','1')->orderBy('module_url')->get();
         $data['parents'] = $this->menulibrary->generateListMenu();
 
         return view('vendor.material.master.menu.create', $data);
@@ -113,7 +113,7 @@ class MenuController extends Controller
         $data = array();
 
         $data['menu'] = Menu::find($id);
-        $data['modules'] = Module::where('active','1')->get();
+        $data['modules'] = Module::where('active','1')->orderBy('module_url')->get();
         $data['parents'] = $this->menulibrary->generateListMenu();
         $data['count'] = Menu::where('active', '1')->where('menu_parent', $data['menu']->menu_parent)->count();
 

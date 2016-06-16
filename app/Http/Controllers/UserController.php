@@ -44,9 +44,9 @@ class UserController extends Controller
     {
         //
         $data = array();
-        $data['religion'] = Religion::where('active','1')->get();
-        $data['roles'] = Role::where('active','1')->get();
-        $data['medias'] = Media::where('active','1')->get();
+        $data['religion'] = Religion::where('active','1')->orderBy('religion_name')->get();
+        $data['roles'] = Role::where('active','1')->orderBy('role_name')->get();
+        $data['medias'] = Media::where('active','1')->orderBy('media_name')->get();
 
         return view('vendor.material.user.create', $data);
     }
@@ -128,9 +128,9 @@ class UserController extends Controller
         $data['user'] = User::find($id);
         $birthdate = Carbon::createFromFormat('Y-m-d', ($data['user']->user_birthdate==null) ? date('Y-m-d') : $data['user']->user_birthdate);
         $data['birthdate'] = $birthdate->format('d/m/Y');
-        $data['religion'] = Religion::where('active','1')->get();
-        $data['roles'] = Role::where('active','1')->get();
-        $data['medias'] = Media::where('active','1')->get();
+        $data['religion'] = Religion::where('active','1')->orderBy('religion_name')->get();
+        $data['roles'] = Role::where('active','1')->orderBy('role_name')->get();
+        $data['medias'] = Media::where('active','1')->orderBy('media_name')->get();
         return view('vendor.material.user.edit', $data);
     }
 
