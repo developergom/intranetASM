@@ -52,6 +52,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('advertisesize/apiDelete', 'AdvertiseSizeController@apiDelete');
         Route::resource('advertisesize', 'AdvertiseSizeController');
 
+        //Brand
+        Route::post('brand/apiList', 'BrandController@apiList');
+        Route::post('brand/apiDelete', 'BrandController@apiDelete');
+        Route::resource('brand', 'BrandController');
+
         //Group
         Route::post('group/apiList', 'GroupController@apiList');
         Route::post('group/apiDelete', 'GroupController@apiDelete');
@@ -118,6 +123,7 @@ Route::group(['middleware' => 'auth'], function() {
         //Sub Industry
         Route::post('subindustry/apiList', 'SubIndustryController@apiList');
         Route::post('subindustry/apiDelete', 'SubIndustryController@apiDelete');
+        Route::post('subindustry/apiGetOption', 'SubIndustryController@apiGetOption');
         Route::resource('subindustry', 'SubIndustryController');
 
         //Unit

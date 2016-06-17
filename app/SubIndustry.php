@@ -21,4 +21,9 @@ class SubIndustry extends Model
 	{
 		return $this->belongsTo('App\Industry', 'industry_id');
 	}
+
+	public function brand()
+	{
+		return $this->hasMany('App\Brand', 'brand_id');
+	}
 }
