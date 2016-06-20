@@ -57,6 +57,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('brand/apiDelete', 'BrandController@apiDelete');
         Route::resource('brand', 'BrandController');
 
+        //Client Type
+        Route::post('clienttype/apiList', 'ClientTypeController@apiList');
+        Route::post('clienttype/apiDelete', 'ClientTypeController@apiDelete');
+        Route::resource('clienttype', 'ClientTypeController');
+
         //Group
         Route::post('group/apiList', 'GroupController@apiList');
         Route::post('group/apiDelete', 'GroupController@apiDelete');

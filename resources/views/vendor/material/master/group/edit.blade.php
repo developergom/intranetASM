@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Group Management<small>Media Group</small></h2></div>
+        <div class="card-header"><h2>Group Management<small>Edit Group</small></h2></div>
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form" method="POST" action="{{ url('master/group/'.$group->group_id) }}">
         		{{ csrf_field() }}
