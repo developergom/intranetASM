@@ -19,4 +19,9 @@ class Religion extends Model{
 	public function users() {
 		return $this->hasMany('App\User','user_id');
 	}
+
+	public function clientcontact()
+	{
+		return $this->hasMany('App\ClientContact', 'client_contact_id');
+	}
 }

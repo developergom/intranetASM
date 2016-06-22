@@ -34,4 +34,9 @@ class Client extends Model
 	{
 		return $this->belongsTo('App\ClientType', 'client_type_id');
 	}
+
+	public function clientcontact()
+	{
+		return $this->hasMany('App\ClientContact', 'client_contact_id');
+	}
 }

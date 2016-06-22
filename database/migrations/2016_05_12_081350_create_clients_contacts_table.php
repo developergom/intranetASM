@@ -16,9 +16,9 @@ class CreateClientsContactsTable extends Migration
         Schema::create('client_contacts', function (Blueprint $table) {
             $table->increments('client_contact_id');
             $table->integer('client_id');
-            $table->string('client_name', 100);
-            $table->enum('client_gender', ['1','2']); //1 = pria | 2 = wanita
-            $table->date('client_birthdate')->nullable();
+            $table->string('client_contact_name', 100);
+            $table->enum('client_contact_gender', ['1','2']); //1 = pria | 2 = wanita
+            $table->date('client_contact_birthdate')->nullable();
             $table->integer('religion_id');
             $table->string('client_contact_phone', 15)->unique();
             $table->string('client_contact_email')->unique();
