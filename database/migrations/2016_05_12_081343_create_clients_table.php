@@ -28,6 +28,7 @@ class CreateClientsTable extends Migration
             $table->string('client_phone', 15);
             $table->string('client_fax', 15);
             $table->string('client_email')->unique();
+            $table->string('client_avatar', 255);
             $table->enum('active', ['0', '1'])->default('1');
             $table->integer('created_by');
             $table->integer('updated_by');

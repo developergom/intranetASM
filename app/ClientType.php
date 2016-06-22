@@ -16,4 +16,9 @@ class ClientType extends Model
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
+
+	public function client()
+	{
+		return $this->hasMany('App\Client', 'client_id');
+	}
 }

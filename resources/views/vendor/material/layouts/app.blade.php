@@ -354,6 +354,7 @@
                             <li><a class="{{ (Request::segment(2)=='advertiserate') ? 'active' : ''  }}" href="{{ url('master/advertiserate') }}">Advertise Rates Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='advertisesize') ? 'active' : ''  }}" href="{{ url('master/advertisesize') }}">Advertise Sizes Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='brand') ? 'active' : ''  }}" href="{{ url('master/brand') }}">Brands Management</a></li>
+                            <li><a class="{{ (Request::segment(2)=='client') ? 'active' : ''  }}" href="{{ url('master/client') }}">Clients Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='clienttype') ? 'active' : ''  }}" href="{{ url('master/clienttype') }}">Client Types Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='group') ? 'active' : ''  }}" href="{{ url('master/group') }}">Groups Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='holiday') ? 'active' : ''  }}" href="{{ url('master/holiday') }}">Holidays Management</a></li>
