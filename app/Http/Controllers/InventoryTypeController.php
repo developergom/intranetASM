@@ -162,7 +162,7 @@ class InventoryTypeController extends Controller
     {
         $id = $request->input('inventory_type_id');
 
-        $obj = inventoryType::find($id);
+        $obj = InventoryType::find($id);
 
         $obj->active = '0';
         $obj->updated_by = $request->user()->user_id;
