@@ -37,6 +37,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('action/apiDelete', 'ActionController@apiDelete');
         Route::resource('action', 'ActionController');
 
+        //Action Type
+        Route::post('actiontype/apiList', 'ActionTypeController@apiList');
+        Route::post('actiontype/apiDelete', 'ActionTypeController@apiDelete');
+        Route::resource('actiontype', 'ActionTypeController');
+
         //Advertise Position
         Route::post('advertiseposition/apiList', 'AdvertisePositionController@apiList');
         Route::post('advertiseposition/apiDelete', 'AdvertisePositionController@apiDelete');
@@ -81,6 +86,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('industry/apiList', 'IndustryController@apiList');
         Route::post('industry/apiDelete', 'IndustryController@apiDelete');
         Route::resource('industry', 'IndustryController');
+
+        //Inventory Type
+        Route::post('inventorytype/apiList', 'InventoryTypeController@apiList');
+        Route::post('inventorytype/apiDelete', 'InventoryTypeController@apiDelete');
+        Route::resource('inventorytype', 'InventoryTypeController');
 
         //Media
         Route::post('media/apiList', 'MediaController@apiList');

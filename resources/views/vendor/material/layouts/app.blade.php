@@ -26,7 +26,7 @@
         
     </head>
     <body>
-        <header id="header" class="clearfix" data-current-skin="blue">
+        <header id="header" class="clearfix" data-current-skin="bluegray">
             <ul class="header-inner">
                 <li id="menu-trigger" data-trigger="#sidebar">
                     <div class="line-wrap">
@@ -37,7 +37,7 @@
                 </li>
 
                 <li class="logo hidden-xs">
-                    <a href="#">Intranet ASM</a>
+                    <a href="#">Intranet<b>ASM</b></a>
                 </li>
 
                 <li class="pull-right">
@@ -350,6 +350,7 @@
 
                         <ul>
                             <li><a class="{{ (Request::segment(2)=='action') ? 'active' : ''  }}" href="{{ url('master/action') }}">Action Controls Management</a></li>
+                            <li><a class="{{ (Request::segment(2)=='actiontype') ? 'active' : ''  }}" href="{{ url('master/actiontype') }}">Action Types Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='advertiseposition') ? 'active' : ''  }}" href="{{ url('master/advertiseposition') }}">Advertise Positions Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='advertiserate') ? 'active' : ''  }}" href="{{ url('master/advertiserate') }}">Advertise Rates Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='advertisesize') ? 'active' : ''  }}" href="{{ url('master/advertisesize') }}">Advertise Sizes Management</a></li>
@@ -359,6 +360,7 @@
                             <li><a class="{{ (Request::segment(2)=='group') ? 'active' : ''  }}" href="{{ url('master/group') }}">Groups Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='holiday') ? 'active' : ''  }}" href="{{ url('master/holiday') }}">Holidays Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='industry') ? 'active' : ''  }}" href="{{ url('master/industry') }}">Industries Management</a></li>
+                            <li><a class="{{ (Request::segment(2)=='inventorytype') ? 'active' : ''  }}" href="{{ url('master/inventorytype') }}">Inventory Types Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='media') ? 'active' : ''  }}" href="{{ url('master/media') }}">Media Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='mediacategory') ? 'active' : ''  }}" href="{{ url('master/mediacategory') }}">Media Categories Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='mediagroup') ? 'active' : ''  }}" href="{{ url('master/mediagroup') }}">Media Groups Management</a></li>
