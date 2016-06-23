@@ -130,6 +130,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('paper/apiDelete', 'PaperController@apiDelete');
         Route::resource('paper', 'PaperController');
 
+        //Proposal Type
+        Route::post('proposaltype/apiList', 'ProposalTypeController@apiList');
+        Route::post('proposaltype/apiDelete', 'ProposalTypeController@apiDelete');
+        Route::resource('proposaltype', 'ProposalTypeController');
+
         //Religion
         Route::post('religion/apiList', 'ReligionController@apiList');
         Route::post('religion/apiEdit', 'ReligionController@apiEdit');

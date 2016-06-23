@@ -367,6 +367,7 @@
                             <li><a class="{{ (Request::segment(2)=='menu') ? 'active' : ''  }}" href="{{ url('master/menu') }}">Menus Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='module') ? 'active' : ''  }}" href="{{ url('master/module') }}">Modules Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='paper') ? 'active' : ''  }}" href="{{ url('master/paper') }}">Paper Types Management</a></li>
+                            <li><a class="{{ (Request::segment(2)=='proposaltype') ? 'active' : ''  }}" href="{{ url('master/proposaltype') }}">Proposal Types Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='religion') ? 'active' : ''  }}" href="{{ url('master/religion') }}">Religions Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='role') ? 'active' : ''  }}" href="{{ url('master/role') }}">Roles Management</a></li>
                             <li><a class="{{ (Request::segment(2)=='subindustry') ? 'active' : ''  }}" href="{{ url('master/subindustry') }}">Sub Industries Management</a></li>
