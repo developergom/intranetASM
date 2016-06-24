@@ -1,5 +1,9 @@
 @extends('vendor.material.layouts.app')
 
+@section('vendorcss')
+<link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+@endsection
+
 @section('content')
     <div class="card">
         <div class="card-header"><h2>Clients Management<small>View Client</small></h2></div>
@@ -9,6 +13,7 @@
 	                <label for="client_type_id" class="col-sm-2 control-label">Client Type</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
+	                    	<input type="hidden" name="_client_id" value="{{ $client->client_id }}">
 	                    	<input name="client_type_id" id="client_type_id" class="form-control input-sm" placeholder="Client Type" value="{{ $client->clienttype->client_type_name }}" disabled="true"> 
 	                    </div> 
 	                </div>
@@ -17,7 +22,7 @@
 	                <label for="client_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="client_name" id="client_name" placeholder="Client Name" required="true" maxlength="255" value="{{ $client->client_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="_client_name" id="_client_name" placeholder="Client Name" required="true" maxlength="255" value="{{ $client->client_name }}" disabled="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -120,11 +125,43 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	            	<div class="col-sm-12">
+	            		<div class="table-responsive">
+					        <table id="grid-data" class="table table-striped">
+					            <thead>
+					                <tr>
+					                    <th data-column-id="client_contact_name" data-order="asc">Name</th>
+					                    <th data-column-id="client_contact_position" data-order="asc">Position Date</th>
+					                    <th data-column-id="client_contact_email" data-order="asc">Email</th>
+					                    <th data-column-id="client_contact_phone" data-order="asc">Phone</th>
+					                    <th data-column-id="link" data-formatter="link" data-sortable="false">Action</th>
+					                </tr>
+					            </thead>
+					            <tbody>
+					            </tbody>
+					        </table>
+					    </div>
+	            	</div>
+	            </div>
+	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
+	                	<a href="javascript:void(0)" class="btn btn-primary btn-sm waves-effect command-add-contact" data-row-client="{{ $client->client_name }}" data-row-id="{{ $client->client_id }}">Add Contact</a>
 	                    <a href="{{ url('master/client') }}" class="btn btn-danger btn-sm">Back</a>
 	                </div>
 	            </div>
 	        </form>
         </div>
     </div>
+
+    @include('vendor.material.master.client.modal')
+@endsection
+
+@section('vendorjs')
+<script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/input-mask.min.js') }}"></script>
+@endsection
+
+@section('customjs')
+<script src="{{ url('js/master/clientcontact-list.js') }}"></script>
+<script src="{{ url('js/master/clientcontact.js') }}"></script>
 @endsection

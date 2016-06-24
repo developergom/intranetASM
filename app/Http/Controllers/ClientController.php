@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use App\Http\Requests;
 use App\Client;
 use App\ClientType;
+use App\Religion;
 
 class ClientController extends Controller
 {
@@ -108,6 +109,7 @@ class ClientController extends Controller
     {
         $data = array();
         $data['client'] = Client::where('active','1')->find($id);
+        $data['religion'] = Religion::where('active', '1')->orderBy('religion_name')->get();
         return view('vendor.material.master.client.show', $data);
     }
 

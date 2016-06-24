@@ -26,7 +26,7 @@
         
     </head>
     <body>
-        <header id="header" class="clearfix" data-current-skin="bluegray">
+        <header id="header" class="clearfix" data-current-skin="blue">
             <ul class="header-inner">
                 <li id="menu-trigger" data-trigger="#sidebar">
                     <div class="line-wrap">

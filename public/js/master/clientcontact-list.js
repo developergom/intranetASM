@@ -6,15 +6,15 @@ $("#grid-data").bootgrid({
         /* To accumulate custom parameter with the request object */
         return {
             '_token': $('meta[name="csrf-token"]').attr('content'),
-            'id': $('input[name="_media_id"]').val()
+            'id': $('input[name="_client_id"]').val()
         };
     },
-    url: base_url + "master/mediaedition/apiList",
+    url: base_url + "master/clientcontact/apiList",
     formatters: {
         "link": function(column, row)
         {
-            return '<a title="Edit Edition" href="javascript:void(0)" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.media_edition_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
-                    +'<a title="Delete Edition" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.media_edition_id + '"><span class="zmdi zmdi-delete"></span></a>';
+            return '<a title="Edit Contact" href="javascript:void(0)" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.client_contact_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Delete Contact" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.client_contact_id + '"><span class="zmdi zmdi-delete"></span></a>';
         }
     },
     converters: {
@@ -27,22 +27,22 @@ $("#grid-data").bootgrid({
 {
     $("#grid-data").find(".command-edit").on("click", function(e)
     {
-        /*var media_id = $(this).data('row-id');
-        var media_name = $(this).data('row-media');*/
         var page_data = $('#grid-data').bootgrid("getCurrentRows");
         var row_id = $(this).parent().parent().data('row-id'); 
         var current = page_data[row_id];
 
         //console.log(current);
 
-        $('input[name="edit_media_edition_id"]').val(current.media_edition_id);
-        $('#edit_media_name').val(current.media_name);
-        $('#edit_media_edition_no').val(current.media_edition_no);
-        $('#edit_media_edition_publish_date').val(moment(current.media_edition_publish_date).format("DD/MM/YYYY"));
-        $('#edit_media_edition_deadline_date').val(moment(current.media_edition_deadline_date).format("DD/MM/YYYY"));
-        $('#edit_media_edition_desc').val(current.media_edition_desc);
+        $('input[name="edit_client_contact_id"]').val(current.client_contact_id);
+        $('#edit_client_name').val(current.client_name);
+        $('#edit_client_contact_name').val(current.client_contact_name);
+        $('#edit_client_contact_gender').val(current.client_contact_gender);
+        $('#edit_client_contact_birthdate').val(moment(current.edit_client_contact_birthdate).format("DD/MM/YYYY"));
+        $('#edit_client_contact_position').val(current.client_contact_position);
+        $('#edit_client_contact_email').val(current.client_contact_email);
+        $('#edit_client_contact_phone').val(current.client_contact_phone);
 
-        $('#modalEditMediaEdition').modal();
+        $('#modalEditClientContact').modal();
     });
 
     $("#grid-data").find(".command-delete").on("click", function(e)
@@ -60,10 +60,10 @@ $("#grid-data").bootgrid({
         },
         function(){
           $.ajax({
-            url: base_url + 'master/mediaedition/apiDelete',
+            url: base_url + 'master/clientcontact/apiDelete',
             type: 'POST',
             data: {
-                'media_edition_id' : delete_id,
+                'client_contact_id' : delete_id,
                 '_token' : $('meta[name="csrf-token"]').attr('content')
             },
             dataType: 'json',
@@ -86,12 +86,12 @@ $("#grid-data").bootgrid({
     });
 });
 
-$('.command-add-edition').click(function(){
-    var media_id = $(this).data('row-id');
-    var media_name = $(this).data('row-media');
+$('.command-add-contact').click(function(){
+    var client_id = $(this).data('row-id');
+    var client_name = $(this).data('row-client');
 
-    $('input[name="media_id"]').val(media_id);
-    $('#media_name').val(media_name);
+    $('input[name="client_id"]').val(client_id);
+    $('#client_name').val(client_name);
 
-    $('#modalAddMediaEdition').modal();
+    $('#modalAddClientContact').modal();
 });

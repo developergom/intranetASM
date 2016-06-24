@@ -19,8 +19,9 @@ class ClientContactController extends Controller
             'client_id' => 'required',
             'client_contact_name' => 'required|max:100',
             'client_contact_gender' => 'required|numeric',
-            'client_contact_phone' => 'required|max:15',
-            'client_contact_email' => 'required|max:255',
+            'religion_id' => 'required',
+            'client_contact_email' => 'required|max:255|unique:client_contacts,client_contact_email',
+            'client_contact_phone' => 'required|max:15|unique:client_contacts,client_contact_phone',
             'client_contact_position' => 'required|max:100',
         ]);
 
@@ -41,7 +42,8 @@ class ClientContactController extends Controller
         {
             return response()->json(100); //success
         }else{
-            return response()->json(200); //failed
+            $data = validation_errors();
+            return response()->json($data); //failed
         }
     }
 
