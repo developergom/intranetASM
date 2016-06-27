@@ -221,3 +221,91 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalViewClientContact" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">View Contact</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="edit_client_name" class="col-sm-2 control-label">Client</label>
+                        <div class="col-sm-10">
+                            <div class="fg-line">
+                                <input type="text" class="form-control input-sm" id="view_client_name" placeholder="Client Name" required="true" maxlength="100" value="{{ old('client_name') }}" disabled="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_client_contact_name" class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-10">
+                            <div class="fg-line">
+                                <input type="text" class="form-control input-sm" id="view_client_contact_name" placeholder="Contact Name" required="true" maxlength="100" value="{{ old('client_contact_name') }}" disabled="true">
+                            </div>
+                            <small class="help-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_client_contact_gender" class="col-sm-2 control-label">Gender</label>
+                        <div class="col-sm-10">
+                            <div class="fg-line">
+                                <input type="text" class="form-control input-sm" id="view_client_contact_gender" placeholder="Gender" required="true" maxlength="100" value="{{ old('client_contact_gender') }}" disabled="true">                                
+                            </div>
+                            <small class="help-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_client_contact_birthdate" class="col-sm-2 control-label">Birth Date</label>
+                        <div class="col-sm-10">
+                            <div class="fg-line">
+                                <input type="text" class="form-control input-sm input-mask" name="view_client_contact_birthdate" id="view_client_contact_birthdate" placeholder="e.g 17/08/1945" required="true" maxlength="10" value="{{ old('client_contact_birthdate') }}" autocomplete="off" data-mask="00/00/0000" disabled="true">
+                            </div>
+                            <small class="help-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_religion_id" class="col-sm-2 control-label">Religion</label>
+                        <div class="col-sm-10">
+                            <div class="fg-line">
+                                <input type="text" class="form-control input-sm" id="view_religion_id" placeholder="Religion" required="true" maxlength="100" value="{{ old('religion_id') }}" disabled="true">
+                            </div>
+                            <small class="help-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_client_contact_position" class="col-sm-2 control-label">Position</label>
+                        <div class="col-sm-10">
+                            <div class="fg-line">
+                                <input type="text" class="form-control input-sm" id="view_client_contact_position" placeholder="Position" required="true" maxlength="100" value="{{ old('client_contact_position') }}" disabled="true">
+                            </div>
+                            <small class="help-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_client_contact_email" class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                            <div class="fg-line">
+                                <input type="text" class="form-control input-sm" id="view_client_contact_email" placeholder="Email" required="true" maxlength="100" value="{{ old('client_contact_email') }}" disabled="true">
+                            </div>
+                            <small class="help-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_client_contact_phone" class="col-sm-2 control-label">Phone</label>
+                        <div class="col-sm-10">
+                            <div class="fg-line">
+                                <input type="text" class="form-control input-sm" id="view_client_contact_phone" placeholder="Phone" maxlength="15" value="{{ old('client_contact_phone') }}" disabled="true">
+                            </div>
+                            <small class="help-block"></small>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect btn-close-client-contact-view" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

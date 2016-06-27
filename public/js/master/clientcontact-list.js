@@ -13,7 +13,8 @@ $("#grid-data").bootgrid({
     formatters: {
         "link": function(column, row)
         {
-            return '<a title="Edit Contact" href="javascript:void(0)" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.client_contact_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
+            return '<a title="View Contact" href="javascript:void(0)" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.client_contact_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit Contact" href="javascript:void(0)" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.client_contact_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
                     +'<a title="Delete Contact" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.client_contact_id + '"><span class="zmdi zmdi-delete"></span></a>';
         }
     },
@@ -25,6 +26,31 @@ $("#grid-data").bootgrid({
     }
 }).on("loaded.rs.jquery.bootgrid", function()
 {
+    $("#grid-data").find(".command-detail").on("click", function(e)
+    {
+        var page_data = $('#grid-data').bootgrid("getCurrentRows");
+        var row_id = $(this).parent().parent().data('row-id'); 
+        var current = page_data[row_id];
+
+        /*console.log(current);*/
+
+        $('#view_client_name').val(current.client_name);
+        $('#view_client_contact_name').val(current.client_contact_name);
+        if(current.client_contact_gender == '1')
+        {
+            $('#view_client_contact_gender').val('Male');
+        }else{
+            $('#view_client_contact_gender').val('Female');
+        }
+        $('#view_client_contact_birthdate').val(moment(current.client_contact_birthdate).format("DD/MM/YYYY"));
+        $('#view_religion_id').val(current.religion_name);
+        $('#view_client_contact_position').val(current.client_contact_position);
+        $('#view_client_contact_email').val(current.client_contact_email);
+        $('#view_client_contact_phone').val(current.client_contact_phone);
+
+        $('#modalViewClientContact').modal();
+    });
+
     $("#grid-data").find(".command-edit").on("click", function(e)
     {
         var page_data = $('#grid-data').bootgrid("getCurrentRows");

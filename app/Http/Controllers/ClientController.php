@@ -19,8 +19,10 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        return view('vendor.material.master.client.list');
+    {   
+        $data = array();
+        $data['religion'] = Religion::where('active', '1')->orderBy('religion_name')->get();
+        return view('vendor.material.master.client.list', $data);
     }
 
     /**

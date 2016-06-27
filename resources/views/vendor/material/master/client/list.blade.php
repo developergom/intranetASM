@@ -1,5 +1,9 @@
 @extends('vendor.material.layouts.app')
 
+@section('vendorcss')
+<link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+@endsection
+
 @section('content')
 <div class="card">
     <div class="card-header">
@@ -23,9 +27,18 @@
             </tbody>
         </table>
     </div>
-</div>    
+</div>  
+
+@include('vendor.material.master.client.modal')
+
+@endsection
+
+@section('vendorjs')
+<script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/input-mask.min.js') }}"></script>
 @endsection
 
 @section('customjs')
+<script src="{{ url('js/master/clientcontact.js') }}"></script>
 <script src="{{ url('js/master/client.js') }}"></script>
 @endsection

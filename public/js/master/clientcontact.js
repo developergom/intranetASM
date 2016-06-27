@@ -14,6 +14,10 @@ $('.btn-close-client-contact-edit').click(function(){
     clear_edit_modal();
 });
 
+$('.btn-close-client-contact-view').click(function(){
+    clear_view_modal();
+});
+
 function save_contact()
 {
     var isValid = false;
@@ -277,4 +281,16 @@ function clear_edit_modal()
     $('#edit_client_contact_position').val('');
     $('#edit_client_contact_email').val('');
     $('#edit_client_contact_phone').val('');
+}
+
+function clear_view_modal()
+{
+    $('#view_client_name').val('');
+    $('#view_client_contact_name').val('');
+    $('#view_client_contact_gender').val('');
+    $('#view_client_contact_birthdate').val('');
+    $('#view_religion_id').val('');
+    $('#view_client_contact_position').val('');
+    $('#view_client_contact_email').val('');
+    $('#view_client_contact_phone').val('');
 }
