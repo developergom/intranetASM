@@ -30,14 +30,14 @@
                             <div class="fg-line">
                                 <div class="radio m-b-15">
                                     <label>
-                                        <input type="radio" name="client_contact_gender" value="1" {{ (old('client_contact_gender')=='1') ? 'checked' : '' }}>
+                                        <input type="radio" name="client_contact_gender" id="gender_male" value="1" {{ (old('client_contact_gender')=='1') ? 'checked' : '' }}>
                                         <i class="input-helper"></i>
                                         Male
                                     </label>
                                 </div>
                                 <div class="radio m-b-15">
                                     <label>
-                                        <input type="radio" name="client_contact_gender" value="2" {{ (old('client_contact_gender')=='2') ? 'checked' : '' }}>
+                                        <input type="radio" name="client_contact_gender" id="gender_female" value="2" {{ (old('client_contact_gender')=='2') ? 'checked' : '' }}>
                                         <i class="input-helper"></i>
                                         Female
                                     </label>
@@ -142,14 +142,14 @@
                             <div class="fg-line">
                                 <div class="radio m-b-15">
                                     <label>
-                                        <input type="radio" name="edit_client_contact_gender" value="1" {{ (old('edit_client_contact_gender')=='1') ? 'checked' : '' }}>
+                                        <input type="radio" name="edit_client_contact_gender" id="edit_gender_male" value="1" {{ (old('edit_client_contact_gender')=='1') ? 'checked' : '' }}>
                                         <i class="input-helper"></i>
                                         Male
                                     </label>
                                 </div>
                                 <div class="radio m-b-15">
                                     <label>
-                                        <input type="radio" name="edit_client_contact_gender" value="2" {{ (old('edit_client_contact_gender')=='2') ? 'checked' : '' }}>
+                                        <input type="radio" name="edit_client_contact_gender" id="edit_gender_female" value="2" {{ (old('edit_client_contact_gender')=='2') ? 'checked' : '' }}>
                                         <i class="input-helper"></i>
                                         Female
                                     </label>
@@ -171,7 +171,7 @@
                         <label for="edit_religion_id" class="col-sm-2 control-label">Religion</label>
                         <div class="col-sm-10">
                             <div class="fg-line">
-                                <select name="edit_religion_id" id="edit_religion_id" class="chosen" required="true">
+                                <select name="edit_religion_id" id="edit_religion_id" class="form-control input-sm" required="true">
                                     <option value=""></option>
                                     @foreach ($religion as $row)
                                         {!! $selected = '' !!}

@@ -72,6 +72,7 @@ class ClientContactController extends Controller
         $data['rowCount'] = $rowCount;
         $data['searchPhrase'] = $searchPhrase;
         $data['rows'] = ClientContact::join('religions','religions.religion_id','=','client_contacts.religion_id')
+                            ->join('clients','clients.client_id','=','client_contacts.client_id')
                             ->where('client_contacts.active','1')
                             ->where('client_contacts.client_id',$id)
                             ->where(function($query) use($searchPhrase) {
@@ -83,6 +84,7 @@ class ClientContactController extends Controller
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
         $data['total'] = ClientContact::join('religions','religions.religion_id','=','client_contacts.religion_id')
+                            ->join('clients','clients.client_id','=','client_contacts.client_id')
                             ->where('client_contacts.active','1')
                             ->where('client_contacts.client_id',$id)
                             ->where(function($query) use($searchPhrase) {
@@ -100,9 +102,18 @@ class ClientContactController extends Controller
     {
         $id = $request->input('client_contact_id');
 
+        $this->validate($request, [
+            'client_contact_id' => 'required',
+            'client_contact_name' => 'required|max:100',
+            'client_contact_gender' => 'required|numeric',
+            'religion_id' => 'required',
+            'client_contact_email' => 'required|max:255|unique:client_contacts,client_contact_email,' . $id . ',client_contact_id',
+            'client_contact_phone' => 'required|max:15|unique:client_contacts,client_contact_phone,' . $id . ',client_contact_id',
+            'client_contact_position' => 'required|max:100',
+        ]);
+
         $obj = ClientContact::find($id);
 
-        $obj->client_id = $request->input('client_id');
         $obj->client_contact_name = $request->input('client_contact_name');
         $obj->client_contact_gender = $request->input('client_contact_gender');
         $obj->client_contact_birthdate = Carbon::createFromFormat('d/m/Y', $request->input('client_contact_birthdate'))->toDateString();
@@ -116,7 +127,8 @@ class ClientContactController extends Controller
         {
             return response()->json(100); //success
         }else{
-            return response()->json(200); //failed
+            $data = validation_errors();
+            return response()->json($data); //failed
         }   
     }
 

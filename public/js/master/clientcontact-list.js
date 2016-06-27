@@ -31,13 +31,20 @@ $("#grid-data").bootgrid({
         var row_id = $(this).parent().parent().data('row-id'); 
         var current = page_data[row_id];
 
-        //console.log(current);
+        /*console.log(current);*/
 
         $('input[name="edit_client_contact_id"]').val(current.client_contact_id);
         $('#edit_client_name').val(current.client_name);
         $('#edit_client_contact_name').val(current.client_contact_name);
-        $('#edit_client_contact_gender').val(current.client_contact_gender);
-        $('#edit_client_contact_birthdate').val(moment(current.edit_client_contact_birthdate).format("DD/MM/YYYY"));
+        if(current.client_contact_gender=='1')
+        {
+            $('#edit_gender_male').prop('checked', true);
+        }else
+        {
+            $('#edit_gender_female').prop('checked', true);
+        }
+        $('#edit_client_contact_birthdate').val(moment(current.client_contact_birthdate).format("DD/MM/YYYY"));
+        $('#edit_religion_id').val(current.religion_id);
         $('#edit_client_contact_position').val(current.client_contact_position);
         $('#edit_client_contact_email').val(current.client_contact_email);
         $('#edit_client_contact_phone').val(current.client_contact_phone);
