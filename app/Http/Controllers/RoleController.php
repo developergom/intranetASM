@@ -105,6 +105,7 @@ class RoleController extends Controller
         $data['actions'] = Action::where('active','1')->get();
         $data['role'] = Role::where('active','1')->find($id);
         $data['menus'] = $this->menulibrary->generateListModule();
+        $data['rolesmodules'] = RolesModules::where('role_id', $id)->get();
         return view('vendor.material.master.role.show', $data);
     }
 
@@ -140,6 +141,8 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $module_access = $request->input('module_id');
+
         $this->validate($request, [
             'role_name' => 'required|max:100',
             'role_desc' => 'required',
@@ -152,6 +155,21 @@ class RoleController extends Controller
         $role->updated_by = $request->user()->user_id;
 
         $role->save();
+
+        //delete roles modules
+        $rm = RolesModules::where('role_id', $id)->delete();
+
+        foreach ($module_access as $key => $value) {
+            foreach ($value as $k => $v) {
+                $rolesmodules = new RolesModules;
+                $rolesmodules->role_id = $id;
+                $rolesmodules->module_id = $key;
+                $rolesmodules->action_id = $k;
+                $rolesmodules->access = $v;
+
+                $rolesmodules->save();
+            }
+        }
 
         $request->session()->flash('status', 'Data has been updated!');
 
