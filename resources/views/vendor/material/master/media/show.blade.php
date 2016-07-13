@@ -55,7 +55,7 @@
 	            <div class="form-group">
 	            	<div class="col-sm-12">
 	            		<div class="table-responsive">
-					        <table id="grid-data" class="table table-striped">
+					        <table id="grid-data" class="table table-hover">
 					            <thead>
 					                <tr>
 					                    <th data-column-id="media_edition_no" data-order="asc">Edition No</th>

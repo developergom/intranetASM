@@ -8,7 +8,7 @@
     </div>
 
     <div class="table-responsive">
-        <table id="grid-data" class="table table-striped">
+        <table id="grid-data" class="table table-hover">
             <thead>
                 <tr>
                     <th data-column-id="paper_name" data-order="asc">Name</th>
