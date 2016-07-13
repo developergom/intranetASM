@@ -34,7 +34,7 @@
 	            </div>
 	            <div class="form-group">
 	            	<div class="col-sm-12">
-	            		<table class="table table-bordered table-hover table-striped">
+	            		<table class="table table-bordered table-hover">
 	            			<thead>
 	            				<tr>
 	            					<th>Menu Name</th>

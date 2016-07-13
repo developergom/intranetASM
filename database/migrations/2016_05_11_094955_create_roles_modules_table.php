@@ -16,7 +16,8 @@ class CreateRolesModulesTable extends Migration
         Schema::create('roles_modules', function (Blueprint $table) {
             $table->integer('role_id');
             $table->integer('module_id');
-            $table->text('access_key');
+            $table->integer('action_id');
+            $table->integer('access');
             //
         });
     }

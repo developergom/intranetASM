@@ -35,7 +35,7 @@
 	            </div>
 	            <div class="form-group">
 	            	<div class="col-sm-12">
-	            		<table class="table table-bordered table-hover table-striped">
+	            		<table class="table table-bordered table-hover">
 	            			<thead>
 	            				<tr>
 	            					<th>Menu Name</th>
@@ -47,14 +47,26 @@
 	            			<tbody>
 	            			@foreach($menus as $menu)
 	            				<tr>
-	            					<td>{{ $menu['menu_name'] }}</td>
+	            					<td>
+	            						<div class="checkbox m-b-15">
+    										<label>
+    											<input name="module_id[{{ $menu['module_id'] }}]" type="checkbox" class="checkbox-check-all" data-parent="{{ $menu['menu_parent'] }}" data-module="{{ $menu['module_id'] }}" value="{{ $menu['module_id'] }}">
+    											<i class="input-helper"></i>
+    											{{ $menu['menu_name'] }}
+    										</label>
+    									</div>
+	            					</td>
 	            					@foreach($actions as $action)
 	            						@if(in_array($action->action_id, $menu['action']))
 	            							<td>
 	            								<center>
 	            									<div class="checkbox m-b-15">
 	            										<label>
-	            											<input type="checkbox" value="{{ $action->action_id }}">
+	            											@if(count($rolesmodules->where('module_id', ''.$menu['module_id'].'')->where('action_id', ''.$action->action_id.'')) > 0)
+					            								<input name="module_id[{{ $menu['module_id'] }}][{{ $action->action_id }}]" type="checkbox" class="checkbox-item-{{ $menu['module_id'] }}" data-parent="{{ $menu['menu_parent'] }}" data-module="{{ $menu['module_id'] }}" value="1" checked="true">
+					            							@else
+					            								<input name="module_id[{{ $menu['module_id'] }}][{{ $action->action_id }}]" type="checkbox" class="checkbox-item-{{ $menu['module_id'] }}" data-parent="{{ $menu['menu_parent'] }}" data-module="{{ $menu['module_id'] }}" value="1">
+					            							@endif
 	            											<i class="input-helper"></i>
 	            										</label>
 	            									</div>
@@ -79,4 +91,8 @@
 	        </form>
         </div>
     </div>
+@endsection
+
+@section('customjs')
+<script src="{{ url('js/master/role-create.js') }}"></script>
 @endsection

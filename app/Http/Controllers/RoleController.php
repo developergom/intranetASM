@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use App\Action;
 use App\Menu;
 use App\Role;
+use App\RolesModules;
 
 use DB;
 use App\Ibrol\Libraries\MenuLibrary;
@@ -54,7 +55,9 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         //
-        dd($request->input('module_id'));
+        //dd($request->input('module_id'));
+
+        $module_access = $request->input('module_id');
 
         $this->validate($request, [
             'role_name' => 'required|max:100',
@@ -69,6 +72,20 @@ class RoleController extends Controller
         $role->created_by = $request->user()->user_id;
 
         $role->save();
+
+        foreach ($module_access as $key => $value) {
+            foreach ($value as $k => $v) {
+                $rolesmodules = new RolesModules;
+                $rolesmodules->role_id = $role->role_id;
+                $rolesmodules->module_id = $key;
+                $rolesmodules->action_id = $k;
+                $rolesmodules->access = $v;
+
+                $rolesmodules->save();
+                /*echo 'module_id' . $key . '<br/>';
+                echo 'action_id' . $k . '<br/>';*/
+            }
+        }
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -87,6 +104,7 @@ class RoleController extends Controller
         $data = array();
         $data['actions'] = Action::where('active','1')->get();
         $data['role'] = Role::where('active','1')->find($id);
+        $data['menus'] = $this->menulibrary->generateListModule();
         return view('vendor.material.master.role.show', $data);
     }
 
@@ -105,6 +123,10 @@ class RoleController extends Controller
         $data['actions'] = Action::where('active','1')->get();
         $data['role'] = Role::where('active','1')->find($id);
         $data['menus'] = $this->menulibrary->generateListModule();
+        $data['rolesmodules'] = RolesModules::where('role_id', $id)->get();
+
+        //dd(count($data['rolesmodules']->where('module_id', '4')->where('action_id', '2')));
+        /*dd($data['rolesmodules']);*/
         return view('vendor.material.master.role.edit', $data);
     }
 
