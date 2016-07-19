@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Auth;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -50,5 +51,13 @@ class User extends Authenticatable
 
     public function religion() {
         return $this->belongsTo('App\Religion', 'religion_id');
+    }
+
+    public function hasRole($role_name) {
+        foreach($this->roles as $role) {
+            if($role->role_name == $role_name) {
+                return true;
+            }
+        }
     }
 }

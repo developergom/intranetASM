@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+use Gate;
 use App\Action;
 use App\Menu;
 use App\Role;
@@ -29,6 +30,10 @@ class RoleController extends Controller
     public function index()
     {
         //
+        if(Gate::denies('Roles Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.role.list');
     }
 
@@ -40,6 +45,10 @@ class RoleController extends Controller
     public function create()
     {
         //
+        if(Gate::denies('Roles Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['actions'] = Action::where('active','1')->get();
         $data['menus'] = $this->menulibrary->generateListModule();

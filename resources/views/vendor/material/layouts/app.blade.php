@@ -339,41 +339,93 @@
                 </div>
 
                 <ul class="main-menu">
+                    @can('Home-Read')
                     <li class="{{ (Request::segment(1)=='') ? 'active' : ''  }}">
                         <a href="{{ url('/') }}"><i class="zmdi zmdi-home"></i> Home</a>
                     </li>
+                    @endcan
+                    @can('Users Management-Read')
                     <li class="{{ (Request::segment(1)=='user') ? 'active' : ''  }}">
                         <a href="{{ url('user') }}"><i class="zmdi zmdi-assignment-account"></i> Users Management</a>
                     </li>
+                    @endcan
+                    @can('Master Data-Read')
                     <li class="sub-menu {{ (Request::segment(1)=='master') ? 'active toggled' : ''  }}">
                         <a href="#"><i class="zmdi zmdi-view-list"></i> Master Data</a>
 
                         <ul>
+                            @can('Action Controls Management-Read')
                             <li><a class="{{ (Request::segment(2)=='action') ? 'active' : ''  }}" href="{{ url('master/action') }}">Action Controls Management</a></li>
+                            @endcan
+                            @can('Action Types Management-Read')
                             <li><a class="{{ (Request::segment(2)=='actiontype') ? 'active' : ''  }}" href="{{ url('master/actiontype') }}">Action Types Management</a></li>
+                            @endcan
+                            @can('Advertise Positions Management-Read')
                             <li><a class="{{ (Request::segment(2)=='advertiseposition') ? 'active' : ''  }}" href="{{ url('master/advertiseposition') }}">Advertise Positions Management</a></li>
+                            @endcan
+                            @can('Advertise Rates Management-Read')
                             <li><a class="{{ (Request::segment(2)=='advertiserate') ? 'active' : ''  }}" href="{{ url('master/advertiserate') }}">Advertise Rates Management</a></li>
+                            @endcan
+                            @can('Advertise Sizes Management-Read')
                             <li><a class="{{ (Request::segment(2)=='advertisesize') ? 'active' : ''  }}" href="{{ url('master/advertisesize') }}">Advertise Sizes Management</a></li>
+                            @endcan
+                            @can('Brands Management-Read')
                             <li><a class="{{ (Request::segment(2)=='brand') ? 'active' : ''  }}" href="{{ url('master/brand') }}">Brands Management</a></li>
+                            @endcan
+                            @can('Clients Management-Read')
                             <li><a class="{{ (Request::segment(2)=='client') ? 'active' : ''  }}" href="{{ url('master/client') }}">Clients Management</a></li>
+                            @endcan
+                            @can('Client Types Management-Read')
                             <li><a class="{{ (Request::segment(2)=='clienttype') ? 'active' : ''  }}" href="{{ url('master/clienttype') }}">Client Types Management</a></li>
+                            @endcan
+                            @can('Groups Management-Read')
                             <li><a class="{{ (Request::segment(2)=='group') ? 'active' : ''  }}" href="{{ url('master/group') }}">Groups Management</a></li>
+                            @endcan
+                            @can('Holidays Management-Read')
                             <li><a class="{{ (Request::segment(2)=='holiday') ? 'active' : ''  }}" href="{{ url('master/holiday') }}">Holidays Management</a></li>
+                            @endcan
+                            @can('Industries Management-Read')
                             <li><a class="{{ (Request::segment(2)=='industry') ? 'active' : ''  }}" href="{{ url('master/industry') }}">Industries Management</a></li>
+                            @endcan
+                            @can('Inventory Types Management-Read')
                             <li><a class="{{ (Request::segment(2)=='inventorytype') ? 'active' : ''  }}" href="{{ url('master/inventorytype') }}">Inventory Types Management</a></li>
+                            @endcan
+                            @can('Media Management-Read')
                             <li><a class="{{ (Request::segment(2)=='media') ? 'active' : ''  }}" href="{{ url('master/media') }}">Media Management</a></li>
+                            @endcan
+                            @can('Media Categories Management-Read')
                             <li><a class="{{ (Request::segment(2)=='mediacategory') ? 'active' : ''  }}" href="{{ url('master/mediacategory') }}">Media Categories Management</a></li>
+                            @endcan
+                            @can('Media Groups Management-Read')
                             <li><a class="{{ (Request::segment(2)=='mediagroup') ? 'active' : ''  }}" href="{{ url('master/mediagroup') }}">Media Groups Management</a></li>
+                            @endcan
+                            @can('Menus Management-Read')
                             <li><a class="{{ (Request::segment(2)=='menu') ? 'active' : ''  }}" href="{{ url('master/menu') }}">Menus Management</a></li>
+                            @endcan
+                            @can('Modules Management-Read')
                             <li><a class="{{ (Request::segment(2)=='module') ? 'active' : ''  }}" href="{{ url('master/module') }}">Modules Management</a></li>
+                            @endcan
+                            @can('Paper Types Management-Read')
                             <li><a class="{{ (Request::segment(2)=='paper') ? 'active' : ''  }}" href="{{ url('master/paper') }}">Paper Types Management</a></li>
+                            @endcan
+                            @can('Proposal Types Management-Read')
                             <li><a class="{{ (Request::segment(2)=='proposaltype') ? 'active' : ''  }}" href="{{ url('master/proposaltype') }}">Proposal Types Management</a></li>
+                            @endcan
+                            @can('Religions Management-Read')
                             <li><a class="{{ (Request::segment(2)=='religion') ? 'active' : ''  }}" href="{{ url('master/religion') }}">Religions Management</a></li>
+                            @endcan
+                            @can('Roles Management-Read')
                             <li><a class="{{ (Request::segment(2)=='role') ? 'active' : ''  }}" href="{{ url('master/role') }}">Roles Management</a></li>
+                            @endcan
+                            @can('Sub Industries Management-Read')
                             <li><a class="{{ (Request::segment(2)=='subindustry') ? 'active' : ''  }}" href="{{ url('master/subindustry') }}">Sub Industries Management</a></li>
+                            @endcan
+                            @can('Units Management-Read')
                             <li><a class="{{ (Request::segment(2)=='unit') ? 'active' : ''  }}" href="{{ url('master/unit') }}">Units Management</a></li>
+                            @endcan
                         </ul>
                     </li>
+                    @endcan
                 </ul>
             </aside>
             

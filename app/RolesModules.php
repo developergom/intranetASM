@@ -9,4 +9,5 @@ class RolesModules extends Model
     protected $table = 'roles_modules';
     public $incrementing = false;
     public $timestamps = false;
+
 }
