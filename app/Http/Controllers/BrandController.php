@@ -19,6 +19,10 @@ class BrandController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('Brands Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.brand.list');
     }
 
@@ -29,6 +33,10 @@ class BrandController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('Brands Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['industry'] = Industry::where('active','1')->orderBy('industry_code')->get();
         $data['subindustry'] = SubIndustry::where('active','1')->orderBy('subindustry_code')->get();
@@ -73,6 +81,10 @@ class BrandController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('Brands Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['brand'] = Brand::where('active','1')->find($id);
         return view('vendor.material.master.brand.show', $data);
@@ -86,6 +98,10 @@ class BrandController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('Brands Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['industry'] = Industry::where('active','1')->orderBy('industry_code')->get();
         $data['brand'] = Brand::where('active','1')->find($id);
@@ -183,6 +199,10 @@ class BrandController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Brands Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('brand_id');
 
         $obj = Brand::find($id);

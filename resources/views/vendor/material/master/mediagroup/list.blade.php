@@ -4,7 +4,9 @@
 <div class="card">
     <div class="card-header">
         <h2>Media Group Management<small>List of all media groups</small></h2>
+        @can('Media Groups Management-Create')
         <a href="{{ url('master/mediagroup/create') }}" title="Create New Media Group"><button class="btn bgm-blue btn-float waves-effect"><i class="zmdi zmdi-plus"></i></button></a>
+        @endcan
     </div>
 
     <div class="table-responsive">

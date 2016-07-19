@@ -17,6 +17,10 @@ class IndustryController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('Industries Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.industry.list');
     }
 
@@ -27,6 +31,10 @@ class IndustryController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('Industries Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.industry.create');
     }
 
@@ -66,6 +74,10 @@ class IndustryController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('Industries Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['industry'] = Industry::where('active','1')->find($id);
         return view('vendor.material.master.industry.show', $data);
@@ -79,6 +91,10 @@ class IndustryController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('Industries Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['industry'] = Industry::where('active','1')->find($id);
         return view('vendor.material.master.industry.edit', $data);
@@ -166,6 +182,10 @@ class IndustryController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Industries Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('industry_id');
 
         $obj = Industry::find($id);

@@ -17,6 +17,10 @@ class ProposalTypeController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('Proposal Types Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.proposaltype.list');
     }
 
@@ -27,6 +31,10 @@ class ProposalTypeController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('Proposal Types Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.proposaltype.create');
     }
 
@@ -64,6 +72,10 @@ class ProposalTypeController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('Proposal Types Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['proposaltype'] = ProposalType::where('active','1')->find($id);
         return view('vendor.material.master.proposaltype.show', $data);
@@ -77,6 +89,10 @@ class ProposalTypeController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('Proposal Types Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['proposaltype'] = ProposalType::where('active','1')->find($id);
         return view('vendor.material.master.proposaltype.edit', $data);
@@ -160,6 +176,10 @@ class ProposalTypeController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Proposal Types Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('proposal_type_id');
 
         $obj = ProposalType::find($id);

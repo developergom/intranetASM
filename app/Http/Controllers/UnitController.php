@@ -17,6 +17,10 @@ class UnitController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('Units Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.unit.list');
     }
 
@@ -27,6 +31,10 @@ class UnitController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('Units Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.unit.create');
     }
 
@@ -66,6 +74,10 @@ class UnitController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('Units Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['unit'] = Unit::where('active','1')->find($id);
         return view('vendor.material.master.unit.show', $data);
@@ -79,6 +91,10 @@ class UnitController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('Units Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['unit'] = Unit::where('active','1')->find($id);
         return view('vendor.material.master.unit.edit', $data);
@@ -166,6 +182,10 @@ class UnitController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Units Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('unit_id');
 
         $obj = Unit::find($id);

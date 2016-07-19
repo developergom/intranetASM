@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+use Gate;
 use App\Http\Requests;
 use App\Action;
 
@@ -18,6 +19,9 @@ class ActionController extends Controller
     public function index()
     {
         //
+        if(Gate::denies('Action Controls Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.material.master.action.list');
     }
 
@@ -29,6 +33,9 @@ class ActionController extends Controller
     public function create()
     {
         //
+        if(Gate::denies('Action Controls Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.material.master.action.create');
     }
 
@@ -70,6 +77,9 @@ class ActionController extends Controller
     public function show($id)
     {
         //
+        if(Gate::denies('Action Controls Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
         $data = array();
         $data['action'] = Action::where('active','1')->find($id);
         return view('vendor.material.master.action.show', $data);
@@ -84,6 +94,9 @@ class ActionController extends Controller
     public function edit($id)
     {
         //
+        if(Gate::denies('Action Controls Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $data = array();
         $data['action'] = Action::where('active','1')->find($id);
         return view('vendor.material.master.action.edit', $data);
@@ -172,6 +185,10 @@ class ActionController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Action Controls Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('action_id');
 
         $obj = Action::find($id);

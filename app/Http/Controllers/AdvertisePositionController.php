@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+use Gate;
 use App\Http\Requests;
 use App\AdvertisePosition;
 
@@ -17,6 +18,9 @@ class AdvertisePositionController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('Advertise Positions Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.material.master.advertise_position.list');
     }
 
@@ -27,6 +31,9 @@ class AdvertisePositionController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('Advertise Positions Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.material.master.advertise_position.create');
     }
 
@@ -64,6 +71,9 @@ class AdvertisePositionController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('Advertise Positions Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
         $data = array();
         $data['advertiseposition'] = AdvertisePosition::where('active','1')->find($id);
         return view('vendor.material.master.advertise_position.show', $data);
@@ -77,6 +87,9 @@ class AdvertisePositionController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('Advertise Positions Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $data = array();
         $data['advertiseposition'] = AdvertisePosition::where('active','1')->find($id);
         return view('vendor.material.master.advertise_position.edit', $data);
@@ -160,6 +173,10 @@ class AdvertisePositionController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Advertise Positions Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('advertise_position_id');
 
         $obj = AdvertisePosition::find($id);

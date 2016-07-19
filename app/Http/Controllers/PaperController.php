@@ -18,6 +18,10 @@ class PaperController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('Paper Types Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.paper.list');
     }
 
@@ -28,6 +32,10 @@ class PaperController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('Paper Types Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['unit'] = Unit::where('active','1')->orderBy('unit_name')->get();
         return view('vendor.material.master.paper.create', $data);
@@ -73,6 +81,10 @@ class PaperController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('Paper Types Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['paper'] = Paper::where('active','1')->find($id);
         return view('vendor.material.master.paper.show', $data);
@@ -86,6 +98,10 @@ class PaperController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('Paper Types Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['unit'] = Unit::where('active','1')->orderBy('unit_name')->get();
         $data['paper'] = Paper::where('active','1')->find($id);
@@ -182,6 +198,10 @@ class PaperController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Paper Types Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('paper_id');
 
         $obj = Paper::find($id);

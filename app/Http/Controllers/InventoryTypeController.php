@@ -17,6 +17,10 @@ class InventoryTypeController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('Inventory Types Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.inventorytype.list');
     }
 
@@ -27,6 +31,10 @@ class InventoryTypeController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('Inventory Types Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+           
         return view('vendor.material.master.inventorytype.create');
     }
 
@@ -64,6 +72,10 @@ class InventoryTypeController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('Inventory Types Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['inventorytype'] = InventoryType::where('active','1')->find($id);
         return view('vendor.material.master.inventorytype.show', $data);
@@ -77,6 +89,10 @@ class InventoryTypeController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('Inventory Types Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['inventorytype'] = InventoryType::where('active','1')->find($id);
         return view('vendor.material.master.inventorytype.edit', $data);
@@ -160,6 +176,10 @@ class InventoryTypeController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Inventory Types Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('inventory_type_id');
 
         $obj = InventoryType::find($id);

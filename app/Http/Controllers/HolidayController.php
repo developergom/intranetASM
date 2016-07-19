@@ -19,6 +19,10 @@ class HolidayController extends Controller
     public function index()
     {
         //
+        if(Gate::denies('Holidays Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.holiday.list');
     }
 
@@ -30,6 +34,10 @@ class HolidayController extends Controller
     public function create()
     {
         //
+        if(Gate::denies('Holidays Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.holiday.create');
     }
 
@@ -70,6 +78,10 @@ class HolidayController extends Controller
     public function show($id)
     {
         //
+        if(Gate::denies('Holidays Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['holiday'] = Holiday::where('active','1')->find($id);
         return view('vendor.material.master.holiday.show', $data);
@@ -84,6 +96,10 @@ class HolidayController extends Controller
     public function edit($id)
     {
         //
+        if(Gate::denies('Holidays Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['holiday'] = Holiday::where('active','1')->find($id);
         return view('vendor.material.master.holiday.edit', $data);
@@ -170,6 +186,10 @@ class HolidayController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Holidays Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('holiday_id');
 
         $obj = Holiday::find($id);

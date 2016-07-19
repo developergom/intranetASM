@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+use Gate;
 use App\Http\Requests;
 use App\ActionType;
 
@@ -17,6 +18,9 @@ class ActionTypeController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('Action Types Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.material.master.actiontype.list');
     }
 
@@ -27,6 +31,9 @@ class ActionTypeController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('Action Types Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.material.master.actiontype.create');
     }
 
@@ -64,6 +71,9 @@ class ActionTypeController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('Action Types Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
         $data = array();
         $data['actiontype'] = ActionType::where('active','1')->find($id);
         return view('vendor.material.master.actiontype.show', $data);
@@ -77,6 +87,10 @@ class ActionTypeController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('Action Types Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['actiontype'] = ActionType::where('active','1')->find($id);
         return view('vendor.material.master.actiontype.edit', $data);
@@ -160,6 +174,10 @@ class ActionTypeController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Action Types Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('action_type_id');
 
         $obj = ActionType::find($id);

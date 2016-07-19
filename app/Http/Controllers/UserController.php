@@ -32,6 +32,10 @@ class UserController extends Controller
     public function index()
     {
         //
+        if(Gate::denies('Users Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.user.list');
     }
 
@@ -43,6 +47,10 @@ class UserController extends Controller
     public function create()
     {
         //
+        if(Gate::denies('Users Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['religion'] = Religion::where('active','1')->orderBy('religion_name')->get();
         $data['roles'] = Role::where('active','1')->orderBy('role_name')->get();
@@ -106,6 +114,10 @@ class UserController extends Controller
     public function show($id)
     {
         //
+        if(Gate::denies('Users Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['user'] = User::with('religion')->find($id);
         $birthdate = Carbon::createFromFormat('Y-m-d', ($data['user']->user_birthdate==null) ? date('Y-m-d') : $data['user']->user_birthdate);
@@ -124,6 +136,10 @@ class UserController extends Controller
     public function edit($id)
     {
         //
+        if(Gate::denies('Users Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['user'] = User::find($id);
         $birthdate = Carbon::createFromFormat('Y-m-d', ($data['user']->user_birthdate==null) ? date('Y-m-d') : $data['user']->user_birthdate);
@@ -235,6 +251,10 @@ class UserController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Users Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $user_id = $request->input('user_id');
 
         $obj = User::find($user_id);

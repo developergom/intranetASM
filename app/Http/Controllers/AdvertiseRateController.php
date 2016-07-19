@@ -20,6 +20,9 @@ class AdvertiseRateController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('Advertise Rates Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.material.master.advertise_rate.list');
     }
 
@@ -30,6 +33,9 @@ class AdvertiseRateController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('Advertise Rates Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $data = array();
         $data['advertiseposition'] = AdvertisePosition::where('active','1')->orderBy('advertise_position_name')->get();
         $data['advertisesize'] = AdvertiseSize::where('active','1')->orderBy('advertise_size_name')->get();
@@ -80,6 +86,9 @@ class AdvertiseRateController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('Advertise Rates Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
         $data = array();
         $data['advertiserate'] = AdvertiseRate::where('active','1')->find($id);
         return view('vendor.material.master.advertise_rate.show', $data);
@@ -93,6 +102,9 @@ class AdvertiseRateController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('Advertise Rates Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $data = array();
         $data['advertiseposition'] = AdvertisePosition::where('active','1')->orderBy('advertise_position_name')->get();
         $data['advertisesize'] = AdvertiseSize::where('active','1')->orderBy('advertise_size_name')->get();
@@ -202,6 +214,10 @@ class AdvertiseRateController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Advertise Rates Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('advertise_rate_id');
 
         $obj = AdvertiseRate::find($id);

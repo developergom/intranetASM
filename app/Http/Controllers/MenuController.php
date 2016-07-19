@@ -28,6 +28,10 @@ class MenuController extends Controller
     public function index()
     {
         //
+        if(Gate::denies('Menus Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.menu.list');
     }
 
@@ -39,6 +43,10 @@ class MenuController extends Controller
     public function create()
     {
         //
+        if(Gate::denies('Menus Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
 
         $data['modules'] = Module::where('active','1')->orderBy('module_url')->get();
@@ -91,6 +99,10 @@ class MenuController extends Controller
     public function show($id)
     {
         //
+        if(Gate::denies('Menus Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
 
         $data['menu'] = Menu::find($id);
@@ -110,6 +122,10 @@ class MenuController extends Controller
     public function edit($id)
     {
         //
+        if(Gate::denies('Menus Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
 
         $data['menu'] = Menu::find($id);
@@ -226,6 +242,10 @@ class MenuController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Menus Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('menu_id');
 
         $obj = Menu::find($id);

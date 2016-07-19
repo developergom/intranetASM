@@ -110,6 +110,10 @@ class RoleController extends Controller
     public function show($id)
     {
         //
+        if(Gate::denies('Roles Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['actions'] = Action::where('active','1')->get();
         $data['role'] = Role::where('active','1')->find($id);
@@ -127,6 +131,10 @@ class RoleController extends Controller
     public function edit($id)
     {
         //
+        if(Gate::denies('Roles Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $module = $this->menulibrary->generateListModule();
 
         $data = array();
@@ -236,6 +244,10 @@ class RoleController extends Controller
 
     public function apiEdit(Request $request)
     {
+        if(Gate::denies('Roles Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $role_id = $request->input('role_id');
 
         $role = Role::find($role_id);

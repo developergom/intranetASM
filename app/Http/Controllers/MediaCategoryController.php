@@ -17,6 +17,10 @@ class MediaCategoryController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('Media Categories Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.mediacategory.list');
     }
 
@@ -27,6 +31,10 @@ class MediaCategoryController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('Media Categories Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.mediacategory.create');
     }
 
@@ -64,6 +72,10 @@ class MediaCategoryController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('Media Categories Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['mediacategory'] = MediaCategory::where('active','1')->find($id);
         return view('vendor.material.master.mediacategory.show', $data);
@@ -77,6 +89,10 @@ class MediaCategoryController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('Media Categories Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['mediacategory'] = MediaCategory::where('active','1')->find($id);
         return view('vendor.material.master.mediacategory.edit', $data);
@@ -160,6 +176,10 @@ class MediaCategoryController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Media Categories Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('media_category_id');
 
         $obj = MediaCategory::find($id);

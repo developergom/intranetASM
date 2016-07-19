@@ -17,6 +17,10 @@ class MediaGroupController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('Media Groups Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.mediagroup.list');
     }
 
@@ -27,6 +31,10 @@ class MediaGroupController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('Media Groups Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.mediagroup.create');
     }
 
@@ -66,6 +74,10 @@ class MediaGroupController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('Media Groups Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['mediagroup'] = MediaGroup::where('active','1')->find($id);
         return view('vendor.material.master.mediagroup.show', $data);
@@ -79,6 +91,10 @@ class MediaGroupController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('Media Groups Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['mediagroup'] = MediaGroup::where('active','1')->find($id);
         return view('vendor.material.master.mediagroup.edit', $data);
@@ -166,6 +182,10 @@ class MediaGroupController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Media Groups Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('media_group_id');
 
         $obj = MediaGroup::find($id);

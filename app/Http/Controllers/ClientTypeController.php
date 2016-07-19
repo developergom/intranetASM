@@ -17,6 +17,10 @@ class ClientTypeController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('Client Types Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.clienttype.list');
     }
 
@@ -27,6 +31,10 @@ class ClientTypeController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('Client Types Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.clienttype.create');
     }
 
@@ -64,6 +72,10 @@ class ClientTypeController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('Client Types Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['clienttype'] = ClientType::where('active','1')->find($id);
         return view('vendor.material.master.clienttype.show', $data);
@@ -77,6 +89,10 @@ class ClientTypeController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('Client Types Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['clienttype'] = ClientType::where('active','1')->find($id);
         return view('vendor.material.master.clienttype.edit', $data);
@@ -160,6 +176,10 @@ class ClientTypeController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Client Types Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('client_type_id');
 
         $obj = ClientType::find($id);

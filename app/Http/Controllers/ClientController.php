@@ -20,6 +20,10 @@ class ClientController extends Controller
      */
     public function index()
     {   
+        if(Gate::denies('Clients Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['religion'] = Religion::where('active', '1')->orderBy('religion_name')->get();
         return view('vendor.material.master.client.list', $data);
@@ -32,6 +36,10 @@ class ClientController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('Clients Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['clienttype'] = ClientType::where('active', '1')->orderBy('client_type_name')->get();
         return view('vendor.material.master.client.create', $data);
@@ -109,6 +117,10 @@ class ClientController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('Clients Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['client'] = Client::where('active','1')->find($id);
         $data['religion'] = Religion::where('active', '1')->orderBy('religion_name')->get();
@@ -123,6 +135,10 @@ class ClientController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('Clients Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['clienttype'] = ClientType::where('active', '1')->orderBy('client_type_name')->get();
         $data['client'] = Client::where('active','1')->find($id);
@@ -251,6 +267,10 @@ class ClientController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Clients Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('client_id');
 
         $obj = Client::find($id);

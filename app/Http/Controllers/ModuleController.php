@@ -19,6 +19,10 @@ class ModuleController extends Controller
     public function index()
     {
         //
+        if(Gate::denies('Modules Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.module.list');
     }
 
@@ -30,6 +34,10 @@ class ModuleController extends Controller
     public function create()
     {
         //
+        if(Gate::denies('Modules Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
 
         $data['actions'] = Action::where('active','1')->get();
@@ -75,6 +83,10 @@ class ModuleController extends Controller
     public function show($id)
     {
         //
+        if(Gate::denies('Modules Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['actions'] = Action::where('active','1')->get();
         $data['module'] = Module::where('active','1')->find($id);
@@ -90,6 +102,10 @@ class ModuleController extends Controller
     public function edit($id)
     {
         //
+        if(Gate::denies('Modules Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['actions'] = Action::where('active','1')->get();
         $data['module'] = Module::where('active','1')->find($id);
@@ -177,6 +193,10 @@ class ModuleController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Modules Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('module_id');
 
         $obj = Module::find($id);

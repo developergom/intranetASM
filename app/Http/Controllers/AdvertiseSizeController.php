@@ -18,6 +18,9 @@ class AdvertiseSizeController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('Advertise Sizes Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('vendor.material.master.advertise_size.list');
     }
 
@@ -28,6 +31,9 @@ class AdvertiseSizeController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('Advertise Sizes Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $data = array();
         $data['unit'] = Unit::where('active','1')->orderBy('unit_name')->get();
         return view('vendor.material.master.advertise_size.create', $data);
@@ -75,6 +81,10 @@ class AdvertiseSizeController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('Advertise Sizes Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['advertisesize'] = AdvertiseSize::where('active','1')->find($id);
         return view('vendor.material.master.advertise_size.show', $data);
@@ -88,6 +98,10 @@ class AdvertiseSizeController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('Advertise Sizes Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['unit'] = Unit::where('active','1')->get();
         $data['advertisesize'] = AdvertiseSize::where('active','1')->find($id);
@@ -188,6 +202,10 @@ class AdvertiseSizeController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Advertise Sizes Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('advertise_size_id');
 
         $obj = AdvertiseSize::find($id);

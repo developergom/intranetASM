@@ -18,6 +18,10 @@ class SubIndustryController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('Sub Industries Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.subindustry.list');
     }
 
@@ -28,6 +32,10 @@ class SubIndustryController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('Sub Industries Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['industry'] = Industry::where('active','1')->orderBy('industry_code')->get();
         return view('vendor.material.master.subindustry.create', $data);
@@ -71,6 +79,10 @@ class SubIndustryController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('Sub Industries Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['subindustry'] = SubIndustry::where('active','1')->find($id);
         return view('vendor.material.master.subindustry.show', $data);
@@ -84,6 +96,10 @@ class SubIndustryController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('Sub Industries Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['industry'] = Industry::where('active','1')->orderBy('industry_code')->get();
         $data['subindustry'] = SubIndustry::where('active','1')->find($id);
@@ -180,6 +196,10 @@ class SubIndustryController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Sub Industries Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('subindustry_id');
 
         $obj = SubIndustry::find($id);

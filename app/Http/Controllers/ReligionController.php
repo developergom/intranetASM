@@ -18,6 +18,10 @@ class ReligionController extends Controller
     public function index()
     {
         //
+        if(Gate::denies('Religions Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.religion.list');
     }
 
@@ -29,6 +33,10 @@ class ReligionController extends Controller
     public function create()
     {
         //
+        if(Gate::denies('Religions Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.religion.create');
     }
 
@@ -67,6 +75,10 @@ class ReligionController extends Controller
     public function show($id)
     {
         //
+        if(Gate::denies('Religions Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['religion'] = Religion::where('active','1')->find($id);
         return view('vendor.material.master.religion.show', $data);
@@ -81,6 +93,10 @@ class ReligionController extends Controller
     public function edit($id)
     {
         //
+        if(Gate::denies('Religions Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['religion'] = Religion::where('active','1')->find($id);
         return view('vendor.material.master.religion.edit', $data);
@@ -163,6 +179,10 @@ class ReligionController extends Controller
 
     public function apiEdit(Request $request)
     {
+        if(Gate::denies('Religions Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('religion_id');
 
         $obj = Religion::find($id);

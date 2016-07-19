@@ -17,6 +17,10 @@ class GroupController extends Controller
      */
     public function index()
     {
+        if(Gate::denies('Groups Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.group.list');
     }
 
@@ -27,6 +31,10 @@ class GroupController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('Groups Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('vendor.material.master.group.create');
     }
 
@@ -64,6 +72,10 @@ class GroupController extends Controller
      */
     public function show($id)
     {
+        if(Gate::denies('Groups Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['group'] = Group::where('active','1')->find($id);
         return view('vendor.material.master.group.show', $data);
@@ -77,6 +89,10 @@ class GroupController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('Groups Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
         $data['group'] = Group::where('active','1')->find($id);
         return view('vendor.material.master.group.edit', $data);
@@ -160,6 +176,10 @@ class GroupController extends Controller
 
     public function apiDelete(Request $request)
     {
+        if(Gate::denies('Groups Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $id = $request->input('group_id');
 
         $obj = Group::find($id);
