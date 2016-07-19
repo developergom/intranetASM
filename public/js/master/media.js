@@ -10,13 +10,50 @@ $("#grid-data").bootgrid({
     },
     url: base_url + "master/media/apiList",
     formatters: {
-        "link": function(column, row)
+        "link-crud": function(column, row)
         {
             return '<a title="Add Edition" href="javascript:void(0)" class="btn btn-icon command-add-edition waves-effect waves-circle" type="button" data-row-media="' + row.media_name + '" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-collection-plus"></span></a>&nbsp;&nbsp;'
                     +'<a title="View Media" href="' + base_url + 'master/media/' + row.media_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
                     +'<a title="Edit Media" href="' + base_url + 'master/media/' + row.media_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
                     +'<a title="Delete Media" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-delete"></span></a>';
-        }
+        },
+        "link-cru": function(column, row)
+        {
+            return '<a title="Add Edition" href="javascript:void(0)" class="btn btn-icon command-add-edition waves-effect waves-circle" type="button" data-row-media="' + row.media_name + '" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-collection-plus"></span></a>&nbsp;&nbsp;'
+                    +'<a title="View Media" href="' + base_url + 'master/media/' + row.media_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit Media" href="' + base_url + 'master/media/' + row.media_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;';
+        },
+        "link-crd": function(column, row)
+        {
+            return '<a title="Add Edition" href="javascript:void(0)" class="btn btn-icon command-add-edition waves-effect waves-circle" type="button" data-row-media="' + row.media_name + '" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-collection-plus"></span></a>&nbsp;&nbsp;'
+                    +'<a title="View Media" href="' + base_url + 'master/media/' + row.media_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Delete Media" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-rud": function(column, row)
+        {
+            return '<a title="View Media" href="' + base_url + 'master/media/' + row.media_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit Media" href="' + base_url + 'master/media/' + row.media_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Delete Media" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-cr": function(column, row)
+        {
+            return '<a title="Add Edition" href="javascript:void(0)" class="btn btn-icon command-add-edition waves-effect waves-circle" type="button" data-row-media="' + row.media_name + '" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-collection-plus"></span></a>&nbsp;&nbsp;'
+                    +'<a title="View Media" href="' + base_url + 'master/media/' + row.media_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
+        },
+        "link-ru": function(column, row)
+        {
+            return '<a title="View Media" href="' + base_url + 'master/media/' + row.media_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit Media" href="' + base_url + 'master/media/' + row.media_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;';
+        },
+        "link-rd": function(column, row)
+        {
+            return '<a title="View Media" href="' + base_url + 'master/media/' + row.media_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Delete Media" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-r": function(column, row)
+        {
+            return '<a title="Add Edition" href="javascript:void(0)" class="btn btn-icon command-add-edition waves-effect waves-circle" type="button" data-row-media="' + row.media_name + '" data-row-id="' + row.media_id + '"><span class="zmdi zmdi-collection-plus"></span></a>&nbsp;&nbsp;';
+        },
     }
 }).on("loaded.rs.jquery.bootgrid", function()
 {

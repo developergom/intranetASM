@@ -10,12 +10,49 @@ $("#grid-data").bootgrid({
     },
     url: base_url + "master/client/apiList",
     formatters: {
-        "link": function(column, row)
+        "link-crud": function(column, row)
         {
             return '<a title="Add Client" href="javascript:void(0)" class="btn btn-icon command-add-contact waves-effect waves-circle" type="button" data-row-client="' + row.client_name + '" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-collection-plus"></span></a>&nbsp;&nbsp;'
                     +'<a title="View Client" href="' + base_url + 'master/client/' + row.client_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
                     +'<a title="Edit Client" href="' + base_url + 'master/client/' + row.client_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
                     +'<a title="Delete Client" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-cru": function(column, row)
+        {
+            return '<a title="Add Client" href="javascript:void(0)" class="btn btn-icon command-add-contact waves-effect waves-circle" type="button" data-row-client="' + row.client_name + '" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-collection-plus"></span></a>&nbsp;&nbsp;'
+                    +'<a title="View Client" href="' + base_url + 'master/client/' + row.client_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit Client" href="' + base_url + 'master/client/' + row.client_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;';
+        },
+        "link-crd": function(column, row)
+        {
+            return '<a title="Add Client" href="javascript:void(0)" class="btn btn-icon command-add-contact waves-effect waves-circle" type="button" data-row-client="' + row.client_name + '" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-collection-plus"></span></a>&nbsp;&nbsp;'
+                    +'<a title="View Client" href="' + base_url + 'master/client/' + row.client_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Delete Client" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-rud": function(column, row)
+        {
+            return '<a title="View Client" href="' + base_url + 'master/client/' + row.client_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit Client" href="' + base_url + 'master/client/' + row.client_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Delete Client" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-cr": function(column, row)
+        {
+            return '<a title="Add Client" href="javascript:void(0)" class="btn btn-icon command-add-contact waves-effect waves-circle" type="button" data-row-client="' + row.client_name + '" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-collection-plus"></span></a>&nbsp;&nbsp;'
+                    +'<a title="View Client" href="' + base_url + 'master/client/' + row.client_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
+        },
+        "link-ru": function(column, row)
+        {
+            return '<a title="View Client" href="' + base_url + 'master/client/' + row.client_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit Client" href="' + base_url + 'master/client/' + row.client_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;';
+        },
+        "link-rd": function(column, row)
+        {
+            return '<a title="View Client" href="' + base_url + 'master/client/' + row.client_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Delete Client" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-r": function(column, row)
+        {
+            return '<a title="View Client" href="' + base_url + 'master/client/' + row.client_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.client_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
         }
     }
 }).on("loaded.rs.jquery.bootgrid", function()

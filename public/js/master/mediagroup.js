@@ -10,11 +10,25 @@ $("#grid-data").bootgrid({
     },
     url: base_url + "master/mediagroup/apiList",
     formatters: {
-        "link": function(column, row)
+        "link-rud": function(column, row)
         {
             return '<a title="View Media Group" href="' + base_url + 'master/mediagroup/' + row.media_group_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.media_group_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
                     +'<a title="Edit Media Group" href="' + base_url + 'master/mediagroup/' + row.media_group_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.media_group_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
                     +'<a title="Delete Media Group" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.media_group_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-ru": function(column, row)
+        {
+            return '<a title="View Media Group" href="' + base_url + 'master/mediagroup/' + row.media_group_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.media_group_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit Media Group" href="' + base_url + 'master/mediagroup/' + row.media_group_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.media_group_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;';
+        },
+        "link-rd": function(column, row)
+        {
+            return '<a title="View Media Group" href="' + base_url + 'master/mediagroup/' + row.media_group_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.media_group_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Delete Media Group" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.media_group_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-r": function(column, row)
+        {
+            return '<a title="View Media Group" href="' + base_url + 'master/mediagroup/' + row.media_group_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.media_group_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
         }
     }
 }).on("loaded.rs.jquery.bootgrid", function()

@@ -11,10 +11,18 @@ $("#grid-data").bootgrid({
     },
     url: base_url + "master/mediaedition/apiList",
     formatters: {
-        "link": function(column, row)
+        "link-rud": function(column, row)
         {
             return '<a title="Edit Edition" href="javascript:void(0)" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.media_edition_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
                     +'<a title="Delete Edition" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.media_edition_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-ru": function(column, row)
+        {
+            return '<a title="Edit Edition" href="javascript:void(0)" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.media_edition_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;';
+        },
+        "link-rd": function(column, row)
+        {
+            return '<a title="Delete Edition" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.media_edition_id + '"><span class="zmdi zmdi-delete"></span></a>';
         }
     },
     converters: {

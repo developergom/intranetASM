@@ -16,11 +16,25 @@ $("#grid-data").bootgrid({
         }
     },
     formatters: {
-        "link": function(column, row)
+        "link-rud": function(column, row)
         {
             return '<a title="View Advertise Rate" href="' + base_url + 'master/advertiserate/' + row.advertise_rate_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.advertise_rate_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
                     +'<a title="Edit Advertise Rate" href="' + base_url + 'master/advertiserate/' + row.advertise_rate_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.advertise_rate_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
                     +'<a title="Delete Advertise Rate" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.advertise_rate_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-ru": function(column, row)
+        {
+            return '<a title="View Advertise Rate" href="' + base_url + 'master/advertiserate/' + row.advertise_rate_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.advertise_rate_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit Advertise Rate" href="' + base_url + 'master/advertiserate/' + row.advertise_rate_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.advertise_rate_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;';
+        },
+        "link-rd": function(column, row)
+        {
+            return '<a title="View Advertise Rate" href="' + base_url + 'master/advertiserate/' + row.advertise_rate_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.advertise_rate_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Delete Advertise Rate" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.advertise_rate_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-r": function(column, row)
+        {
+            return '<a title="View Advertise Rate" href="' + base_url + 'master/advertiserate/' + row.advertise_rate_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.advertise_rate_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
         }
     }
 }).on("loaded.rs.jquery.bootgrid", function()

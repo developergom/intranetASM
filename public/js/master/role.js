@@ -10,12 +10,25 @@ $("#grid-data").bootgrid({
     },
     url: base_url + "master/role/apiList",
     formatters: {
-        "link": function(column, row)
+        "link-rud": function(column, row)
         {
-            //return "<a href=\"#\">" + column.id + ": " + row.role_id + "</a>";
             return '<a title="View Role" href="' + base_url + 'master/role/' + row.role_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.role_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
                     +'<a title="Edit Role" href="' + base_url + 'master/role/' + row.role_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.role_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
                     +'<a title="Delete Role" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.role_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-ru": function(column, row)
+        {
+            return '<a title="View Role" href="' + base_url + 'master/role/' + row.role_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.role_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit Role" href="' + base_url + 'master/role/' + row.role_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.role_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;';
+        },
+        "link-rd": function(column, row)
+        {
+            return '<a title="View Role" href="' + base_url + 'master/role/' + row.role_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.role_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Delete Role" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.role_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-r": function(column, row)
+        {
+            return '<a title="View Role" href="' + base_url + 'master/role/' + row.role_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.role_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
         }
     }
 }).on("loaded.rs.jquery.bootgrid", function()

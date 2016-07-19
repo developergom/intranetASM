@@ -10,11 +10,25 @@ $("#grid-data").bootgrid({
     },
     url: base_url + "master/clienttype/apiList",
     formatters: {
-        "link": function(column, row)
+        "link-rud": function(column, row)
         {
             return '<a title="View Client Type" href="' + base_url + 'master/clienttype/' + row.client_type_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.client_type_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
                     +'<a title="Edit Client Type" href="' + base_url + 'master/clienttype/' + row.client_type_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.client_type_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
                     +'<a title="Delete Client Type" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.client_type_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-ru": function(column, row)
+        {
+            return '<a title="View Client Type" href="' + base_url + 'master/clienttype/' + row.client_type_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.client_type_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit Client Type" href="' + base_url + 'master/clienttype/' + row.client_type_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.client_type_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;';
+        },
+        "link-rd": function(column, row)
+        {
+            return '<a title="View Client Type" href="' + base_url + 'master/clienttype/' + row.client_type_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.client_type_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Delete Client Type" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.client_type_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-r": function(column, row)
+        {
+            return '<a title="View Client Type" href="' + base_url + 'master/clienttype/' + row.client_type_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.client_type_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
         }
     }
 }).on("loaded.rs.jquery.bootgrid", function()
