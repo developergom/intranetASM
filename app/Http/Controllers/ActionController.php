@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+use Cache;
 use Gate;
 use App\Http\Requests;
 use App\Action;
@@ -22,7 +23,7 @@ class ActionController extends Controller
         if(Gate::denies('Action Controls Management-Read')) {
             abort(403, 'Unauthorized action.');
         }
-        return view('vendor.material.master.action.list');
+        return view('vendor.material.master.action.list')->with('menu_cache', Cache::get('menus'));
     }
 
     /**

@@ -427,6 +427,7 @@
                     </li>
                     @endcan
                 </ul>
+                <!-- @include('vendor.material.layouts.menu') -->
             </aside>
             
             <aside id="chat" class="sidebar c-overflow">

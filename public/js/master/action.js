@@ -10,12 +10,26 @@ $("#grid-data").bootgrid({
     },
     url: base_url + "master/action/apiList",
     formatters: {
-        "link": function(column, row)
+        "link-rud": function(column, row)
         {
             //return "<a href=\"#\">" + column.id + ": " + row.role_id + "</a>";
             return '<a title="View Action Control" href="' + base_url + 'master/action/' + row.action_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.action_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
                     +'<a title="Edit Action Control" href="' + base_url + 'master/action/' + row.action_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.action_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
                     +'<a title="Delete Action Control" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.action_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-ru": function(column, row)
+        {
+            return '<a title="View Action Control" href="' + base_url + 'master/action/' + row.action_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.action_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit Action Control" href="' + base_url + 'master/action/' + row.action_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.action_id + '"><span class="zmdi zmdi-edit"></span></a>';
+        },
+        "link-rd": function(column, row)
+        {
+            return '<a title="View Action Control" href="' + base_url + 'master/action/' + row.action_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.action_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Delete Action Control" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.action_id + '"><span class="zmdi zmdi-delete"></span></a>';
+        },
+        "link-r": function(column, row)
+        {
+            return '<a title="View Action Control" href="' + base_url + 'master/action/' + row.action_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.action_id + '"><span class="zmdi zmdi-more"></span></a>';
         }
     }
 }).on("loaded.rs.jquery.bootgrid", function()

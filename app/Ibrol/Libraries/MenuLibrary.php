@@ -7,6 +7,9 @@ use App\Action;
 use App\Menu;
 use App\Module;
 
+use Gate;
+use App\Http\Requests\Request;
+
 class MenuLibrary{
 
 	/**
@@ -55,5 +58,88 @@ class MenuLibrary{
 
     	//dd($data);
     	return $data;
+    }
+
+    public function generateMenu()
+    {
+        /*if(Gate::allows('Media Management-Read')) {
+            dd('soni');
+        }else{
+            dd('sino');
+        }*/
+
+        $data = Menu::where('active','1')->orderBy('menu_order','asc')->get();
+        $recursive = new Recursive;
+        $tmp = $recursive->data_recursive($data, 'menu_id', 'menu_parent', 0);
+        $menu = '<ul class="main-menu">';
+        
+        foreach($tmp as $key => $value) {
+            //level 1
+            if(count($value['sub']) > 0) {
+                $active = '';
+                $obj = $value['data'];
+                $icon = is_null($obj->menu_icon) ? 'zmdi zmdi-home' : $obj->menu_icon;
+                $gateName = $obj->menu_name . '-Read';
+                if(Gate::allows($gateName)) {
+                    $menu .= '<li class="sub-menu ' . $active . '"><a href="' . url('') . $obj->module->module_url . '"><i class="' . $icon . '"></i> ' . $obj->menu_name . '</a><ul>';
+                }
+
+                foreach($value['sub'] as $k => $v) {
+                    //level 2
+                    if(count($v['sub']) > 0) {
+                        $active = '';
+                        $obj = $v['data'];
+                        $icon = is_null($obj->menu_icon) ? 'zmdi zmdi-home' : $obj->menu_icon;
+                        $gateName = $obj->menu_name . '-Read';
+                        if(Gate::allows($gateName)) {
+                            $menu .= '<li class="' . $active . '"><a href="' . url('') . $obj->module->module_url . '"><i class="' . $icon . '"></i> ' . $obj->menu_name . '</a><ul>';
+                        }
+
+                        foreach($v['sub'] as $k2 => $v2) {
+                            //level 3
+                            $active = '';
+                            $obj = $v2['data'];
+                            $icon = is_null($obj->menu_icon) ? 'zmdi zmdi-home' : $obj->menu_icon;
+                            $gateName = $obj->menu_name . '-Read';
+                            if(Gate::allows($gateName)) {
+                                $menu .= '<li class="' . $active . '"><a href="' . url('') . $obj->module->module_url . '"><i class="' . $icon . '"></i> ' . $obj->menu_name . '</a></li>';
+                            }
+                        }
+
+
+                        if(Gate::allows($gateName)) {
+                            $menu .= '</ul></li>';
+                        }
+                    }else{
+                        $active = '';
+                        $obj = $v['data'];
+                        $icon = is_null($obj->menu_icon) ? 'zmdi zmdi-home' : $obj->menu_icon;
+                        $gateName = $obj->menu_name . '-Read';
+                        if(Gate::allows($gateName)) {
+                            $menu .= '<li class="' . $active . '"><a href="' . url('') . $obj->module->module_url . '"><i class="' . $icon . '"></i> ' . $obj->menu_name . '</a></li>';                        
+                        }
+                    }
+                }
+
+                $gateName = $obj->menu_name . '-Read';
+                if(Gate::allows($gateName)) {
+                    $menu .= '</ul></li>';
+                }
+            }else{
+                //$active = (Request::segment(1)=='') ? 'active' : '';
+                $active = '';
+                $obj = $value['data'];
+                $icon = is_null($obj->menu_icon) ? 'zmdi zmdi-home' : $obj->menu_icon;
+                $gateName = $obj->menu_name . '-Read';
+                if(Gate::allows($gateName)) {
+                    $menu .= '<li class="' . $active . '"><a href="' . url('') . $obj->module->module_url . '"><i class="' . $icon . '"></i> ' . $obj->menu_name . '</a></li>';
+                }
+            }
+        }
+
+        $menu .= '</ul>';
+
+        return $menu;
+        //return $tmp;
     }
 }
