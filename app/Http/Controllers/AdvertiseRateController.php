@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+use Gate;
 use App\Http\Requests;
 use App\AdvertisePosition;
 use App\AdvertiseRate;

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Carbon\Carbon;
 
+use Gate;
 use App\Http\Requests;
 use App\Holiday;
 
