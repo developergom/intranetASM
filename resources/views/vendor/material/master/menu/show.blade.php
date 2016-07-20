@@ -26,6 +26,14 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="menu_icon" class="col-sm-2 control-label">Icon</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <i class="{{ $menu->menu_icon }}"></i>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="menu_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">

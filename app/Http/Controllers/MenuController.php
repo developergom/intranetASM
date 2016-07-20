@@ -78,6 +78,7 @@ class MenuController extends Controller
         $obj = new Menu;
         $obj->menu_name = $request->input('menu_name');
         $obj->module_id = $request->input('module_id');
+        $obj->menu_icon = $request->input('menu_icon');
         $obj->menu_parent = $request->input('menu_parent');
         $obj->menu_order = $request->input('menu_order');
         $obj->menu_desc = $request->input('menu_desc');
@@ -171,6 +172,7 @@ class MenuController extends Controller
 
         $obj->menu_name = $request->input('menu_name');
         $obj->module_id = $request->input('module_id');
+        $obj->menu_icon = $request->input('menu_icon');
         $obj->menu_parent = $request->input('menu_parent');
         $obj->menu_order = $request->input('menu_order');
         $obj->menu_desc = $request->input('menu_desc');

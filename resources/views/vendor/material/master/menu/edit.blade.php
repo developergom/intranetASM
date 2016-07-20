@@ -47,6 +47,19 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="menu_icon" class="col-sm-2 control-label">Icon</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="menu_icon" id="menu_icon" placeholder="Menu Icon" maxlength="100" value="{{ $menu->menu_icon }}">
+	                    </div>
+	                    @if ($errors->has('menu_icon'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('menu_icon') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="menu_parent" class="col-sm-2 control-label">Parent</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
