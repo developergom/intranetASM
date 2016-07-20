@@ -7,6 +7,7 @@ use App\Ibrol\Libraries\RoleAccess;
 use App\Menu;
 use App\Action;
 use App\Role;
+use Cache;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -68,11 +69,9 @@ class AuthServiceProvider extends ServiceProvider
 
     public function getMenus()
     {
-        return Menu::where('active', '1')->get();
-        /*$menus = Menu::where('active', '1')->get();
-        foreach ($menus as $key => $value) {
-            dd($value->module->actions);
+        if(!Cache::has('allMenu')) {
+            Cache::add('allMenu', Menu::where('active', '1')->get(), 30);
         }
-        dd($r);*/
+        return Cache::get('allMenu');
     }
 }

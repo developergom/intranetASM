@@ -427,7 +427,8 @@
                     </li>
                     @endcan
                 </ul> -->
-                @include('vendor.material.layouts.menu')
+                <!-- @include('vendor.material.layouts.menu') -->
+                {!! $menucomposer !!}
             </aside>
             
             <aside id="chat" class="sidebar c-overflow">

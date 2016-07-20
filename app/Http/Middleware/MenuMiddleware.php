@@ -22,11 +22,12 @@ class MenuMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(!Cache::has('menus-'.Auth::user()->user_id)) {
+        if(!Cache::has('datamenus-'.Auth::user()->user_id)) {
             $menulibrary = new MenuLibrary;
             $datamenu = $menulibrary->getMenuFromDatabase();
-            $menu = $menulibrary->generateMenu($datamenu);
-            Cache::add('menus-'.Auth::user()->user_id,$menu,1);
+            /*$menu = $menulibrary->generateMenu($datamenu);*/
+            /*Cache::add('menus-'.Auth::user()->user_id,$menu,1);*/
+            Cache::add('datamenus-'.Auth::user()->user_id,$datamenu,1);
         }
 
         return $next($request);
