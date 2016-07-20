@@ -25,9 +25,7 @@ class MenuMiddleware
         if(!Cache::has('datamenus-'.Auth::user()->user_id)) {
             $menulibrary = new MenuLibrary;
             $datamenu = $menulibrary->getMenuFromDatabase();
-            /*$menu = $menulibrary->generateMenu($datamenu);*/
-            /*Cache::add('menus-'.Auth::user()->user_id,$menu,1);*/
-            Cache::add('datamenus-'.Auth::user()->user_id,$datamenu,1);
+            Cache::add('datamenus-'.Auth::user()->user_id,$datamenu,90);
         }
 
         return $next($request);

@@ -15,12 +15,9 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-        /*if(Auth::check()) {*/
-            view()->composer(
-                '*', 'App\Http\ViewComposer\MenuComposer'
-            );    
-        /*}*/
+        view()->composer(
+            '*', 'App\Http\ViewComposer\MenuComposer'
+        );    
         
     }
 
