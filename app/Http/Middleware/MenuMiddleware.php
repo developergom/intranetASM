@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Cache;
 use Gate;
+use Auth;
 
 use App\Ibrol\Libraries\Recursive;
 use App\Ibrol\Libraries\MenuLibrary;
@@ -21,9 +22,12 @@ class MenuMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $menulibrary = new MenuLibrary;
-        $menu = $menulibrary->generateMenu();
-        Cache::add('menus',$menu,1);
+        if(!Cache::has('menus-'.Auth::user()->user_id)) {
+            $menulibrary = new MenuLibrary;
+            $datamenu = $menulibrary->getMenuFromDatabase();
+            $menu = $menulibrary->generateMenu($datamenu);
+            Cache::add('menus-'.Auth::user()->user_id,$menu,1);
+        }
 
         return $next($request);
     }

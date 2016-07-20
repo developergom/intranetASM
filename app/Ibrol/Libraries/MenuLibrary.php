@@ -8,6 +8,7 @@ use App\Menu;
 use App\Module;
 
 use Gate;
+use Route;
 use App\Http\Requests\Request;
 
 class MenuLibrary{
@@ -60,20 +61,28 @@ class MenuLibrary{
     	return $data;
     }
 
-    public function generateMenu()
+    public function getMenuFromDatabase()
     {
+        $data = Menu::where('active','1')->orderBy('menu_order','asc')->get();
+        $recursive = new Recursive;
+        $tmp = $recursive->data_recursive($data, 'menu_id', 'menu_parent', 0);
+
+        return $tmp;
+    }
+
+    public function generateMenu($data)
+    {
+        /*dd(Route::getCurrentRoute()->getPath());*/
         /*if(Gate::allows('Media Management-Read')) {
             dd('soni');
         }else{
             dd('sino');
         }*/
 
-        $data = Menu::where('active','1')->orderBy('menu_order','asc')->get();
-        $recursive = new Recursive;
-        $tmp = $recursive->data_recursive($data, 'menu_id', 'menu_parent', 0);
+        
         $menu = '<ul class="main-menu">';
         
-        foreach($tmp as $key => $value) {
+        foreach($data as $key => $value) {
             //level 1
             if(count($value['sub']) > 0) {
                 $active = '';

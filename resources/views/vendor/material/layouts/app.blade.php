@@ -338,7 +338,7 @@
                     </ul>
                 </div>
 
-                <ul class="main-menu">
+                <!-- <ul class="main-menu">
                     @can('Home-Read')
                     <li class="{{ (Request::segment(1)=='') ? 'active' : ''  }}">
                         <a href="{{ url('/') }}"><i class="zmdi zmdi-home"></i> Home</a>
@@ -426,8 +426,8 @@
                         </ul>
                     </li>
                     @endcan
-                </ul>
-                <!-- @include('vendor.material.layouts.menu') -->
+                </ul> -->
+                @include('vendor.material.layouts.menu')
             </aside>
             
             <aside id="chat" class="sidebar c-overflow">

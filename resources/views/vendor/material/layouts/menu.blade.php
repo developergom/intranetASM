@@ -1,1 +1,1 @@
-{!! Cache::get('menus') !!}
+{!! Cache::get('menus-'.Auth::user()->user_id) !!}

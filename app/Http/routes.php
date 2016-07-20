@@ -15,20 +15,22 @@
     return view('home');
 });*/
 
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@index')->middleware(['auth','menu']);
 
 Route::get('/test', 'Test@index');
 
 Route::auth();
 
-Route::get('/home', 'HomeController@index');
+Route::get('/home', 'HomeController@index')->middleware(['auth','menu']);
 
 //Role
-Route::post('user/apiList', 'UserController@apiList');
-Route::post('user/apiDelete', 'UserController@apiDelete');
-Route::resource('user', 'UserController');
+Route::group(['middleware' => ['auth', 'menu']], function(){
+    Route::post('user/apiList', 'UserController@apiList');
+    Route::post('user/apiDelete', 'UserController@apiDelete');
+    Route::resource('user', 'UserController');
+});
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => ['auth', 'menu']], function() {
     //
     Route::group(['prefix' => 'master'], function() {
 
