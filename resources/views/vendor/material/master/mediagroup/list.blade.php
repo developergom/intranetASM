@@ -16,7 +16,19 @@
                     <th data-column-id="media_group_code" data-order="asc">Code</th>
                     <th data-column-id="media_group_name" data-order="asc">Name</th>
                     <th data-column-id="media_group_desc" data-order="asc">Description</th>
-                    <th data-column-id="link" data-formatter="link" data-sortable="false">Action</th>
+                    @can('Media Groups Management-Update')
+                        @can('Media Groups Management-Delete')
+                            <th data-column-id="link" data-formatter="link-rud" data-sortable="false">Action</th>
+                        @else
+                            <th data-column-id="link" data-formatter="link-ru" data-sortable="false">Action</th>
+                        @endcan
+                    @else
+                        @can('Media Groups Management-Delete')
+                            <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
+                        @else
+                            <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
+                        @endcan
+                    @endcan
                 </tr>
             </thead>
             <tbody>

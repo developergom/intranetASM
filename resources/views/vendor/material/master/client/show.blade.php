@@ -134,7 +134,19 @@
 					                    <th data-column-id="client_contact_position" data-order="asc">Position Date</th>
 					                    <th data-column-id="client_contact_email" data-order="asc">Email</th>
 					                    <th data-column-id="client_contact_phone" data-order="asc">Phone</th>
-					                    <th data-column-id="link" data-formatter="link" data-sortable="false">Action</th>
+					                    @can('Clients Management-Update')
+					                        @can('Clients Management-Delete')
+					                            <th data-column-id="link" data-formatter="link-rud" data-sortable="false">Action</th>
+					                        @else
+					                            <th data-column-id="link" data-formatter="link-ru" data-sortable="false">Action</th>
+					                        @endcan
+					                    @else
+					                        @can('Clients Management-Delete')
+					                            <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
+					                        @else
+					                            <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
+					                        @endcan
+					                    @endcan
 					                </tr>
 					            </thead>
 					            <tbody>
@@ -145,7 +157,9 @@
 	            </div>
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
+	                	@can('Clients Management-Create')
 	                	<a href="javascript:void(0)" class="btn btn-primary btn-sm waves-effect command-add-contact" data-row-client="{{ $client->client_name }}" data-row-id="{{ $client->client_id }}">Add Contact</a>
+	                	@endcan
 	                    <a href="{{ url('master/client') }}" class="btn btn-danger btn-sm">Back</a>
 	                </div>
 	            </div>

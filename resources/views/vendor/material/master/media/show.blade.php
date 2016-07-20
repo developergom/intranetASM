@@ -61,7 +61,19 @@
 					                    <th data-column-id="media_edition_no" data-order="asc">Edition No</th>
 					                    <th data-column-id="media_edition_publish_date" data-converter="datetime" data-order="asc">Publish Date</th>
 					                    <th data-column-id="media_edition_deadline_date" data-converter="datetime" data-order="asc">Deadline</th>
-					                    <th data-column-id="link" data-formatter="link" data-sortable="false">Action</th>
+					                    @can('Media Management-Update')
+					                        @can('Media Management-Delete')
+					                            <th data-column-id="link" data-formatter="link-rud" data-sortable="false">Action</th>
+					                        @else
+					                            <th data-column-id="link" data-formatter="link-ru" data-sortable="false">Action</th>
+					                        @endcan
+					                    @else
+					                        @can('Media Management-Delete')
+					                            <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
+					                        @else
+					                            <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
+					                        @endcan
+					                    @endcan
 					                </tr>
 					            </thead>
 					            <tbody>
@@ -72,7 +84,9 @@
 	            </div>
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
+	                	@can('Media Management-Create')
 	                    <a href="javascript:void(0)" class="btn btn-primary btn-sm waves-effect command-add-edition" data-row-media="{{ $media->media_name }}" data-row-id="{{ $media->media_id }}">Add Edition</a>
+	                    @endcan
 	                    <a href="{{ url('master/media') }}" class="btn btn-danger btn-sm waves-effect">Back</a>
 	                </div>
 	            </div>

@@ -4,7 +4,9 @@
 <div class="card">
     <div class="card-header">
         <h2>Media Management<small>List of all media</small></h2>
+        @can('Media Management-Create')
         <a href="{{ url('master/media/create') }}" title="Create New Media"><button class="btn bgm-blue btn-float waves-effect"><i class="zmdi zmdi-plus"></i></button></a>
+        @endcan
     </div>
 
     <div class="table-responsive">
@@ -15,7 +17,35 @@
                     <th data-column-id="media_name" data-order="asc">Name</th>
                     <th data-column-id="media_group_name" data-order="asc">Group</th>
                     <th data-column-id="media_category_name" data-order="asc">Category</th>
-                    <th data-column-id="link" data-formatter="link" data-sortable="false">Action</th>
+                    @can('Media Management-Create')
+                        @can('Media Management-Update')
+                            @can('Media Management-Delete')
+                                <th data-column-id="link" data-formatter="link-crud" data-sortable="false">Action</th>
+                            @else
+                                <th data-column-id="link" data-formatter="link-cru" data-sortable="false">Action</th>
+                            @endcan
+                        @else
+                            @can('Media Management-Delete')
+                                <th data-column-id="link" data-formatter="link-crd" data-sortable="false">Action</th>
+                            @else
+                                <th data-column-id="link" data-formatter="link-cr" data-sortable="false">Action</th>
+                            @endcan
+                        @endcan
+                    @else
+                        @can('Media Management-Update')
+                            @can('Media Management-Delete')
+                                <th data-column-id="link" data-formatter="link-rud" data-sortable="false">Action</th>
+                            @else
+                                <th data-column-id="link" data-formatter="link-ru" data-sortable="false">Action</th>
+                            @endcan
+                        @else
+                            @can('Media Management-Delete')
+                                <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
+                            @else
+                                <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
+                            @endcan
+                        @endcan
+                    @endcan
                 </tr>
             </thead>
             <tbody>

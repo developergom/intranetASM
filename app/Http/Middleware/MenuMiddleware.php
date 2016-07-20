@@ -22,10 +22,7 @@ class MenuMiddleware
     public function handle($request, Closure $next)
     {
         $menulibrary = new MenuLibrary;
-        //$menu = Menu::where('active','1')->get();
-        //dd($menulibrary->generateMenu());
         $menu = $menulibrary->generateMenu();
-        //$request->session()->put('menus',$menu);
         Cache::add('menus',$menu,1);
 
         return $next($request);

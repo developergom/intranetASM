@@ -4,7 +4,9 @@
 <div class="card">
     <div class="card-header">
         <h2>Advertise Sizes Management<small>List of all advertise sizes</small></h2>
+        @can('Advertise Sizes Management-Create')
         <a href="{{ url('master/advertisesize/create') }}" title="Create New Advertise Size"><button class="btn bgm-blue btn-float waves-effect"><i class="zmdi zmdi-plus"></i></button></a>
+        @endcan
     </div>
 
     <div class="table-responsive">
@@ -16,7 +18,19 @@
                     <th data-column-id="advertise_size_width" data-order="asc">Width</th>
                     <th data-column-id="advertise_size_length" data-order="asc">Length</th>
                     <th data-column-id="unit_code" data-order="asc">Unit</th>
-                    <th data-column-id="link" data-formatter="link" data-sortable="false">Action</th>
+                    @can('Advertise Sizes Management-Update')
+                        @can('Advertise Sizes Management-Delete')
+                            <th data-column-id="link" data-formatter="link-rud" data-sortable="false">Action</th>
+                        @else
+                            <th data-column-id="link" data-formatter="link-ru" data-sortable="false">Action</th>
+                        @endcan
+                    @else
+                        @can('Advertise Sizes Management-Delete')
+                            <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
+                        @else
+                            <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
+                        @endcan
+                    @endcan
                 </tr>
             </thead>
             <tbody>
