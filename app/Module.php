@@ -25,4 +25,8 @@ class Module extends Model
     public function menu() {
     	return $this->belongsTo('App\Module','module_id','module_id');
     }
+
+    public function flowgroup() {
+    	return $this->hasOne('App\FlowGroup','flow_group_id');
+    }
 }

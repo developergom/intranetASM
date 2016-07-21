@@ -80,6 +80,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('clienttype/apiDelete', 'ClientTypeController@apiDelete');
         Route::resource('clienttype', 'ClientTypeController');
 
+        //Flow Group
+        Route::post('flowgroup/apiList', 'FlowGroupController@apiList');
+        Route::post('flowgroup/apiDelete', 'FlowGroupController@apiDelete');
+        Route::resource('flowgroup', 'FlowGroupController');
+
         //Group
         Route::post('group/apiList', 'GroupController@apiList');
         Route::post('group/apiDelete', 'GroupController@apiDelete');
