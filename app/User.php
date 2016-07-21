@@ -45,6 +45,10 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Role','users_roles');
     }
 
+    public function groups() {
+        return $this->belongsToMany('App\Group','users_groups');
+    }
+
     public function medias() {
         return $this->belongsToMany('App\Media','users_medias');
     }

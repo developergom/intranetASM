@@ -93,6 +93,25 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="group_id" class="col-sm-2 control-label">Group</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <select name="group_id[]" id="group_id" class="chosen" multiple required="true" disabled="true">
+	                        	<option value=""></option>
+                                @foreach ($groups as $row)
+                                	{!! $selected = '' !!}
+                                	@foreach ($user->groups as $group)
+                                		@if($group->group_id==$row->group_id)
+                                			{!! $selected = 'selected' !!}
+                                		@endif
+                                	@endforeach
+								    <option value="{{ $row->group_id }}" {{ $selected }}>{{ $row->group_name }}</option>
+								@endforeach
+                            </select>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="media_id" class="col-sm-2 control-label">Media</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
