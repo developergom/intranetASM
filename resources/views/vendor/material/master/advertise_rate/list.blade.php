@@ -19,7 +19,7 @@
                     <th data-column-id="advertise_rate_code" data-order="asc">Code</th>
                     <th data-column-id="advertise_rate_normal" data-converter="price" data-order="asc">Normal Rate</th>
                     <th data-column-id="advertise_rate_discount" data-converter="price" data-order="asc">Discount Rate</th>
-                    @can('Advertise RatesManagement-Update')
+                    @can('Advertise Rates Management-Update')
                         @can('Advertise Rates Management-Delete')
                             <th data-column-id="link" data-formatter="link-rud" data-sortable="false">Action</th>
                         @else

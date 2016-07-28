@@ -35,7 +35,6 @@ class AuthServiceProvider extends ServiceProvider
         foreach($this->getMenus() as $key => $value) {
             foreach($value->module->actions as $action) {
                 $gate->define($value->menu_name . '-' . $action->action_name, function($user) use ($value, $action) {
-                    //dd(Auth::user()->roles);
                     return RoleAccess::hasAccess(Auth::user()->roles, $value->module_id, $action->action_id);
                 });
             }
@@ -45,7 +44,7 @@ class AuthServiceProvider extends ServiceProvider
     public function getMenus()
     {
         if(!Cache::has('allMenu')) {
-            Cache::add('allMenu', Menu::where('active', '1')->get(), 30);
+            Cache::add('allMenu', Menu::where('active', '1')->get(), 60);
         }
         return Cache::get('allMenu');
     }

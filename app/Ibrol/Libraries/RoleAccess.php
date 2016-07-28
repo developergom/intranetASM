@@ -29,7 +29,7 @@ class RoleAccess{
 
     	foreach($roles as $role) {
             $roles_modules = Cache::get('roles_modules');
-            if($roles_modules->where('role_id', ''.$role->role_id.'')->where('module_id', ''.$module_id.'')->where('action_id', ''.$action_id.'')->count() > 0) {
+            if($roles_modules->where('role_id', $role->role_id)->where('module_id', $module_id)->where('action_id', $action_id)->count() > 0) {
                 $access = true;
             }
     	}

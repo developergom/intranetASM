@@ -62,7 +62,7 @@
 	            								<center>
 	            									<div class="checkbox m-b-15">
 	            										<label>
-	            											@if(count($rolesmodules->where('module_id', ''.$menu['module_id'].'')->where('action_id', ''.$action->action_id.'')) > 0)
+	            											@if(count($rolesmodules->where('module_id', $menu['module_id'])->where('action_id', $action->action_id)) > 0)
 					            								<input name="module_id[{{ $menu['module_id'] }}][{{ $action->action_id }}]" type="checkbox" class="checkbox-item-{{ $menu['module_id'] }}" data-parent="{{ $menu['menu_parent'] }}" data-module="{{ $menu['module_id'] }}" value="1" checked="true">
 					            							@else
 					            								<input name="module_id[{{ $menu['module_id'] }}][{{ $action->action_id }}]" type="checkbox" class="checkbox-item-{{ $menu['module_id'] }}" data-parent="{{ $menu['menu_parent'] }}" data-module="{{ $menu['module_id'] }}" value="1">
