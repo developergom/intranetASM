@@ -12,12 +12,12 @@ class CreateUsersGroupsTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('users_groups', function (Blueprint $table) {
-            $table->integer('user_id');
-            $table->integer('group_id');
-            //
-        });
+        if (!Schema::hasTable('users_groups')) {
+            Schema::create('users_groups', function (Blueprint $table) {
+                $table->integer('user_id');
+                $table->integer('group_id');
+            });
+        }
     }
 
     /**

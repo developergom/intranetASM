@@ -12,21 +12,21 @@ class CreateMenusTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('menus', function (Blueprint $table) {
-            $table->increments('menu_id');
-            $table->integer('module_id');
-            $table->string('menu_name', 100);
-            $table->text('menu_desc')->nullable();
-            $table->string('menu_icon')->nullable();
-            $table->integer('menu_order');
-            $table->integer('menu_parent');
-            $table->enum('active',['0','1'])->default('1');
-            $table->integer('created_by');
-            $table->integer('updated_by')->nullable();
-            $table->timestamps();
-            //
-        });
+        if (!Schema::hasTable('menus')) {
+            Schema::create('menus', function (Blueprint $table) {
+                $table->increments('menu_id');
+                $table->integer('module_id');
+                $table->string('menu_name', 100);
+                $table->text('menu_desc')->nullable();
+                $table->string('menu_icon')->nullable();
+                $table->integer('menu_order');
+                $table->integer('menu_parent');
+                $table->enum('active',['0','1'])->default('1');
+                $table->integer('created_by');
+                $table->integer('updated_by')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

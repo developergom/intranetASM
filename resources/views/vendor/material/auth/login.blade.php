@@ -187,6 +187,10 @@
             $('.btn-login').click(function(){
                 $('#form-login').submit();
             });
+
+            /*setInterval(function(){
+                window.location.reload();
+            }, 3600000);*/ // 1 hour 
         });
         </script>
         

@@ -12,12 +12,12 @@ class CreateUsersMediasTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('users_medias', function (Blueprint $table) {
-            $table->integer('user_id');
-            $table->integer('media_id');
-            //
-        });
+        if (!Schema::hasTable('users_medias')) {
+            Schema::create('users_medias', function (Blueprint $table) {
+                $table->integer('user_id');
+                $table->integer('media_id');
+            });
+        }
     }
 
     /**

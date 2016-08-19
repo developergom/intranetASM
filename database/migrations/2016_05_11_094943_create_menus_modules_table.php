@@ -12,12 +12,12 @@ class CreateMenusModulesTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('menus_modules', function (Blueprint $table) {
-            $table->integer('menu_id');
-            $table->integer('module_id');
-            //
-        });
+        if (!Schema::hasTable('menus_modules')) {
+            Schema::create('menus_modules', function (Blueprint $table) {
+                $table->integer('menu_id');
+                $table->integer('module_id');
+            });
+        }
     }
 
     /**

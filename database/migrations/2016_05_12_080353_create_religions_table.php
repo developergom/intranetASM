@@ -12,16 +12,16 @@ class CreateReligionsTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('religions', function (Blueprint $table) {
-            $table->increments('religion_id');
-            $table->string('religion_name', 100);
-            $table->enum('active', ['0', '1'])->default('1');
-            $table->integer('created_by');
-            $table->integer('updated_by');
-            $table->timestamps();
-            //
-        });
+        if (!Schema::hasTable('religions')) {
+            Schema::create('religions', function (Blueprint $table) {
+                $table->increments('religion_id');
+                $table->string('religion_name', 100);
+                $table->enum('active', ['0', '1'])->default('1');
+                $table->integer('created_by');
+                $table->integer('updated_by');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

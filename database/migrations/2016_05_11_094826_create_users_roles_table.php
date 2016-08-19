@@ -12,12 +12,12 @@ class CreateUsersRolesTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('users_roles', function (Blueprint $table) {
-            $table->integer('user_id');
-            $table->integer('role_id');
-            //
-        });
+        if (!Schema::hasTable('users_roles')) {
+            Schema::create('users_roles', function (Blueprint $table) {
+                $table->integer('user_id');
+                $table->integer('role_id');
+            });
+        }
     }
 
     /**

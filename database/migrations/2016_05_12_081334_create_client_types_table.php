@@ -12,17 +12,17 @@ class CreateClientTypesTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('client_types', function (Blueprint $table) {
-            $table->increments('client_type_id');
-            $table->string('client_type_name', 100);
-            $table->text('client_type_desc')->nullable();
-            $table->enum('active', ['0', '1'])->default('1');
-            $table->integer('created_by');
-            $table->integer('updated_by');
-            $table->timestamps();
-            //
-        });
+        if (!Schema::hasTable('client_types')) {
+            Schema::create('client_types', function (Blueprint $table) {
+                $table->increments('client_type_id');
+                $table->string('client_type_name', 100);
+                $table->text('client_type_desc')->nullable();
+                $table->enum('active', ['0', '1'])->default('1');
+                $table->integer('created_by');
+                $table->integer('updated_by');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

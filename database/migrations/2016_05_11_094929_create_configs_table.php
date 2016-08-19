@@ -12,17 +12,17 @@ class CreateConfigsTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('configs', function (Blueprint $table) {
-            $table->increments('config_id');
-            $table->string('config_key', 100)->unique();
-            $table->string('config_value');
-            $table->text('config_desc')->nullable();
-            $table->integer('created_by');
-            $table->integer('updated_by')->nullable();
-            $table->timestamps();
-            //
-        });
+        if (!Schema::hasTable('configs')) {
+            Schema::create('configs', function (Blueprint $table) {
+                $table->increments('config_id');
+                $table->string('config_key', 100)->unique();
+                $table->string('config_value');
+                $table->text('config_desc')->nullable();
+                $table->integer('created_by');
+                $table->integer('updated_by')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

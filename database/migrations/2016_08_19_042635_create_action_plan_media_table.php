@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateActionsModulesTable extends Migration
+class CreateActionPlanMediaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,10 @@ class CreateActionsModulesTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('actions_modules')) {
-            Schema::create('actions_modules', function (Blueprint $table) {
-                $table->integer('action_id');
-                $table->integer('module_id');
+        if (!Schema::hasTable('action_plan_media')) {
+            Schema::create('action_plan_media', function (Blueprint $table) {
+                $table->integer('action_plan_id');
+                $table->integer('media_id');
             });
         }
     }
@@ -27,6 +27,6 @@ class CreateActionsModulesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('actions_modules');
+        Schema::dropIfExists('action_plan_media');
     }
 }

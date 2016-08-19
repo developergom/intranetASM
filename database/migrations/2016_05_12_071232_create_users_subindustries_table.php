@@ -12,12 +12,12 @@ class CreateUsersSubindustriesTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('users_subindustries', function (Blueprint $table) {
-            $table->integer('user_id');
-            $table->integer('subindustry_id');
-            //
-        });
+        if (!Schema::hasTable('users_subindustries')) {
+            Schema::create('users_subindustries', function (Blueprint $table) {
+                $table->integer('user_id');
+                $table->integer('subindustry_id');
+            });
+        }
     }
 
     /**

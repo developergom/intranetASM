@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGroupsTable extends Migration
+class CreateActionPlanUploadsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,16 +12,17 @@ class CreateGroupsTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('groups')) {
-            Schema::create('groups', function (Blueprint $table) {
-                $table->increments('group_id');
-                $table->string('group_name', 50);
-                $table->text('group_desc');
+        if (!Schema::hasTable('action_plan_uploads')) {
+            Schema::create('action_plan_uploads', function (Blueprint $table) {
+                $table->increments('action_plain_upload_id');
+                $table->integer('action_plan_id');
+                $table->string('action_plan_upload_file_name', 255);
+                $table->string('action_plan_upload_file_location', 255);
                 $table->enum('active',['0','1'])->default('1');
                 $table->integer('created_by');
                 $table->integer('updated_by')->nullable();
                 $table->timestamps();
-            });
+            });   
         }
     }
 
@@ -32,6 +33,6 @@ class CreateGroupsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('groups');  
+        Schema::dropIfExists('action_plan_uploads');
     }
 }

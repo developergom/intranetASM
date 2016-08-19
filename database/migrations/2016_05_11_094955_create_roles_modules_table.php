@@ -12,14 +12,14 @@ class CreateRolesModulesTable extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('roles_modules', function (Blueprint $table) {
-            $table->integer('role_id');
-            $table->integer('module_id');
-            $table->integer('action_id');
-            $table->integer('access');
-            //
-        });
+        if (!Schema::hasTable('roles_modules')) {
+            Schema::create('roles_modules', function (Blueprint $table) {
+                $table->integer('role_id');
+                $table->integer('module_id');
+                $table->integer('action_id');
+                $table->integer('access');
+            });
+        }
     }
 
     /**
