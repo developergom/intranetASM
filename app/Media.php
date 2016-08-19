@@ -46,4 +46,9 @@ class Media extends Model
     {
     	return $this->hasMany('App\AdvertiseRate','advertise_rate_id');
     }
+
+    public function actionplan()
+    {
+    	return $this->belongsToMany('App\ActionPlan','action_plan_media');
+    }
 }

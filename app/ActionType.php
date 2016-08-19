@@ -16,4 +16,8 @@ class ActionType extends Model
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
+
+	public function actionplan() {
+		return $this->hasMany('App\ActionPlan', 'action_plan_id');
+	}
 }

@@ -169,4 +169,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('unit/apiDelete', 'UnitController@apiDelete');
         Route::resource('unit', 'UnitController');
     });
+
+    Route::group(['prefix' => 'plan'], function() {
+        //Action Plan
+        Route::post('actionplan/apiList', 'ActionPlanController@apiList');
+        Route::post('actionplan/apiDelete', 'ActionPlanController@apiDelete');
+        Route::resource('actionplan', 'ActionPlanController');
+    });
 });
