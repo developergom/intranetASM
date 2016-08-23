@@ -17,6 +17,7 @@ class CreateFlowsTable extends Migration
                 $table->increments('flow_id');
                 $table->integer('flow_group_id');
                 $table->string('flow_name', 100);
+                $table->string('flow_url', 255);
                 $table->integer('flow_no');
                 $table->integer('flow_prev');
                 $table->integer('flow_next');

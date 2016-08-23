@@ -25,4 +25,8 @@ class Role extends Model{
     {
     	return DB::table('roles')->where('active','1')->where('role_name','like','%$search%')->skip($start)->take($limit)->get();
     }
+
+    public function flow() {
+    	return $this->hasMany('App\Flow', 'flow_id');
+    }
 }

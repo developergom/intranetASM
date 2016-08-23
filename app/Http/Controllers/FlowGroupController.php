@@ -188,7 +188,7 @@ class FlowGroupController extends Controller
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
-        $data['total'] = Menu::join('modules','modules.module_id','=','flow_groups.module_id')
+        $data['total'] = FlowGroup::join('modules','modules.module_id','=','flow_groups.module_id')
                                 ->where('flow_groups.active','1')
                                 ->where(function($query) use($searchPhrase) {
                                     $query->where('flow_group_name','like','%' . $searchPhrase . '%')

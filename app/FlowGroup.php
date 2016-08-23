@@ -20,4 +20,8 @@ class FlowGroup extends Model
 	public function module() {
 		return $this->belongsTo('App\Module','module_id');
 	}
+
+	public function flow() {
+		return $this->hasMany('App\Flow', 'flow_id');
+	}
 }
