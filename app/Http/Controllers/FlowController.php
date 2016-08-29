@@ -65,6 +65,9 @@ class FlowController extends Controller
             'role_id' => 'required'
         ]);
 
+        //reorder flow
+        $this->reorderFlow($request, 'ADD', $request->input('flow_group_id'), $request->input('flow_no'));
+
         $obj = new Flow;
         $obj->flow_group_id = $request->input('flow_group_id');
         $obj->flow_name = $request->input('flow_name');
@@ -149,6 +152,19 @@ class FlowController extends Controller
         ]);
 
         $obj = Flow::find($id);
+
+        //reorder flow
+        if($request->input('flow_no') > $obj->flow_no)
+        {
+            $direction = 'TOUPPER';
+        }
+        else
+        {
+            $direction = 'TOLOWER';
+        }
+
+        $this->reorderFlow($request, 'UPDATE', $request->input('flow_group_id'), $request->input('flow_no'), $direction, $obj->flow_no);
+
         $obj->flow_group_id = $request->input('flow_group_id');
         $obj->flow_name = $request->input('flow_name');
         $obj->flow_url = $request->input('flow_url');
@@ -235,6 +251,9 @@ class FlowController extends Controller
 
         $obj = Flow::find($id);
 
+        //reorder flow
+        $this->reorderFlow($request, 'DELETE', $obj->flow_group_id, $obj->flow_no);
+
         $obj->active = '0';
         $obj->updated_by = $request->user()->user_id;
 
@@ -267,5 +286,64 @@ class FlowController extends Controller
     	$flow = new Flow;
     	//dd($flow->flowbyitems);
     	return $flow->flowbyitems;
+    }
+
+    /**
+    * 
+    * @param string $method (ADD, UPDATE, DELETE)
+    * @param int $flow_group_id
+    * @param int $order
+    *
+    * @return void()
+    **/
+    private function reorderFlow(Request $request, $method, $flow_group_id, $order, $direction = NULL, $old_order = NULL)
+    {
+        if($method == 'ADD')
+        {
+            $flows = Flow::where('active','1')->where('flow_group_id', $flow_group_id)->where('flow_no', '>=', $order)->get();
+
+            foreach($flows as $flow)
+            {
+                $update = Flow::find($flow->flow_id);
+                $update->flow_no = $flow->flow_no + 1;
+                $update->updated_by = $request->user()->user_id;
+                $update->save();
+            }
+        }elseif($method == 'UPDATE'){
+            if($direction == 'TOLOWER')
+            {
+                $flows = Flow::where('active','1')->where('flow_group_id', $flow_group_id)->where('flow_no', '>=', $order)->where('flow_no', '<=', $old_order)->get();
+
+                foreach($flows as $flow)
+                {
+                    $update = Flow::find($flow->flow_id);
+                    $update->flow_no = $flow->flow_no + 1;
+                    $update->updated_by = $request->user()->user_id;
+                    $update->save();
+                }
+            }
+            elseif($direction == 'TOUPPER')
+            {
+                $flows = Flow::where('active','1')->where('flow_group_id', $flow_group_id)->where('flow_no', '>=', $order)->where('flow_no', '>=', $old_order)->get();
+
+                foreach($flows as $flow)
+                {
+                    $update = Flow::find($flow->flow_id);
+                    $update->flow_no = $flow->flow_no - 1;
+                    $update->updated_by = $request->user()->user_id;
+                    $update->save();
+                }
+            }
+        }elseif($method == 'DELETE'){
+            $flows = Flow::where('active','1')->where('flow_group_id', $flow_group_id)->where('flow_no', '>', $order)->get();
+
+            foreach($flows as $flow)
+            {
+                $update = Flow::find($flow->flow_id);
+                $update->flow_no = $flow->flow_no - 1;
+                $update->updated_by = $request->user()->user_id;
+                $update->save();
+            }
+        }
     }
 }
