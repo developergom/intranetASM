@@ -55,7 +55,33 @@ class FlowController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'flow_group_id' => 'required',
+            'flow_name' => 'required|max:100',
+            'flow_url' => 'required|max:255',
+            'flow_no' => 'required',
+            'flow_prev' => 'required',
+            'flow_by' => 'required',
+            'role_id' => 'required'
+        ]);
+
+        $obj = new Flow;
+        $obj->flow_group_id = $request->input('flow_group_id');
+        $obj->flow_name = $request->input('flow_name');
+        $obj->flow_url = $request->input('flow_url');
+        $obj->flow_no = $request->input('flow_no');
+        $obj->flow_prev = $request->input('flow_prev');
+        $obj->flow_next = $request->input('flow_no') + 1;
+        $obj->flow_by = $request->input('flow_by');
+        $obj->role_id = $request->input('role_id');
+        $obj->active = '1';
+        $obj->created_by = $request->user()->user_id;
+
+        $obj->save();
+
+        $request->session()->flash('status', 'Data has been saved!');
+
+        return redirect('master/flow');
     }
 
     /**
@@ -66,7 +92,18 @@ class FlowController extends Controller
      */
     public function show($id)
     {
-        //
+        if(Gate::denies('Flows Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['flow'] = Flow::find($id);
+        $data['flowbyitems'] = $this->getFlowByItems();
+        $data['flowgroup'] = FlowGroup::where('active','1')->orderBy('flow_group_name')->get();
+        $data['role'] = Role::where('active','1')->orderBy('role_name')->get();
+
+        return view('vendor.material.master.flow.show', $data);
     }
 
     /**
@@ -77,7 +114,19 @@ class FlowController extends Controller
      */
     public function edit($id)
     {
-        //
+        if(Gate::denies('Flows Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['flow'] = Flow::find($id);
+        $data['flowbyitems'] = $this->getFlowByItems();
+        $data['flowgroup'] = FlowGroup::where('active','1')->orderBy('flow_group_name')->get();
+        $data['role'] = Role::where('active','1')->orderBy('role_name')->get();
+        $data['count'] = Flow::where('active', '1')->where('flow_group_id', $data['flow']->flow_group_id)->count();
+
+        return view('vendor.material.master.flow.edit', $data);
     }
 
     /**
@@ -89,7 +138,32 @@ class FlowController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'flow_group_id' => 'required',
+            'flow_name' => 'required|max:100',
+            'flow_url' => 'required|max:255',
+            'flow_no' => 'required',
+            'flow_prev' => 'required',
+            'flow_by' => 'required',
+            'role_id' => 'required'
+        ]);
+
+        $obj = Flow::find($id);
+        $obj->flow_group_id = $request->input('flow_group_id');
+        $obj->flow_name = $request->input('flow_name');
+        $obj->flow_url = $request->input('flow_url');
+        $obj->flow_no = $request->input('flow_no');
+        $obj->flow_prev = $request->input('flow_prev');
+        $obj->flow_next = $request->input('flow_no') + 1;
+        $obj->flow_by = $request->input('flow_by');
+        $obj->role_id = $request->input('role_id');
+        $obj->updated_by = $request->user()->user_id;
+
+        $obj->save();
+
+        $request->session()->flash('status', 'Data has been updated!');
+
+        return redirect('master/flow');
     }
 
     /**

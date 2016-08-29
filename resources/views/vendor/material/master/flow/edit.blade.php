@@ -6,10 +6,11 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Flows Management<small>Create New Flow</small></h2></div>
+        <div class="card-header"><h2>Flows Management<small>Edit Flow Item</small></h2></div>
         <div class="card-body card-padding">
-        	<form class="form-horizontal" role="form" method="POST" action="{{ url('master/flow') }}">
+        	<form class="form-horizontal" role="form" method="POST" action="{{ url('master/flow/' . $flow->flow_id) }}">
         		{{ csrf_field() }}
+        		<input type="hidden" name="_method" value="PUT">
         		<div class="form-group">
 	                <label for="flow_group_id" class="col-sm-2 control-label">Flow Group</label>
 	                <div class="col-sm-10">
@@ -18,7 +19,7 @@
 	                        	<option value=""></option>
                                 @foreach ($flowgroup as $row)
                                 	{!! $selected = '' !!}
-                                	@if($row->flow_group_id==old('flow_group_id'))
+                                	@if($row->flow_group_id==$flow->flow_group_id)
                                 		{!! $selected = 'selected' !!}
                                 	@endif
 								    <option value="{{ $row->flow_group_id }}" {{ $selected }}>{{ $row->flow_group_name }}</option>
@@ -36,7 +37,7 @@
 	                <label for="flow_name" class="col-sm-2 control-label">Flow Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="flow_name" id="flow_name" placeholder="Flow Name" required="true" maxlength="100" value="{{ old('flow_name') }}">
+	                        <input type="text" class="form-control input-sm" name="flow_name" id="flow_name" placeholder="Flow Name" required="true" maxlength="100" value="{{ $flow->flow_name }}">
 	                    </div>
 	                    @if ($errors->has('flow_name'))
 			                <span class="help-block">
@@ -49,7 +50,7 @@
 	                <label for="flow_url" class="col-sm-2 control-label">Flow URL</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="flow_url" id="flow_url" placeholder="Flow URL" required="true" maxlength="255" value="{{ old('flow_url') }}">
+	                        <input type="text" class="form-control input-sm" name="flow_url" id="flow_url" placeholder="Flow URL" required="true" maxlength="255" value="{{ $flow->flow_url }}">
 	                    </div>
 	                    @if ($errors->has('flow_url'))
 			                <span class="help-block">
@@ -65,6 +66,13 @@
 	                        <div class="select">
 		                        <select name="flow_no" id="flow_no" class="form-control" required="true">
 		                        	<option value="">SELECT AN OPTION</option>
+		                        	@for($i = 1; $i <= $count; $i++)
+		                        		{!! $selected = '' !!}
+	                                	@if($i==$flow->flow_no)
+	                                		{!! $selected = 'selected' !!}
+	                                	@endif
+									    <option value="{{ $i }}" {{ $selected }}>{{ $i }}</option>
+		                        	@endfor
 		                        </select>
 	                        </div>
 	                    </div>
@@ -75,23 +83,6 @@
 			            @endif
 	                </div>
 	            </div>
-	            <!-- <div class="form-group">
-	                <label for="flow_next" class="col-sm-2 control-label">Next Flow</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <div class="select">
-		                        <select name="flow_next" id="flow_next" class="form-control" required="true">
-		                        	<option value="">SELECT AN OPTION</option>
-		                        </select>
-	                        </div>
-	                    </div>
-	                    @if ($errors->has('flow_next'))
-			                <span class="help-block">
-			                    <strong>{{ $errors->first('flow_next') }}</strong>
-			                </span>
-			            @endif
-	                </div>
-	            </div> -->
 	            <div class="form-group">
 	                <label for="flow_prev" class="col-sm-2 control-label">Previous Flow</label>
 	                <div class="col-sm-10">
@@ -99,6 +90,13 @@
 	                        <div class="select">
 		                        <select name="flow_prev" id="flow_prev" class="form-control" required="true">
 		                        	<option value="">SELECT AN OPTION</option>
+		                        	@for($i = 1; $i <= $count; $i++)
+		                        		{!! $selected = '' !!}
+	                                	@if($i==$flow->flow_prev)
+	                                		{!! $selected = 'selected' !!}
+	                                	@endif
+									    <option value="{{ $i }}" {{ $selected }}>{{ $i }}</option>
+		                        	@endfor
 		                        </select>
 	                        </div>
 	                    </div>
@@ -117,7 +115,7 @@
 	                        	<option value=""></option>
                                 @foreach ($flowbyitems as $key => $value)
                                 	{!! $selected = '' !!}
-                                	@if($key == old('flow_by'))
+                                	@if($key == $flow->flow_by)
                                 		{!! $selected = 'selected' !!}
                                 	@endif
 								    <option value="{{ $key }}" {{ $selected }}>{{ $value }}</option>
@@ -139,7 +137,7 @@
 	                        	<option value=""></option>
                                 @foreach ($role as $row)
                                 	{!! $selected = '' !!}
-                                	@if($row->role_id==old('role_id'))
+                                	@if($row->role_id==$flow->role_id)
                                 		{!! $selected = 'selected' !!}
                                 	@endif
 								    <option value="{{ $row->role_id }}" {{ $selected }}>{{ $row->role_name }}</option>

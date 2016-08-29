@@ -21,10 +21,10 @@ $(document).ready(function(){
 			success: function(data){
 				var max = data.count + 1;
 
-				$('#flow_no').empty();
+				$('#flow_no,#flow_prev').empty();
 				for(i = 1; i <= max; i++)
 				{
-					$('#flow_no').append('<option value="' + i + '">' + i + '</option>');
+					$('#flow_no,#flow_prev').append('<option value="' + i + '">' + i + '</option>');
 				}
 			}
 		});
