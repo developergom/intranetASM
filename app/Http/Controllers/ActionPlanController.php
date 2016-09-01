@@ -37,7 +37,15 @@ class ActionPlanController extends Controller
      */
     public function create()
     {
-        //
+        if(Gate::denies('Action Plan-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['actiontypes'] = ActionType::where('active', '1')->get();
+
+        return view('vendor.material.plan.actionplan.create', $data);
     }
 
     /**

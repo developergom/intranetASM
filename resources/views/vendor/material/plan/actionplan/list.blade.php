@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h2>Action Plan<small>List of all action plan</small></h2>
+        <h2>Action Plans<small>List of all action plan</small></h2>
         @can('Action Plan-Create')
         <a href="{{ url('plan/actionplan/create') }}" title="Create New Action Plan"><button class="btn bgm-blue btn-float waves-effect"><i class="zmdi zmdi-plus"></i></button></a>
         @endcan

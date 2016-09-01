@@ -14,7 +14,7 @@ class CreateActionPlansTable extends Migration
     {   
         if (!Schema::hasTable('action_plans')) {     
             Schema::create('action_plans', function (Blueprint $table) {
-                $table->increments('action_plain_id');
+                $table->increments('action_plan_id');
                 $table->integer('action_type_id');
                 $table->string('action_plan_title', 150);
                 $table->text('action_plan_desc');
