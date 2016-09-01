@@ -11,9 +11,21 @@ use App\Http\Requests;
 use App\ActionPlan;
 use App\UploadFile;
 use App\ActionType;
+use App\Media;
+use App\MediaEdition;
+
+use App\Ibrol\Libraries\FlowLibrary;
 
 class ActionPlanController extends Controller
 {
+    private $flows;
+    private $uri = '/plan/actionplan';
+
+    public function __construct() {
+        $flow = new FlowLibrary;
+        $this->flows = $flow->getCurrentFlows($this->uri);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -24,6 +36,8 @@ class ActionPlanController extends Controller
         if(Gate::denies('Action Plan-Read')) {
             abort(403, 'Unauthorized action.');
         }
+
+        //dd($this->flows);
 
         $data = array();
 
@@ -43,7 +57,11 @@ class ActionPlanController extends Controller
 
         $data = array();
 
-        $data['actiontypes'] = ActionType::where('active', '1')->get();
+        $data['actiontypes'] = ActionType::where('active', '1')->orderBy('action_type_name')->get();
+        $data['medias'] = Media::where('active', '1')->orderBy('media_name')->get();
+        $data['mediaeditions'] = MediaEdition::where('active', '1')->orderBy('media_edition_id')->get();
+
+        //dd($data['mediaeditions']);
 
         return view('vendor.material.plan.actionplan.create', $data);
     }

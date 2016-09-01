@@ -20,6 +20,8 @@ class CreateActionPlansTable extends Migration
                 $table->text('action_plan_desc');
                 $table->date('action_plan_startdate');
                 $table->date('action_plan_enddate');
+                $table->integer('flow_no');
+                $table->integer('current_user');
                 $table->enum('active',['0','1'])->default('1');
                 $table->integer('created_by');
                 $table->integer('updated_by')->nullable();
