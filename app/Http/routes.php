@@ -144,6 +144,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('module/apiDelete', 'ModuleController@apiDelete');
         Route::resource('module', 'ModuleController');
 
+        //Notification Type
+        Route::post('notificationtype/apiList', 'NotificationTypeController@apiList');
+        Route::post('notificationtype/apiDelete', 'NotificationTypeController@apiDelete');
+        Route::resource('notificationtype', 'NotificationTypeController');
+
         //Paper Type
         Route::post('paper/apiList', 'PaperController@apiList');
         Route::post('paper/apiDelete', 'PaperController@apiDelete');

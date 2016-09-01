@@ -18,7 +18,7 @@ class CreateNotificationTypesTable extends Migration
                 $table->string('notification_type_code');
                 $table->string('notification_type_name');
                 $table->string('notification_type_url');
-                $table->text('nofification_type_desc')->nullable();
+                $table->text('notification_type_desc')->nullable();
                 $table->enum('active', ['0', '1'])->default('1');
                 $table->integer('created_by');
                 $table->integer('updated_by');
