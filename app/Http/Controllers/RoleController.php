@@ -9,6 +9,7 @@ use Gate;
 use App\Action;
 use App\Menu;
 use App\Role;
+use App\RoleLevel;
 use App\RolesModules;
 
 use DB;
@@ -51,6 +52,7 @@ class RoleController extends Controller
 
         $data = array();
         $data['actions'] = Action::where('active','1')->get();
+        $data['rolelevels'] = RoleLevel::where('active','1')->get();
         $data['menus'] = $this->menulibrary->generateListModule();
         return view('vendor.material.master.role.create', $data);
     }
@@ -69,12 +71,14 @@ class RoleController extends Controller
         $module_access = $request->input('module_id');
 
         $this->validate($request, [
+            'role_level_id' => 'required',
             'role_name' => 'required|max:100',
             'role_desc' => 'required',
         ]);
 
         $role = new Role;
 
+        $role->role_level_id = $request->input('role_level_id');
         $role->role_name = $request->input('role_name');
         $role->role_desc = $request->input('role_desc');
         $role->active = '1';
@@ -117,6 +121,7 @@ class RoleController extends Controller
         $data = array();
         $data['actions'] = Action::where('active','1')->get();
         $data['role'] = Role::where('active','1')->find($id);
+        $data['rolelevels'] = RoleLevel::where('active','1')->get();
         $data['menus'] = $this->menulibrary->generateListModule();
         $data['rolesmodules'] = RolesModules::where('role_id', $id)->get();
         return view('vendor.material.master.role.show', $data);
@@ -139,6 +144,7 @@ class RoleController extends Controller
 
         $data = array();
         $data['actions'] = Action::where('active','1')->get();
+        $data['rolelevels'] = RoleLevel::where('active','1')->get();
         $data['role'] = Role::where('active','1')->find($id);
         $data['menus'] = $this->menulibrary->generateListModule();
         $data['rolesmodules'] = RolesModules::where('role_id', $id)->get();
@@ -161,12 +167,14 @@ class RoleController extends Controller
         $module_access = $request->input('module_id');
 
         $this->validate($request, [
+            'role_level_id' => 'required',
             'role_name' => 'required|max:100',
             'role_desc' => 'required',
         ]);
 
         $role = Role::find($id);
 
+        $role->role_level_id = $request->input('role_level_id');
         $role->role_name = $request->input('role_name');
         $role->role_desc = $request->input('role_desc');
         $role->updated_by = $request->user()->user_id;
@@ -226,17 +234,21 @@ class RoleController extends Controller
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
         $data['searchPhrase'] = $searchPhrase;
-        $data['rows'] = Role::where('active','1')
+        $data['rows'] = Role::join('role_levels', 'role_levels.role_level_id', '=', 'roles.role_level_id')
+                            ->where('roles.active','1')
                             ->where(function($query) use($searchPhrase) {
-                                $query->where('role_name','like','%' . $searchPhrase . '%')
+                                $query->where('role_level_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('role_name','like','%' . $searchPhrase . '%')
                                         ->orWhere('role_desc','like','%' . $searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
-        $data['total'] = Role::where('active','1')
+        $data['total'] = Role::join('role_levels', 'role_levels.role_level_id', '=', 'roles.role_level_id')
+                                ->where('roles.active','1')
                                 ->where(function($query) use($searchPhrase) {
-                                    $query->where('role_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('role_desc','like','%' . $searchPhrase . '%');
+                                    $query->where('role_level_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('role_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('role_desc','like','%' . $searchPhrase . '%');
                                 })->count();
 
         return response()->json($data);

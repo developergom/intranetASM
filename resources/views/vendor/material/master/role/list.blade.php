@@ -13,6 +13,7 @@
         <table id="grid-data" class="table table-hover">
             <thead>
                 <tr>
+                    <th data-column-id="role_level_name" data-order="asc">Role Level</th>
                     <th data-column-id="role_name" data-order="asc">Role Name</th>
                     <th data-column-id="role_desc" data-order="desc">Description</th>
                     @can('Roles Management-Update')

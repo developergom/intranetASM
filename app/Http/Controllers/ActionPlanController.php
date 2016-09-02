@@ -19,11 +19,14 @@ use App\Ibrol\Libraries\FlowLibrary;
 class ActionPlanController extends Controller
 {
     private $flows;
+    private $flow_group_id;
     private $uri = '/plan/actionplan';
 
     public function __construct() {
         $flow = new FlowLibrary;
         $this->flows = $flow->getCurrentFlows($this->uri);
+        $this->flow_group_id = $this->flows[0]->flow_group_id;
+        //dd();
     }
 
     /**
@@ -49,8 +52,11 @@ class ActionPlanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        /*$flow = new FlowLibrary;
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);*/
+
         if(Gate::denies('Action Plan-Create')) {
             abort(403, 'Unauthorized action.');
         }
@@ -60,8 +66,6 @@ class ActionPlanController extends Controller
         $data['actiontypes'] = ActionType::where('active', '1')->orderBy('action_type_name')->get();
         $data['medias'] = Media::where('active', '1')->orderBy('media_name')->get();
         $data['mediaeditions'] = MediaEdition::where('active', '1')->orderBy('media_edition_id')->get();
-
-        //dd($data['mediaeditions']);
 
         return view('vendor.material.plan.actionplan.create', $data);
     }
@@ -74,7 +78,28 @@ class ActionPlanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'action_plan_type_id' => 'required',
+            'action_plan_title' => 'required|max:100',
+            'action_plan_startdate' => 'required',
+            'action_plan_enddate' => 'required',
+            'media_edition_id[]' => 'array',
+            'media_id[]' => 'array',
+        ]);
+
+        $flow = new FlowLibrary;
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
+
+        $obj = new ActionPlan;
+        $obj->action_plan_type_id = $request->input('action_plan_type_id');
+        $obj->action_plan_title = $request->input('action_plan_title');
+        $obj->action_plan_startdate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_startdate'))->toDateString();
+        $obj->action_plan_enddate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_enddate'))->toDateString();
+        $obj->action_plan_desc = $request->input('action_plan_desc');
+        $obj->flow_no = '2';
+        $obj->current_user = $current_user;
+        $obj->active = '1';
+        $obj->created_by = $request->user()->user_id;
     }
 
     /**

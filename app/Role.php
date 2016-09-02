@@ -10,7 +10,7 @@ class Role extends Model{
 	protected $primaryKey = 'role_id';
 
 	protected $fillable = [
-				'role_name', 'role_desc'
+				'role_level_id', 'role_name', 'role_desc'
 	];
 
 	protected $hidden = [
@@ -19,6 +19,10 @@ class Role extends Model{
 
 	public function users() {
         return $this->belongsToMany('App\User','users_roles');
+    }
+
+    public function role_level() {
+    	return $this->belongsTo('App\RoleLevel', 'role_level_id');
     }
 
     public function getApiList($start = 0, $limit = 10, $search = '', $sort_name = 'role_id', $sort_type = 'asc')

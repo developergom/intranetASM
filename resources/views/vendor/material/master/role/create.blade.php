@@ -1,11 +1,37 @@
 @extends('vendor.material.layouts.app')
 
+@section('vendorcss')
+<link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+@endsection
+
 @section('content')
     <div class="card">
         <div class="card-header"><h2>Role Management<small>Create New Role</small></h2></div>
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form" method="POST" action="{{ url('master/role') }}">
         		{{ csrf_field() }}
+        		<div class="form-group">
+	                <label for="role_level_id" class="col-sm-2 control-label">Role Level</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <select name="role_level_id" id="role_level_id" class="chosen" required="true">
+	                        	<option value=""></option>
+                                @foreach ($rolelevels as $row)
+                                	{!! $selected = '' !!}
+                                	@if($row->role_level_id==old('role_level_id'))
+                                		{!! $selected = 'selected' !!}
+                                	@endif
+								    <option value="{{ $row->role_level_id }}" {{ $selected }}>{{ $row->role_level_name }}</option>
+								@endforeach
+                            </select>
+	                    </div>
+	                    @if ($errors->has('role_level_id'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('role_level_id') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
 	            <div class="form-group">
 	                <label for="role_name" class="col-sm-2 control-label">Role Name</label>
 	                <div class="col-sm-10">
@@ -86,6 +112,10 @@
 	        </form>
         </div>
     </div>
+@endsection
+
+@section('vendorjs')
+<script src="{{ url('js/chosen.jquery.js') }}"></script>
 @endsection
 
 @section('customjs')
