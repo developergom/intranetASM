@@ -19,33 +19,57 @@ class FlowLibrary{
 		return $tmp;
 	}
 
-	public function getNextFlow($flow_group_id, $flow_no, $user_id, $PIC = '')
+	public function getNextFlow($flow_group_id, $flow_no, $user_id, $pic = '', $author = '')
 	{
 		$nextFlow = array();
 
 		$flow = Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $flow_no  + 1)->first();
+		$nextUser = $this->getNextUser($flow->flow_by, $flow->role_id, $user_id, $pic, $author);
 		//dd($flow);
 
 		$nextFlow['flow_no'] = $flow->flow_no;
+		$nextFlow['current_user'] = $nextUser;
+
+		return $nextFlow;
 	}
 
-	private function getNextUser($flow_by, $role_id, $user_id) 
+	private function getNextUser($flow_by, $role_id, $user_id, $pic = '', $author = '') 
 	{
+		$nextUser = $author;
+
 		if($flow_by == 'AUTHOR') 
 		{
-
+			$nextUser = $author;
 		}elseif($flow_by == 'INDUSTRY')
 		{
 
 		}elseif($flow_by == 'MEDIA')
 		{
+			$currUser = User::find($user_id);
+			$media_id = $currUser->medias[0]->media_id;
+			$user = User::whereHas('medias',function($query) use($media_id){
+				$query->where('medias.media_id','=',$media_id);
+			})->whereHas('roles', function($query) use($role_id){
+				$query->where('roles.role_id','=',$role_id);
+			})->first();
 
+			$nextUser = $user->user_id;
 		}elseif($flow_by == 'PIC')
 		{
-
+			$nextUser = $pic;
 		}elseif($flow_by == 'GROUP')
 		{
+			$currUser = User::find($user_id);
+			$group_id = $currUser->groups[0]->group_id;
+			$user = User::whereHas('groups',function($query) use($group_id){
+				$query->where('groups.group_id','=',$group_id);
+			})->whereHas('roles', function($query) use($role_id){
+				$query->where('roles.role_id','=',$role_id);
+			})->first();
 
+			$nextUser = $user->user_id;
 		}
+
+		return $nextUser;
 	}
 }

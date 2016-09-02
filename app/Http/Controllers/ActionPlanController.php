@@ -9,23 +9,28 @@ use Carbon\Carbon;
 use Gate;
 use App\Http\Requests;
 use App\ActionPlan;
+use App\ActionPlanHistory;
 use App\UploadFile;
 use App\ActionType;
 use App\Media;
 use App\MediaEdition;
 
 use App\Ibrol\Libraries\FlowLibrary;
+use App\Ibrol\Libraries\NotificationLibrary;
 
 class ActionPlanController extends Controller
 {
     private $flows;
     private $flow_group_id;
     private $uri = '/plan/actionplan';
+    private $notif;
 
     public function __construct() {
         $flow = new FlowLibrary;
         $this->flows = $flow->getCurrentFlows($this->uri);
         $this->flow_group_id = $this->flows[0]->flow_group_id;
+
+        $this->notif = new NotificationLibrary;
         //dd();
     }
 
@@ -52,10 +57,12 @@ class ActionPlanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
         /*$flow = new FlowLibrary;
-        $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);*/
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
+
+        dd($nextFlow);*/
 
         if(Gate::denies('Action Plan-Create')) {
             abort(403, 'Unauthorized action.');
@@ -96,10 +103,26 @@ class ActionPlanController extends Controller
         $obj->action_plan_startdate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_startdate'))->toDateString();
         $obj->action_plan_enddate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_enddate'))->toDateString();
         $obj->action_plan_desc = $request->input('action_plan_desc');
-        $obj->flow_no = '2';
-        $obj->current_user = $current_user;
+        $obj->flow_no = $nextFlow['flow_no'];
+        $obj->current_user = $nextFlow['current_user'];
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
+
+        $obj->save();
+
+        $his = new ActionPlanHistory;
+        $his->action_plan_id = $obj->action_plan_id;
+        $his->action_plan_history_text = $request->input('action_plan_desc');
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'actionplanapproval', 'Please check ', $obj->action_plan_id);
+
+        $request->session()->flash('status', 'Data has been saved!');
+
+        return redirect('action_plan');
     }
 
     /**

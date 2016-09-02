@@ -39,4 +39,9 @@ class ActionPlan extends Model
 	{
 		return $this->belongsToMany('App\UploadFile', 'action_plan_upload_file');
 	}
+
+	public function action_plan_histories()
+	{
+		return $this->hasMany('App\ActionPlanHistory', 'action_plan_history_id');
+	}
 }
