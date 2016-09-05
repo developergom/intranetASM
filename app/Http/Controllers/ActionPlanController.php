@@ -14,6 +14,7 @@ use App\UploadFile;
 use App\ActionType;
 use App\Media;
 use App\MediaEdition;
+use App\User;
 
 use App\Ibrol\Libraries\FlowLibrary;
 use App\Ibrol\Libraries\NotificationLibrary;
@@ -57,7 +58,7 @@ class ActionPlanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         /*$flow = new FlowLibrary;
         $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
@@ -71,8 +72,23 @@ class ActionPlanController extends Controller
         $data = array();
 
         $data['actiontypes'] = ActionType::where('active', '1')->orderBy('action_type_name')->get();
-        $data['medias'] = Media::where('active', '1')->orderBy('media_name')->get();
-        $data['mediaeditions'] = MediaEdition::where('active', '1')->orderBy('media_edition_id')->get();
+        $data['medias'] = Media::whereHas('users', function($query) use($request){
+                            $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                        })->where('medias.active', '1')->orderBy('media_name')->get();
+
+        /*$m = MediaEdition::whereHas('media', function($query) use($data){
+            $query->where('mediaeditions.media_id', '=', $data['medias']);
+        })->where('mediaeditions.active', '1')->orderBy('media_edition_no')->get();*/
+        /*$m = MediaEdition::where('mediaeditions.media_id', 'IN', $data['medias'])->where('mediaeditions.active', '1')->orderBy('media_edition_no')->get();*/
+
+
+        $medias = array();
+        foreach ($data['medias'] as $key => $value) {
+            array_push($medias, $value['media_id']);
+        }
+        /*dd($medias);*/
+
+        $data['mediaeditions'] = MediaEdition::whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
 
         return view('vendor.material.plan.actionplan.create', $data);
     }

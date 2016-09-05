@@ -39,7 +39,7 @@ class Media extends Model
 
     public function mediaedition()
     {
-    	return $this->hasMany('App\MediaEdition','media_edition_id');
+    	return $this->hasMany('App\MediaEdition','media_id');
     }
 
     public function advertiserate()
