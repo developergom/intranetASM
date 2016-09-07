@@ -112,7 +112,7 @@
 	                <label for="media_edition_id" class="col-sm-2 control-label">Media Edition</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="media_edition_id[]" id="media_edition_id" class="chosen" multiple required="true">
+	                        <select name="media_edition_id[]" id="media_edition_id" class="chosen" multiple>
 	                        	<option value=""></option>
                                 @foreach ($mediaeditions as $row)
                                 	{!! $selected = '' !!}
@@ -138,7 +138,9 @@
 	                <label for="upload_file" class="col-sm-2 control-label">Upload File(s)</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <div class="dropzone" id="uploadFileArea"></div>
+	                        <div class="dropzone" id="uploadFileArea">
+	                        	
+	                        </div>
 	                    </div>
 	                </div>
 	            </div>

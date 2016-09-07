@@ -56,4 +56,24 @@ class DropzoneController extends Controller
     		return Response::json('error', 400);	
     	}
     }
+
+    public function getPreviousUploaded(Request $request) {
+    	$result = array();
+		$path = 'uploads/tmp/' . $request->user()->user_id;
+
+		$files = File::files($path);
+		foreach ($files as $key => $value) {
+			$file = pathinfo($value);
+			$filesize = File::size($value);
+
+			$obj = array();
+			$obj['name'] = $file['basename'];
+			$obj['size'] = $filesize;
+			$result['files'][] = $obj;
+		}
+
+		$result['_id'] = $request->user()->user_id;
+
+		echo json_encode($result);
+    }
 }

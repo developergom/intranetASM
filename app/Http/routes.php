@@ -17,6 +17,7 @@
 Route::get('dropzone', 'DropzoneController@index');
 Route::post('dropzone/uploadFiles', 'DropzoneController@uploadFiles');
 Route::post('dropzone/removeFile', 'DropzoneController@removeFile');
+Route::get('dropzone/getPreviousUploaded', 'DropzoneController@getPreviousUploaded');
 
 Route::get('/', 'HomeController@index')->middleware(['auth','menu']);
 
