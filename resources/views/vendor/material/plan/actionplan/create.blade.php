@@ -2,6 +2,8 @@
 
 @section('vendorcss')
 <link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+<link href="{{ url('css/basic.min.css') }}" rel="stylesheet">
+<link href="{{ url('css/dropzone.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -133,6 +135,14 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="upload_file" class="col-sm-2 control-label">Upload File(s)</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <div class="dropzone" id="uploadFileArea"></div>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
 	                    <a href="{{ url('plan/actionplan') }}" class="btn btn-danger btn-sm">Back</a>
@@ -145,6 +155,7 @@
 
 @section('vendorjs')
 <script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/dropzone.min.js') }}"></script>
 <script src="{{ url('js/input-mask.min.js') }}"></script>
 @endsection
 

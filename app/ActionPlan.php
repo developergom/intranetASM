@@ -25,17 +25,17 @@ class ActionPlan extends Model
 		return $this->belongsTo('App\ActionType', 'action_type_id');
 	}
 
-	public function media() 
+	public function medias() 
 	{
 		return $this->belongsToMany('App\Media', 'action_plan_media');
 	}
 
-	public function mediaedition()
+	public function mediaeditions()
 	{
 		return $this->belongsToMany('App\MediaEdition', 'action_plan_media_edition');
 	}
 
-	public function uploadfile() 
+	public function uploadfiles() 
 	{
 		return $this->belongsToMany('App\UploadFile', 'action_plan_upload_file');
 	}

@@ -17,6 +17,7 @@ class CreateUploadFilesTable extends Migration
                 $table->increments('upload_file_id');
                 $table->string('upload_file_type');
                 $table->string('upload_file_name');
+                $table->string('upload_file_path');
                 $table->string('upload_file_size');
                 $table->text('upload_file_desc');
                 $table->enum('active',['0','1'])->default('1');

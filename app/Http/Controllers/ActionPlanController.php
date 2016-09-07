@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Carbon\Carbon;
 
+use File;
 use Gate;
 use App\Http\Requests;
 use App\ActionPlan;
@@ -102,7 +103,7 @@ class ActionPlanController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'action_plan_type_id' => 'required',
+            'action_type_id' => 'required',
             'action_plan_title' => 'required|max:100',
             'action_plan_startdate' => 'required',
             'action_plan_enddate' => 'required',
@@ -114,7 +115,7 @@ class ActionPlanController extends Controller
         $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
 
         $obj = new ActionPlan;
-        $obj->action_plan_type_id = $request->input('action_plan_type_id');
+        $obj->action_type_id = $request->input('action_type_id');
         $obj->action_plan_title = $request->input('action_plan_title');
         $obj->action_plan_startdate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_startdate'))->toDateString();
         $obj->action_plan_enddate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_enddate'))->toDateString();
@@ -125,6 +126,42 @@ class ActionPlanController extends Controller
         $obj->created_by = $request->user()->user_id;
 
         $obj->save();
+
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+            }
+        }
+
+        ActionPlan::find($obj->action_plan_id)->uploadfiles()->sync($fileArray);
+        ActionPlan::find($obj->action_plan_id)->medias()->sync($request->input('media_id'));
+        ActionPlan::find($obj->action_plan_id)->mediaeditions()->sync($request->input('media_edition_id'));
 
         $his = new ActionPlanHistory;
         $his->action_plan_id = $obj->action_plan_id;
@@ -138,7 +175,7 @@ class ActionPlanController extends Controller
 
         $request->session()->flash('status', 'Data has been saved!');
 
-        return redirect('action_plan');
+        return redirect('plan/actionplan');
     }
 
     /**

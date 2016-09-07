@@ -12,6 +12,7 @@ class UploadFile extends Model
 	protected $fillable = [
 				'upload_file_type', 
 				'upload_file_name', 
+				'upload_file_path', 
 				'upload_file_size', 
 				'upload_file_desc'
 	];

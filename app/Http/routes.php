@@ -14,6 +14,9 @@
 /*Route::get('/', function () {
     return view('home');
 });*/
+Route::get('dropzone', 'DropzoneController@index');
+Route::post('dropzone/uploadFiles', 'DropzoneController@uploadFiles');
+Route::post('dropzone/removeFile', 'DropzoneController@removeFile');
 
 Route::get('/', 'HomeController@index')->middleware(['auth','menu']);
 
