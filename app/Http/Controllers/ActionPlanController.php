@@ -260,11 +260,11 @@ class ActionPlanController extends Controller
 
         if($listtype == 'onprocess') {
             $data['rows'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
-                                ->where('action_plans.active','1')
                                 ->where('action_plans.flow_no','<>','98')
-                                ->where('action_plans.flow_no','<>','99')
                                 ->where('action_plans.created_by',$request->user()->user_id)
                                 ->where('action_plans.current_user', '<>' , $request->user()->user_id)
+                                ->orWhereIn('action_plans.created_by', $subordinate)
+                                ->where('action_plans.active','1')
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
@@ -274,11 +274,11 @@ class ActionPlanController extends Controller
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
-                                ->where('action_plans.active','1')
                                 ->where('action_plans.flow_no','<>','98')
-                                ->where('action_plans.flow_no','<>','99')
                                 ->where('action_plans.created_by',$request->user()->user_id)
                                 ->where('action_plans.current_user', '<>' , $request->user()->user_id)
+                                ->orWhereIn('action_plans.created_by', $subordinate)
+                                ->where('action_plans.active','1')
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
