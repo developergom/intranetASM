@@ -19,6 +19,7 @@ use App\User;
 
 use App\Ibrol\Libraries\FlowLibrary;
 use App\Ibrol\Libraries\NotificationLibrary;
+use App\Ibrol\Libraries\UserLibrary;
 
 class ActionPlanController extends Controller
 {
@@ -233,6 +234,9 @@ class ActionPlanController extends Controller
 
     public function apiList($listtype, Request $request)
     {
+        $u = new UserLibrary;
+        $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+
         $current = $request->input('current') or 1;
         $rowCount = $request->input('rowCount') or 10;
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
