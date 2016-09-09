@@ -187,7 +187,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
 
     Route::group(['prefix' => 'plan'], function() {
         //Action Plan
-        Route::post('actionplan/apiList', 'ActionPlanController@apiList');
+        Route::post('actionplan/apiList/{listtype}', 'ActionPlanController@apiList');
         Route::post('actionplan/apiDelete', 'ActionPlanController@apiDelete');
         Route::resource('actionplan', 'ActionPlanController');
     });

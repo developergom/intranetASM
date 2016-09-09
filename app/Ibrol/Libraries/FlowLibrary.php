@@ -72,4 +72,8 @@ class FlowLibrary{
 
 		return $nextUser;
 	}
+
+	public function getTotalFlow() {
+		
+	}
 }

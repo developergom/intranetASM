@@ -159,9 +159,17 @@ class ActionPlanController extends Controller
             }
         }
 
-        ActionPlan::find($obj->action_plan_id)->uploadfiles()->sync($fileArray);
-        ActionPlan::find($obj->action_plan_id)->medias()->sync($request->input('media_id'));
-        ActionPlan::find($obj->action_plan_id)->mediaeditions()->sync($request->input('media_edition_id'));
+        if(!empty($fileArray)) {
+            ActionPlan::find($obj->action_plan_id)->uploadfiles()->sync($fileArray);    
+        }
+
+        if(!empty($request->input('media_id'))) {
+            ActionPlan::find($obj->action_plan_id)->medias()->sync($request->input('media_id'));
+        }
+        
+        if(!empty($request->input('media_edition_id'))) {
+            ActionPlan::find($obj->action_plan_id)->mediaeditions()->sync($request->input('media_edition_id'));
+        }
 
         $his = new ActionPlanHistory;
         $his->action_plan_id = $obj->action_plan_id;
@@ -223,7 +231,7 @@ class ActionPlanController extends Controller
         //
     }
 
-    public function apiList(Request $request)
+    public function apiList($listtype, Request $request)
     {
         $current = $request->input('current') or 1;
         $rowCount = $request->input('rowCount') or 10;
@@ -245,24 +253,106 @@ class ActionPlanController extends Controller
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
         $data['searchPhrase'] = $searchPhrase;
-        $data['rows'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
-                            ->where('action_plans.active','1')
-                            ->where(function($query) use($searchPhrase) {
-                                $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
-                                        ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
-                                        ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
-                                        ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%');
-                            })
-                            ->skip($skip)->take($rowCount)
-                            ->orderBy($sort_column, $sort_type)->get();
-        $data['total'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
-                            ->where('action_plans.active','1')
-                            ->where(function($query) use($searchPhrase) {
-                                $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
-                                        ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
-                                        ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
-                                        ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%');
-                            })->count();
+
+        if($listtype == 'onprocess') {
+            $data['rows'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+                                ->where('action_plans.active','1')
+                                ->where('action_plans.flow_no','<>','98')
+                                ->where('action_plans.flow_no','<>','99')
+                                ->where('action_plans.created_by',$request->user()->user_id)
+                                ->where('action_plans.current_user', '<>' , $request->user()->user_id)
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%');
+                                })
+                                ->skip($skip)->take($rowCount)
+                                ->orderBy($sort_column, $sort_type)->get();
+            $data['total'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+                                ->where('action_plans.active','1')
+                                ->where('action_plans.flow_no','<>','98')
+                                ->where('action_plans.flow_no','<>','99')
+                                ->where('action_plans.created_by',$request->user()->user_id)
+                                ->where('action_plans.current_user', '<>' , $request->user()->user_id)
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%');
+                                })->count();    
+        }elseif($listtype == 'needchecking') {
+            $data['rows'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+                                ->where('action_plans.active','1')
+                                ->where('action_plans.flow_no','<>','98')
+                                ->where('action_plans.flow_no','<>','99')
+                                ->where('action_plans.current_user', '=' , $request->user()->user_id)
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%');
+                                })
+                                ->skip($skip)->take($rowCount)
+                                ->orderBy($sort_column, $sort_type)->get();
+            $data['total'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+                                ->where('action_plans.active','1')
+                                ->where('action_plans.flow_no','<>','98')
+                                ->where('action_plans.flow_no','<>','99')
+                                ->where('action_plans.current_user', '=' , $request->user()->user_id)
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%');
+                                })->count();
+        }elseif($listtype == 'finished') {
+            $data['rows'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+                                ->where('action_plans.active','1')
+                                ->where('action_plans.flow_no','=','98')
+                                ->where('action_plans.created_by', '=' , $request->user()->user_id)
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%');
+                                })
+                                ->skip($skip)->take($rowCount)
+                                ->orderBy($sort_column, $sort_type)->get();
+            $data['total'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+                                ->where('action_plans.active','1')
+                                ->where('action_plans.flow_no','=','98')
+                                ->where('action_plans.created_by', '=' , $request->user()->user_id)
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%');
+                                })->count();
+        }elseif($listtype == 'canceled') {
+            $data['rows'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+                                ->where('action_plans.active','0')
+                                ->where('action_plans.created_by', '=' , $request->user()->user_id)
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%');
+                                })
+                                ->skip($skip)->take($rowCount)
+                                ->orderBy($sort_column, $sort_type)->get();
+            $data['total'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+                                ->where('action_plans.active','0')
+                                ->where('action_plans.created_by', '=' , $request->user()->user_id)
+                                ->where(function($query) use($searchPhrase) {
+                                    $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
+                                            ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%');
+                                })->count();
+        }
+
+        
 
         return response()->json($data);
     }
@@ -283,6 +373,14 @@ class ActionPlanController extends Controller
 
         if($obj->save())
         {
+            $his = new ActionPlanHistory;
+            $his->action_plan_id = $id;
+            $his->action_plan_history_text = 'Deleting';
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
             return response()->json(100); //success
         }else{
             return response()->json(200); //failed
