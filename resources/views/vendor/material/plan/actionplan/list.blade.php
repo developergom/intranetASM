@@ -35,14 +35,14 @@
                                     <th data-column-id="action_plan_startdate" data-order="asc">Start Period</th>
                                     <th data-column-id="action_plan_enddate" data-order="asc">End Period</th>
                                     @can('Action Plan-Update')
-                                        @can('Action Plan-Delete')
-                                            <th data-column-id="link" data-formatter="link-rud" data-sortable="false">Action</th>
+                                        @can('Action Plan-Approval')
+                                            <th data-column-id="link" data-formatter="link-rua" data-sortable="false">Action</th>
                                         @else
                                             <th data-column-id="link" data-formatter="link-ru" data-sortable="false">Action</th>
                                         @endcan
                                     @else
-                                        @can('Action Plan-Delete')
-                                            <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
+                                        @can('Action Plan-Approval')
+                                            <th data-column-id="link" data-formatter="link-ra" data-sortable="false">Action</th>
                                         @else
                                             <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
                                         @endcan
@@ -63,18 +63,10 @@
                                     <th data-column-id="action_plan_title" data-order="asc">Title</th>
                                     <th data-column-id="action_plan_startdate" data-order="asc">Start Period</th>
                                     <th data-column-id="action_plan_enddate" data-order="asc">End Period</th>
-                                    @can('Action Plan-Update')
-                                        @can('Action Plan-Delete')
-                                            <th data-column-id="link" data-formatter="link-rud" data-sortable="false">Action</th>
-                                        @else
-                                            <th data-column-id="link" data-formatter="link-ru" data-sortable="false">Action</th>
-                                        @endcan
+                                    @can('Action Plan-Delete')
+                                        <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
                                     @else
-                                        @can('Action Plan-Delete')
-                                            <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
-                                        @else
-                                            <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
-                                        @endcan
+                                        <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
                                     @endcan
                                 </tr>
                             </thead>
@@ -94,19 +86,7 @@
                                     <th data-column-id="action_plan_title" data-order="asc">Title</th>
                                     <th data-column-id="action_plan_startdate" data-order="asc">Start Period</th>
                                     <th data-column-id="action_plan_enddate" data-order="asc">End Period</th>
-                                    @can('Action Plan-Update')
-                                        @can('Action Plan-Delete')
-                                            <th data-column-id="link" data-formatter="link-rud" data-sortable="false">Action</th>
-                                        @else
-                                            <th data-column-id="link" data-formatter="link-ru" data-sortable="false">Action</th>
-                                        @endcan
-                                    @else
-                                        @can('Action Plan-Delete')
-                                            <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
-                                        @else
-                                            <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
-                                        @endcan
-                                    @endcan
+                                    <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -123,19 +103,7 @@
                                     <th data-column-id="action_plan_title" data-order="asc">Title</th>
                                     <th data-column-id="action_plan_startdate" data-order="asc">Start Period</th>
                                     <th data-column-id="action_plan_enddate" data-order="asc">End Period</th>
-                                    @can('Action Plan-Update')
-                                        @can('Action Plan-Delete')
-                                            <th data-column-id="link" data-formatter="link-rud" data-sortable="false">Action</th>
-                                        @else
-                                            <th data-column-id="link" data-formatter="link-ru" data-sortable="false">Action</th>
-                                        @endcan
-                                    @else
-                                        @can('Action Plan-Delete')
-                                            <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
-                                        @else
-                                            <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
-                                        @endcan
-                                    @endcan
+                                    <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
