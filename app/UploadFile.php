@@ -25,4 +25,9 @@ class UploadFile extends Model
 	{
 		return $this->belongsToMany('App\ActionPlan', 'action_plan_upload_file');
 	}
+
+	public function downloads()
+	{
+		return $this->hasMany('App\Download', 'upload_file_id');
+	}
 }
