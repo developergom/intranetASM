@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 @endcan
-                @can('Action Plan-Create')
+                @can('Action Plan-Read')
                 <div role="tabpanel" class="tab-pane" id="finished">
                     <div class="table-responsive">
                         <table id="grid-data-finished" class="table table-hover">
@@ -94,6 +94,8 @@
                         </table>
                     </div>
                 </div>
+                @endcan
+                @can('Action Plan-Create')
                 <div role="tabpanel" class="tab-pane" id="canceled">
                     <div class="table-responsive">
                         <table id="grid-data-canceled" class="table table-hover">

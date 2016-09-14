@@ -123,6 +123,7 @@ class ActionPlanController extends Controller
         $obj->action_plan_desc = $request->input('action_plan_desc');
         $obj->flow_no = $nextFlow['flow_no'];
         $obj->current_user = $nextFlow['current_user'];
+        $obj->revision_no = 0;
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
 
@@ -157,6 +158,7 @@ class ActionPlanController extends Controller
                 $upl->save();
 
                 array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => 0 ];
             }
         }
 
@@ -193,9 +195,36 @@ class ActionPlanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        if(Gate::denies('Action Plan-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['actiontypes'] = ActionType::where('active', '1')->orderBy('action_type_name')->get();
+        $data['medias'] = Media::whereHas('users', function($query) use($request){
+                            $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                        })->where('medias.active', '1')->orderBy('media_name')->get();
+
+        $medias = array();
+        foreach ($data['medias'] as $key => $value) {
+            array_push($medias, $value['media_id']);
+        }
+
+        $data['mediaeditions'] = MediaEdition::whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
+        $data['actionplan'] = ActionPlan::find($id);
+
+        $startdate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_startdate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_startdate);
+        $enddate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_enddate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_enddate);
+        $data['startdate'] = $startdate->format('d/m/Y');
+        $data['enddate'] = $enddate->format('d/m/Y');
+        $data['uploadedfiles'] = $data['actionplan']->uploadfiles()->where('revision_no', $data['actionplan']->revision_no)->get();
+
+        //dd($data['actionplan']->uploadfiles()->where('revision_no', $data['actionplan']->revision_no)->get());
+
+        return view('vendor.material.plan.actionplan.show', $data);
     }
 
     /**

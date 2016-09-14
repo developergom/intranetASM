@@ -16,6 +16,7 @@ class CreateActionPlanUploadFileTable extends Migration
             Schema::create('action_plan_upload_file', function (Blueprint $table) {
                 $table->integer('action_plan_id');
                 $table->integer('upload_file_id');
+                $table->integer('revision_no');
             });
         }
     }

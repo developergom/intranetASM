@@ -23,6 +23,8 @@ Route::get('/', 'HomeController@index')->middleware(['auth','menu']);
 
 Route::get('/test', 'Test@index');
 
+Route::get('/download/file/{id}', 'DownloadController@downloadFile');
+
 Route::auth();
 
 Route::get('/home', 'HomeController@index')->middleware(['auth','menu']);
