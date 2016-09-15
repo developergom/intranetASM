@@ -6,9 +6,9 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Action Plans<small>View Action Plan</small></h2></div>
+        <div class="card-header"><h2>Action Plans<small>Action Plan Approval</small></h2></div>
         <div class="card-body card-padding">
-        	<form class="form-horizontal" role="form">
+        	<form class="form-horizontal" role="form"  method="POST" action="{{ url('plan/actionplan/approve/' . $actionplan->flow_no . '/' . $actionplan->action_plan_id) }}">
         		{{ csrf_field() }}
         		<div class="form-group">
         			<label for="action_type_id" class="col-sm-2 control-label">Type</label>
@@ -130,30 +130,6 @@
 	                    </div>
 	                </div>
 	            </div>
-	            <!-- <div class="form-group">
-	                <label for="created_at" class="col-sm-2 control-label">Created Time</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" placeholder="Created Time" disabled="true" maxlength="100" value="{{ $actionplan->created_at }}">
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="updated_by" class="col-sm-2 control-label">Updated By</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" placeholder="Updated By" disabled="true" maxlength="100" value="">
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="updated_time" class="col-sm-2 control-label">Updated Time</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" placeholder="Updated Time" disabled="true" maxlength="100" value="{{ $actionplan->updated_at }}">
-	                    </div>
-	                </div>
-	            </div> -->
 	            <div class="form-group">
 	                <label for="history" class="col-sm-2 control-label">History</label>
 	                <div class="col-sm-10">
@@ -180,7 +156,33 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="approval" class="col-sm-2 control-label">Approval</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <label class="radio radio-inline m-r-20">
+	                            <input name="approval" value="1" type="radio" required>
+	                            <i class="input-helper"></i>  
+	                            Yes
+	                        </label>
+	                        <label class="radio radio-inline m-r-20">
+	                            <input name="approval" value="0" type="radio" required>
+	                            <i class="input-helper"></i>  
+	                            No
+	                        </label>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="comment" class="col-sm-2 control-label">Comment</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <textarea name="comment" id="comment" class="form-control input-sm" placeholder="Comment" required="true">{{ old('comment') }}</textarea>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
+	                	<button type="submit" class="btn btn-primary btn-sm">Submit</button>
 	                    <a href="{{ url('plan/actionplan') }}" class="btn btn-danger btn-sm">Back</a>
 	                </div>
 	            </div>

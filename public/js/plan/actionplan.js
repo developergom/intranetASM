@@ -18,7 +18,7 @@ $("#grid-data-needchecking").bootgrid({
                     +'<a title="Edit Action Plan" href="' + base_url + 'plan/actionplan/' + row.action_plan_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.action_plan_id + '"><span class="zmdi zmdi-edit"></span></a>';
             }else{
                 return '<a title="View Action Plan" href="' + base_url + 'plan/actionplan/' + row.action_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.action_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                    +'<a title="Approve Action Plan" href="' + base_url + 'plan/actionplan/approve/' + row.action_plan_id + '" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.action_plan_id + '"><span class="zmdi zmdi-assignment-alert"></span></a>';
+                    +'<a title="Approve Action Plan" href="' + base_url + 'plan/actionplan/approve/' + row.flow_no + '/' + row.action_plan_id + '" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.action_plan_id + '"><span class="zmdi zmdi-assignment-alert"></span></a>';
             }
         },
         "link-ru": function(column, row)
@@ -36,7 +36,7 @@ $("#grid-data-needchecking").bootgrid({
                 return '<a title="View Action Plan" href="' + base_url + 'plan/actionplan/' + row.action_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.action_plan_id + '"><span class="zmdi zmdi-more"></span></a>';                
             }else{
                 return '<a title="View Action Plan" href="' + base_url + 'plan/actionplan/' + row.action_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.action_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                    +'<a title="Approve Action Plan" href="' + base_url + 'plan/actionplan/approve/' + row.action_plan_id + '" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.action_plan_id + '"><span class="zmdi zmdi-assignment-alert"></span>';
+                    +'<a title="Approve Action Plan" href="' + base_url + 'plan/actionplan/approve/' + row.flow_no + '/' + row.action_plan_id + '" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.action_plan_id + '"><span class="zmdi zmdi-assignment-alert"></span></a>';
             }
         },
         "link-r": function(column, row)
@@ -104,7 +104,8 @@ $("#grid-data-onprocess").bootgrid({
                 if(data==100) 
                 {
                     swal("Deleted!", "Your data has been deleted.", "success");
-                    $("#grid-data-onprocess").bootgrid("reload");
+                    //$("#grid-data-onprocess").bootgrid("reload");
+                    reload_datagrid();
                 }else{
                     swal("Failed!", "Deleting data failed.", "error");
                 }
@@ -161,3 +162,11 @@ $("#grid-data-canceled").bootgrid({
 {
     
 });
+
+
+function reload_datagrid() {
+    $("#grid-data-onprocess").bootgrid("reload");
+    $("#grid-data-needchecking").bootgrid("reload");
+    $("#grid-data-finished").bootgrid("reload");
+    $("#grid-data-canceled").bootgrid("reload");
+}

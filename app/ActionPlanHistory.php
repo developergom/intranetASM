@@ -18,8 +18,22 @@ class ActionPlanHistory extends Model
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
 
-	public function action_plan() 
+	public function actionplan() 
 	{
-		return $this->belongsTo('App\ActionPlan', 'action_plan_history_id');
+		return $this->belongsTo('App\ActionPlan', 'action_plan_id');
+	}
+
+	public function getCreatedByAttribute($value)
+	{
+		$user = User::find($value); 
+		//return $user->user_firstname . ' ' . $user->user_lastname;
+		return $user;
+	}
+
+	public function getUpdatedByAttribute($value)
+	{
+		$user = User::find($value); 
+		//return $user->user_firstname . ' ' . $user->user_lastname;
+		return $user;
 	}
 }

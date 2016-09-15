@@ -63,6 +63,7 @@
                                     <th data-column-id="action_plan_title" data-order="asc">Title</th>
                                     <th data-column-id="action_plan_startdate" data-order="asc">Start Period</th>
                                     <th data-column-id="action_plan_enddate" data-order="asc">End Period</th>
+                                    <th data-column-id="user_firstname" data-order="asc">Current User</th>
                                     @can('Action Plan-Delete')
                                         <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
                                     @else

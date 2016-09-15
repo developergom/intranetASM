@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class ActionPlan extends Model
 {
@@ -40,8 +41,22 @@ class ActionPlan extends Model
 		return $this->belongsToMany('App\UploadFile', 'action_plan_upload_file');
 	}
 
-	public function action_plan_histories()
+	public function actionplanhistories()
 	{
-		return $this->hasMany('App\ActionPlanHistory', 'action_plan_history_id');
+		return $this->hasMany('App\ActionPlanHistory', 'action_plan_id');
+	}
+
+	public function getCreatedByAttribute($value)
+	{
+		$user = User::find($value); 
+		//return $user->user_firstname . ' ' . $user->user_lastname;
+		return $user;
+	}
+
+	public function getUpdatedByAttribute($value)
+	{
+		$user = User::find($value); 
+		//return $user->user_firstname . ' ' . $user->user_lastname;
+		return $user;
 	}
 }

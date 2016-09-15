@@ -183,7 +183,7 @@ class ActionPlanController extends Controller
 
         $his->save();
 
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'actionplanapproval', 'Please check ', $obj->action_plan_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'actionplanapproval', 'Please check Action Plan "' . $obj->action_plan_title . '"', $obj->action_plan_id);
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -202,10 +202,9 @@ class ActionPlanController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        //dd($request->server());
-        /*dd(BrowserDetect::detect());*/
-
         $data = array();
+
+        $data['actionplan'] = ActionPlan::find($id);
 
         $data['actiontypes'] = ActionType::where('active', '1')->orderBy('action_type_name')->get();
         $data['medias'] = Media::whereHas('users', function($query) use($request){
@@ -218,15 +217,11 @@ class ActionPlanController extends Controller
         }
 
         $data['mediaeditions'] = MediaEdition::whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
-        $data['actionplan'] = ActionPlan::find($id);
-
         $startdate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_startdate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_startdate);
         $enddate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_enddate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_enddate);
         $data['startdate'] = $startdate->format('d/m/Y');
         $data['enddate'] = $enddate->format('d/m/Y');
         $data['uploadedfiles'] = $data['actionplan']->uploadfiles()->where('revision_no', $data['actionplan']->revision_no)->get();
-
-        //dd($data['actionplan']->uploadfiles()->where('revision_no', $data['actionplan']->revision_no)->get());
 
         return view('vendor.material.plan.actionplan.show', $data);
     }
@@ -293,11 +288,14 @@ class ActionPlanController extends Controller
 
         if($listtype == 'onprocess') {
             $data['rows'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+                                ->join('users','users.user_id', '=', 'action_plans.current_user')
                                 ->where('action_plans.flow_no','<>','98')
-                                ->where('action_plans.created_by',$request->user()->user_id)
-                                ->where('action_plans.current_user', '<>' , $request->user()->user_id)
-                                ->orWhereIn('action_plans.created_by', $subordinate)
                                 ->where('action_plans.active','1')
+                                ->where('action_plans.current_user', '<>' , $request->user()->user_id)
+                                ->where(function($query) use($request, $subordinate){
+                                    $query->where('action_plans.created_by', '=' , $request->user()->user_id)
+                                            ->orWhereIn('action_plans.created_by', $subordinate);
+                                })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
@@ -307,11 +305,14 @@ class ActionPlanController extends Controller
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+                                ->join('users','users.user_id', '=', 'action_plans.current_user')
                                 ->where('action_plans.flow_no','<>','98')
-                                ->where('action_plans.created_by',$request->user()->user_id)
-                                ->where('action_plans.current_user', '<>' , $request->user()->user_id)
-                                ->orWhereIn('action_plans.created_by', $subordinate)
                                 ->where('action_plans.active','1')
+                                ->where('action_plans.current_user', '<>' , $request->user()->user_id)
+                                ->where(function($query) use($request, $subordinate){
+                                    $query->where('action_plans.created_by', '=' , $request->user()->user_id)
+                                            ->orWhereIn('action_plans.created_by', $subordinate);
+                                })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
@@ -347,7 +348,10 @@ class ActionPlanController extends Controller
             $data['rows'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
                                 ->where('action_plans.active','1')
                                 ->where('action_plans.flow_no','=','98')
-                                ->where('action_plans.created_by', '=' , $request->user()->user_id)
+                                ->where(function($query) use($request, $subordinate){
+                                    $query->where('action_plans.created_by', '=' , $request->user()->user_id)
+                                            ->orWhereIn('action_plans.created_by', $subordinate);
+                                })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
@@ -359,7 +363,10 @@ class ActionPlanController extends Controller
             $data['total'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
                                 ->where('action_plans.active','1')
                                 ->where('action_plans.flow_no','=','98')
-                                ->where('action_plans.created_by', '=' , $request->user()->user_id)
+                                ->where(function($query) use($request, $subordinate){
+                                    $query->where('action_plans.created_by', '=' , $request->user()->user_id)
+                                            ->orWhereIn('action_plans.created_by', $subordinate);
+                                })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
@@ -369,7 +376,10 @@ class ActionPlanController extends Controller
         }elseif($listtype == 'canceled') {
             $data['rows'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
                                 ->where('action_plans.active','0')
-                                ->where('action_plans.created_by', '=' , $request->user()->user_id)
+                                ->where(function($query) use($request, $subordinate){
+                                    $query->where('action_plans.created_by', '=' , $request->user()->user_id)
+                                            ->orWhereIn('action_plans.created_by', $subordinate);
+                                })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
@@ -380,7 +390,10 @@ class ActionPlanController extends Controller
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
                                 ->where('action_plans.active','0')
-                                ->where('action_plans.created_by', '=' , $request->user()->user_id)
+                                ->where(function($query) use($request, $subordinate){
+                                    $query->where('action_plans.created_by', '=' , $request->user()->user_id)
+                                            ->orWhereIn('action_plans.created_by', $subordinate);
+                                })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
@@ -422,5 +435,123 @@ class ActionPlanController extends Controller
         }else{
             return response()->json(200); //failed
         }
+    }
+
+    public function approve(Request $request, $flow_no, $id)
+    {
+        if($flow_no == 1) {
+            return $this->approveFlowNo1($request, $id);
+        }elseif($flow_no == 2) {
+            return $this->approveFlowNo2($request, $id);
+        }
+    }
+
+    public function postApprove(Request $request, $flow_no, $id)
+    {
+        if($flow_no == 1) {
+            $this->postApproveFlowNo1($request, $id);
+        }elseif($flow_no == 2) {
+            $this->postApproveFlowNo2($request, $id);
+        }
+
+        return redirect('plan/actionplan');
+    }
+
+    private function approveFlowNo2(Request $request, $id)
+    {
+        if(Gate::denies('Action Plan-Approval')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['actionplan'] = ActionPlan::find($id);
+
+        $data['actiontypes'] = ActionType::where('active', '1')->orderBy('action_type_name')->get();
+        $data['medias'] = Media::whereHas('users', function($query) use($request){
+                            $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                        })->where('medias.active', '1')->orderBy('media_name')->get();
+
+        $medias = array();
+        foreach ($data['medias'] as $key => $value) {
+            array_push($medias, $value['media_id']);
+        }
+
+        $data['mediaeditions'] = MediaEdition::whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
+        $startdate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_startdate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_startdate);
+        $enddate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_enddate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_enddate);
+        $data['startdate'] = $startdate->format('d/m/Y');
+        $data['enddate'] = $enddate->format('d/m/Y');
+        $data['uploadedfiles'] = $data['actionplan']->uploadfiles()->where('revision_no', $data['actionplan']->revision_no)->get();
+
+        return view('vendor.material.plan.actionplan.approve', $data);
+    }
+
+    private function postApproveFlowNo2(Request $request, $id)
+    {
+        if(Gate::denies('Action Plan-Approval')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $this->validate($request, [
+            'approval' => 'required',
+            'comment' => 'required',
+        ]);
+
+        if($request->input('approval') == '1') 
+        {
+            //approve
+            $actionplan = ActionPlan::find($id);
+
+            $flow = new FlowLibrary;
+            $nextFlow = $flow->getNextFlow($this->flow_group_id, $actionplan->flow_no, $request->user()->user_id, '', $actionplan->created_by->user_id);
+
+            //dd($nextFlow);
+
+            $actionplan->flow_no = $nextFlow['flow_no'];
+            $actionplan->current_user = $nextFlow['current_user'];
+            $actionplan->updated_by = $request->user()->user_id;
+            $actionplan->save();
+
+            $his = new ActionPlanHistory;
+            $his->action_plan_id = $id;
+            $his->action_plan_history_text = $request->input('comment');
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
+            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'actionplanfinished', 'Action Plan "' . $actionplan->action_plan_title . '" has been approved.', $id);
+
+            $request->session()->flash('status', 'Data has been saved!');
+
+        }else{
+            //reject
+            $actionplan = ActionPlan::find($id);
+
+            $flow = new FlowLibrary;
+            $prevFlow = $flow->getPreviousFlow($this->flow_group_id, $actionplan->flow_no, $request->user()->user_id, '', $actionplan->created_by->user_id);
+
+            //dd($prevFlow);
+
+            $actionplan->flow_no = $prevFlow['flow_no'];
+            $actionplan->revision_no = $actionplan->revision_no + 1;
+            $actionplan->current_user = $prevFlow['current_user'];
+            $actionplan->updated_by = $request->user()->user_id;
+            $actionplan->save();
+
+            $his = new ActionPlanHistory;
+            $his->action_plan_id = $id;
+            $his->action_plan_history_text = $request->input('comment');
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
+            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'actionplanreject', 'Action Plan "' . $actionplan->action_plan_title . '" rejected.', $id);
+
+            $request->session()->flash('status', 'Data has been saved!');
+        }
+
     }
 }

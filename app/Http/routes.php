@@ -192,5 +192,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('actionplan/apiList/{listtype}', 'ActionPlanController@apiList');
         Route::post('actionplan/apiDelete', 'ActionPlanController@apiDelete');
         Route::resource('actionplan', 'ActionPlanController');
+        Route::get('actionplan/approve/{flow_no}/{id}', 'ActionPlanController@approve');
+        Route::post('actionplan/approve/{flow_no}/{id}', 'ActionPlanController@postApprove');
     });
 });

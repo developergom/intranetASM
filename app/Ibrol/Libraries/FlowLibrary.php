@@ -23,12 +23,20 @@ class FlowLibrary{
 	{
 		$nextFlow = array();
 
-		$flow = Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $flow_no  + 1)->first();
-		$nextUser = $this->getNextUser($flow->flow_by, $flow->role_id, $user_id, $pic, $author);
-		//dd($flow);
+		//counting flow
+		if(Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $flow_no  + 1)->where('active', '1')->count() > 0)
+		{
+			$flow = Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $flow_no  + 1)->where('active', '1')->first();
+			$nextUser = $this->getNextUser($flow->flow_by, $flow->role_id, $user_id, $pic, $author);
+			//dd($flow);
 
-		$nextFlow['flow_no'] = $flow->flow_no;
-		$nextFlow['current_user'] = $nextUser;
+			$nextFlow['flow_no'] = $flow->flow_no;
+			$nextFlow['current_user'] = $nextUser;
+		}else{
+			$nextFlow['flow_no'] = 98;
+			$nextFlow['current_user'] = $author;
+		}
+
 
 		return $nextFlow;
 	}
@@ -73,7 +81,17 @@ class FlowLibrary{
 		return $nextUser;
 	}
 
-	public function getTotalFlow() {
-		
+	public function getPreviousFlow($flow_group_id, $flow_no, $user_id, $pic = '', $author = '') {
+		$prevFlow = array();
+
+		$currentFlow = Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $flow_no)->where('active', '1')->first();
+
+		$flow = Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $currentFlow->flow_prev)->where('active', '1')->first();
+		$prevUser = $this->getNextUser($flow->flow_by, $flow->role_id, $user_id, $pic, $author);
+
+		$prevFlow['flow_no'] = $flow->flow_no;
+		$prevFlow['current_user'] = $prevUser;
+
+		return $prevFlow;
 	}
 }
