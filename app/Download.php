@@ -14,6 +14,7 @@ class Download extends Model
 				'download_ip', 
 				'download_device', 
 				'download_os',
+				'download_browser',
 	];
 
 	protected $hidden = [

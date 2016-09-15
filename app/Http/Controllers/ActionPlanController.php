@@ -8,6 +8,7 @@ use Carbon\Carbon;
 
 use File;
 use Gate;
+use BrowserDetect;
 use App\Http\Requests;
 use App\ActionPlan;
 use App\ActionPlanHistory;
@@ -200,6 +201,9 @@ class ActionPlanController extends Controller
         if(Gate::denies('Action Plan-Read')) {
             abort(403, 'Unauthorized action.');
         }
+
+        //dd($request->server());
+        /*dd(BrowserDetect::detect());*/
 
         $data = array();
 
