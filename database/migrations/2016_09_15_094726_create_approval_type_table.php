@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateActionPlanHistoriesTable extends Migration
+class CreateApprovalTypeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,10 @@ class CreateActionPlanHistoriesTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('action_plan_histories')) {
-            Schema::create('action_plan_histories', function (Blueprint $table) {
-                $table->increments('action_plan_history_id');
-                $table->integer('action_plan_id');
-                $table->integer('approval_type_id');
-                $table->string('action_plan_history_text');
+        if (!Schema::hasTable('approval_types')) {
+            Schema::create('approval_types', function (Blueprint $table) {
+                $table->increments('approval_type_id');
+                $table->string('approval_type_name');
                 $table->enum('active', ['0', '1'])->default('1');
                 $table->integer('created_by');
                 $table->integer('updated_by');
@@ -33,6 +31,6 @@ class CreateActionPlanHistoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('action_plan_histories');
+        Schema::dropIfExists('approval_types');
     }
 }

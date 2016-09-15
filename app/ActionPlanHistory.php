@@ -11,6 +11,7 @@ class ActionPlanHistory extends Model
 
 	protected $fillable = [
 				'action_plan_id', 
+				'approval_type_id', 
 				'action_plan_history_text'
 	];
 
@@ -21,6 +22,11 @@ class ActionPlanHistory extends Model
 	public function actionplan() 
 	{
 		return $this->belongsTo('App\ActionPlan', 'action_plan_id');
+	}
+
+	public function approvaltype()
+	{
+		return $this->belongsTo('App\ApprovalType', 'approval_type_id');	
 	}
 
 	public function getCreatedByAttribute($value)

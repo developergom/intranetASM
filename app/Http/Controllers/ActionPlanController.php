@@ -177,6 +177,7 @@ class ActionPlanController extends Controller
 
         $his = new ActionPlanHistory;
         $his->action_plan_id = $obj->action_plan_id;
+        $his->approval_type_id = 1;
         $his->action_plan_history_text = $request->input('action_plan_desc');
         $his->active = '1';
         $his->created_by = $request->user()->user_id;
@@ -232,9 +233,34 @@ class ActionPlanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        //
+        if(Gate::denies('Action Plan-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['actionplan'] = ActionPlan::find($id);
+
+        $data['actiontypes'] = ActionType::where('active', '1')->orderBy('action_type_name')->get();
+        $data['medias'] = Media::whereHas('users', function($query) use($request){
+                            $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                        })->where('medias.active', '1')->orderBy('media_name')->get();
+
+        $medias = array();
+        foreach ($data['medias'] as $key => $value) {
+            array_push($medias, $value['media_id']);
+        }
+
+        $data['mediaeditions'] = MediaEdition::whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
+        $startdate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_startdate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_startdate);
+        $enddate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_enddate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_enddate);
+        $data['startdate'] = $startdate->format('d/m/Y');
+        $data['enddate'] = $enddate->format('d/m/Y');
+        $data['uploadedfiles'] = $data['actionplan']->uploadfiles()->where('revision_no', $data['actionplan']->revision_no)->get();
+
+        return view('vendor.material.plan.actionplan.edit', $data);
     }
 
     /**
@@ -246,7 +272,89 @@ class ActionPlanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'action_type_id' => 'required',
+            'action_plan_title' => 'required|max:100',
+            'action_plan_startdate' => 'required',
+            'action_plan_enddate' => 'required',
+            'media_edition_id[]' => 'array',
+            'media_id[]' => 'array',
+        ]);
+
+        $flow = new FlowLibrary;
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
+
+        $obj = ActionPlan::find($id);
+        $obj->action_type_id = $request->input('action_type_id');
+        $obj->action_plan_title = $request->input('action_plan_title');
+        $obj->action_plan_startdate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_startdate'))->toDateString();
+        $obj->action_plan_enddate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_enddate'))->toDateString();
+        $obj->action_plan_desc = $request->input('action_plan_desc');
+        $obj->flow_no = $nextFlow['flow_no'];
+        $obj->current_user = $nextFlow['current_user'];
+        $obj->updated_by = $request->user()->user_id;
+
+        $obj->save();
+
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => $obj->revision_no ];
+            }
+        }
+
+        if(!empty($fileArray)) {
+            ActionPlan::find($obj->action_plan_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
+        }
+
+        if(!empty($request->input('media_id'))) {
+            ActionPlan::find($obj->action_plan_id)->medias()->sync($request->input('media_id'));
+        }
+        
+        if(!empty($request->input('media_edition_id'))) {
+            ActionPlan::find($obj->action_plan_id)->mediaeditions()->sync($request->input('media_edition_id'));
+        }
+
+        $his = new ActionPlanHistory;
+        $his->action_plan_id = $obj->action_plan_id;
+        $his->approval_type_id = 1;
+        $his->action_plan_history_text = $request->input('action_plan_desc');
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'actionplanapproval', 'Please check Action Plan "' . $obj->action_plan_title . '"', $obj->action_plan_id);
+
+        $request->session()->flash('status', 'Data has been saved!');
+
+        return redirect('plan/actionplan');
     }
 
     /**
@@ -425,6 +533,7 @@ class ActionPlanController extends Controller
         {
             $his = new ActionPlanHistory;
             $his->action_plan_id = $id;
+            $his->approval_type_id = 3;
             $his->action_plan_history_text = 'Deleting';
             $his->active = '1';
             $his->created_by = $request->user()->user_id;
@@ -515,6 +624,7 @@ class ActionPlanController extends Controller
 
             $his = new ActionPlanHistory;
             $his->action_plan_id = $id;
+            $his->approval_type_id = 2;
             $his->action_plan_history_text = $request->input('comment');
             $his->active = '1';
             $his->created_by = $request->user()->user_id;
@@ -542,6 +652,7 @@ class ActionPlanController extends Controller
 
             $his = new ActionPlanHistory;
             $his->action_plan_id = $id;
+            $his->approval_type_id = 3;
             $his->action_plan_history_text = $request->input('comment');
             $his->active = '1';
             $his->created_by = $request->user()->user_id;
