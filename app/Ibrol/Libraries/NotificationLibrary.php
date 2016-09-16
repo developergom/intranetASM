@@ -13,7 +13,7 @@ class NotificationLibrary{
 		$obj->notification_text = $text;
 		$obj->notification_ref_id = $ref_id;
 		$obj->notification_receiver = $to;
-		$obj->notification_status = '1';
+		$obj->notification_status = '0';
 		$obj->active = '1';
 		$obj->created_by = $from;
 

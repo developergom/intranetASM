@@ -24,6 +24,7 @@ Route::get('/', 'HomeController@index')->middleware(['auth','menu']);
 Route::get('/test', 'Test@index');
 
 Route::get('/download/file/{id}', 'DownloadController@downloadFile');
+Route::get('/api/loadNotification', 'NotificationController@loadNotification');
 
 Route::auth();
 

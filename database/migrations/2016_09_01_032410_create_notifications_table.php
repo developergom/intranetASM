@@ -19,6 +19,7 @@ class CreateNotificationsTable extends Migration
                 $table->string('notification_text');
                 $table->integer('notification_ref_id');
                 $table->integer('notification_receiver');
+                $table->dateTime('notification_senttime');
                 $table->dateTime('notification_readtime');
                 $table->integer('notification_status');
                 $table->enum('active', ['0', '1'])->default('1');

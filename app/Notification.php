@@ -10,7 +10,7 @@ class Notification extends Model
 	protected $primaryKey = 'notification_id';
 
 	protected $fillable = [
-				'notification_type_code', 'notification_text', 'notification_ref_id', 'notification_receiver', 'notification_readtime', 'notification_status'
+				'notification_type_code', 'notification_text', 'notification_ref_id', 'notification_receiver', 'notification_senttime', 'notification_readtime', 'notification_status'
 	];
 
 	protected $hidden = [
