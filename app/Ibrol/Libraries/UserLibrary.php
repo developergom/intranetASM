@@ -25,7 +25,7 @@ class UserLibrary{
 						->join('users_roles', 'users_roles.user_id', '=', 'users.user_id')
 						->join('roles', 'roles.role_id', '=', 'users_roles.role_id')
 						->whereIn('users_groups.group_id', $user_group)
-						->where('roles.role_level_id', '<=', $role)
+						->where('roles.role_level_id', '<', $role)
 						->where('users.user_id', '<>', $user_id)
 						->get();
 

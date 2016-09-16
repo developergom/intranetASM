@@ -32,8 +32,9 @@
                                 <tr>
                                     <th data-column-id="action_type_name" data-order="asc">Type</th>
                                     <th data-column-id="action_plan_title" data-order="asc">Title</th>
-                                    <th data-column-id="action_plan_startdate" data-order="asc">Start Period</th>
-                                    <th data-column-id="action_plan_enddate" data-order="asc">End Period</th>
+                                    <th data-column-id="action_plan_startdate" data-converter="datetime" data-order="asc">Start Period</th>
+                                    <th data-column-id="action_plan_enddate" data-converter="datetime" data-order="asc">End Period</th>
+                                    <th data-column-id="user_firstname" data-order="asc">Created By</th>
                                     @can('Action Plan-Update')
                                         @can('Action Plan-Approval')
                                             <th data-column-id="link" data-formatter="link-rua" data-sortable="false">Action</th>
@@ -61,8 +62,8 @@
                                 <tr>
                                     <th data-column-id="action_type_name" data-order="asc">Type</th>
                                     <th data-column-id="action_plan_title" data-order="asc">Title</th>
-                                    <th data-column-id="action_plan_startdate" data-order="asc">Start Period</th>
-                                    <th data-column-id="action_plan_enddate" data-order="asc">End Period</th>
+                                    <th data-column-id="action_plan_startdate" data-converter="datetime" data-order="asc">Start Period</th>
+                                    <th data-column-id="action_plan_enddate" data-converter="datetime" data-order="asc">End Period</th>
                                     <th data-column-id="user_firstname" data-order="asc">Current User</th>
                                     @can('Action Plan-Delete')
                                         <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
@@ -85,8 +86,9 @@
                                 <tr>
                                     <th data-column-id="action_type_name" data-order="asc">Type</th>
                                     <th data-column-id="action_plan_title" data-order="asc">Title</th>
-                                    <th data-column-id="action_plan_startdate" data-order="asc">Start Period</th>
-                                    <th data-column-id="action_plan_enddate" data-order="asc">End Period</th>
+                                    <th data-column-id="action_plan_startdate" data-converter="datetime" data-order="asc">Start Period</th>
+                                    <th data-column-id="action_plan_enddate" data-converter="datetime" data-order="asc">End Period</th>
+                                    <th data-column-id="user_firstname" data-order="asc">Created By</th>
                                     <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
                                 </tr>
                             </thead>
@@ -104,8 +106,9 @@
                                 <tr>
                                     <th data-column-id="action_type_name" data-order="asc">Type</th>
                                     <th data-column-id="action_plan_title" data-order="asc">Title</th>
-                                    <th data-column-id="action_plan_startdate" data-order="asc">Start Period</th>
-                                    <th data-column-id="action_plan_enddate" data-order="asc">End Period</th>
+                                    <th data-column-id="action_plan_startdate" data-converter="datetime" data-order="asc">Start Period</th>
+                                    <th data-column-id="action_plan_enddate" data-converter="datetime" data-order="asc">End Period</th>
+                                    <th data-column-id="user_firstname" data-order="asc">Created By</th>
                                     <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
                                 </tr>
                             </thead>

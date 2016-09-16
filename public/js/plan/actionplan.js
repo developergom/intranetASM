@@ -43,6 +43,12 @@ $("#grid-data-needchecking").bootgrid({
         {
             return '<a title="View Action Plan" href="' + base_url + 'plan/actionplan/' + row.action_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.action_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
         }
+    },
+    converters: {
+        datetime: {
+            from: function (value) { return moment(value); },
+            to: function (value) { return moment(value).format("DD/MM/YYYY"); }
+        }
     }
 }).on("loaded.rs.jquery.bootgrid", function()
 {
@@ -70,6 +76,12 @@ $("#grid-data-onprocess").bootgrid({
         "link-r": function(column, row)
         {
             return '<a title="View Action Plan" href="' + base_url + 'plan/actionplan/' + row.action_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.action_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
+        }
+    },
+    converters: {
+        datetime: {
+            from: function (value) { return moment(value); },
+            to: function (value) { return moment(value).format("DD/MM/YYYY"); }
         }
     }
 }).on("loaded.rs.jquery.bootgrid", function()
@@ -134,6 +146,12 @@ $("#grid-data-finished").bootgrid({
         {
             return '<a title="View Action Plan" href="' + base_url + 'plan/actionplan/' + row.action_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.action_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
         }
+    },
+    converters: {
+        datetime: {
+            from: function (value) { return moment(value); },
+            to: function (value) { return moment(value).format("DD/MM/YYYY"); }
+        }
     }
 }).on("loaded.rs.jquery.bootgrid", function()
 {
@@ -156,6 +174,12 @@ $("#grid-data-canceled").bootgrid({
         "link-r": function(column, row)
         {
             return '<a title="View Action Plan" href="' + base_url + 'plan/actionplan/' + row.action_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.action_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
+        }
+    },
+    converters: {
+        datetime: {
+            from: function (value) { return moment(value); },
+            to: function (value) { return moment(value).format("DD/MM/YYYY"); }
         }
     }
 }).on("loaded.rs.jquery.bootgrid", function()
