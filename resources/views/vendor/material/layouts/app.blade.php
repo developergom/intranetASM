@@ -127,7 +127,7 @@
                         <li class="dropdown">
                             <a data-toggle="dropdown" href="#">
                                 <i class="tm-icon zmdi zmdi-notifications"></i>
-                                <i class="tmn-counts">0</i>
+                                <i class="tmn-counts" id="notification_count">0</i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-lg pull-right">
                                 <div class="listview" id="notifications">
@@ -568,6 +568,7 @@
         <script src="{{ url('js/jquery.simpleWeather.min.js') }}"></script>
         <script src="{{ url('js/waves.min.js') }}"></script>
         <script src="{{ url('js/bootstrap-notify.min.js') }}"></script>
+        <script src="{{ url('js/jquery.bootstrap-growl.js') }}"></script>
         <script src="{{ url('js/sweet-alert.min.js') }}"></script>
         <script src="{{ url('js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
         <script src="{{ url('js/jquery.bootgrid.min.js') }}"></script>

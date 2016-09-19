@@ -25,6 +25,7 @@ Route::get('/test', 'Test@index');
 
 Route::get('/download/file/{id}', 'DownloadController@downloadFile');
 Route::get('/api/loadNotification', 'NotificationController@loadNotification');
+Route::post('/api/updateNotification', 'NotificationController@updateNotification');
 
 Route::auth();
 
