@@ -16,13 +16,19 @@ $(document).ready(function(){
 		accept: function(file, done) {
 			done();
 		},
+		error: function(file, response){
+			alert(response);
+			getPreviousUploaded();
+		},
+		success: function(file, response){
+			console.log(response);
+		},
 		init: function() {
-			$.ajax({
+			/*$.ajax({
 				url: base_url + "/dropzone/getPreviousUploaded",
 				type: "GET",
 				dataType: "json",
 				success: function(data) {
-					/*console.log(data);*/
 					$.each(data.files, function(key, value){
 						var mockFile = { name: value.name, size: value.size };
 						myDropzone.options.addedfile.call(myDropzone, mockFile);
@@ -30,7 +36,8 @@ $(document).ready(function(){
 						myDropzone.options.complete.call(myDropzone, mockFile);
 					});
 				}
-			});
+			});*/
+			getPreviousUploaded();
 		}
 	});
 
@@ -94,4 +101,23 @@ $(document).ready(function(){
 
 		}
 	}*/
+
+	function getPreviousUploaded() {
+		$('#uploadFileArea').empty();
+
+		$.ajax({
+			url: base_url + "/dropzone/getPreviousUploaded",
+			type: "GET",
+			dataType: "json",
+			success: function(data) {
+				/*console.log(data);*/
+				$.each(data.files, function(key, value){
+					var mockFile = { name: value.name, size: value.size };
+					myDropzone.options.addedfile.call(myDropzone, mockFile);
+					myDropzone.options.thumbnail.call(myDropzone, mockFile, base_url + "uploads/tmp/" + data._id + "/" + value.name);
+					myDropzone.options.complete.call(myDropzone, mockFile);
+				});
+			}
+		});
+	}
 });

@@ -135,11 +135,11 @@
                                         Notification
 
                                         <ul class="actions">
-                                            <li class="dropdown">
+                                            <!-- <li class="dropdown">
                                                 <a href="#" data-clear="notification">
                                                     <i class="zmdi zmdi-check-all"></i>
                                                 </a>
-                                            </li>
+                                            </li> -->
                                         </ul>
                                     </div>
                                     <div class="lv-body" id="notification_lists">

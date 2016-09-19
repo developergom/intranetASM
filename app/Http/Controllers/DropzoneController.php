@@ -18,13 +18,13 @@ class DropzoneController extends Controller
 
     	$rules = array(
     		/*'file' => 'image|max:10000'*/
-    		'file' => 'max:10000'
+    		'file' => 'max:2000'
     	);
 
     	$validation = Validator::make($input, $rules);
 
     	if($validation->fails()) {
-    		return Response::make($validation->errors->first(), 400);
+    		return Response::json($validation->errors()->first(), 400);
     	}
 
     	$destinationPath = 'uploads/tmp/' . $request->user()->user_id;
