@@ -48,7 +48,8 @@ class NotificationTypeController extends Controller
         $this->validate($request, [
             'notification_type_code' => 'required|alpha_dash|max:50|unique:notification_types,notification_type_code',
             'notification_type_name' => 'required|max:255',
-            'notification_type_url' => 'required|max:255'
+            'notification_type_url' => 'required|max:255',
+            'notification_type_need_confirmation' => 'required'
         ]);
 
         $obj = new NotificationType;
@@ -57,6 +58,7 @@ class NotificationTypeController extends Controller
         $obj->notification_type_name = $request->input('notification_type_name');
         $obj->notification_type_url = $request->input('notification_type_url');
         $obj->notification_type_desc = $request->input('notification_type_desc');
+        $obj->notification_type_need_confirmation = $request->input('notification_type_need_confirmation');
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
 
@@ -112,7 +114,8 @@ class NotificationTypeController extends Controller
         $this->validate($request, [
             'notification_type_code' => 'required|alpha_dash|max:50|unique:notification_types,notification_type_code,' . $id . ',notification_type_id',
             'notification_type_name' => 'required|max:255',
-            'notification_type_url' => 'required|max:255'
+            'notification_type_url' => 'required|max:255',
+            'notification_type_need_confirmation' => 'required'
         ]);
 
         $obj = NotificationType::find($id);
@@ -121,6 +124,7 @@ class NotificationTypeController extends Controller
         $obj->notification_type_name = $request->input('notification_type_name');
         $obj->notification_type_url = $request->input('notification_type_url');
         $obj->notification_type_desc = $request->input('notification_type_desc');
+        $obj->notification_type_need_confirmation = $request->input('notification_type_need_confirmation');
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
 

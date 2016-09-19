@@ -5,6 +5,12 @@ $(document).ready(function(){
 	}, 60000); //check every 1 minute
 });
 
+$('#notification_lists').on('click', '.notification-item', function(){
+	var notification_id = $(this).data('notification_id');
+
+	readNotification(notification_id);
+});
+
 function loadNotification() {
 	$.ajax({
 		url: base_url + 'api/loadNotification',
@@ -16,7 +22,7 @@ function loadNotification() {
 				$('#notification_lists').empty();
 				$('#notification_count').empty();
 				$.each(data.notifications, function(key, value) {
-					html += '<a class="lv-item" href="' + value.notification_type_url + '" title="' + value.notification_text + '">'
+					html += '<a class="lv-item notification-item" href="' + value.notification_type_url + '" title="' + value.notification_text + '" data-notification_id="' + value.notification_id + '">'
                                 +'<div class="media">'
                                     +'<div class="pull-left">'
                                         +'<img class="lv-img-sm" src="img/avatar/' + value.user_avatar + '" alt="">'
@@ -56,7 +62,7 @@ function notify(message, notifType) {
 
 function sendNotification(notificationID, message, notifType) {
 	$.ajax({
-		url: base_url + 'api/updateNotification',
+		url: base_url + 'api/sendNotification',
 		type: 'POST',
 		data: {
 				'notification_id' : notificationID,
@@ -73,4 +79,23 @@ function sendNotification(notificationID, message, notifType) {
 			}
 		}
 	});
+}
+
+function readNotification(notificationID) {
+	$.ajax({
+		url: base_url + 'api/readNotification',
+		type: 'POST',
+		data: {
+				'notification_id' : notificationID,
+				'_token' : $('meta[name="csrf-token"]').attr('content')
+				},
+		dataType: 'json',
+		success: function(data) {
+			if(data == 'success') {
+				console.log('Read Notification Success');
+			}else{
+				console.log('Read Notification Failed');
+			}
+		}
+	});	
 }

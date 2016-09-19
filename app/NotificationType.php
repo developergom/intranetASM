@@ -10,7 +10,7 @@ class NotificationType extends Model
 	protected $primaryKey = 'notification_type_id';
 
 	protected $fillable = [
-				'notification_type_code', 'notification_type_name', 'notification_type_url', 'notification_type_desc'
+				'notification_type_code', 'notification_type_name', 'notification_type_url', 'notification_type_desc', 'notification_type_need_confirmation'
 	];
 
 	protected $hidden = [
@@ -18,6 +18,6 @@ class NotificationType extends Model
 	];
 
 	public function notification() {
-		return $this->hasMany('App\Notification', 'notification_type_code');
+		return $this->hasMany('App\Notification', 'notification_type_code', 'notification_type_code');
 	}
 }

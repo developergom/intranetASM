@@ -18,6 +18,6 @@ class Notification extends Model
 	];
 
 	public function notification_type() {
-		return $this->belongsTo('App\NotificationType', 'notification_type_code');
+		return $this->belongsTo('App\NotificationType', 'notification_type_code', 'notification_type_code');
 	}
 }
