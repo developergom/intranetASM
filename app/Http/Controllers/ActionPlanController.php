@@ -350,6 +350,7 @@ class ActionPlanController extends Controller
 
         $his->save();
 
+        $this->notif->remove($request->user()->user_id, 'actionplanreject', $obj->action_plan_id);
         $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'actionplanapproval', 'Please check Action Plan "' . $obj->action_plan_title . '"', $obj->action_plan_id);
 
         $request->session()->flash('status', 'Data has been saved!');
@@ -556,6 +557,10 @@ class ActionPlanController extends Controller
 
             $his->save();
 
+            $this->notif->remove($request->user()->user_id, 'actionplanreject', $obj->action_plan_id);
+            $this->notif->remove($request->user()->user_id, 'actionplanapproval', $obj->action_plan_id);
+            $this->notif->remove($request->user()->user_id, 'actionplanfinished', $obj->action_plan_id);
+
             return response()->json(100); //success
         }else{
             return response()->json(200); //failed
@@ -647,6 +652,7 @@ class ActionPlanController extends Controller
 
             $his->save();
 
+            $this->notif->remove($request->user()->user_id, 'actionplanapproval', $actionplan->action_plan_id);
             $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'actionplanfinished', 'Action Plan "' . $actionplan->action_plan_title . '" has been approved.', $id);
 
             $request->session()->flash('status', 'Data has been saved!');
@@ -675,6 +681,7 @@ class ActionPlanController extends Controller
 
             $his->save();
 
+            $this->notif->remove($request->user()->user_id, 'actionplanapproval', $actionplan->action_plan_id);
             $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'actionplanreject', 'Action Plan "' . $actionplan->action_plan_title . '" rejected.', $id);
 
             $request->session()->flash('status', 'Data has been saved!');

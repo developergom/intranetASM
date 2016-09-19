@@ -26,11 +26,15 @@ class NotificationLibrary{
 		$obj->save();
 	}
 
-	public function read($receiver, $ref_id)
+	public function remove($receiver, $notification_type_code, $ref_id)
 	{
-		$obj = Notification::where('notification_ref_id', $ref_id)->where('notification_receiver', $receiver)->first();
+		$obj = Notification::where('notification_type_code', $notification_type_code)->where('notification_ref_id', $ref_id)->where('notification_receiver', $receiver)->where('active', '1')->first();
 
-		$obj->status = '0';
+		//dd($obj);
+
+		$obj->notification_status = '1';
+		$obj->active = '0';
+		$obj->updated_by = $receiver;
 
 		$obj->save();
 	}
