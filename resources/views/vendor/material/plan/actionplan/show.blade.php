@@ -2,6 +2,7 @@
 
 @section('vendorcss')
 <link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -14,7 +15,7 @@
         			<label for="action_type_id" class="col-sm-2 control-label">Type</label>
         			<div class="col-sm-10">
         				<div class="fg-line">
-	        				<select name="action_type_id" id="action_type_id" class="chosen" disabled="true">
+	        				<select name="action_type_id" id="action_type_id" class="selectpicker" data-live-search="true" disabled="true">
 	        					@foreach($actiontypes as $row)
 	        						@if($actionplan->action_type_id == $row->action_type_id)
 	        							<option value="{{ $row->action_type_id }}" selected>{{ $row->action_type_name }}</option>
@@ -60,7 +61,7 @@
 	                <label for="media_id" class="col-sm-2 control-label">Media</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="media_id[]" id="media_id" class="chosen" multiple required="true" disabled="true" placeholder="Media Edition">
+	                        <select name="media_id[]" id="media_id" class="selectpicker" data-live-search="true" multiple required="true" disabled="true" placeholder="Media Edition">
                                 @foreach ($medias as $row)
                                 	{!! $selected = '' !!}
                                 	@foreach ($actionplan->medias as $media)
@@ -78,7 +79,7 @@
 	                <label for="media_edition_id" class="col-sm-2 control-label">Media Edition</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="media_edition_id[]" id="media_edition_id" class="chosen" multiple disabled="true" placeholder="Media Edition">
+	                        <select name="media_edition_id[]" id="media_edition_id" class="selectpicker" data-live-search="true" multiple disabled="true" placeholder="Media Edition">
                                 @foreach ($mediaeditions as $row)
                                 	{!! $selected = '' !!}
                                 	@foreach ($actionplan->mediaeditions as $mediaedition)
@@ -195,6 +196,7 @@
 
 @section('vendorjs')
 <script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 @endsection
 
 @section('customjs')

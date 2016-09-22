@@ -33,6 +33,7 @@
     "jquery.price_format": "^2.0.0",
     "twitter-bootstrap-wizard": "^1.3.2",
     "dropzone": "^4.3.0",
-    "bootstrap-growl": "^1.1.0"
+    "bootstrap-growl": "^1.1.0",
+    "bootstrap-select": "^1.11.2"
   }
 }
