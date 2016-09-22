@@ -1,7 +1,7 @@
 @extends('vendor.material.layouts.app')
 
 @section('vendorcss')
-<link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -77,18 +77,13 @@
 	                <label for="role_id" class="col-sm-2 control-label">Role</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="role_id[]" id="role_id" class="chosen" multiple required="true" disabled="true">
-	                        	<option value=""></option>
-                                @foreach ($roles as $row)
-                                	{!! $selected = '' !!}
-                                	@foreach ($user->roles as $role)
-                                		@if($role->role_id==$row->role_id)
-                                			{!! $selected = 'selected' !!}
-                                		@endif
-                                	@endforeach
-								    <option value="{{ $row->role_id }}" {{ $selected }}>{{ $row->role_name }}</option>
-								@endforeach
-                            </select>
+                            @foreach ($roles as $row)
+                            	@foreach ($user->roles as $role)
+                            		@if($role->role_id==$row->role_id)
+                            			<span class="badge">{{ $row->role_name }}</span>
+                            		@endif
+                            	@endforeach
+							@endforeach
 	                    </div>
 	                </div>
 	            </div>
@@ -96,18 +91,13 @@
 	                <label for="group_id" class="col-sm-2 control-label">Group</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="group_id[]" id="group_id" class="chosen" multiple required="true" disabled="true">
-	                        	<option value=""></option>
-                                @foreach ($groups as $row)
-                                	{!! $selected = '' !!}
-                                	@foreach ($user->groups as $group)
-                                		@if($group->group_id==$row->group_id)
-                                			{!! $selected = 'selected' !!}
-                                		@endif
-                                	@endforeach
-								    <option value="{{ $row->group_id }}" {{ $selected }}>{{ $row->group_name }}</option>
-								@endforeach
-                            </select>
+                            @foreach ($groups as $row)
+                            	@foreach ($user->groups as $group)
+                            		@if($group->group_id==$row->group_id)
+                            			<span class="badge">{{ $row->group_name }}</span>
+                            		@endif
+                            	@endforeach
+							@endforeach
 	                    </div>
 	                </div>
 	            </div>
@@ -115,18 +105,13 @@
 	                <label for="media_id" class="col-sm-2 control-label">Media</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="media_id[]" id="media_id" class="chosen" multiple required="true" disabled="true">
-	                        	<option value=""></option>
-                                @foreach ($medias as $row)
-                                	{!! $selected = '' !!}
-                                	@foreach ($user->medias as $media)
-                                		@if($media->media_id==$row->media_id)
-                                			{!! $selected = 'selected' !!}
-                                		@endif
-                                	@endforeach
-								    <option value="{{ $row->media_id }}" {{ $selected }}>{{ $row->media_name }}</option>
-								@endforeach
-                            </select>
+                            @foreach ($medias as $row)
+                            	@foreach ($user->medias as $media)
+                            		@if($media->media_id==$row->media_id)
+                            			<span class="badge">{{ $row->media_name }}</span>
+                            		@endif
+                            	@endforeach
+							@endforeach
 	                    </div>
 	                </div>
 	            </div>
@@ -141,7 +126,7 @@
 @endsection
 
 @section('vendorjs')
-<script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/input-mask.min.js') }}"></script>
 @endsection
 

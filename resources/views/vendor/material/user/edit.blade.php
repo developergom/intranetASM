@@ -1,7 +1,7 @@
 @extends('vendor.material.layouts.app')
 
 @section('vendorcss')
-<link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -93,8 +93,8 @@
 	                <label for="religion_id" class="col-sm-2 control-label">Religion</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="religion_id" id="religion_id" class="chosen" required="true">
-	                        	<option value=""></option>
+	                        <select name="religion_id" id="religion_id" class="selectpicker" data-live-search="true" required="true">
+	                        	<!-- <option value=""></option> -->
                                 @foreach ($religion as $row)
                                 	{!! $selected = '' !!}
                                 	@if($row->religion_id==$user->religion_id)
@@ -141,8 +141,8 @@
 	                <label for="role_id" class="col-sm-2 control-label">Role</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="role_id[]" id="role_id" class="chosen" multiple required="true">
-	                        	<option value=""></option>
+	                        <select name="role_id[]" id="role_id" class="selectpicker" data-live-search="true" multiple required="true">
+	                        	<!-- <option value=""></option> -->
                                 @foreach ($roles as $row)
                                 	{!! $selected = '' !!}
                                 	@foreach ($user->roles as $role)
@@ -165,8 +165,8 @@
 	                <label for="group_id" class="col-sm-2 control-label">Group</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="group_id[]" id="group_id" class="chosen" multiple required="true">
-	                        	<option value=""></option>
+	                        <select name="group_id[]" id="group_id" class="selectpicker" data-live-search="true" multiple required="true">
+	                        	<!-- <option value=""></option> -->
                                 @foreach ($groups as $row)
                                 	{!! $selected = '' !!}
                                 	@foreach ($user->groups as $group)
@@ -189,8 +189,8 @@
 	                <label for="media_id" class="col-sm-2 control-label">Media</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="media_id[]" id="media_id" class="chosen" multiple required="true">
-	                        	<option value=""></option>
+	                        <select name="media_id[]" id="media_id" class="selectpicker" data-live-search="true" multiple required="true">
+	                        	<!-- <option value=""></option> -->
                                 @foreach ($medias as $row)
                                 	{!! $selected = '' !!}
                                 	@foreach ($user->medias as $media)
@@ -221,7 +221,7 @@
 @endsection
 
 @section('vendorjs')
-<script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/input-mask.min.js') }}"></script>
 @endsection
 

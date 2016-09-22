@@ -61,17 +61,13 @@
 	                <label for="media_id" class="col-sm-2 control-label">Media</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="media_id[]" id="media_id" class="selectpicker" data-live-search="true" multiple required="true" disabled="true" placeholder="Media Edition">
-                                @foreach ($medias as $row)
-                                	{!! $selected = '' !!}
-                                	@foreach ($actionplan->medias as $media)
-                                		@if($media->media_id==$row->media_id)
-                                			{!! $selected = 'selected' !!}
-                                		@endif
-                                	@endforeach
-								    <option value="{{ $row->media_id }}" {{ $selected }}>{{ $row->media_name }}</option>
-								@endforeach
-                            </select>
+                            @foreach ($medias as $row)
+                            	@foreach ($actionplan->medias as $media)
+                            		@if($media->media_id==$row->media_id)
+                            			<span class="badge">{{ $row->media_name }}</span>
+                            		@endif
+                            	@endforeach
+							@endforeach
 	                    </div>
 	                </div>
 	            </div>
@@ -79,17 +75,13 @@
 	                <label for="media_edition_id" class="col-sm-2 control-label">Media Edition</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="media_edition_id[]" id="media_edition_id" class="selectpicker" data-live-search="true" multiple disabled="true" placeholder="Media Edition">
-                                @foreach ($mediaeditions as $row)
-                                	{!! $selected = '' !!}
-                                	@foreach ($actionplan->mediaeditions as $mediaedition)
-                                		@if($mediaedition->media_edition_id==$row->media_edition_id)
-                                			{!! $selected = 'selected' !!}
-                                		@endif
-                                	@endforeach
-								    <option value="{{ $row->media_edition_id }}" {{ $selected }}>{{ $row->media->media_name .' - '. $row->media_edition_no }}</option>
-								@endforeach
-                            </select>
+                            @foreach ($mediaeditions as $row)
+                            	@foreach ($actionplan->mediaeditions as $mediaedition)
+                            		@if($mediaedition->media_edition_id==$row->media_edition_id)
+                            			<span class="badge">{{ $row->media->media_name .' - '. $row->media_edition_no }}</span>
+                            		@endif
+                            	@endforeach
+							@endforeach
 	                    </div>
 	                </div>
 	            </div>
