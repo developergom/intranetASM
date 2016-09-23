@@ -274,10 +274,10 @@
 
                     <ul class="main-menu">
                         <li>
-                            <a href="#"><i class="zmdi zmdi-account"></i> View Profile</a>
+                            <a href="{{ url('profile') }}"><i class="zmdi zmdi-account"></i> View Profile</a>
                         </li>
                         <li>
-                            <a href="#"><i class="zmdi zmdi-settings"></i> Settings</a>
+                            <a href="{{ url('change-password') }}"><i class="zmdi zmdi-key"></i> Change Password</a>
                         </li>
                         <li>
                             <a href="{{ url('logout') }}"><i class="zmdi zmdi-time-restore"></i> Logout</a>

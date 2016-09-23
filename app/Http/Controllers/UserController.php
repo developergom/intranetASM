@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Carbon\Carbon;
 
 use Gate;
+use Hash;
 use App\Http\Requests;
 use App\User;
 use App\Group;
@@ -278,5 +279,52 @@ class UserController extends Controller
         }else{
             return response()->json(200); //failed
         }
+    }
+
+    public function changePassword() {
+        if(Gate::denies('Home-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('vendor.material.user.changepassword');
+    }
+
+    public function postChangePassword(Request $request) {
+        $this->validate($request, [
+            'old_password' => 'required|max:100',
+            'new_password' => 'required|min:6|max:100',
+            'confirm_new_password' => 'required|min:6|max:100|same:new_password',
+        ]);
+
+        $user = User::find($request->user()->user_id);
+
+        if(Hash::check($request->input('old_password'), $user->password)) {
+            $user->password = Hash::make($request->input('new_password'));
+            $user->updated_by = $request->user()->user_id;
+
+            $user->save();
+
+            $request->session()->flash('status', 'Your password has been changed!');
+            return redirect('home');
+        }else{
+            $request->session()->flash('errorchangepassword', 'Please input a correct Old Password!');
+            return redirect('change-password');
+        }
+    }
+
+    public function viewProfile(Request $request) {
+        if(Gate::denies('Home-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+        $data['user'] = User::with('religion')->find($request->user()->user_id);
+        $birthdate = Carbon::createFromFormat('Y-m-d', ($data['user']->user_birthdate==null) ? date('Y-m-d') : $data['user']->user_birthdate);
+        $data['birthdate'] = $birthdate->format('d/m/Y');
+        $data['roles'] = Role::where('active','1')->get();
+        $data['groups'] = Group::where('active','1')->get();
+        $data['medias'] = Media::where('active','1')->get();
+
+        return view('vendor.material.user.profile', $data);
     }
 }

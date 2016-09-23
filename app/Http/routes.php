@@ -36,6 +36,9 @@ Route::get('/home', 'HomeController@index')->middleware(['auth','menu']);
 Route::group(['middleware' => ['auth', 'menu']], function(){
     Route::post('user/apiList', 'UserController@apiList');
     Route::post('user/apiDelete', 'UserController@apiDelete');
+    Route::get('change-password', 'UserController@changePassword');
+    Route::post('change-password', 'UserController@postChangePassword');
+    Route::get('profile', 'UserController@viewProfile');
     Route::resource('user', 'UserController');
 });
 
