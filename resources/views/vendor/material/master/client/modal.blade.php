@@ -59,7 +59,7 @@
                         <label for="religion_id" class="col-sm-2 control-label">Religion</label>
                         <div class="col-sm-10">
                             <div class="fg-line">
-                                <select name="religion_id" id="religion_id" class="chosen" required="true">
+                                <select name="religion_id" id="religion_id" class="selectpicker" data-live-search="true" required="true">
                                     <option value=""></option>
                                     @foreach ($religion as $row)
                                         {!! $selected = '' !!}
@@ -171,7 +171,7 @@
                         <label for="edit_religion_id" class="col-sm-2 control-label">Religion</label>
                         <div class="col-sm-10">
                             <div class="fg-line">
-                                <select name="edit_religion_id" id="edit_religion_id" class="form-control input-sm" required="true">
+                                <select name="edit_religion_id" id="edit_religion_id" class="selectpicker" data-live-search="true" required="true">
                                     <option value=""></option>
                                     @foreach ($religion as $row)
                                         {!! $selected = '' !!}

@@ -1,7 +1,7 @@
 @extends('vendor.material.layouts.app')
 
 @section('vendorcss')
-<link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -14,7 +14,7 @@
 	                <label for="media_id" class="col-sm-2 control-label">Media</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="media_id" id="media_id" class="chosen" required="true">
+	                        <select name="media_id" id="media_id" class="selectpicker" data-live-search="true" required="true">
 	                        	<option value=""></option>
                                 @foreach ($media as $row)
                                 	{!! $selected = '' !!}
@@ -36,7 +36,7 @@
 	                <label for="advertise_position_id" class="col-sm-2 control-label">Position</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="advertise_position_id" id="advertise_position_id" class="chosen" required="true">
+	                        <select name="advertise_position_id" id="advertise_position_id" class="selectpicker" data-live-search="true" required="true">
 	                        	<option value=""></option>
                                 @foreach ($advertiseposition as $row)
                                 	{!! $selected = '' !!}
@@ -58,7 +58,7 @@
 	                <label for="advertise_size_id" class="col-sm-2 control-label">Size</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="advertise_size_id" id="advertise_size_id" class="chosen" required="true">
+	                        <select name="advertise_size_id" id="advertise_size_id" class="selectpicker" data-live-search="true" required="true">
 	                        	<option value=""></option>
                                 @foreach ($advertisesize as $row)
                                 	{!! $selected = '' !!}
@@ -129,7 +129,7 @@
 @endsection
 
 @section('vendorjs')
-<script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/jquery.price_format.min.js') }}"></script>
 @endsection
 

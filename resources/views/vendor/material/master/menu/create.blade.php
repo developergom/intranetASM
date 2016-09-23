@@ -1,7 +1,7 @@
 @extends('vendor.material.layouts.app')
 
 @section('vendorcss')
-<link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -27,7 +27,7 @@
 	                <label for="module_id" class="col-sm-2 control-label">URL</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="module_id" id="module_id" class="chosen" required="true">
+	                        <select name="module_id" id="module_id" class="selectpicker" data-live-search="true" required="true">
 	                        	<option value=""></option>
                                 @foreach ($modules as $row)
                                 	{!! $selected = '' !!}
@@ -62,7 +62,7 @@
 	                <label for="menu_parent" class="col-sm-2 control-label">Parent</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="menu_parent" id="menu_parent" class="chosen" required="true">
+	                        <select name="menu_parent" id="menu_parent" class="selectpicker" data-live-search="true" required="true">
 	                        	<option value=""></option>
 	                        	<option value="0">ROOT</option>
 	                        	@foreach($parents as $key => $val)
@@ -83,8 +83,8 @@
 	                    <div class="fg-line">
 	                        <!-- <input type="number" name="menu_order" id="menu_order" class="form-control input-sm" placeholder="Menu Order" min="1" max="10" required="true" value="{{ old('menu_order') }}"> -->
 	                        <div class="select">
-		                        <select name="menu_order" id="menu_order" class="form-control" required="true">
-		                        	<option value="">SELECT AN OPTION</option>
+		                        <select name="menu_order" id="menu_order" class="selectpicker" data-live-search="true" required="true">
+		                        	<option value=""></option>
 		                        </select>
 	                        </div>
 	                    </div>
@@ -120,7 +120,7 @@
 @endsection
 
 @section('vendorjs')
-<script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/input-mask.min.js') }}"></script>
 @endsection
 

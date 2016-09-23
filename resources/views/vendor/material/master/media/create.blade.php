@@ -1,7 +1,7 @@
 @extends('vendor.material.layouts.app')
 
 @section('vendorcss')
-<link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -40,7 +40,7 @@
 	                <label for="media_group_id" class="col-sm-2 control-label">Group</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="media_group_id" id="media_group_id" class="chosen" required="true">
+	                        <select name="media_group_id" id="media_group_id" class="selectpicker" data-live-search="true" required="true">
 	                        	<option value=""></option>
                                 @foreach ($mediagroup as $row)
                                 	{!! $selected = '' !!}
@@ -62,7 +62,7 @@
 	                <label for="media_category_id" class="col-sm-2 control-label">Category</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="media_category_id" id="media_category_id" class="chosen" required="true">
+	                        <select name="media_category_id" id="media_category_id" class="selectpicker" data-live-search="true" required="true">
 	                        	<option value=""></option>
                                 @foreach ($mediacategory as $row)
                                 	{!! $selected = '' !!}
@@ -129,6 +129,6 @@
 @endsection
 
 @section('vendorjs')
-<script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/fileinput.min.js') }}"></script>
 @endsection

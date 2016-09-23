@@ -1,7 +1,7 @@
 @extends('vendor.material.layouts.app')
 
 @section('vendorcss')
-<link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -40,7 +40,7 @@
 	                <label for="unit_id" class="col-sm-2 control-label">Unit</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="unit_id" id="unit_id" class="chosen" required="true">
+	                        <select name="unit_id" id="unit_id" class="selectpicker" data-live-search="true" required="true">
 	                        	<option value=""></option>
                                 @foreach ($unit as $row)
                                 	{!! $selected = '' !!}
@@ -100,7 +100,7 @@
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-	                    <a href="{{ url('master/advertise_size') }}" class="btn btn-danger btn-sm">Back</a>
+	                    <a href="{{ url('master/advertisesize') }}" class="btn btn-danger btn-sm">Back</a>
 	                </div>
 	            </div>
 	        </form>
@@ -109,5 +109,5 @@
 @endsection
 
 @section('vendorjs')
-<script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 @endsection

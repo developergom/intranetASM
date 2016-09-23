@@ -89,6 +89,8 @@ $("#grid-data").bootgrid({
         $('#edit_client_contact_email').val(current.client_contact_email);
         $('#edit_client_contact_phone').val(current.client_contact_phone);
 
+        $('#edit_religion_id').selectpicker('refresh');
+
         $('#modalEditClientContact').modal();
     });
 

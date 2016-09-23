@@ -1,7 +1,7 @@
 @extends('vendor.material.layouts.app')
 
 @section('vendorcss')
-<link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -27,7 +27,7 @@
 	                <label for="module_id" class="col-sm-2 control-label">URL</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="module_id" id="module_id" class="chosen" required="true">
+	                        <select name="module_id" id="module_id" class="selectpicker" data-live-search="true" required="true">
 	                        	<option value=""></option>
                                 @foreach ($modules as $row)
                                 	{!! $selected = '' !!}
@@ -70,6 +70,6 @@
 @endsection
 
 @section('vendorjs')
-<script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/input-mask.min.js') }}"></script>
 @endsection

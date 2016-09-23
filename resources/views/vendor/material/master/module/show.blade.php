@@ -29,18 +29,13 @@
 	                <label for="action_id" class="col-sm-2 control-label">Action(s)</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="action_id[]" id="action_id" class="chosen" multiple required="true" disabled="true">
-	                        	<option value=""></option>
-                                @foreach ($actions as $row)
-                                	{!! $selected = '' !!}
-                                	@foreach ($module->actions as $action)
-                                		@if($action->action_id==$row->action_id)
-                                			{!! $selected = 'selected' !!}
-                                		@endif
-                                	@endforeach
-								    <option value="{{ $row->action_id }}" {{ $selected }}>{{ $row->action_name }}</option>
-								@endforeach
-                            </select>
+                            @foreach ($actions as $row)
+                            	@foreach ($module->actions as $action)
+                            		@if($action->action_id==$row->action_id)
+                            			<span class="badge">{{ $row->action_name }}</span>
+                            		@endif
+                            	@endforeach
+							@endforeach
 	                    </div>
 	                </div>
 	            </div>

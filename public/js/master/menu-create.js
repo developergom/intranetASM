@@ -26,6 +26,8 @@ $(document).ready(function(){
 				{
 					$('#menu_order').append('<option value="' + i + '">' + i + '</option>');
 				}
+
+				$('#menu_order').selectpicker('refresh');
 			}
 		});
 	});

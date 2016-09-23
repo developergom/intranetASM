@@ -26,6 +26,8 @@ $(document).ready(function(){
 				{
 					$('#flow_no,#flow_prev').append('<option value="' + i + '">' + i + '</option>');
 				}
+
+				$('#flow_no, #flow_prev').selectpicker('refresh');
 			}
 		});
 	});

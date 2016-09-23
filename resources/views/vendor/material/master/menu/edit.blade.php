@@ -1,7 +1,7 @@
 @extends('vendor.material.layouts.app')
 
 @section('vendorcss')
-<link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -28,8 +28,7 @@
 	                <label for="module_id" class="col-sm-2 control-label">URL</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="module_id" id="module_id" class="chosen" required="true">
-	                        	<option value=""></option>
+	                        <select name="module_id" id="module_id" class="selectpicker" data-live-search="true" required="true">
                                 @foreach ($modules as $row)
                                 	{!! $selected = '' !!}
                                 	@if($row->module_id == $menu->module_id)
@@ -63,8 +62,7 @@
 	                <label for="menu_parent" class="col-sm-2 control-label">Parent</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="menu_parent" id="menu_parent" class="chosen" required="true">
-	                        	<option value=""></option>
+	                        <select name="menu_parent" id="menu_parent" class="selectpicker" data-live-search="true" required="true">
 	                        	{!! $selected = '' !!}
 	                        	@if($menu->menu_parent == 0)
 	                        		{!! $selected = 'selected' !!}
@@ -91,7 +89,7 @@
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <div class="select">
-		                        <select name="menu_order" id="menu_order" class="form-control" required="true">
+		                        <select name="menu_order" id="menu_order" class="selectpicker" data-live-search="true" required="true">
 		                        	@for($i=1; $i <= $count; $i++)
 		                        		{!! $selected = '' !!}
 			                        	@if($menu->menu_order == $i)
@@ -134,7 +132,7 @@
 @endsection
 
 @section('vendorjs')
-<script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/input-mask.min.js') }}"></script>
 @endsection
 

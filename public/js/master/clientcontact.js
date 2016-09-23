@@ -149,6 +149,8 @@ function clear_modal()
     $('#client_contact_position').val('');
     $('#client_contact_email').val('');
     $('#client_contact_phone').val('');
+
+    $('#religion_id').selectpicker('refresh');
 }
 
 function edit_contact()
@@ -281,6 +283,8 @@ function clear_edit_modal()
     $('#edit_client_contact_position').val('');
     $('#edit_client_contact_email').val('');
     $('#edit_client_contact_phone').val('');
+
+    $('#edit_religion_id').selectpicker('refresh');
 }
 
 function clear_view_modal()

@@ -1,7 +1,7 @@
 @extends('vendor.material.layouts.app')
 
 @section('vendorcss')
-<link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -15,7 +15,7 @@
 	                <label for="flow_group_id" class="col-sm-2 control-label">Flow Group</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="flow_group_id" id="flow_group_id" class="chosen" required="true">
+	                        <select name="flow_group_id" id="flow_group_id" class="selectpicker" data-live-search="true" required="true">
 	                        	<option value=""></option>
                                 @foreach ($flowgroup as $row)
                                 	{!! $selected = '' !!}
@@ -64,8 +64,8 @@
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <div class="select">
-		                        <select name="flow_no" id="flow_no" class="form-control" required="true">
-		                        	<option value="">SELECT AN OPTION</option>
+		                        <select name="flow_no" id="flow_no" class="selectpicker" data-live-search="true" required="true">
+		                        	<option value=""></option>
 		                        	@for($i = 1; $i <= $count; $i++)
 		                        		{!! $selected = '' !!}
 	                                	@if($i==$flow->flow_no)
@@ -88,8 +88,8 @@
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <div class="select">
-		                        <select name="flow_prev" id="flow_prev" class="form-control" required="true">
-		                        	<option value="">SELECT AN OPTION</option>
+		                        <select name="flow_prev" id="flow_prev" class="selectpicker" data-live-search="true" required="true">
+		                        	<option value=""></option>
 		                        	@for($i = 1; $i <= $count; $i++)
 		                        		{!! $selected = '' !!}
 	                                	@if($i==$flow->flow_prev)
@@ -111,8 +111,7 @@
 	                <label for="flow_by" class="col-sm-2 control-label">Flow By</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="flow_by" id="flow_by" class="chosen" required="true">
-	                        	<option value=""></option>
+	                        <select name="flow_by" id="flow_by" class="selectpicker" data-live-search="true" required="true">
                                 @foreach ($flowbyitems as $key => $value)
                                 	{!! $selected = '' !!}
                                 	@if($key == $flow->flow_by)
@@ -133,8 +132,7 @@
 	                <label for="role_id" class="col-sm-2 control-label">Role</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="role_id" id="role_id" class="chosen" required="true">
-	                        	<option value=""></option>
+	                        <select name="role_id" id="role_id" class="selectpicker" data-live-search="true" required="true">
                                 @foreach ($role as $row)
                                 	{!! $selected = '' !!}
                                 	@if($row->role_id==$flow->role_id)
@@ -163,7 +161,7 @@
 @endsection
 
 @section('vendorjs')
-<script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/input-mask.min.js') }}"></script>
 @endsection
 

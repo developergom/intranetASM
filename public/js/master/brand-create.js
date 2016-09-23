@@ -19,12 +19,14 @@ $(document).ready(function(){
                 });
             },
             success: function(data) {
-                console.log(data);
+                //console.log(data);
 
                 $('#subindustry_id').empty();
                 $.each(data, function(i, item){
                     $('#subindustry_id').append('<option value="' + item.subindustry_id + '">' + item.subindustry_code + ' - ' + item.subindustry_name + '</option>');
                 });
+
+                $('#subindustry_id').selectpicker('refresh');
             }
         });
     });

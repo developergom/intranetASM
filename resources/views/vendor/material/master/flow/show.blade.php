@@ -14,16 +14,7 @@
 	                <label for="flow_group_id" class="col-sm-2 control-label">Flow Group</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="flow_group_id" id="flow_group_id" class="chosen" required="true" disabled="true">
-	                        	<option value=""></option>
-                                @foreach ($flowgroup as $row)
-                                	{!! $selected = '' !!}
-                                	@if($row->flow_group_id==$flow->flow_group_id)
-                                		{!! $selected = 'selected' !!}
-                                	@endif
-								    <option value="{{ $row->flow_group_id }}" {{ $selected }}>{{ $row->flow_group_name }}</option>
-								@endforeach
-                            </select>
+                            <input type="text" placeholder="Flow Group" class="form-control input-sm" disabled="true" value="{{ $flow->flowgroup->flow_group_name }}">
 	                    </div>
 	                </div>
 	            </div>
@@ -63,16 +54,7 @@
 	                <label for="flow_by" class="col-sm-2 control-label">Flow By</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="flow_by" id="flow_by" class="chosen" required="true" disabled="true">
-	                        	<option value=""></option>
-                                @foreach ($flowbyitems as $key => $value)
-                                	{!! $selected = '' !!}
-                                	@if($key == $flow->flow_by)
-                                		{!! $selected = 'selected' !!}
-                                	@endif
-								    <option value="{{ $key }}" {{ $selected }}>{{ $value }}</option>
-								@endforeach
-                            </select>
+                            <input type="text" placeholder="Flow By" class="form-control input-sm" disabled="true" value="{{ $flowbyitems[$flow->flow_by] }}">
 	                    </div>
 	                </div>
 	            </div>
@@ -80,16 +62,7 @@
 	                <label for="role_id" class="col-sm-2 control-label">Role</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="role_id" id="role_id" class="chosen" required="true" disabled="true">
-	                        	<option value=""></option>
-                                @foreach ($role as $row)
-                                	{!! $selected = '' !!}
-                                	@if($row->role_id==$flow->role_id)
-                                		{!! $selected = 'selected' !!}
-                                	@endif
-								    <option value="{{ $row->role_id }}" {{ $selected }}>{{ $row->role_name }}</option>
-								@endforeach
-                            </select>
+                            <input type="text" placeholder="Role" class="form-control input-sm" disabled="true" value="{{ $flow->role->role_name }}">
 	                    </div>
 	                </div>
 	            </div>

@@ -1,7 +1,7 @@
 @extends('vendor.material.layouts.app')
 
 @section('vendorcss')
-<link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -40,8 +40,7 @@
 	                <label for="action_id" class="col-sm-2 control-label">Action(s)</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="action_id[]" id="action_id" class="chosen" multiple required="true">
-	                        	<option value=""></option>
+	                        <select name="action_id[]" id="action_id" class="selectpicker" data-live-search="true" multiple required="true">
                                 @foreach ($actions as $row)
                                 	{!! $selected = '' !!}
                                 	@if(old('action_id'))
@@ -74,7 +73,7 @@
 @endsection
 
 @section('vendorjs')
-<script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/input-mask.min.js') }}"></script>
 @endsection
 

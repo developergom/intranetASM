@@ -1,7 +1,7 @@
 @extends('vendor.material.layouts.app')
 
 @section('vendorcss')
-<link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -15,8 +15,7 @@
 	                <label for="industry_id" class="col-sm-2 control-label">Industry</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="industry_id" id="industry_id" class="chosen" required="true">
-	                        	<option value=""></option>
+	                        <select name="industry_id" id="industry_id" class="selectpicker" data-live-search="true" required="true">
                                 @foreach ($industry as $row)
                                 	{!! $selected = '' !!}
                                 	@if($row->industry_id==$brand->subindustry->industry_id)
@@ -37,8 +36,8 @@
 	                <label for="subindustry_id" class="col-sm-2 control-label">Sub Industry</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="subindustry_id" id="subindustry_id" class="form-control" required="true">
-	                        	<option value="">SELECT AN OPTION</option>
+	                        <select name="subindustry_id" id="subindustry_id" class="selectpicker" data-live-search="true" required="true">
+	                        	<option value=""></option>
                                 @foreach ($subindustry as $row)
                                 	{!! $selected = '' !!}
                                 	@if($row->subindustry_id==$brand->subindustry_id)
@@ -106,7 +105,7 @@
 @endsection
 
 @section('vendorjs')
-<script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 @endsection
 
 @section('customjs')
