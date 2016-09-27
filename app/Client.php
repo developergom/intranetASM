@@ -39,4 +39,8 @@ class Client extends Model
 	{
 		return $this->hasMany('App\ClientContact', 'client_contact_id');
 	}
+
+	public function agendas() {
+		return $this->belongsToMany('App\Agenda', 'agendas_clients');
+	}
 }

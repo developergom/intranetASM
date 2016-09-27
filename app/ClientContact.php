@@ -34,4 +34,8 @@ class ClientContact extends Model
 	{
 		return $this->belongsTo('App\Religion', 'religion_id');
 	}
+
+	public function agendas() {
+		return $this->belongsToMany('App\Agenda', 'agendas_clients');
+	}
 }

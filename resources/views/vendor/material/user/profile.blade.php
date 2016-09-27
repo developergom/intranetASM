@@ -194,13 +194,13 @@
             <div class="pmbb-header">
                 <h2><i class="zmdi zmdi-assignment-account m-r-5"></i> Role Information</h2>
                 
-                <ul class="actions">
+                <!-- <ul class="actions">
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown">
                             <i class="zmdi zmdi-more-vert"></i>
                         </a>
                     </li>
-                </ul>
+                </ul> -->
             </div>
             <div class="pmbb-body p-l-30">
                 <div class="pmbb-view">

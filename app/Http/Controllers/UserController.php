@@ -95,7 +95,7 @@ class UserController extends Controller
         $obj->user_email = $request->input('user_email');
         $obj->user_phone = $request->input('user_phone');
         $obj->password = bcrypt('password');
-        $obj->user_avatar = 'avatar.jpg';
+        $obj->user_avatar = ($request->input('user_gender')=='1') ? 'avatar.jpg' : 'avatar-female.jpg';
         $obj->user_status = 'ACTIVE';
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;

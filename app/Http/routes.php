@@ -71,6 +71,16 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('advertisesize/apiDelete', 'AdvertiseSizeController@apiDelete');
         Route::resource('advertisesize', 'AdvertiseSizeController');
 
+        //Agenda
+        Route::post('agenda/apiList', 'AgendaController@apiList');
+        Route::post('agenda/apiDelete', 'AgendaController@apiDelete');
+        Route::resource('agenda', 'AgendaController');
+
+        //Agenda Type
+        Route::post('agendatype/apiList', 'AgendaTypeController@apiList');
+        Route::post('agendatype/apiDelete', 'AgendaTypeController@apiDelete');
+        Route::resource('agendatype', 'AgendaTypeController');
+
         //Brand
         Route::post('brand/apiList', 'BrandController@apiList');
         Route::post('brand/apiDelete', 'BrandController@apiDelete');

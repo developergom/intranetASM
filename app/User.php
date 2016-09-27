@@ -64,4 +64,8 @@ class User extends Authenticatable
             }
         }
     }
+
+    public function agendas() {
+        return $this->belongsToMany('App\Agenda', 'agendas_clients');
+    }
 }
