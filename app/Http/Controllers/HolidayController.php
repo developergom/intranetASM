@@ -53,7 +53,7 @@ class HolidayController extends Controller
         //
         $this->validate($request, [
             'holiday_name' => 'required|max:100',
-            'holiday_date' => 'required',
+            'holiday_date' => 'required|date_format:"d/m/Y"',
         ]);
 
         $obj = new Holiday;
@@ -118,7 +118,7 @@ class HolidayController extends Controller
         //
         $this->validate($request, [
             'holiday_name' => 'required|max:100',
-            'holiday_date' => 'required',
+            'holiday_date' => 'required|date_format:"d/m/Y"',
         ]);
 
         $obj = holiday::find($id);

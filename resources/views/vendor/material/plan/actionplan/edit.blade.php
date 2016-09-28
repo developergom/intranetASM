@@ -18,7 +18,7 @@
         			<label for="action_type_id" class="col-sm-2 control-label">Type</label>
         			<div class="col-sm-10">
         				<div class="fg-line">
-	        				<select name="action_type_id" id="action_type_id" class="selectpicker" data-mobile="true" data-live-search="true" required="true">
+	        				<select name="action_type_id" id="action_type_id" class="selectpicker" data-live-search="true" required="true">
 	        					<option value=""></option>
 	        					@foreach($actiontypes as $row)
 	        						{!! $selected = '' !!}
@@ -92,7 +92,7 @@
 	                <label for="media_id" class="col-sm-2 control-label">Media</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="media_id[]" id="media_id" class="selectpicker" data-live-search="true" data-mobile="true" multiple required="true">
+	                        <select name="media_id[]" id="media_id" class="selectpicker" data-live-search="true" multiple required="true">
 	                        	<!-- <option value=""></option> -->
                                 @foreach ($medias as $row)
                                 	{!! $selected = '' !!}
@@ -116,7 +116,7 @@
 	                <label for="media_edition_id" class="col-sm-2 control-label">Media Edition</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="media_edition_id[]" id="media_edition_id" class="selectpicker" data-live-search="true" data-mobile="true" multiple>
+	                        <select name="media_edition_id[]" id="media_edition_id" class="selectpicker" data-live-search="true" multiple>
 	                        	<!-- <option value=""></option> -->
                                 @foreach ($mediaeditions as $row)
                                 	{!! $selected = '' !!}

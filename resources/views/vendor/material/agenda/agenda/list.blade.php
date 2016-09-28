@@ -13,7 +13,7 @@
         <table id="grid-data" class="table table-hover">
             <thead>
                 <tr>
-                    <th data-column-id="agenda_date" data-order="asc">Date</th>
+                    <th data-column-id="agenda_date" data-converter="datetime" data-order="asc">Date</th>
                     <th data-column-id="agenda_type_name" data-order="asc">Type</th>
                     <th data-column-id="agenda_destination" data-order="asc">Destination</th>
                     <th data-column-id="user_firstname" data-order="asc">Author</th>

@@ -30,7 +30,7 @@ $(document).ready(function(){
 				'<a class="list-group-item">Clients</a>'
 			],
 			suggestion: function(data) {
-				return '<a href="#" class="list-group-item">' + data.client_name + '</a>'
+				return '<a href="javascript:void(0)" class="list-group-item">' + data.client_name + '</a>'
 			}
 		}
 	});

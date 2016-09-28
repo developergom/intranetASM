@@ -30,6 +30,12 @@ $("#grid-data").bootgrid({
         {
             return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
         }
+    },
+    converters: {
+        datetime: {
+            from: function (value) { return moment(value); },
+            to: function (value) { return moment(value).format("DD/MM/YYYY"); }
+        }
     }
 }).on("loaded.rs.jquery.bootgrid", function()
 {

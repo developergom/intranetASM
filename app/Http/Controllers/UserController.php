@@ -75,7 +75,7 @@ class UserController extends Controller
         $this->validate($request, [
             'user_name' => 'required|unique:users,user_name|max:100|min:6',
             'user_firstname' => 'required|max:100',
-            'user_birthdate' => 'required',
+            'user_birthdate' => 'required|date_format:"d/m/Y"',
             'user_gender' => 'required',
             'religion_id' => 'required',
             'user_email' => 'required|unique:users,user_email|max:100',
@@ -171,7 +171,7 @@ class UserController extends Controller
         $this->validate($request, [
             'user_name' => 'required|unique:users,user_name,'.$id.',user_id|max:100|min:6',
             'user_firstname' => 'required|max:100',
-            'user_birthdate' => 'required',
+            'user_birthdate' => 'required|date_format:"d/m/Y"',
             'user_gender' => 'required',
             'religion_id' => 'required',
             'user_email' => 'required|unique:users,user_email,'.$id.',user_id|max:100',

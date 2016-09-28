@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 use Gate;
+use Carbon\Carbon;
 use App\Http\Requests;
 use App\Agenda;
 use App\AgendaType;
@@ -55,23 +56,39 @@ class AgendaController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'agenda_date' => 'required',
+            'agenda_date' => 'required|date_format:"d/m/Y"',
+            'agenda_type_id' => 'required',
+            'agenda_destination' => 'required|max:100'
         ]);
 
-        dd($request->input());
+        /*dd($request->input());*/
 
         $obj = new Agenda;
 
-        $obj->agenda_type_name = $request->input('agenda_type_name');
-        $obj->agenda_type_desc = $request->input('agenda_type_desc');
+        $obj->agenda_date = Carbon::createFromFormat('d/m/Y', $request->input('agenda_date'))->toDateString();
+        $obj->agenda_type_id = $request->input('agenda_type_id');
+        $obj->agenda_destination = $request->input('agenda_destination');
+        $obj->agenda_desc = $request->input('agenda_desc');
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
 
         $obj->save();
 
+        if(!is_null($request->input('client_id'))) {
+            if(!empty($request->input('client_id'))) {
+                Agenda::find($obj->agenda_id)->clients()->sync($request->input('client_id'));
+            }            
+        }
+
+        if(!is_null($request->input('client_contact_id'))) {
+            if(!empty($request->input('client_contact_id'))) {
+                Agenda::find($obj->agenda_id)->clientcontacts()->sync($request->input('client_contact_id'));
+            }            
+        }
+
         $request->session()->flash('status', 'Data has been saved!');
 
-        return redirect('master/agenda');
+        return redirect('agenda/plan');
     }
 
     /**

@@ -107,8 +107,8 @@ class ActionPlanController extends Controller
         $this->validate($request, [
             'action_type_id' => 'required',
             'action_plan_title' => 'required|max:100',
-            'action_plan_startdate' => 'required',
-            'action_plan_enddate' => 'required',
+            'action_plan_startdate' => 'required|date_format:"d/m/Y"',
+            'action_plan_enddate' => 'required|date_format:"d/m/Y"',
             'media_edition_id[]' => 'array',
             'media_id[]' => 'array',
         ]);
@@ -275,8 +275,8 @@ class ActionPlanController extends Controller
         $this->validate($request, [
             'action_type_id' => 'required',
             'action_plan_title' => 'required|max:100',
-            'action_plan_startdate' => 'required',
-            'action_plan_enddate' => 'required',
+            'action_plan_startdate' => 'required|date_format:"d/m/Y"',
+            'action_plan_enddate' => 'required|date_format:"d/m/Y"',
             'media_edition_id[]' => 'array',
             'media_id[]' => 'array',
         ]);
