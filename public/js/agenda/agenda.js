@@ -12,19 +12,31 @@ $("#grid-data").bootgrid({
     formatters: {
         "link-rud": function(column, row)
         {
-            return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                    +'<a title="Edit Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
-                    +'<a title="Delete Agenda Plan" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-delete"></span></a>';
+            if(uid==row.user_id) {
+                return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                        +'<a title="Edit Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
+                        +'<a title="Delete Agenda Plan" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-delete"></span></a>';
+            }else{
+                return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
+            }
         },
         "link-ru": function(column, row)
         {
-            return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                    +'<a title="Edit Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-edit"></span></a>';
+            if(uid==row.user_id) {
+                return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                        +'<a title="Edit Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-edit"></span></a>';
+            }else{
+                return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
+            }
         },
         "link-rd": function(column, row)
         {
-            return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                    +'<a title="Delete Agenda Plan" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-delete"></span></a>';
+            if(uid==row.user_id) {
+                return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                        +'<a title="Delete Agenda Plan" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-delete"></span></a>';
+            }else{
+                return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';                
+            }
         },
         "link-r": function(column, row)
         {

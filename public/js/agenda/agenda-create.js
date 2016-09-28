@@ -90,10 +90,10 @@ $(document).ready(function(){
 		$('#clientcontact').val('');
 	});
 
-	$('body').on('click', '.delete-clientcontact-id-id',  function() {
+	$('body').on('click', '.delete-clientcontact-id',  function() {
 		var ccid = $(this).data('clientcontactid');
 
 		$('#clientcontact-id-' + ccid).remove();
-		$('#span-clientcontact-id-id-' + ccid).remove();
+		$('#span-clientcontact-id-' + ccid).remove();
 	});
 });

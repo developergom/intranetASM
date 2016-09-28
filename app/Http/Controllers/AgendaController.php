@@ -103,7 +103,7 @@ class AgendaController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $data = array();
-        $data['agenda'] = agenda::where('active','1')->find($id);
+        $data['agenda'] = Agenda::where('active','1')->find($id);
         return view('vendor.material.master.agenda.show', $data);
     }
 
@@ -115,13 +115,16 @@ class AgendaController extends Controller
      */
     public function edit($id)
     {
-        if(Gate::denies('Agendas-Update')) {
+        if(Gate::denies('Agenda Plan-Update')) {
             abort(403, 'Unauthorized action.');
         }
 
         $data = array();
-        $data['agenda'] = agenda::where('active','1')->find($id);
-        return view('vendor.material.master.agenda.edit', $data);
+        $data['agendatypes'] = AgendaType::where('active', '1')->get();
+        $data['agenda'] = Agenda::find($id);
+        $agenda_date = Carbon::createFromFormat('Y-m-d', ($data['agenda']->agenda_date==null) ? date('Y-m-d') : $data['agenda']->agenda_date);
+        $data['agenda_date'] = $agenda_date->format('d/m/Y');
+        return view('vendor.material.agenda.agenda.edit', $data);
     }
 
     /**
@@ -134,20 +137,42 @@ class AgendaController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'agenda_type_name' => 'required|max:100',
+            'agenda_date' => 'required|date_format:"d/m/Y"',
+            'agenda_type_id' => 'required',
+            'agenda_destination' => 'required|max:100'
         ]);
 
-        $obj = agenda::find($id);
+        /*dd($request->input());*/
 
-        $obj->agenda_type_name = $request->input('agenda_type_name');
-        $obj->agenda_type_desc = $request->input('agenda_type_desc');
+        $obj = Agenda::find($id);
+
+        $obj->agenda_date = Carbon::createFromFormat('d/m/Y', $request->input('agenda_date'))->toDateString();
+        $obj->agenda_type_id = $request->input('agenda_type_id');
+        $obj->agenda_destination = $request->input('agenda_destination');
+        $obj->agenda_desc = $request->input('agenda_desc');
         $obj->updated_by = $request->user()->user_id;
 
         $obj->save();
 
+        if(!is_null($request->input('client_id'))) {
+            if(!empty($request->input('client_id'))) {
+                Agenda::find($obj->agenda_id)->clients()->sync($request->input('client_id'));
+            }            
+        }else{
+            Agenda::find($obj->agenda_id)->clients()->sync([]);
+        }
+
+        if(!is_null($request->input('client_contact_id'))) {
+            if(!empty($request->input('client_contact_id'))) {
+                Agenda::find($obj->agenda_id)->clientcontacts()->sync($request->input('client_contact_id'));
+            }            
+        }else{
+            Agenda::find($obj->agenda_id)->clientcontacts()->sync([]);
+        }
+
         $request->session()->flash('status', 'Data has been updated!');
 
-        return redirect('master/agenda');
+        return redirect('agenda/plan');
     }
 
     /**
@@ -221,13 +246,13 @@ class AgendaController extends Controller
 
     public function apiDelete(Request $request)
     {
-        if(Gate::denies('Agendas-Delete')) {
+        if(Gate::denies('Agenda Plan-Delete')) {
             abort(403, 'Unauthorized action.');
         }
 
-        $id = $request->input('agenda_type_id');
+        $id = $request->input('agenda_id');
 
-        $obj = agenda::find($id);
+        $obj = Agenda::find($id);
 
         $obj->active = '0';
         $obj->updated_by = $request->user()->user_id;
