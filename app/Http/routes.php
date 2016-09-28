@@ -92,6 +92,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('clientcontact/apiDelete', 'ClientContactController@apiDelete');
         Route::post('clientcontact/apiList', 'ClientContactController@apiList');
         Route::post('clientcontact/apiEdit', 'ClientContactController@apiEdit');
+        Route::get('clientcontact/apiSearch/{query}', 'ClientContactController@apiSearch');
 
         //Client Type
         Route::post('clienttype/apiList', 'ClientTypeController@apiList');

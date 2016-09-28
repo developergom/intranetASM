@@ -150,4 +150,17 @@ class ClientContactController extends Controller
             return response()->json(200); //failed
         }
     }
+
+    public function apiSearch($query)
+    {
+        if(Gate::denies('Home-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $clientContactName = $query;
+
+        $result = ClientContact::join('clients', 'clients.client_id', '=', 'client_contacts.client_id')->where('client_contact_name','like','%' . $clientContactName . '%')->where('client_contacts.active', '1')->take(5)->get();
+
+        return response()->json($result, 200);
+    }
 }

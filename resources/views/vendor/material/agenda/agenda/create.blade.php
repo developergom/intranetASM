@@ -63,10 +63,19 @@
 	                <label for="client" class="col-sm-2 control-label">Client</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm typeahead" name="client" id="client" placeholder="Client" maxlength="100" autocomplete="off">
-	                        <!-- <select name="client_id[]" id="client_id" class="selectpicker" multiple readonly></select> -->
+	                        <input type="text" class="form-control input-sm" name="client" id="client" placeholder="Client" maxlength="100" autocomplete="off">
 	                    </div>
 	                    <div id="list-client-id">
+						</div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="clientcontact" class="col-sm-2 control-label">Contact</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="clientcontact" id="clientcontact" placeholder="Contact" maxlength="100" autocomplete="off">
+	                    </div>
+	                    <div id="list-clientcontact-id">
 						</div>
 	                </div>
 	            </div>
