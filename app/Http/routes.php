@@ -71,11 +71,6 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('advertisesize/apiDelete', 'AdvertiseSizeController@apiDelete');
         Route::resource('advertisesize', 'AdvertiseSizeController');
 
-        //Agenda
-        Route::post('agenda/apiList', 'AgendaController@apiList');
-        Route::post('agenda/apiDelete', 'AgendaController@apiDelete');
-        Route::resource('agenda', 'AgendaController');
-
         //Agenda Type
         Route::post('agendatype/apiList', 'AgendaTypeController@apiList');
         Route::post('agendatype/apiDelete', 'AgendaTypeController@apiDelete');
@@ -89,6 +84,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         //Client
         Route::post('client/apiList', 'ClientController@apiList');
         Route::post('client/apiDelete', 'ClientController@apiDelete');
+        Route::get('client/apiSearch/{query}', 'ClientController@apiSearch');
         Route::resource('client', 'ClientController');
 
         //Client Contact
@@ -210,5 +206,12 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::resource('actionplan', 'ActionPlanController');
         Route::get('actionplan/approve/{flow_no}/{id}', 'ActionPlanController@approve');
         Route::post('actionplan/approve/{flow_no}/{id}', 'ActionPlanController@postApprove');
+    });
+
+    Route::group(['prefix' => 'agenda'], function() {
+        //Agenda Plan
+        Route::post('plan/apiList', 'AgendaController@apiList');
+        Route::post('plan/apiDelete', 'AgendaController@apiDelete');
+        Route::resource('plan', 'AgendaController');
     });
 });
