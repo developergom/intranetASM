@@ -79,7 +79,7 @@ $(document).ready(function(){
 				'<a class="list-group-item">Contacts</a>'
 			],
 			suggestion: function(data) {
-				return '<a href="#" class="list-group-item">' + data.client_contact_name + ' - ' + data.client_name + '</a>'
+				return '<a href="javascript:void(0)" class="list-group-item">' + data.client_contact_name + ' - ' + data.client_name + '</a>'
 			}
 		}
 	});

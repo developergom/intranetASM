@@ -33,7 +33,7 @@
         			<label for="agenda_type_id" class="col-sm-2 control-label">Type</label>
         			<div class="col-sm-10">
         				<div class="fg-line">
-        					<select name="agenda_type_id" id="agenda_type_id" class="selectpicker" data-live-search="true" required="true">
+        					<select name="agenda_type_id" id="agenda_type_id" class="selectpicker" data-live-search="true" data-mobile="true" required="true">
 	                        	<option value=""></option>
                                 @foreach ($agendatypes as $row)
                                 	{!! $selected = '' !!}
