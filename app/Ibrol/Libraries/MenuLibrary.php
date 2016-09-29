@@ -81,8 +81,8 @@ class MenuLibrary{
                 $obj = $value['data'];
                 $active = ($obj->module->module_url==$uri) ? 'active toggled' : '';
                 $icon = is_null($obj->menu_icon) ? 'zmdi zmdi-home' : $obj->menu_icon;
-                $gateName = $obj->menu_name . '-Read';
-                if(Gate::allows($gateName)) {
+                $gateName1 = $obj->menu_name . '-Read';
+                if(Gate::allows($gateName1)) {
                     $menu .= '<li class="sub-menu ' . $active . '"><a href="' . url('') . $obj->module->module_url . '"><i class="' . $icon . '"></i> ' . $obj->menu_name . '</a><ul>';
                 }
 
@@ -92,8 +92,8 @@ class MenuLibrary{
                         $obj = $v['data'];
                         $active = ($obj->module->module_url==$uri) ? 'active' : '';
                         $icon = is_null($obj->menu_icon) ? 'zmdi zmdi-home' : $obj->menu_icon;
-                        $gateName = $obj->menu_name . '-Read';
-                        if(Gate::allows($gateName)) {
+                        $gateName2 = $obj->menu_name . '-Read';
+                        if(Gate::allows($gateName2)) {
                             $menu .= '<li><a class="' . $active . '" href="' . url('') . $obj->module->module_url . '"><i class="' . $icon . '"></i> ' . $obj->menu_name . '</a><ul>';
                         }
 
@@ -102,37 +102,37 @@ class MenuLibrary{
                             $obj = $v2['data'];
                             $active = ($obj->module->module_url==$uri) ? 'active' : '';
                             $icon = is_null($obj->menu_icon) ? 'zmdi zmdi-home' : $obj->menu_icon;
-                            $gateName = $obj->menu_name . '-Read';
-                            if(Gate::allows($gateName)) {
+                            $gateName3 = $obj->menu_name . '-Read';
+                            if(Gate::allows($gateName3)) {
                                 $menu .= '<li><a class="' . $active . '" href="' . url('') . $obj->module->module_url . '"><i class="' . $icon . '"></i> ' . $obj->menu_name . '</a></li>';
                             }
                         }
 
 
-                        if(Gate::allows($gateName)) {
+                        if(Gate::allows($gateName2)) {
                             $menu .= '</ul></li>';
                         }
                     }else{
                         $obj = $v['data'];
                         $active = ($obj->module->module_url==$uri) ? 'active' : '';
                         $icon = is_null($obj->menu_icon) ? 'zmdi zmdi-home' : $obj->menu_icon;
-                        $gateName = $obj->menu_name . '-Read';
-                        if(Gate::allows($gateName)) {
+                        $gateName2 = $obj->menu_name . '-Read';
+                        if(Gate::allows($gateName2)) {
                             $menu .= '<li><a class="' . $active . '" href="' . url('') . $obj->module->module_url . '"><i class="' . $icon . '"></i> ' . $obj->menu_name . '</a></li>';                        
                         }
                     }
                 }
 
-                $gateName = $obj->menu_name . '-Read';
-                if(Gate::allows($gateName)) {
+                $gateName1 = $obj->menu_name . '-Read';
+                if(Gate::allows($gateName1)) {
                     $menu .= '</ul></li>';
                 }
             }else{
                 $obj = $value['data'];
                 $active = ($obj->module->module_url==$uri) ? 'active' : '';
                 $icon = is_null($obj->menu_icon) ? 'zmdi zmdi-home' : $obj->menu_icon;
-                $gateName = $obj->menu_name . '-Read';
-                if(Gate::allows($gateName)) {
+                $gateName1 = $obj->menu_name . '-Read';
+                if(Gate::allows($gateName1)) {
                     $menu .= '<li class="' . $active . '"><a href="' . url('') . $obj->module->module_url . '"><i class="' . $icon . '"></i> ' . $obj->menu_name . '</a></li>';
                 }
             }
