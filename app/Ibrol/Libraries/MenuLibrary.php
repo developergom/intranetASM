@@ -108,7 +108,7 @@ class MenuLibrary{
                             }
                         }
 
-                        $gateName2 = $obj->menu_name . '-Read';
+                        //$gateName2 = $obj->menu_name . '-Read';
                         if(Gate::allows($gateName2)) {
                             $menu .= '</ul></li>';
                         }
@@ -123,7 +123,7 @@ class MenuLibrary{
                     }
                 }
 
-                $gateName1 = $obj->menu_name . '-Read';
+                //$gateName1 = $obj->menu_name . '-Read';
                 if(Gate::allows($gateName1)) {
                     $menu .= '</ul></li>';
                 }
