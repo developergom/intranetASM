@@ -64,7 +64,7 @@
                                         Messages
                                     </div>
                                     <div class="lv-body">
-                                        <a class="lv-item" href="#">
+                                        <!-- <a class="lv-item" href="#">
                                             <div class="media">
                                                 <div class="pull-left">
                                                     <img class="lv-img-sm" src="img/profile-pics/1.jpg" alt="">
@@ -118,7 +118,7 @@
                                                     <small class="lv-small">Proin laoreet commodo eros id faucibus. Donec ligula quam, imperdiet vel ante placerat</small>
                                                 </div>
                                             </div>
-                                        </a>
+                                        </a> -->
                                     </div>
                                     <a class="lv-footer" href="#">View All</a>
                                 </div>
