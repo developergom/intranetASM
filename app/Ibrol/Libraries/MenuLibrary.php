@@ -6,6 +6,7 @@ use App\Ibrol\Libraries\Recursive;
 use App\Action;
 use App\Menu;
 use App\Module;
+use App\Setting;
 
 use Gate;
 use Route;

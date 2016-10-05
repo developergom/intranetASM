@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h2>Settings Management<small>List of all Settings</small></h2>
+        <h2>Application Settings Management<small>List of all Settings</small></h2>
         @can('Application Settings-Create')
         <a href="{{ url('config/setting/create') }}" title="Create New Setting"><button class="btn bgm-blue btn-float waves-effect"><i class="zmdi zmdi-plus"></i></button></a>
         @endcan

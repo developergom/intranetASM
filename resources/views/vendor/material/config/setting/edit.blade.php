@@ -1,8 +1,8 @@
 @extends('vendor.material.layouts.app')
 
 @section('content')
-    <div class="card">
-        <div class="card-header"><h2>Settings Management<small>Edit Setting</small></h2></div>
+    <div class="card">Application 
+        <div class="card-header"><h2>Application Settings Management<small>Edit Setting</small></h2></div>
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form" method="POST" action="{{ url('config/setting/'.$setting->setting_id) }}">
         		{{ csrf_field() }}

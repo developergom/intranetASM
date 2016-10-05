@@ -37,7 +37,8 @@
                 </li>
 
                 <li class="logo hidden-xs">
-                    <a href="#">Intranet<b>ASM</b></a>
+                    <!-- <a href="#">Intranet<b>ASM</b></a> -->
+                    <a href="#">{!! Cache::get('setting_app_name') !!}</a>
                 </li>
 
                 <li class="pull-right">

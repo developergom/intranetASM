@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Settings Management<small>Create New Setting</small></h2></div>
+        <div class="card-header"><h2>Application Settings Management<small>Create New Setting</small></h2></div>
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form" method="POST" action="{{ url('config/setting') }}">
         		{{ csrf_field() }}
