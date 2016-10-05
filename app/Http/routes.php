@@ -215,4 +215,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('plan/apiDelete', 'AgendaController@apiDelete');
         Route::resource('plan', 'AgendaController');
     });
+
+    Route::group(['prefix' => 'config'], function() {
+        //Application Setting
+        Route::post('setting/apiList', 'SettingController@apiList');
+        Route::post('setting/apiDelete', 'SettingController@apiDelete');
+        Route::resource('setting', 'SettingController');
+    });
 });
