@@ -39,7 +39,7 @@ class HomeController extends Controller
                                                 })->orWhere(function($query) use($today) {
                                                     $query->where('announcement_startdate', '<=', $today)
                                                             ->where('announcement_enddate', '>=', $today);
-                                                })->get();
+                                                })->where('active', '=', '1')->get();
 
         /*dd($data);*/
 
