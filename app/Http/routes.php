@@ -217,6 +217,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
     });
 
     Route::group(['prefix' => 'config'], function() {
+        //Announcement Management
+        Route::post('announcement/apiList', 'AnnouncementController@apiList');
+        Route::post('announcement/apiDelete', 'AnnouncementController@apiDelete');
+        Route::resource('announcement', 'AnnouncementController');
+
         //Application Setting
         Route::post('setting/apiList', 'SettingController@apiList');
         Route::post('setting/apiDelete', 'SettingController@apiDelete');

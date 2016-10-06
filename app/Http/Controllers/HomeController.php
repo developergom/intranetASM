@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Auth;
 use App\User;
 
+use App\Announcement;
+use Carbon\Carbon;
+
 class HomeController extends Controller
 {
     /**
@@ -27,7 +30,19 @@ class HomeController extends Controller
     public function index()
     {
         //dd(Auth::user()->roles);
+        $data = array();
+        $today = date('Y-m-d');
 
-        return view('home');
+        $data['announcements'] = Announcement::where(function($query) use($today) {
+                                                    $query->where('announcement_startdate', '>=', $today)
+                                                            ->where('announcement_enddate', '<=', $today);
+                                                })->orWhere(function($query) use($today) {
+                                                    $query->where('announcement_startdate', '<=', $today)
+                                                            ->where('announcement_enddate', '>=', $today);
+                                                })->get();
+
+        /*dd($data);*/
+
+        return view('home', $data);
     }
 }
