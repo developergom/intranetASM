@@ -14,8 +14,8 @@
             <thead>
                 <tr>
                     <th data-column-id="announcement_title" data-order="asc">Title</th>
-                    <th data-column-id="announcement_startdate" data-converters="datetime" data-order="asc">Start Date</th>
-                    <th data-column-id="announcement_enddate" data-converters="datetime" data-order="asc">End Date</th>
+                    <th data-column-id="announcement_startdate" data-converter="datetime" data-order="asc">Start Date</th>
+                    <th data-column-id="announcement_enddate" data-converter="datetime" data-order="asc">End Date</th>
                     @can('Announcement Management-Update')
                         @can('Announcement Management-Delete')
                             <th data-column-id="link" data-formatter="link-rud" data-sortable="false">Action</th>
