@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+    @if(count($announcements) > 0)
     <div id="announcement-container" class="alert alert-info" role="alert">
         <div id="text">
             <!-- 1 Lorem itsum lorem itsum lorem itsum lorem itsum lorem itsum lorem itsum lorem itsum lorem itsum lorem itsum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="zmdi zmdi-info"></span>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -15,6 +16,7 @@
             @endforeach
         </div>
     </div>
+    @endif
 	<div class="block-header">
         <h2>Dashboard</h2>
         
