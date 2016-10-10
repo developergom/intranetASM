@@ -63,7 +63,7 @@ class MenuLibrary{
 
     public function getMenuFromDatabase()
     {
-        $data = Menu::where('active','1')->orderBy('menu_order','asc')->get();
+        $data = Menu::with('module')->where('active','1')->orderBy('menu_order','asc')->get();
         $recursive = new Recursive;
         $tmp = $recursive->data_recursive($data, 'menu_id', 'menu_parent', 0);
 
