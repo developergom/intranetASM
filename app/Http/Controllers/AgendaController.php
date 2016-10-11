@@ -103,8 +103,8 @@ class AgendaController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $data = array();
-        $data['agendatypes'] = AgendaType::where('active', '1')->get();
-        $data['agenda'] = Agenda::find($id);
+        //$data['agendatypes'] = AgendaType::where('active', '1')->get();
+        $data['agenda'] = Agenda::with('agendatype','clients','clientcontacts','clientcontacts.client')->find($id);
         $agenda_date = Carbon::createFromFormat('Y-m-d', ($data['agenda']->agenda_date==null) ? date('Y-m-d') : $data['agenda']->agenda_date);
         $data['agenda_date'] = $agenda_date->format('d/m/Y');
         return view('vendor.material.agenda.agenda.show', $data);

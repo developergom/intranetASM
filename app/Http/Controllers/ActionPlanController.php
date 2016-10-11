@@ -91,7 +91,7 @@ class ActionPlanController extends Controller
         }
         /*dd($medias);*/
 
-        $data['mediaeditions'] = MediaEdition::whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
+        $data['mediaeditions'] = MediaEdition::with('media')->whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
 
         return view('vendor.material.plan.actionplan.create', $data);
     }
@@ -205,7 +205,7 @@ class ActionPlanController extends Controller
 
         $data = array();
 
-        $data['actionplan'] = ActionPlan::find($id);
+        $data['actionplan'] = ActionPlan::with('actionplanhistories', 'actionplanhistories.approvaltype')->find($id);
 
         $data['actiontypes'] = ActionType::where('active', '1')->orderBy('action_type_name')->get();
         $data['medias'] = Media::whereHas('users', function($query) use($request){
@@ -217,7 +217,7 @@ class ActionPlanController extends Controller
             array_push($medias, $value['media_id']);
         }
 
-        $data['mediaeditions'] = MediaEdition::whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
+        $data['mediaeditions'] = MediaEdition::with('media')->whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
         $startdate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_startdate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_startdate);
         $enddate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_enddate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_enddate);
         $data['startdate'] = $startdate->format('d/m/Y');
@@ -253,7 +253,7 @@ class ActionPlanController extends Controller
             array_push($medias, $value['media_id']);
         }
 
-        $data['mediaeditions'] = MediaEdition::whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
+        $data['mediaeditions'] = MediaEdition::with('media')->whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
         $startdate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_startdate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_startdate);
         $enddate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_enddate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_enddate);
         $data['startdate'] = $startdate->format('d/m/Y');

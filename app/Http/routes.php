@@ -32,7 +32,7 @@ Route::auth();
 
 Route::get('/home', 'HomeController@index')->middleware(['auth','menu']);
 
-//Role
+//User
 Route::group(['middleware' => ['auth', 'menu']], function(){
     Route::post('user/apiList', 'UserController@apiList');
     Route::post('user/apiDelete', 'UserController@apiDelete');
@@ -98,6 +98,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('clienttype/apiList', 'ClientTypeController@apiList');
         Route::post('clienttype/apiDelete', 'ClientTypeController@apiDelete');
         Route::resource('clienttype', 'ClientTypeController');
+
+        //Event Type
+        Route::post('eventtype/apiList', 'EventTypeController@apiList');
+        Route::post('eventtype/apiDelete', 'EventTypeController@apiDelete');
+        Route::resource('eventtype', 'EventTypeController');
 
         //Flow
         Route::post('flow/apiList', 'FlowController@apiList');
