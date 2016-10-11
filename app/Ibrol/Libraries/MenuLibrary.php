@@ -35,12 +35,13 @@ class MenuLibrary{
     public function generateListModule()
     {
     	$tmp = $this->generateListMenu();
-    	//dd($tmp);
+        $datamenu = Menu::all();
+        $datamodule = Module::with('actions')->get();
 
     	$data = array();
     	$i = 0;
     	foreach ($tmp as $key => $value) {
-    		$menu = Menu::find($key);
+            $menu = $datamenu->where('menu_id', $key)->first();
 
     		$data[$i] = array();
     		$data[$i]['menu_id'] = $key;
@@ -49,8 +50,9 @@ class MenuLibrary{
     		$data[$i]['menu_parent'] = $menu->menu_parent;
     		$data[$i]['action'] = array();
 
-    		$modules = Module::find($menu->module_id);
-    		foreach ($modules->actions as $action) {
+            $modules = $datamodule->where('module_id', $menu->module_id)->first();
+            $actions = $modules->actions->all();
+    		foreach ($actions as $action) {
     			array_push($data[$i]['action'], $action->action_id);
     		}
 
