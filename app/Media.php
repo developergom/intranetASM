@@ -51,4 +51,9 @@ class Media extends Model
     {
     	return $this->belongsToMany('App\ActionPlan','action_plan_media');
     }
+
+    public function eventplans()
+    {
+    	return $this->belongsToMany('App\EventPlan','action_plans_medias');
+    }
 }

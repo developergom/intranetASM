@@ -17,7 +17,7 @@ class EventType extends Model
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
 
-	public function actionplan() {
-		return $this->hasMany('App\ActionPlan', 'event_plan_id');
+	public function eventplan() {
+		return $this->hasMany('App\EventPlan', 'event_type_id');
 	}
 }

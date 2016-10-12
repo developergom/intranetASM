@@ -20,4 +20,8 @@ class ApprovalType extends Model
 	public function actionplanhistories() {
 		return $this->hasMany('App\ActionPlanHistory', 'approval_type_id');
 	}
+
+	public function eventplanhistories() {
+		return $this->hasMany('App\EventPlanHistory', 'approval_type_id');
+	}
 }

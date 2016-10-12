@@ -11,7 +11,7 @@ class ImplementationsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('implementations')->insert(
+        DB::table('implementations')->insert(array(
         	[
 	        	'implementation_month' => '01',
 	        	'implementation_month_name' => 'January',
@@ -119,7 +119,7 @@ class ImplementationsTableSeeder extends Seeder
 	        	'created_at' => date('Y-m-d H:i:s'),
 	        	'updated_by' => '1',
 	        	'updated_at' => date('Y-m-d H:i:s'),
-        	]
+        	])
         );
     }
 }

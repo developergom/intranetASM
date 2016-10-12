@@ -38,7 +38,7 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="notification_type_need_confirmation" class="col-sm-2 control-label">Gender</label>
+	                <label for="notification_type_need_confirmation" class="col-sm-2 control-label">Need Confirmation?</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                    	<input type="text" class="form-control input-sm" name="notification_type_need_confirmation" id="notification_type_need_confirmation" placeholder="Gender" maxlength="100" value="{{ ($notificationtype->notification_type_need_confirmation=='1') ? 'Yes' : 'No' }}" disabled="true">

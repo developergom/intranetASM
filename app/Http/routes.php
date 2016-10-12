@@ -212,6 +212,13 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::resource('actionplan', 'ActionPlanController');
         Route::get('actionplan/approve/{flow_no}/{id}', 'ActionPlanController@approve');
         Route::post('actionplan/approve/{flow_no}/{id}', 'ActionPlanController@postApprove');
+
+        //Event Plan
+        Route::post('eventplan/apiList/{listtype}', 'EventPlanController@apiList');
+        Route::post('eventplan/apiDelete', 'EventPlanController@apiDelete');
+        Route::resource('eventplan', 'EventPlanController');
+        Route::get('eventplan/approve/{flow_no}/{id}', 'EventPlanController@approve');
+        Route::post('eventplan/approve/{flow_no}/{id}', 'EventPlanController@postApprove');
     });
 
     Route::group(['prefix' => 'agenda'], function() {

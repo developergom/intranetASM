@@ -30,4 +30,9 @@ class UploadFile extends Model
 	{
 		return $this->hasMany('App\Download', 'upload_file_id');
 	}
+
+	public function eventplan() 
+	{
+		return $this->belongsToMany('App\EventPlan', 'event_plan_upload_file');
+	}
 }
