@@ -215,12 +215,144 @@ class EventPlanController extends Controller
         return view('vendor.material.plan.eventplan.show', $data);
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Request $request, $id)
+    {
+        if(Gate::denies('Event Plan-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['eventplan'] = EventPlan::with('eventtype', 'medias', 'eventplanhistories', 'eventplanhistories.approvaltype')->find($id);
+        $data['eventtypes'] = EventType::where('active', '1')->orderBy('event_type_name')->get();
+        $data['medias'] = Media::whereHas('users', function($query) use($request){
+                            $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                        })->where('medias.active', '1')->orderBy('media_name')->get();
+
+        $medias = array();
+        foreach ($data['medias'] as $key => $value) {
+            array_push($medias, $value['media_id']);
+        }
+
+        $data['implementations'] = Implementation::where('active', '1')->orderBy('implementation_month')->get();
+
+        $event_plan_deadline = Carbon::createFromFormat('Y-m-d', ($data['eventplan']->event_plan_deadline==null) ? date('Y-m-d') : $data['eventplan']->event_plan_deadline);
+        $data['event_plan_deadline'] = $event_plan_deadline->format('d/m/Y');
+        $data['uploadedfiles'] = $data['eventplan']->uploadfiles()->where('revision_no', $data['eventplan']->revision_no)->get();
+
+        return view('vendor.material.plan.eventplan.edit', $data);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'event_type_id' => 'required',
+            'event_plan_name' => 'required|max:100',
+            'event_plan_desc' => 'required',
+            'event_plan_viewer' => 'required|numeric',
+            'event_plan_location' => 'required|max:100',
+            'event_plan_year' => 'required|max:4',
+            'event_plan_deadline' => 'required|date_format:"d/m/Y"',
+            'implementation_id[]' => 'array',
+            'media_id[]' => 'array',
+        ]);
+
+        $flow = new FlowLibrary;
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
+
+        $obj = EventPlan::find($id);
+        $obj->event_type_id = $request->input('event_type_id');
+        $obj->event_plan_name = $request->input('event_plan_name');
+        $obj->event_plan_desc = $request->input('event_plan_desc');
+        $obj->event_plan_viewer = $request->input('event_plan_viewer');
+        $obj->event_plan_location = $request->input('event_plan_location');
+        $obj->event_plan_year = $request->input('event_plan_year');
+        $obj->event_plan_deadline = Carbon::createFromFormat('d/m/Y', $request->input('event_plan_deadline'))->toDateString();
+        $obj->flow_no = $nextFlow['flow_no'];
+        $obj->current_user = $nextFlow['current_user'];
+        $obj->updated_by = $request->user()->user_id;
+
+        $obj->save();
+
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => $obj->revision_no ];
+            }
+        }
+
+        if(!empty($fileArray)) {
+            EventPlan::find($obj->event_plan_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
+        }
+
+        if(!empty($request->input('media_id'))) {
+            EventPlan::find($obj->event_plan_id)->medias()->sync($request->input('media_id'));
+        }
+        
+        if(!empty($request->input('implementation_id'))) {
+            EventPlan::find($obj->event_plan_id)->implementations()->sync($request->input('implementation_id'));
+        }
+
+        $his = new EventPlanHistory;
+        $his->event_plan_id = $obj->event_plan_id;
+        $his->approval_type_id = 1;
+        $his->event_plan_history_text = $request->input('event_plan_desc');
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        $this->notif->remove($request->user()->user_id, 'eventplanreject', $obj->event_plan_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'eventplanapproval', 'Please check Event Plan "' . $obj->event_plan_name . '"', $obj->event_plan_id);
+
+        $request->session()->flash('status', 'Data has been saved!');
+
+        return redirect('plan/eventplan');
+    }
+
     public function apiList($listtype, Request $request)
     {
         $u = new UserLibrary;
         $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
-
-        //dd($subordinate);
 
         $current = $request->input('current') or 1;
         $rowCount = $request->input('rowCount') or 10;
@@ -434,5 +566,121 @@ class EventPlanController extends Controller
         }else{
             return response()->json(200); //failed
         }
+    }
+
+    public function approve(Request $request, $flow_no, $id)
+    {
+        if($flow_no == 1) {
+            return $this->approveFlowNo1($request, $id);
+        }elseif($flow_no == 2) {
+            return $this->approveFlowNo2($request, $id);
+        }
+    }
+
+    public function postApprove(Request $request, $flow_no, $id)
+    {
+        if($flow_no == 1) {
+            $this->postApproveFlowNo1($request, $id);
+        }elseif($flow_no == 2) {
+            $this->postApproveFlowNo2($request, $id);
+        }
+
+        return redirect('plan/eventplan');
+    }
+
+    private function approveFlowNo2(Request $request, $id)
+    {
+        if(Gate::denies('Event Plan-Approval')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['eventplan'] = EventPlan::with('eventtype', 'eventplanhistories', 'eventplanhistories.approvaltype')->find($id);
+
+        $data['medias'] = Media::whereHas('users', function($query) use($request){
+                            $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                        })->where('medias.active', '1')->orderBy('media_name')->get();
+
+        $medias = array();
+        foreach ($data['medias'] as $key => $value) {
+            array_push($medias, $value['media_id']);
+        }
+
+        $data['implementations'] = Implementation::where('active', '1')->orderBy('implementation_month')->get();
+
+        $event_plan_deadline = Carbon::createFromFormat('Y-m-d', ($data['eventplan']->event_plan_deadline==null) ? date('Y-m-d') : $data['eventplan']->event_plan_deadline);
+        $data['event_plan_deadline'] = $event_plan_deadline->format('d/m/Y');
+        $data['uploadedfiles'] = $data['eventplan']->uploadfiles()->where('revision_no', $data['eventplan']->revision_no)->get();
+
+        return view('vendor.material.plan.eventplan.approve', $data);
+    }
+
+    private function postApproveFlowNo2(Request $request, $id)
+    {
+        if(Gate::denies('Event Plan-Approval')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $this->validate($request, [
+            'approval' => 'required',
+            'comment' => 'required',
+        ]);
+
+        if($request->input('approval') == '1') 
+        {
+            //approve
+            $eventplan = EventPlan::find($id);
+
+            $flow = new FlowLibrary;
+            $nextFlow = $flow->getNextFlow($this->flow_group_id, $eventplan->flow_no, $request->user()->user_id, '', $eventplan->created_by->user_id);
+
+            $eventplan->flow_no = $nextFlow['flow_no'];
+            $eventplan->current_user = $nextFlow['current_user'];
+            $eventplan->updated_by = $request->user()->user_id;
+            $eventplan->save();
+
+            $his = new EventPlanHistory;
+            $his->event_plan_id = $id;
+            $his->approval_type_id = 2;
+            $his->event_plan_history_text = $request->input('comment');
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
+            $this->notif->remove($request->user()->user_id, 'eventplanapproval', $eventplan->event_plan_id);
+            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'eventplanfinished', 'Event Plan "' . $eventplan->event_plan_name . '" has been approved.', $id);
+
+            $request->session()->flash('status', 'Data has been saved!');
+
+        }else{
+            //reject
+            $eventplan = EventPlan::find($id);
+
+            $flow = new FlowLibrary;
+            $prevFlow = $flow->getPreviousFlow($this->flow_group_id, $eventplan->flow_no, $request->user()->user_id, '', $eventplan->created_by->user_id);
+
+            $eventplan->flow_no = $prevFlow['flow_no'];
+            $eventplan->revision_no = $eventplan->revision_no + 1;
+            $eventplan->current_user = $prevFlow['current_user'];
+            $eventplan->updated_by = $request->user()->user_id;
+            $eventplan->save();
+
+            $his = new EventPlanHistory;
+            $his->event_plan_id = $id;
+            $his->approval_type_id = 3;
+            $his->event_plan_history_text = $request->input('comment');
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
+            $this->notif->remove($request->user()->user_id, 'eventplanapproval', $eventplan->event_plan_id);
+            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'eventplanreject', 'Event Plan "' . $eventplan->event_plan_name . '" rejected.', $id);
+
+            $request->session()->flash('status', 'Data has been saved!');
+        }
+
     }
 }
