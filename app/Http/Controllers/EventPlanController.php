@@ -181,6 +181,40 @@ class EventPlanController extends Controller
         return redirect('plan/eventplan');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request, $id)
+    {
+        if(Gate::denies('Event Plan-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['eventplan'] = EventPlan::with('eventtype', 'eventplanhistories', 'eventplanhistories.approvaltype')->find($id);
+
+        $data['medias'] = Media::whereHas('users', function($query) use($request){
+                            $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                        })->where('medias.active', '1')->orderBy('media_name')->get();
+
+        $medias = array();
+        foreach ($data['medias'] as $key => $value) {
+            array_push($medias, $value['media_id']);
+        }
+
+        $data['implementations'] = Implementation::where('active', '1')->orderBy('implementation_month')->get();
+
+        $event_plan_deadline = Carbon::createFromFormat('Y-m-d', ($data['eventplan']->event_plan_deadline==null) ? date('Y-m-d') : $data['eventplan']->event_plan_deadline);
+        $data['event_plan_deadline'] = $event_plan_deadline->format('d/m/Y');
+        $data['uploadedfiles'] = $data['eventplan']->uploadfiles()->where('revision_no', $data['eventplan']->revision_no)->get();
+
+        return view('vendor.material.plan.eventplan.show', $data);
+    }
+
     public function apiList($listtype, Request $request)
     {
         $u = new UserLibrary;

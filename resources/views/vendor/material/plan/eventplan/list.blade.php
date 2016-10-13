@@ -66,7 +66,7 @@
                                     <th data-column-id="event_plan_viewer" data-order="asc">Total Viewer</th>
                                     <th data-column-id="implementation_month_name" data-order="asc">Month</th>
                                     <th data-column-id="event_plan_year" data-order="asc">Year</th>
-                                    <th data-column-id="user_firstname" data-order="asc">Created By</th>
+                                    <th data-column-id="user_firstname" data-order="asc">Current User</th>
                                     @can('Event Plan-Delete')
                                         <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
                                     @else

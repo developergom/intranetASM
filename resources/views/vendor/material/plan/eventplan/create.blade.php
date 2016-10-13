@@ -125,7 +125,7 @@
 	                <label for="event_plan_deadline" class="col-sm-2 control-label">Deadline</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="event_plan_deadline" id="event_plan_deadline" placeholder="Event Plan Deadline" required="true" maxlength="10" value="{{ old('event_plan_deadline') }}" autocomplete="off" data-mask="00/00/0000">
+	                        <input type="text" class="form-control input-sm input-mask" name="event_plan_deadline" id="event_plan_deadline" placeholder="e.g 17/08/1945" required="true" maxlength="10" value="{{ old('event_plan_deadline') }}" autocomplete="off" data-mask="00/00/0000">
 	                    </div>
 	                    @if ($errors->has('event_plan_deadline'))
 			                <span class="help-block">

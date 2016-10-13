@@ -46,4 +46,16 @@ class EventPlan extends Model
 	{
 		return $this->belongsToMany('App\UploadFile', 'event_plan_upload_file');
 	}
+
+	public function getCreatedByAttribute($value)
+	{
+		$user = User::find($value); 
+		return $user;
+	}
+
+	public function getUpdatedByAttribute($value)
+	{
+		$user = User::find($value); 
+		return $user;
+	}
 }
