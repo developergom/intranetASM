@@ -8,7 +8,7 @@ use Gate;
 use App\Http\Requests;
 use App\CreativeFormat;
 
-class CreativeFormat extends Controller
+class CreativeFormatController extends Controller
 {
     /**
      * Display a listing of the resource.
