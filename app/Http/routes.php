@@ -99,6 +99,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('clienttype/apiDelete', 'ClientTypeController@apiDelete');
         Route::resource('clienttype', 'ClientTypeController');
 
+        //Creative Format
+        Route::post('creativeformat/apiList', 'CreativeFormatController@apiList');
+        Route::post('creativeformat/apiDelete', 'CreativeFormatController@apiDelete');
+        Route::resource('creativeformat', 'CreativeFormatController');
+
         //Event Type
         Route::post('eventtype/apiList', 'EventTypeController@apiList');
         Route::post('eventtype/apiDelete', 'EventTypeController@apiDelete');
