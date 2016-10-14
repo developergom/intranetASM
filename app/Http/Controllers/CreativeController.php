@@ -207,6 +207,133 @@ class CreativeController extends Controller
         return view('vendor.material.plan.creative.show', $data);
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Request $request, $id)
+    {
+        if(Gate::denies('Creative Plan-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['creative'] = Creative::with('creativeformat', 'creativehistories', 'creativehistories.approvaltype', 'unit', 'mediacategory')->find($id);
+        $data['creativeformats'] = CreativeFormat::where('active', '1')->orderBy('creative_format_name')->get();
+        $data['mediacategories'] = MediaCategory::where('active', '1')->orderBy('media_category_name')->get();
+        $data['units'] = Unit::where('active', '1')->orderBy('unit_name')->get();
+        $data['medias'] = Media::whereHas('users', function($query) use($request){
+                            $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                        })->where('medias.active', '1')->orderBy('media_name')->get();
+
+        $medias = array();
+        foreach ($data['medias'] as $key => $value) {
+            array_push($medias, $value['media_id']);
+        }
+
+        $data['uploadedfiles'] = $data['creative']->uploadfiles()->where('revision_no', $data['creative']->revision_no)->get();
+
+        return view('vendor.material.plan.creative.edit', $data);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'creative_format_id' => 'required',
+            'creative_name' => 'required|max:100',
+            'media_category_id' => 'required',
+            'creative_width' => 'required|numeric',
+            'creative_height' => 'required|numeric',
+            'unit_id' => 'required',
+            'creative_desc' => 'required',
+            'media_id[]' => 'array',
+        ]);
+
+        $flow = new FlowLibrary;
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
+
+        $obj = Creative::find($id);
+        $obj->creative_format_id = $request->input('creative_format_id');
+        $obj->creative_name = $request->input('creative_name');
+        $obj->media_category_id = $request->input('media_category_id');
+        $obj->creative_width = $request->input('creative_width');
+        $obj->creative_height = $request->input('creative_height');
+        $obj->unit_id = $request->input('unit_id');
+        $obj->creative_desc = $request->input('creative_desc');
+        $obj->flow_no = $nextFlow['flow_no'];
+        $obj->current_user = $nextFlow['current_user'];
+        $obj->updated_by = $request->user()->user_id;
+
+        $obj->save();
+
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => $obj->revision_no ];
+            }
+        }
+
+        if(!empty($fileArray)) {
+            Creative::find($obj->creative_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
+        }
+
+        if(!empty($request->input('media_id'))) {
+            Creative::find($obj->creative_id)->medias()->sync($request->input('media_id'));
+        }
+
+        $his = new CreativeHistory;
+        $his->creative_id = $obj->creative_id;
+        $his->approval_type_id = 1;
+        $his->creative_history_text = $request->input('creative_desc');
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        $this->notif->remove($request->user()->user_id, 'creativereject', $obj->creative_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'creativeapproval', 'Please check Creative Plan "' . $obj->creative_name . '"', $obj->creative_id);
+
+        $request->session()->flash('status', 'Data has been saved!');
+
+        return redirect('plan/creativeplan');
+    }
+
     public function apiList($listtype, Request $request)
     {
         $u = new UserLibrary;
