@@ -16,4 +16,8 @@ class CreativeFormat extends Model
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
+
+	public function creatives() {
+		return $this->hasMany('App\Creative', 'creative_format_id');
+	}
 }

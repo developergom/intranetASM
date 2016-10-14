@@ -35,4 +35,9 @@ class UploadFile extends Model
 	{
 		return $this->belongsToMany('App\EventPlan', 'event_plan_upload_file');
 	}
+
+	public function creative() 
+	{
+		return $this->belongsToMany('App\Creative', 'creative_upload_file');
+	}
 }
