@@ -177,6 +177,36 @@ class CreativeController extends Controller
         return redirect('plan/creativeplan');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request, $id)
+    {
+        if(Gate::denies('Creative Plan-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['creative'] = Creative::with('creativeformat', 'creativehistories', 'creativehistories.approvaltype', 'unit', 'mediacategory')->find($id);
+
+        $data['medias'] = Media::whereHas('users', function($query) use($request){
+                            $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                        })->where('medias.active', '1')->orderBy('media_name')->get();
+
+        $medias = array();
+        foreach ($data['medias'] as $key => $value) {
+            array_push($medias, $value['media_id']);
+        }
+
+        $data['uploadedfiles'] = $data['creative']->uploadfiles()->where('revision_no', $data['creative']->revision_no)->get();
+
+        return view('vendor.material.plan.creative.show', $data);
+    }
+
     public function apiList($listtype, Request $request)
     {
         $u = new UserLibrary;

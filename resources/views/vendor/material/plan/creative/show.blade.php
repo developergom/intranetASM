@@ -7,77 +7,55 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Event Plans<small>View Event Plan</small></h2></div>
+        <div class="card-header"><h2>Creative Plans<small>View Creative Plan</small></h2></div>
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form">
         		{{ csrf_field() }}
         		<div class="form-group">
-        			<label for="event_type_id" class="col-sm-2 control-label">Type</label>
+        			<label for="creative_format_id" class="col-sm-2 control-label">Format</label>
         			<div class="col-sm-10">
         				<div class="fg-line">
-	        				<input type="text" class="form-control input-sm" name="event_plan_type" id="event_plan_type" placeholder="Event Plan Type" disabled="true" maxlength="100" value="{{ $eventplan->eventtype->event_type_name }}">
+	        				<input type="text" class="form-control input-sm" name="creative_format_id" id="creative_format_id" placeholder="Creative Format" required="true" maxlength="100" value="{{ $creative->creativeformat->creative_format_name }}" disabled="true">
 	        			</div>
         			</div>
         		</div>
 	            <div class="form-group">
-	                <label for="event_plan_name" class="col-sm-2 control-label">Event Name</label>
+	                <label for="creative_name" class="col-sm-2 control-label">Creative Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_plan_name" id="event_plan_name" placeholder="Event Plan Name" disabled="true" maxlength="100" value="{{ $eventplan->event_plan_name }}">
+	                        <input type="text" class="form-control input-sm" name="creative_name" id="creative_name" placeholder="Creative Plan Name" required="true" maxlength="100" value="{{ $creative->creative_name }}" disabled="true">
 	                    </div>
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="event_plan_desc" class="col-sm-2 control-label">Description</label>
+        			<label for="media_category_id" class="col-sm-2 control-label">Category</label>
+        			<div class="col-sm-10">
+        				<div class="fg-line">
+	        				<input type="text" class="form-control input-sm" name="media_category_id" id="media_category_id" placeholder="Category" required="true" maxlength="100" value="{{ $creative->mediacategory->media_category_name }}" disabled="true">
+	        			</div>
+        			</div>
+        		</div>
+	            <div class="form-group">
+	                <label for="creative_width" class="col-sm-2 control-label">Width</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="event_plan_desc" id="event_plan_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $eventplan->event_plan_desc }}</textarea>
+	                        <input type="text" class="form-control input-sm" name="creative_width" id="creative_width" placeholder="Width" required="true" maxlength="10" value="{{ $creative->creative_width .' '. $creative->unit->unit_code }}" disabled="true">
 	                    </div>
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="event_plan_viewer" class="col-sm-2 control-label">Estimated Viewer/Guest (number only)</label>
+	                <label for="creative_height" class="col-sm-2 control-label">Height</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_plan_viewer" id="event_plan_viewer" placeholder="Estimated Viewer/Guest" required="true" maxlength="15" disabled="true" value="{{ $eventplan->event_plan_viewer }}">
+	                        <input type="text" class="form-control input-sm" name="creative_height" id="creative_height" placeholder="Height" required="true" maxlength="10" value="{{ $creative->creative_height .' '. $creative->unit->unit_code }}" disabled="true">
 	                    </div>
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="event_plan_location" class="col-sm-2 control-label">Location</label>
+	                <label for="creative_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_plan_location" id="event_plan_location" placeholder="Event Plan Location" required="true" maxlength="100" disabled="true" value="{{ $eventplan->event_plan_location }}">
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="implementation_id" class="col-sm-2 control-label">Implementation</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-                            @foreach ($implementations as $row)
-                            	@foreach ($eventplan->implementations as $implementation)
-                            		@if($implementation->implementation_id==$row->implementation_id)
-                            			<span class="badge">{{ $row->implementation_month_name }}</span>
-                            		@endif
-                            	@endforeach
-							@endforeach
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="event_plan_year" class="col-sm-2 control-label">Year</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_plan_year" id="event_plan_year" placeholder="Event Plan Year" required="true" maxlength="4" value="{{ $eventplan->event_plan_year }}">
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="event_plan_deadline" class="col-sm-2 control-label">Deadline</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="event_plan_deadline" id="event_plan_deadline" placeholder="e.g 17/08/1945" disabled="true" maxlength="10" value="{{ $event_plan_deadline }}" autocomplete="off" data-mask="00/00/0000">
+	                        <textarea name="creative_desc" id="creative_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $creative->creative_desc }}</textarea>
 	                    </div>
 	                </div>
 	            </div>
@@ -86,7 +64,7 @@
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
                             @foreach ($medias as $row)
-                            	@foreach ($eventplan->medias as $media)
+                            	@foreach ($creative->medias as $media)
                             		@if($media->media_id==$row->media_id)
                             			<span class="badge">{{ $row->media_name }}</span>
                             		@endif
@@ -112,7 +90,7 @@
 	                        				<h4>{{ $uploadedfile->upload_file_name }}</h4>
 	                        				<p>{{ $uploadedfile->upload_file_desc }}</p>
 	                        				<div class="m-b-5">
-	                        					@can('Event Plan-Download')
+	                        					@can('Creative Plan-Download')
 	                        					<a class="btn btn-sm btn-primary waves-effect" href="{{ url('download/file/' . $uploadedfile->upload_file_id) }}" role="button">Download File</a>
 	                        					@endcan
 	                        				</div>
@@ -128,7 +106,7 @@
 	                <label for="created_by" class="col-sm-2 control-label">Created By</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" placeholder="Created By" disabled="true" maxlength="100" value="{{ $eventplan->created_by->user_firstname . ' ' . $eventplan->created_by->user_lastname }}">
+	                        <input type="text" class="form-control input-sm" placeholder="Created By" disabled="true" maxlength="100" value="{{ $creative->created_by->user_firstname . ' ' . $creative->created_by->user_lastname }}">
 	                    </div>
 	                </div>
 	            </div>
@@ -136,7 +114,7 @@
 	                <label for="history" class="col-sm-2 control-label">History</label>
 	                <div class="col-sm-10">
 	                    <div class="timeline">
-                        @foreach($eventplan->eventplanhistories as $key => $value)
+                        @foreach($creative->creativehistories as $key => $value)
                         	<div class="t-view" data-tv-type="text">
                                 <div class="tv-header media">
                                     <a href="#" class="tvh-user pull-left">
@@ -149,7 +127,7 @@
                                 </div>
                                 <div class="tv-body">
 									<p>
-										{{ $value->event_plan_history_text }}
+										{{ $value->creative_history_text }}
 									</p>
 									<div class="clearfix"></div>
 									<ul class="tvb-stats">
@@ -163,7 +141,7 @@
 	            </div>
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
-	                    <a href="{{ url('plan/eventplan') }}" class="btn btn-danger btn-sm">Back</a>
+	                    <a href="{{ url('plan/creativeplan') }}" class="btn btn-danger btn-sm">Back</a>
 	                </div>
 	            </div>
 	        </form>

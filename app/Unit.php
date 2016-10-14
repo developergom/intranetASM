@@ -26,6 +26,11 @@ class Unit extends Model
 
 	public function advertisesizes()
 	{
-		return $this->hasMany('App\AdvertiseSize','advertise_size_id');	
+		return $this->hasMany('App\AdvertiseSize','unit_id');	
+	}
+
+	public function creatives()
+	{
+		return $this->hasMany('App\Creative','unit_id');		
 	}
 }

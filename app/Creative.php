@@ -37,6 +37,11 @@ class Creative extends Model
 		return $this->belongsTo('App\MediaCategory', 'media_category_id');
 	}
 
+	public function unit() 
+	{
+		return $this->belongsTo('App\Unit', 'unit_id');
+	}
+
 	public function creativehistories()
 	{
 		return $this->hasMany('App\CreativeHistory', 'creative_id');

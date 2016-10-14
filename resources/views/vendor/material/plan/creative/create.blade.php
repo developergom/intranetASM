@@ -14,7 +14,7 @@
         	<form class="form-horizontal" role="form" method="POST" action="{{ url('plan/creativeplan') }}">
         		{{ csrf_field() }}
         		<div class="form-group">
-        			<label for="creative_format_id" class="col-sm-2 control-label">Type</label>
+        			<label for="creative_format_id" class="col-sm-2 control-label">Format</label>
         			<div class="col-sm-10">
         				<div class="fg-line">
 	        				<select name="creative_format_id" id="creative_format_id" class="selectpicker" data-live-search="true" required="true">
