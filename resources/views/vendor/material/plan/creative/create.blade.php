@@ -9,127 +9,112 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Event Plans<small>Create New Event Plan</small></h2></div>
+        <div class="card-header"><h2>Creative Plans<small>Create New Creative Plan</small></h2></div>
         <div class="card-body card-padding">
-        	<form class="form-horizontal" role="form" method="POST" action="{{ url('plan/eventplan') }}">
+        	<form class="form-horizontal" role="form" method="POST" action="{{ url('plan/creativeplan') }}">
         		{{ csrf_field() }}
         		<div class="form-group">
-        			<label for="event_type_id" class="col-sm-2 control-label">Type</label>
+        			<label for="creative_format_id" class="col-sm-2 control-label">Type</label>
         			<div class="col-sm-10">
         				<div class="fg-line">
-	        				<select name="event_type_id" id="event_type_id" class="selectpicker" data-live-search="true" required="true">
+	        				<select name="creative_format_id" id="creative_format_id" class="selectpicker" data-live-search="true" required="true">
 	        					<option value=""></option>
-	        					@foreach($eventtypes as $row)
-	        						<option value="{{ $row->event_type_id }}">{{ $row->event_type_name }}</option>
+	        					@foreach($creativeformats as $row)
+	        						<option value="{{ $row->creative_format_id }}">{{ $row->creative_format_name }}</option>
 	        					@endforeach
 	        				</select>
 	        			</div>
         			</div>
-        			@if ($errors->has('event_type_id'))
+        			@if ($errors->has('creative_format_id'))
 		                <span class="help-block">
-		                    <strong>{{ $errors->first('event_type_id') }}</strong>
+		                    <strong>{{ $errors->first('creative_format_id') }}</strong>
 		                </span>
 		            @endif
         		</div>
 	            <div class="form-group">
-	                <label for="event_plan_name" class="col-sm-2 control-label">Event Name</label>
+	                <label for="creative_name" class="col-sm-2 control-label">Creative Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_plan_name" id="event_plan_name" placeholder="Event Plan Name" required="true" maxlength="100" value="{{ old('event_plan_name') }}">
+	                        <input type="text" class="form-control input-sm" name="creative_name" id="creative_name" placeholder="Creative Plan Name" required="true" maxlength="100" value="{{ old('creative_name') }}">
 	                    </div>
-	                    @if ($errors->has('event_plan_name'))
+	                    @if ($errors->has('creative_name'))
 			                <span class="help-block">
-			                    <strong>{{ $errors->first('event_plan_name') }}</strong>
+			                    <strong>{{ $errors->first('creative_name') }}</strong>
 			                </span>
 			            @endif
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="event_plan_desc" class="col-sm-2 control-label">Description</label>
+        			<label for="media_category_id" class="col-sm-2 control-label">Category</label>
+        			<div class="col-sm-10">
+        				<div class="fg-line">
+	        				<select name="media_category_id" id="media_category_id" class="selectpicker" data-live-search="true" required="true">
+	        					<option value=""></option>
+	        					@foreach($mediacategories as $row)
+	        						<option value="{{ $row->media_category_id }}">{{ $row->media_category_name }}</option>
+	        					@endforeach
+	        				</select>
+	        			</div>
+        			</div>
+        			@if ($errors->has('media_category_id'))
+		                <span class="help-block">
+		                    <strong>{{ $errors->first('media_category_id') }}</strong>
+		                </span>
+		            @endif
+        		</div>
+        		<div class="form-group">
+        			<label for="unit_id" class="col-sm-2 control-label">Unit</label>
+        			<div class="col-sm-10">
+        				<div class="fg-line">
+	        				<select name="unit_id" id="unit_id" class="selectpicker" data-live-search="true" required="true">
+	        					<option value=""></option>
+	        					@foreach($units as $row)
+	        						<option value="{{ $row->unit_id }}">{{ $row->unit_name }}</option>
+	        					@endforeach
+	        				</select>
+	        			</div>
+        			</div>
+        			@if ($errors->has('unit_id'))
+		                <span class="help-block">
+		                    <strong>{{ $errors->first('unit_id') }}</strong>
+		                </span>
+		            @endif
+        		</div>
+	            <div class="form-group">
+	                <label for="creative_width" class="col-sm-2 control-label">Width</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="event_plan_desc" id="event_plan_desc" class="form-control input-sm" placeholder="Description">{{ old('event_plan_desc') }}</textarea>
+	                        <input type="text" class="form-control input-sm" name="creative_width" id="creative_width" placeholder="Width" required="true" maxlength="10" value="{{ old('creative_width') }}">
 	                    </div>
-	                    @if ($errors->has('event_plan_desc'))
+	                    @if ($errors->has('creative_width'))
 			                <span class="help-block">
-			                    <strong>{{ $errors->first('event_plan_desc') }}</strong>
+			                    <strong>{{ $errors->first('creative_width') }}</strong>
 			                </span>
 			            @endif
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="event_plan_viewer" class="col-sm-2 control-label">Estimated Viewer/Guest (number only)</label>
+	                <label for="creative_height" class="col-sm-2 control-label">Height</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_plan_viewer" id="event_plan_viewer" placeholder="Estimated Viewer/Guest" required="true" maxlength="15" value="{{ old('event_plan_viewer') }}">
+	                        <input type="text" class="form-control input-sm" name="creative_height" id="creative_height" placeholder="Height" required="true" maxlength="10" value="{{ old('creative_height') }}">
 	                    </div>
-	                    @if ($errors->has('event_plan_viewer'))
+	                    @if ($errors->has('creative_height'))
 			                <span class="help-block">
-			                    <strong>{{ $errors->first('event_plan_viewer') }}</strong>
+			                    <strong>{{ $errors->first('creative_height') }}</strong>
 			                </span>
 			            @endif
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="event_plan_location" class="col-sm-2 control-label">Location</label>
+	                <label for="creative_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_plan_location" id="event_plan_location" placeholder="Event Plan Location" required="true" maxlength="100" value="{{ old('event_plan_location') }}">
+	                        <textarea name="creative_desc" id="creative_desc" class="form-control input-sm" placeholder="Description">{{ old('creative_desc') }}</textarea>
 	                    </div>
-	                    @if ($errors->has('event_plan_location'))
+	                    @if ($errors->has('creative_desc'))
 			                <span class="help-block">
-			                    <strong>{{ $errors->first('event_plan_location') }}</strong>
-			                </span>
-			            @endif
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="implementation_id" class="col-sm-2 control-label">Implementation</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <select name="implementation_id[]" id="implementation_id" class="selectpicker" data-live-search="true" multiple required="true">
-                                @foreach ($implementations as $row)
-                                	{!! $selected = '' !!}
-                                	@if(old('implementation_id'))
-	                                	@foreach (old('implementation_id') as $key => $value)
-	                                		@if($value==$row->implementation_id)
-	                                			{!! $selected = 'selected' !!}
-	                                		@endif
-	                                	@endforeach
-                                	@endif
-								    <option value="{{ $row->implementation_id }}" {{ $selected }}>{{ $row->implementation_month_name }}</option>
-								@endforeach
-                            </select>
-	                    </div>
-	                    @if ($errors->has('implementation_id'))
-			                <span class="help-block">
-			                    <strong>{{ $errors->first('implementation_id') }}</strong>
-			                </span>
-			            @endif
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="event_plan_year" class="col-sm-2 control-label">Year</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_plan_year" id="event_plan_year" placeholder="Event Plan Year" required="true" maxlength="4" value="{{ old('event_plan_year') }}">
-	                    </div>
-	                    @if ($errors->has('event_plan_year'))
-			                <span class="help-block">
-			                    <strong>{{ $errors->first('event_plan_year') }}</strong>
-			                </span>
-			            @endif
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="event_plan_deadline" class="col-sm-2 control-label">Deadline</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="event_plan_deadline" id="event_plan_deadline" placeholder="e.g 17/08/1945" required="true" maxlength="10" value="{{ old('event_plan_deadline') }}" autocomplete="off" data-mask="00/00/0000">
-	                    </div>
-	                    @if ($errors->has('event_plan_deadline'))
-			                <span class="help-block">
-			                    <strong>{{ $errors->first('event_plan_deadline') }}</strong>
+			                    <strong>{{ $errors->first('creative_desc') }}</strong>
 			                </span>
 			            @endif
 	                </div>
@@ -172,7 +157,7 @@
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-	                    <a href="{{ url('plan/eventplan') }}" class="btn btn-danger btn-sm">Back</a>
+	                    <a href="{{ url('plan/creativeplan') }}" class="btn btn-danger btn-sm">Back</a>
 	                </div>
 	            </div>
 	        </form>
@@ -188,5 +173,5 @@
 @endsection
 
 @section('customjs')
-<script src="{{ url('js/plan/eventplan-create.js') }}"></script>
+<script src="{{ url('js/plan/creative-create.js') }}"></script>
 @endsection

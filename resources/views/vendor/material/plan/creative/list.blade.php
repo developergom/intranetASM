@@ -5,7 +5,7 @@
     <div class="card-header">
         <h2>Creative Plans<small>List of all creative plan</small></h2>
         @can('Creative Plan-Create')
-        <a href="{{ url('plan/eventplan/create') }}" title="Create New Creative Plan"><button class="btn bgm-blue btn-float waves-effect"><i class="zmdi zmdi-plus"></i></button></a>
+        <a href="{{ url('plan/creativeplan/create') }}" title="Create New Creative Plan"><button class="btn bgm-blue btn-float waves-effect"><i class="zmdi zmdi-plus"></i></button></a>
         @endcan
     </div>
 
