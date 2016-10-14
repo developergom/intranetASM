@@ -417,4 +417,116 @@ class CreativeController extends Controller
             return response()->json(200); //failed
         }
     }
+
+    public function approve(Request $request, $flow_no, $id)
+    {
+        if($flow_no == 1) {
+            return $this->approveFlowNo1($request, $id);
+        }elseif($flow_no == 2) {
+            return $this->approveFlowNo2($request, $id);
+        }
+    }
+
+    public function postApprove(Request $request, $flow_no, $id)
+    {
+        if($flow_no == 1) {
+            $this->postApproveFlowNo1($request, $id);
+        }elseif($flow_no == 2) {
+            $this->postApproveFlowNo2($request, $id);
+        }
+
+        return redirect('plan/creativeplan');
+    }
+
+    private function approveFlowNo2(Request $request, $id)
+    {
+        if(Gate::denies('Creative Plan-Approval')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['creative'] = Creative::with('creativeformat', 'creativehistories', 'creativehistories.approvaltype', 'unit', 'mediacategory')->find($id);
+
+        $data['medias'] = Media::whereHas('users', function($query) use($request){
+                            $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                        })->where('medias.active', '1')->orderBy('media_name')->get();
+
+        $medias = array();
+        foreach ($data['medias'] as $key => $value) {
+            array_push($medias, $value['media_id']);
+        }
+
+        $data['uploadedfiles'] = $data['creative']->uploadfiles()->where('revision_no', $data['creative']->revision_no)->get();
+
+        return view('vendor.material.plan.creative.approve', $data);
+    }
+
+    private function postApproveFlowNo2(Request $request, $id)
+    {
+        if(Gate::denies('Creative Plan-Approval')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $this->validate($request, [
+            'approval' => 'required',
+            'comment' => 'required',
+        ]);
+
+        if($request->input('approval') == '1') 
+        {
+            //approve
+            $creative = Creative::find($id);
+
+            $flow = new FlowLibrary;
+            $nextFlow = $flow->getNextFlow($this->flow_group_id, $creative->flow_no, $request->user()->user_id, '', $creative->created_by->user_id);
+
+            $creative->flow_no = $nextFlow['flow_no'];
+            $creative->current_user = $nextFlow['current_user'];
+            $creative->updated_by = $request->user()->user_id;
+            $creative->save();
+
+            $his = new CreativeHistory;
+            $his->creative_id = $id;
+            $his->approval_type_id = 2;
+            $his->creative_history_text = $request->input('comment');
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
+            $this->notif->remove($request->user()->user_id, 'creativeapproval', $creative->creative_id);
+            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'creativefinished', 'Creative Plan "' . $creative->creative_name . '" has been approved.', $id);
+
+            $request->session()->flash('status', 'Data has been saved!');
+
+        }else{
+            //reject
+            $creative = Creative::find($id);
+
+            $flow = new FlowLibrary;
+            $prevFlow = $flow->getPreviousFlow($this->flow_group_id, $creative->flow_no, $request->user()->user_id, '', $creative->created_by->user_id);
+
+            $creative->flow_no = $prevFlow['flow_no'];
+            $creative->revision_no = $creative->revision_no + 1;
+            $creative->current_user = $prevFlow['current_user'];
+            $creative->updated_by = $request->user()->user_id;
+            $creative->save();
+
+            $his = new CreativeHistory;
+            $his->creative_id = $id;
+            $his->approval_type_id = 3;
+            $his->creative_history_text = $request->input('comment');
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
+            $this->notif->remove($request->user()->user_id, 'creativeapproval', $creative->creative_id);
+            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'creativereject', 'Creative Plan "' . $creative->creative_name . '" rejected.', $id);
+
+            $request->session()->flash('status', 'Data has been saved!');
+        }
+
+    }
 }
