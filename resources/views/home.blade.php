@@ -2,6 +2,7 @@
 
 @section('vendorcss')
 <link href="{{ url('css/announcement-home.css') }}" rel="stylesheet">
+<link href="{{ url('css/monthly.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -50,16 +51,48 @@
             </li>
         </ul>
     </div>
-    <div class="card">
+    <!-- <div class="card">
         <div class="card-header">Dashboard</div>
         <div class="card-body card-padding">
             You are logged in!
+        </div>
+    </div> -->
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header"><h4>Plan Calendar</h4></div>
+                <div class="card-body card-padding">
+                    <div class="monthly" id="calendar"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header"><h4>Upcoming Plan</h4></div>
+                <div class="card-body card-padding">
+                    <div role="tabpanel" class="tab">
+                        <ul class="tab-nav" role="tablist">
+                            <li class="active"><a href="#below30" aria-controls="below30" role="tab" data-toggle="tab" aria-expanded="true">< 30 days</a></li>
+                            <li role="presentation" class=""><a href="#upper30" aria-controls="upper30" role="tab" data-toggle="tab" aria-expanded="false">> 30 days</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane animated flipInX active" id="below30">
+                                <div class="listview" id="list-below30"></div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane animated flipInX" id="upper30">
+                                <div class="listview" id="list-upper30"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
 
 @section('vendorjs')
 <script src="{{ url('js/jquery.marquee.min.js') }}"></script>
+<script src="{{ url('js/monthly.js') }}"></script>
 @endsection
 
 @section('customjs')
@@ -70,6 +103,47 @@ $(document).ready(function(){
         startVisible: true,
         duplicated: true
       });
+
+    $('#calendar').monthly({
+        'mode' : 'event',
+        'stylePast' : true,
+        'dataType' : 'json',
+        'jsonUrl' : base_url + 'api/loadPlan',
+    });
+
+    $.ajax({
+        url: base_url + 'api/loadUpcomingPlan/below/-30',
+        type: 'GET',
+        dataType: 'json',
+        error: function(){
+            console.log('Error loading data');
+        },
+        success:function(data) {
+            console.log(data);
+            $.each(data['monthly'], function(key, value){
+                var ls = '';
+                ls += '<a class="lv-item" href="#"><div class="media"><div class="media-body"><div class="lv-title">' + value.name + '</div><small class="lv-small">' + value.startdate + ' ( ' + value.timeto + ' days left )</small></div></div></a>';
+                $('#list-below30').append(ls);
+            });
+        }
+    });
+
+    $.ajax({
+        url: base_url + 'api/loadUpcomingPlan/upper/-30',
+        type: 'GET',
+        dataType: 'json',
+        error: function(){
+            console.log('Error loading data');
+        },
+        success:function(data) {
+            console.log(data);
+            $.each(data['monthly'], function(key, value){
+                var ls = '';
+                ls += '<a class="lv-item" href="#"><div class="media"><div class="media-body"><div class="lv-title">' + value.name + '</div><small class="lv-small">' + value.startdate + ' ( ' + value.timeto + ' days left )</small></div></div></a>';
+                $('#list-upper30').append(ls);
+            });
+        }
+    });
 });
 </script>
 @endsection

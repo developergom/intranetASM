@@ -20,6 +20,8 @@ Route::post('dropzone/removeFile', 'DropzoneController@removeFile');
 Route::get('dropzone/getPreviousUploaded', 'DropzoneController@getPreviousUploaded');
 
 Route::get('/', 'HomeController@index')->middleware(['auth','menu']);
+Route::get('/api/loadPlan', 'HomeController@apiPlan')->middleware(['auth','menu']);
+Route::get('/api/loadUpcomingPlan/{mode}/{day}', 'HomeController@apiUpcomingPlan')->middleware(['auth','menu']);
 
 Route::get('/test', 'Test@index');
 
