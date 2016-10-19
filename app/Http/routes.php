@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth', 'menu']], function(){
     Route::get('profile', 'UserController@viewProfile');
     Route::resource('user', 'UserController');
     Route::post('editProfile', 'UserController@postEditProfile');
+    Route::post('uploadAvatar', 'UserController@postUploadAvatar');
 });
 
 Route::group(['middleware' => ['auth', 'menu']], function() {

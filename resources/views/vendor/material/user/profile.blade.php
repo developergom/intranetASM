@@ -25,7 +25,7 @@
                     </div>
                 </div> -->
                 
-                <a href="#" class="pmop-edit">
+                <a href="#" class="pmop-edit" id="command-upload-avatar">
                     <i class="zmdi zmdi-camera"></i> <span class="hidden-xs">Update Profile Picture</span>
                 </a>
             </div>
@@ -243,6 +243,34 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalUploadAvatar" data-backdrop="static" data-keyboard="false" tabindex="-2" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Profile Picture</h4>
+            </div>
+            <form class="form-horizontal" role="form" method="POST" action="{{ url('uploadAvatar') }}" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="user_birthdate" class="col-sm-4 control-label">Upload Profile Picture</label>
+                        <div class="col-sm-8">
+                            <div class="fg-line">
+                                <input type="file" name="upload_file" id="upload_file" class="form-control input-sm" required="true">
+                            </div>
+                            <small class="help-block">Max File 2 MB (.jpg, .gif, .png)</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary waves-effect btn-upload-avatar">Save</button>
+                    <button type="button" class="btn btn-danger waves-effect btn-cancel-upload-avatar" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('vendorjs')
@@ -361,6 +389,10 @@ $(document).ready(function(){
             });
         }
     }
+
+    $('#command-upload-avatar').click(function(){
+        $('#modalUploadAvatar').modal();
+    });
 });
 </script>
 @endsection

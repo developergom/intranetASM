@@ -355,4 +355,36 @@ class UserController extends Controller
             return response()->json($data); //failed
         }
     }
+
+    public function postUploadAvatar(Request $request) {
+        $id = $request->user()->user_id;
+
+        $this->validate($request, [
+            'upload_file' => 'required|image|max:2000',
+        ]);
+
+        $obj = User::find($id);
+
+        if ($request->hasFile('upload_file')) {
+            if ($request->file('upload_file')->isValid()) {
+                $uploaded = $request->file('upload_file');
+                $avatar = Carbon::now()->format('YmdHis') . $uploaded->getClientOriginalName();
+                $uploaded->move(
+                    base_path() . '/public/img/avatar/', $avatar
+                );
+
+                $obj->user_avatar = $avatar;
+
+            }
+        }
+
+        $obj->updated_by = $request->user()->user_id;
+
+        if($obj->save())
+        {
+            $request->session()->flash('status', 'Avatar has been changed!');
+
+            return redirect('profile');
+        }
+    }
 }
