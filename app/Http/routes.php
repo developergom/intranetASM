@@ -42,6 +42,7 @@ Route::group(['middleware' => ['auth', 'menu']], function(){
     Route::post('change-password', 'UserController@postChangePassword');
     Route::get('profile', 'UserController@viewProfile');
     Route::resource('user', 'UserController');
+    Route::post('editProfile', 'UserController@postEditProfile');
 });
 
 Route::group(['middleware' => ['auth', 'menu']], function() {
