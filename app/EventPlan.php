@@ -14,7 +14,7 @@ class EventPlan extends Model
 				'event_plan_name',
 				'event_plan_desc',
 				'event_plan_viewer',
-				'event_plan_location',
+				'location_id',
 				'event_plan_deadline',
 				'event_plan_year'
 	];
@@ -25,6 +25,10 @@ class EventPlan extends Model
 
 	public function eventtype() {
 		return $this->belongsTo('App\EventType', 'event_type_id');
+	}
+
+	public function location() {
+		return $this->belongsTo('App\Location', 'location_id');
 	}
 
 	public function medias() 

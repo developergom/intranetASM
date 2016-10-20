@@ -44,10 +44,10 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="event_plan_location" class="col-sm-2 control-label">Location</label>
+	                <label for="location_id" class="col-sm-2 control-label">Location</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_plan_location" id="event_plan_location" placeholder="Event Plan Location" required="true" maxlength="100" disabled="true" value="{{ $eventplan->event_plan_location }}">
+	                        <input type="text" class="form-control input-sm" name="location_id" id="location_id" placeholder="Location" required="true" maxlength="100" disabled="true" value="{{ $eventplan->location->location_name . ' - ' . $eventplan->location->location_city }}">
 	                    </div>
 	                </div>
 	            </div>

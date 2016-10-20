@@ -15,6 +15,7 @@ use App\EventPlanHistory;
 use App\UploadFile;
 use App\EventType;
 use App\Implementation;
+use App\Location;
 use App\Media;
 use App\MediaEdition;
 use App\User;
@@ -68,6 +69,7 @@ class EventPlanController extends Controller
         $data = array();
 
         $data['eventtypes'] = EventType::where('active', '1')->orderBy('event_type_name')->get();
+        $data['locations'] = Location::where('active', '1')->orderBy('location_name')->get();
         $data['implementations'] = Implementation::where('active', '1')->orderBy('implementation_month')->get();
         $data['medias'] = Media::whereHas('users', function($query) use($request){
                             $query->where('users_medias.user_id', '=', $request->user()->user_id);
@@ -94,7 +96,7 @@ class EventPlanController extends Controller
             'event_plan_name' => 'required|max:100',
             'event_plan_desc' => 'required',
             'event_plan_viewer' => 'required|numeric',
-            'event_plan_location' => 'required|max:100',
+            'location_id' => 'required',
             'event_plan_year' => 'required|max:4',
             'event_plan_deadline' => 'required|date_format:"d/m/Y"',
             'implementation_id[]' => 'array',
@@ -109,7 +111,7 @@ class EventPlanController extends Controller
         $obj->event_plan_name = $request->input('event_plan_name');
         $obj->event_plan_desc = $request->input('event_plan_desc');
         $obj->event_plan_viewer = $request->input('event_plan_viewer');
-        $obj->event_plan_location = $request->input('event_plan_location');
+        $obj->location_id = $request->input('location_id');
         $obj->event_plan_year = $request->input('event_plan_year');
         $obj->event_plan_deadline = Carbon::createFromFormat('d/m/Y', $request->input('event_plan_deadline'))->toDateString();
         $obj->flow_no = $nextFlow['flow_no'];
@@ -231,6 +233,7 @@ class EventPlanController extends Controller
 
         $data['eventplan'] = EventPlan::with('eventtype', 'medias', 'eventplanhistories', 'eventplanhistories.approvaltype')->find($id);
         $data['eventtypes'] = EventType::where('active', '1')->orderBy('event_type_name')->get();
+        $data['locations'] = Location::where('active', '1')->orderBy('location_name')->get();
         $data['medias'] = Media::whereHas('users', function($query) use($request){
                             $query->where('users_medias.user_id', '=', $request->user()->user_id);
                         })->where('medias.active', '1')->orderBy('media_name')->get();
@@ -263,7 +266,7 @@ class EventPlanController extends Controller
             'event_plan_name' => 'required|max:100',
             'event_plan_desc' => 'required',
             'event_plan_viewer' => 'required|numeric',
-            'event_plan_location' => 'required|max:100',
+            'location_id' => 'required',
             'event_plan_year' => 'required|max:4',
             'event_plan_deadline' => 'required|date_format:"d/m/Y"',
             'implementation_id[]' => 'array',
@@ -278,7 +281,7 @@ class EventPlanController extends Controller
         $obj->event_plan_name = $request->input('event_plan_name');
         $obj->event_plan_desc = $request->input('event_plan_desc');
         $obj->event_plan_viewer = $request->input('event_plan_viewer');
-        $obj->event_plan_location = $request->input('event_plan_location');
+        $obj->location_id = $request->input('location_id');
         $obj->event_plan_year = $request->input('event_plan_year');
         $obj->event_plan_deadline = Carbon::createFromFormat('d/m/Y', $request->input('event_plan_deadline'))->toDateString();
         $obj->flow_no = $nextFlow['flow_no'];
