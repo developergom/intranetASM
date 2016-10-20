@@ -144,6 +144,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('inventorytype/apiDelete', 'InventoryTypeController@apiDelete');
         Route::resource('inventorytype', 'InventoryTypeController');
 
+        //Location
+        Route::post('location/apiList', 'LocationController@apiList');
+        Route::post('location/apiDelete', 'LocationController@apiDelete');
+        Route::resource('location', 'LocationController');
+
         //Media
         Route::post('media/apiList', 'MediaController@apiList');
         Route::post('media/apiDelete', 'MediaController@apiDelete');
