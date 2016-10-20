@@ -76,18 +76,27 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="event_plan_location" class="col-sm-2 control-label">Location</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_plan_location" id="event_plan_location" placeholder="Event Plan Location" required="true" maxlength="100" value="{{ $eventplan->event_plan_location }}">
-	                    </div>
-	                    @if ($errors->has('event_plan_location'))
-			                <span class="help-block">
-			                    <strong>{{ $errors->first('event_plan_location') }}</strong>
-			                </span>
-			            @endif
-	                </div>
-	            </div>
+        			<label for="location_id" class="col-sm-2 control-label">Location</label>
+        			<div class="col-sm-10">
+        				<div class="fg-line">
+	        				<select name="location_id" id="location_id" class="selectpicker" data-live-search="true" required="true">
+	        					<option value=""></option>
+	        					@foreach($locations as $row)
+	        						{!! $selected = '' !!}
+	        						@if($row->location_id == $eventplan->location_id)
+	        							{!! $selected = 'selected' !!}
+	        						@endif
+	        						<option value="{{ $row->location_id }}" {{ $selected }}>{{ $row->location_name . ' - ' . $row->location_city }}</option>
+	        					@endforeach
+	        				</select>
+	        			</div>
+        			</div>
+        			@if ($errors->has('location_id'))
+		                <span class="help-block">
+		                    <strong>{{ $errors->first('location_id') }}</strong>
+		                </span>
+		            @endif
+        		</div>
 	            <div class="form-group">
 	                <label for="implementation_id" class="col-sm-2 control-label">Implementation</label>
 	                <div class="col-sm-10">

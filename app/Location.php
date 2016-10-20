@@ -16,4 +16,8 @@ class Location extends Model
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
+
+	public function eventplans() {
+		return $this->hasMany('App\EventPlan', 'location_id');
+	}
 }
