@@ -76,14 +76,40 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="action_plan_desc" class="col-sm-2 control-label">Description</label>
+	                <label for="action_plan_pages" class="col-sm-2 control-label">Total Pages / Appearance</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="action_plan_desc" id="action_plan_desc" class="form-control input-sm" placeholder="Description">{{ $actionplan->action_plan_desc }}</textarea>
+	                        <input type="text" class="form-control input-sm" name="action_plan_pages" id="action_plan_pages" placeholder="Total Pages / Appearance (numeric)" required="true" maxlength="20" value="{{ $actionplan->action_plan_pages }}">
+	                    </div>
+	                    @if ($errors->has('action_plan_pages'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('action_plan_pages') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="action_plan_desc" class="col-sm-2 control-label">Theme Description</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <textarea name="action_plan_desc" id="action_plan_desc" class="form-control input-sm" placeholder="Theme Description">{{ $actionplan->action_plan_desc }}</textarea>
 	                    </div>
 	                    @if ($errors->has('action_plan_desc'))
 			                <span class="help-block">
 			                    <strong>{{ $errors->first('action_plan_desc') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="action_plan_rubric_desc" class="col-sm-2 control-label">Rubric Description</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <textarea name="action_plan_rubric_desc" id="action_plan_rubric_desc" class="form-control input-sm" placeholder="Rubric Description">{{ $actionplan->action_plan_rubric_desc }}</textarea>
+	                    </div>
+	                    @if ($errors->has('action_plan_rubric_desc'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('action_plan_rubric_desc') }}</strong>
 			                </span>
 			            @endif
 	                </div>

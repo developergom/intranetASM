@@ -15,7 +15,9 @@ class ActionPlan extends Model
 				'action_plan_title', 
 				'action_plan_desc', 
 				'action_plan_startdate',
-				'action_plan_enddate'
+				'action_plan_enddate',
+				'action_plan_pages',
+				'action_plan_rubric_desc'
 	];
 
 	protected $hidden = [
