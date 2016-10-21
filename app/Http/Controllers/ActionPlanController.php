@@ -109,6 +109,7 @@ class ActionPlanController extends Controller
             'action_plan_title' => 'required|max:100',
             'action_plan_startdate' => 'required|date_format:"d/m/Y"',
             'action_plan_enddate' => 'required|date_format:"d/m/Y"',
+            'action_plan_pages' => 'numeric',
             'media_edition_id[]' => 'array',
             'media_id[]' => 'array',
         ]);
@@ -122,6 +123,8 @@ class ActionPlanController extends Controller
         $obj->action_plan_startdate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_startdate'))->toDateString();
         $obj->action_plan_enddate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_enddate'))->toDateString();
         $obj->action_plan_desc = $request->input('action_plan_desc');
+        $obj->action_plan_rubric_desc = $request->input('action_plan_rubric_desc');
+        $obj->action_plan_pages = $request->input('action_plan_pages');
         $obj->flow_no = $nextFlow['flow_no'];
         $obj->current_user = $nextFlow['current_user'];
         $obj->revision_no = 0;
@@ -277,6 +280,7 @@ class ActionPlanController extends Controller
             'action_plan_title' => 'required|max:100',
             'action_plan_startdate' => 'required|date_format:"d/m/Y"',
             'action_plan_enddate' => 'required|date_format:"d/m/Y"',
+            'action_plan_pages' => 'numeric',
             'media_edition_id[]' => 'array',
             'media_id[]' => 'array',
         ]);
@@ -290,6 +294,8 @@ class ActionPlanController extends Controller
         $obj->action_plan_startdate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_startdate'))->toDateString();
         $obj->action_plan_enddate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_enddate'))->toDateString();
         $obj->action_plan_desc = $request->input('action_plan_desc');
+        $obj->action_plan_rubric_desc = $request->input('action_plan_rubric_desc');
+        $obj->action_plan_pages = $request->input('action_plan_pages');
         $obj->flow_no = $nextFlow['flow_no'];
         $obj->current_user = $nextFlow['current_user'];
         $obj->updated_by = $request->user()->user_id;
