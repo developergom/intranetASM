@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Event Types Management<small>Create New Event Type</small></h2></div>
+        <div class="card-header"><h2>Program Types Management<small>Create New Program Type</small></h2></div>
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form" method="POST" action="{{ url('master/eventtype') }}">
         		{{ csrf_field() }}
@@ -10,7 +10,7 @@
 	                <label for="event_type_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_type_name" id="event_type_name" placeholder="Event Type Name" required="true" maxlength="100" value="{{ old('event_type_name') }}">
+	                        <input type="text" class="form-control input-sm" name="event_type_name" id="event_type_name" placeholder="Program Type Name" required="true" maxlength="100" value="{{ old('event_type_name') }}">
 	                    </div>
 	                    @if ($errors->has('event_type_name'))
 			                <span class="help-block">

@@ -9,7 +9,7 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Event Plans<small>Create New Event Plan</small></h2></div>
+        <div class="card-header"><h2>Program Plans<small>Create New Program Plan</small></h2></div>
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form" method="POST" action="{{ url('plan/eventplan') }}">
         		{{ csrf_field() }}
@@ -32,10 +32,10 @@
 		            @endif
         		</div>
 	            <div class="form-group">
-	                <label for="event_plan_name" class="col-sm-2 control-label">Event Name</label>
+	                <label for="event_plan_name" class="col-sm-2 control-label">Program Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_plan_name" id="event_plan_name" placeholder="Event Plan Name" required="true" maxlength="100" value="{{ old('event_plan_name') }}">
+	                        <input type="text" class="form-control input-sm" name="event_plan_name" id="event_plan_name" placeholder="Program Plan Name" required="true" maxlength="100" value="{{ old('event_plan_name') }}">
 	                    </div>
 	                    @if ($errors->has('event_plan_name'))
 			                <span class="help-block">
@@ -117,7 +117,7 @@
 	                <label for="event_plan_year" class="col-sm-2 control-label">Year</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_plan_year" id="event_plan_year" placeholder="Event Plan Year" required="true" maxlength="4" value="{{ old('event_plan_year') }}">
+	                        <input type="text" class="form-control input-sm" name="event_plan_year" id="event_plan_year" placeholder="Program Plan Year" required="true" maxlength="4" value="{{ old('event_plan_year') }}">
 	                    </div>
 	                    @if ($errors->has('event_plan_year'))
 			                <span class="help-block">

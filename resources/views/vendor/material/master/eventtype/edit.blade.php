@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Event Types Management<small>Edit Event Type</small></h2></div>
+        <div class="card-header"><h2>Program Types Management<small>Edit Program Type</small></h2></div>
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form" method="POST" action="{{ url('master/eventtype/'.$eventtype->event_type_id) }}">
         		{{ csrf_field() }}

@@ -108,7 +108,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('creativeformat/apiDelete', 'CreativeFormatController@apiDelete');
         Route::resource('creativeformat', 'CreativeFormatController');
 
-        //Event Type
+        //Event Type / Program Type
         Route::post('eventtype/apiList', 'EventTypeController@apiList');
         Route::post('eventtype/apiDelete', 'EventTypeController@apiDelete');
         Route::resource('eventtype', 'EventTypeController');
@@ -234,7 +234,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('creativeplan/approve/{flow_no}/{id}', 'CreativeController@approve');
         Route::post('creativeplan/approve/{flow_no}/{id}', 'CreativeController@postApprove');
 
-        //Event Plan
+        //Event Plan / Program Plan
         Route::post('eventplan/apiList/{listtype}', 'EventPlanController@apiList');
         Route::post('eventplan/apiDelete', 'EventPlanController@apiDelete');
         Route::resource('eventplan', 'EventPlanController');

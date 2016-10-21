@@ -46,7 +46,7 @@ class EventPlanController extends Controller
      */
     public function index()
     {
-        if(Gate::denies('Event Plan-Read')) {
+        if(Gate::denies('Program Plan-Read')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -62,7 +62,7 @@ class EventPlanController extends Controller
      */
     public function create(Request $request)
     {
-        if(Gate::denies('Event Plan-Create')) {
+        if(Gate::denies('Program Plan-Create')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -176,7 +176,7 @@ class EventPlanController extends Controller
 
         $his->save();
 
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'eventplanapproval', 'Please check Event Plan "' . $obj->event_plan_name . '"', $obj->event_plan_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'eventplanapproval', 'Please check Program Plan "' . $obj->event_plan_name . '"', $obj->event_plan_id);
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -191,7 +191,7 @@ class EventPlanController extends Controller
      */
     public function show(Request $request, $id)
     {
-        if(Gate::denies('Event Plan-Read')) {
+        if(Gate::denies('Program Plan-Read')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -225,7 +225,7 @@ class EventPlanController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        if(Gate::denies('Event Plan-Update')) {
+        if(Gate::denies('Program Plan-Update')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -345,7 +345,7 @@ class EventPlanController extends Controller
         $his->save();
 
         $this->notif->remove($request->user()->user_id, 'eventplanreject', $obj->event_plan_id);
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'eventplanapproval', 'Please check Event Plan "' . $obj->event_plan_name . '"', $obj->event_plan_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'eventplanapproval', 'Please check Program Plan "' . $obj->event_plan_name . '"', $obj->event_plan_id);
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -539,7 +539,7 @@ class EventPlanController extends Controller
 
     public function apiDelete(Request $request)
     {
-        if(Gate::denies('Event Plan-Delete')) {
+        if(Gate::denies('Program Plan-Delete')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -593,7 +593,7 @@ class EventPlanController extends Controller
 
     private function approveFlowNo2(Request $request, $id)
     {
-        if(Gate::denies('Event Plan-Approval')) {
+        if(Gate::denies('Program Plan-Approval')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -621,7 +621,7 @@ class EventPlanController extends Controller
 
     private function postApproveFlowNo2(Request $request, $id)
     {
-        if(Gate::denies('Event Plan-Approval')) {
+        if(Gate::denies('Program Plan-Approval')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -653,7 +653,7 @@ class EventPlanController extends Controller
             $his->save();
 
             $this->notif->remove($request->user()->user_id, 'eventplanapproval', $eventplan->event_plan_id);
-            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'eventplanfinished', 'Event Plan "' . $eventplan->event_plan_name . '" has been approved.', $id);
+            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'eventplanfinished', 'Program Plan "' . $eventplan->event_plan_name . '" has been approved.', $id);
 
             $request->session()->flash('status', 'Data has been saved!');
 
@@ -680,7 +680,7 @@ class EventPlanController extends Controller
             $his->save();
 
             $this->notif->remove($request->user()->user_id, 'eventplanapproval', $eventplan->event_plan_id);
-            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'eventplanreject', 'Event Plan "' . $eventplan->event_plan_name . '" rejected.', $id);
+            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'eventplanreject', 'Program Plan "' . $eventplan->event_plan_name . '" rejected.', $id);
 
             $request->session()->flash('status', 'Data has been saved!');
         }

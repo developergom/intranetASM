@@ -7,7 +7,7 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Event Plans<small>Event Plan Approval</small></h2></div>
+        <div class="card-header"><h2>Program Plans<small>Program Plan Approval</small></h2></div>
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form"  method="POST" action="{{ url('plan/eventplan/approve/' . $eventplan->flow_no . '/' . $eventplan->event_plan_id) }}">
         		{{ csrf_field() }}
@@ -15,15 +15,15 @@
         			<label for="event_type_id" class="col-sm-2 control-label">Type</label>
         			<div class="col-sm-10">
         				<div class="fg-line">
-	        				<input type="text" class="form-control input-sm" name="event_plan_type" id="event_plan_type" placeholder="Event Plan Type" disabled="true" maxlength="100" value="{{ $eventplan->eventtype->event_type_name }}">
+	        				<input type="text" class="form-control input-sm" name="event_plan_type" id="event_plan_type" placeholder="Program Plan Type" disabled="true" maxlength="100" value="{{ $eventplan->eventtype->event_type_name }}">
 	        			</div>
         			</div>
         		</div>
 	            <div class="form-group">
-	                <label for="event_plan_name" class="col-sm-2 control-label">Event Name</label>
+	                <label for="event_plan_name" class="col-sm-2 control-label">Program Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_plan_name" id="event_plan_name" placeholder="Event Plan Name" disabled="true" maxlength="100" value="{{ $eventplan->event_plan_name }}">
+	                        <input type="text" class="form-control input-sm" name="event_plan_name" id="event_plan_name" placeholder="Program Plan Name" disabled="true" maxlength="100" value="{{ $eventplan->event_plan_name }}">
 	                    </div>
 	                </div>
 	            </div>
@@ -69,7 +69,7 @@
 	                <label for="event_plan_year" class="col-sm-2 control-label">Year</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_plan_year" id="event_plan_year" placeholder="Event Plan Year" required="true" maxlength="4" value="{{ $eventplan->event_plan_year }}">
+	                        <input type="text" class="form-control input-sm" name="event_plan_year" id="event_plan_year" placeholder="Program Plan Year" required="true" maxlength="4" value="{{ $eventplan->event_plan_year }}">
 	                    </div>
 	                </div>
 	            </div>
@@ -112,7 +112,7 @@
 	                        				<h4>{{ $uploadedfile->upload_file_name }}</h4>
 	                        				<p>{{ $uploadedfile->upload_file_desc }}</p>
 	                        				<div class="m-b-5">
-	                        					@can('Event Plan-Download')
+	                        					@can('Program Plan-Download')
 	                        					<a class="btn btn-sm btn-primary waves-effect" href="{{ url('download/file/' . $uploadedfile->upload_file_id) }}" role="button">Download File</a>
 	                        					@endcan
 	                        				</div>
