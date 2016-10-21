@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Event Types Management<small>View Event Type</small></h2></div>
+        <div class="card-header"><h2>Program Types Management<small>View Program Type</small></h2></div>
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form">
 	            <div class="form-group">

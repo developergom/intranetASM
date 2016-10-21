@@ -17,7 +17,7 @@ class EventTypeController extends Controller
      */
     public function index()
     {
-        if(Gate::denies('Event Types Management-Read')) {
+        if(Gate::denies('Program Types Management-Read')) {
             abort(403, 'Unauthorized action.');
         }
         return view('vendor.material.master.eventtype.list');
@@ -30,7 +30,7 @@ class EventTypeController extends Controller
      */
     public function create()
     {
-        if(Gate::denies('Event Types Management-Create')) {
+        if(Gate::denies('Program Types Management-Create')) {
             abort(403, 'Unauthorized action.');
         }
         return view('vendor.material.master.eventtype.create');
@@ -70,7 +70,7 @@ class EventTypeController extends Controller
      */
     public function show($id)
     {
-        if(Gate::denies('Event Types Management-Read')) {
+        if(Gate::denies('Program Types Management-Read')) {
             abort(403, 'Unauthorized action.');
         }
         $data = array();
@@ -86,7 +86,7 @@ class EventTypeController extends Controller
      */
     public function edit($id)
     {
-        if(Gate::denies('Event Types Management-Update')) {
+        if(Gate::denies('Program Types Management-Update')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -173,7 +173,7 @@ class EventTypeController extends Controller
 
     public function apiDelete(Request $request)
     {
-        if(Gate::denies('Event Types Management-Delete')) {
+        if(Gate::denies('Program Types Management-Delete')) {
             abort(403, 'Unauthorized action.');
         }
 

@@ -14,34 +14,34 @@ $("#grid-data-needchecking").bootgrid({
         "link-rua": function(column, row)
         {
             if(row.flow_no=='1') {
-                return '<a title="View Event Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                    +'<a title="Edit Event Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-edit"></span></a>';
+                return '<a title="View Program Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit Program Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-edit"></span></a>';
             }else{
-                return '<a title="View Event Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                    +'<a title="Approve Event Plan" href="' + base_url + 'plan/eventplan/approve/' + row.flow_no + '/' + row.event_plan_id + '" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-assignment-alert"></span></a>';
+                return '<a title="View Program Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Approve Program Plan" href="' + base_url + 'plan/eventplan/approve/' + row.flow_no + '/' + row.event_plan_id + '" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-assignment-alert"></span></a>';
             }
         },
         "link-ru": function(column, row)
         {
             if(row.flow_no=='1') {
-                return '<a title="View Event Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                    +'<a title="Edit Event Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;';
+                return '<a title="View Program Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit Program Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;';
             }else{
-                return '<a title="View Event Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>';
+                return '<a title="View Program Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>';
             }
         },
         "link-ra": function(column, row)
         {
             if(row.flow_no=='1') {
-                return '<a title="View Event Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>';                
+                return '<a title="View Program Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>';                
             }else{
-                return '<a title="View Event Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                    +'<a title="Approve Event Plan" href="' + base_url + 'plan/eventplan/approve/' + row.flow_no + '/' + row.event_plan_id + '" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-assignment-alert"></span></a>';
+                return '<a title="View Program Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Approve Program Plan" href="' + base_url + 'plan/eventplan/approve/' + row.flow_no + '/' + row.event_plan_id + '" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-assignment-alert"></span></a>';
             }
         },
         "link-r": function(column, row)
         {
-            return '<a title="View Event Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
+            return '<a title="View Program Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
         }
     },
     converters: {
@@ -70,12 +70,12 @@ $("#grid-data-onprocess").bootgrid({
     formatters: {
         "link-rd": function(column, row)
         {
-            return '<a title="View Event Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                    +'<a title="Delete Event Plan" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-delete"></span></a>';
+            return '<a title="View Program Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Delete Program Plan" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-delete"></span></a>';
         },
         "link-r": function(column, row)
         {
-            return '<a title="View Event Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
+            return '<a title="View Program Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
         }
     },
     converters: {
@@ -143,7 +143,7 @@ $("#grid-data-finished").bootgrid({
     formatters: {
         "link-r": function(column, row)
         {
-            return '<a title="View Event Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
+            return '<a title="View Program Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
         }
     },
     converters: {
@@ -172,7 +172,7 @@ $("#grid-data-canceled").bootgrid({
     formatters: {
         "link-r": function(column, row)
         {
-            return '<a title="View Event Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
+            return '<a title="View Program Plan" href="' + base_url + 'plan/eventplan/' + row.event_plan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.event_plan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
         }
     },
     converters: {
