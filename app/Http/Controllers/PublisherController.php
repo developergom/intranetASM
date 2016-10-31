@@ -7,10 +7,9 @@ use Illuminate\Http\Response;
 
 use Gate;
 use App\Http\Requests;
-use App\MediaGroup;
 use App\Publisher;
 
-class MediaGroupController extends Controller
+class PublisherController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,11 +18,11 @@ class MediaGroupController extends Controller
      */
     public function index()
     {
-        if(Gate::denies('Media Groups Management-Read')) {
+        if(Gate::denies('Publishers Management-Read')) {
             abort(403, 'Unauthorized action.');
         }
 
-        return view('vendor.material.master.mediagroup.list');
+        return view('vendor.material.master.publisher.list');
     }
 
     /**
@@ -33,15 +32,11 @@ class MediaGroupController extends Controller
      */
     public function create()
     {
-        if(Gate::denies('Media Groups Management-Create')) {
+        if(Gate::denies('Publishers Management-Create')) {
             abort(403, 'Unauthorized action.');
         }
 
-        $data = array();
-
-        $data['publishers'] = Publisher::where('active', '1')->get();
-
-        return view('vendor.material.master.mediagroup.create', $data);
+        return view('vendor.material.master.publisher.create');
     }
 
     /**
@@ -53,17 +48,15 @@ class MediaGroupController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'publisher_id' => 'required',
-            'media_group_code' => 'required|max:5|unique:media_groups,media_group_code',
-            'media_group_name' => 'required|max:100',
+            'publisher_code' => 'required|max:5|unique:publishers,publisher_code',
+            'publisher_name' => 'required|max:100',
         ]);
 
-        $obj = new MediaGroup;
+        $obj = new Publisher;
 
-        $obj->publisher_id = $request->input('publisher_id');
-        $obj->media_group_code = $request->input('media_group_code');
-        $obj->media_group_name = $request->input('media_group_name');
-        $obj->media_group_desc = $request->input('media_group_desc');
+        $obj->publisher_code = $request->input('publisher_code');
+        $obj->publisher_name = $request->input('publisher_name');
+        $obj->publisher_desc = $request->input('publisher_desc');
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
 
@@ -71,7 +64,7 @@ class MediaGroupController extends Controller
 
         $request->session()->flash('status', 'Data has been saved!');
 
-        return redirect('master/mediagroup');
+        return redirect('master/publisher');
     }
 
     /**
@@ -82,13 +75,13 @@ class MediaGroupController extends Controller
      */
     public function show($id)
     {
-        if(Gate::denies('Media Groups Management-Read')) {
+        if(Gate::denies('Publishers Management-Read')) {
             abort(403, 'Unauthorized action.');
         }
 
         $data = array();
-        $data['mediagroup'] = MediaGroup::where('active','1')->find($id);
-        return view('vendor.material.master.mediagroup.show', $data);
+        $data['publisher'] = Publisher::where('active','1')->find($id);
+        return view('vendor.material.master.publisher.show', $data);
     }
 
     /**
@@ -99,14 +92,13 @@ class MediaGroupController extends Controller
      */
     public function edit($id)
     {
-        if(Gate::denies('Media Groups Management-Update')) {
+        if(Gate::denies('Publishers Management-Update')) {
             abort(403, 'Unauthorized action.');
         }
 
         $data = array();
-        $data['publishers'] = Publisher::where('active', '1')->get();
-        $data['mediagroup'] = MediaGroup::where('active','1')->find($id);
-        return view('vendor.material.master.mediagroup.edit', $data);
+        $data['publisher'] = Publisher::where('active','1')->find($id);
+        return view('vendor.material.master.publisher.edit', $data);
     }
 
     /**
@@ -119,24 +111,22 @@ class MediaGroupController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'publisher_id' => 'required',
-            'media_group_code' => 'required|max:5|unique:media_groups,media_group_code,'.$id.',media_group_id',
-            'media_group_name' => 'required|max:100',
+            'publisher_code' => 'required|max:5|unique:publishers,publisher_code,'.$id.',publisher_id',
+            'publisher_name' => 'required|max:100',
         ]);
 
-        $obj = MediaGroup::find($id);
+        $obj = Publisher::find($id);
 
-        $obj->publisher_id = $request->input('publisher_id');
-        $obj->media_group_code = $request->input('media_group_code');
-        $obj->media_group_name = $request->input('media_group_name');
-        $obj->media_group_desc = $request->input('media_group_desc');
+        $obj->publisher_code = $request->input('publisher_code');
+        $obj->publisher_name = $request->input('publisher_name');
+        $obj->publisher_desc = $request->input('publisher_desc');
         $obj->updated_by = $request->user()->user_id;
 
         $obj->save();
 
         $request->session()->flash('status', 'Data has been updated!');
 
-        return redirect('master/mediagroup');
+        return redirect('master/publisher');
     }
 
     /**
@@ -157,7 +147,7 @@ class MediaGroupController extends Controller
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
         $searchPhrase = $request->input('searchPhrase') or '';
         
-        $sort_column = 'media_group_id';
+        $sort_column = 'publisher_id';
         $sort_type = 'asc';
 
         if(is_array($request->input('sort'))) {
@@ -172,23 +162,19 @@ class MediaGroupController extends Controller
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
         $data['searchPhrase'] = $searchPhrase;
-        $data['rows'] = MediaGroup::join('publishers', 'publishers.publisher_id', '=', 'media_groups.publisher_id')
-                            ->where('media_groups.active','1')
+        $data['rows'] = Publisher::where('active','1')
                             ->where(function($query) use($searchPhrase) {
-                                $query->where('publisher_name','like','%' . $searchPhrase . '%')
-                                        ->orWhere('media_group_code','like','%' . $searchPhrase . '%')
-                                        ->orWhere('media_group_name','like','%' . $searchPhrase . '%')
-                                        ->orWhere('media_group_desc','like','%' . $searchPhrase . '%');
+                                $query->where('publisher_code','like','%' . $searchPhrase . '%')
+                                        ->orWhere('publisher_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('publisher_desc','like','%' . $searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
-        $data['total'] = MediaGroup::join('publishers', 'publishers.publisher_id', '=', 'media_groups.publisher_id')
-                                ->where('media_groups.active','1')
+        $data['total'] = Publisher::where('active','1')
                                 ->where(function($query) use($searchPhrase) {
-                                    $query->where('publisher_name','like','%' . $searchPhrase . '%')
-                                        ->orWhere('media_group_code','like','%' . $searchPhrase . '%')
-                                        ->orWhere('media_group_name','like','%' . $searchPhrase . '%')
-                                        ->orWhere('media_group_desc','like','%' . $searchPhrase . '%');
+                                    $query->where('publisher_code','like','%' . $searchPhrase . '%')
+                                        ->orWhere('publisher_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('publisher_desc','like','%' . $searchPhrase . '%');
                                 })->count();
 
         return response()->json($data);
@@ -197,13 +183,13 @@ class MediaGroupController extends Controller
 
     public function apiDelete(Request $request)
     {
-        if(Gate::denies('Media Groups Management-Delete')) {
+        if(Gate::denies('Publishers Management-Delete')) {
             abort(403, 'Unauthorized action.');
         }
 
-        $id = $request->input('media_group_id');
+        $id = $request->input('publisher_id');
 
-        $obj = MediaGroup::find($id);
+        $obj = Publisher::find($id);
 
         $obj->active = '0';
         $obj->updated_by = $request->user()->user_id;
