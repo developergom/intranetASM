@@ -5,6 +5,14 @@
         <div class="card-header"><h2>Media Group Management<small>View Media Group</small></h2></div>
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form">
+        		<div class="form-group">
+	                <label for="publisher_name" class="col-sm-2 control-label">Publisher</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="publisher_name" id="publisher_name" placeholder="Publisher" required="true" value="{{ $mediagroup->publisher->publisher_name }}" disabled="true">
+	                    </div>
+	                </div>
+	            </div>
 	            <div class="form-group">
 	                <label for="media_group_code" class="col-sm-2 control-label">Code</label>
 	                <div class="col-sm-10">

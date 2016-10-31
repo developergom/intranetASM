@@ -13,6 +13,7 @@
         <table id="grid-data" class="table table-hover">
             <thead>
                 <tr>
+                    <th data-column-id="publisher_name" data-order="asc">Publisher</th>
                     <th data-column-id="media_group_code" data-order="asc">Code</th>
                     <th data-column-id="media_group_name" data-order="asc">Name</th>
                     <th data-column-id="media_group_desc" data-order="asc">Description</th>

@@ -1,5 +1,9 @@
 @extends('vendor.material.layouts.app')
 
+@section('vendorcss')
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
+@endsection
+
 @section('content')
     <div class="card">
         <div class="card-header"><h2>Media Group Management<small>Edit Media Group</small></h2></div>
@@ -7,6 +11,28 @@
         	<form class="form-horizontal" role="form" method="POST" action="{{ url('master/mediagroup/'.$mediagroup->media_group_id) }}">
         		{{ csrf_field() }}
         		<input type="hidden" name="_method" value="PUT">
+        		<div class="form-group">
+	                <label for="publisher_id" class="col-sm-2 control-label">Publisher</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <select name="publisher_id" id="publisher_id" class="selectpicker" data-live-search="true" required="true">
+	                        	<option value=""></option>
+                                @foreach ($publishers as $row)
+                                	{!! $selected = '' !!}
+                                	@if($row->publisher_id==$mediagroup->publisher_id)
+                                		{!! $selected = 'selected' !!}
+                                	@endif
+								    <option value="{{ $row->publisher_id }}" {{ $selected }}>{{ $row->publisher_name }}</option>
+								@endforeach
+                            </select>
+	                    </div>
+	                    @if ($errors->has('publisher_id'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('publisher_id') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
 	            <div class="form-group">
 	                <label for="media_group_code" class="col-sm-2 control-label">Code</label>
 	                <div class="col-sm-10">
@@ -55,4 +81,8 @@
 	        </form>
         </div>
     </div>
+@endsection
+
+@section('vendorjs')
+<script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 @endsection

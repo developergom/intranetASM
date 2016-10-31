@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Gate;
 use App\Http\Requests;
 use App\MediaGroup;
+use App\Publisher;
 
 class MediaGroupController extends Controller
 {
@@ -36,7 +37,11 @@ class MediaGroupController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        return view('vendor.material.master.mediagroup.create');
+        $data = array();
+
+        $data['publishers'] = Publisher::where('active', '1')->get();
+
+        return view('vendor.material.master.mediagroup.create', $data);
     }
 
     /**
@@ -48,12 +53,14 @@ class MediaGroupController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'publisher_id' => 'required',
             'media_group_code' => 'required|max:5|unique:media_groups,media_group_code',
             'media_group_name' => 'required|max:100',
         ]);
 
         $obj = new MediaGroup;
 
+        $obj->publisher_id = $request->input('publisher_id');
         $obj->media_group_code = $request->input('media_group_code');
         $obj->media_group_name = $request->input('media_group_name');
         $obj->media_group_desc = $request->input('media_group_desc');
@@ -97,6 +104,7 @@ class MediaGroupController extends Controller
         }
 
         $data = array();
+        $data['publishers'] = Publisher::where('active', '1')->get();
         $data['mediagroup'] = MediaGroup::where('active','1')->find($id);
         return view('vendor.material.master.mediagroup.edit', $data);
     }
@@ -111,12 +119,14 @@ class MediaGroupController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
+            'publisher_id' => 'required',
             'media_group_code' => 'required|max:5|unique:media_groups,media_group_code,'.$id.',media_group_id',
             'media_group_name' => 'required|max:100',
         ]);
 
         $obj = MediaGroup::find($id);
 
+        $obj->publisher_id = $request->input('publisher_id');
         $obj->media_group_code = $request->input('media_group_code');
         $obj->media_group_name = $request->input('media_group_name');
         $obj->media_group_desc = $request->input('media_group_desc');
@@ -162,17 +172,21 @@ class MediaGroupController extends Controller
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
         $data['searchPhrase'] = $searchPhrase;
-        $data['rows'] = MediaGroup::where('active','1')
+        $data['rows'] = MediaGroup::join('publishers', 'publishers.publisher_id', '=', 'media_groups.publisher_id')
+                            ->where('media_groups.active','1')
                             ->where(function($query) use($searchPhrase) {
-                                $query->where('media_group_code','like','%' . $searchPhrase . '%')
+                                $query->where('publisher_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('media_group_code','like','%' . $searchPhrase . '%')
                                         ->orWhere('media_group_name','like','%' . $searchPhrase . '%')
                                         ->orWhere('media_group_desc','like','%' . $searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
-        $data['total'] = MediaGroup::where('active','1')
+        $data['total'] = MediaGroup::join('publishers', 'publishers.publisher_id', '=', 'media_groups.publisher_id')
+                                ->where('media_groups.active','1')
                                 ->where(function($query) use($searchPhrase) {
-                                    $query->where('media_group_code','like','%' . $searchPhrase . '%')
+                                    $query->where('publisher_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('media_group_code','like','%' . $searchPhrase . '%')
                                         ->orWhere('media_group_name','like','%' . $searchPhrase . '%')
                                         ->orWhere('media_group_desc','like','%' . $searchPhrase . '%');
                                 })->count();
