@@ -197,6 +197,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('proposaltype/apiDelete', 'ProposalTypeController@apiDelete');
         Route::resource('proposaltype', 'ProposalTypeController');
 
+        //Publisher
+        Route::post('publisher/apiList', 'PublisherController@apiList');
+        Route::post('publisher/apiDelete', 'PublisherController@apiDelete');
+        Route::resource('publisher', 'PublisherController');
+
         //Religion
         Route::post('religion/apiList', 'ReligionController@apiList');
         Route::post('religion/apiEdit', 'ReligionController@apiEdit');
