@@ -168,6 +168,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         //Media Group
         Route::post('mediagroup/apiList', 'MediaGroupController@apiList');
         Route::post('mediagroup/apiDelete', 'MediaGroupController@apiDelete');
+        Route::post('mediagroup/apiGetOption', 'MediaGroupController@apiGetOption');
         Route::resource('mediagroup', 'MediaGroupController');
 
         //Menu

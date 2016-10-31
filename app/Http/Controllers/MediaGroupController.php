@@ -215,4 +215,17 @@ class MediaGroupController extends Controller
             return response()->json(200); //failed
         }
     }
+
+    public function apiGetOption(Request $request)
+    {
+        if(Gate::denies('Media Groups Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $id = $request->input('publisher_id');
+
+        $data = MediaGroup::where('active', '1')->where('publisher_id', $id)->orderBy('media_group_name', 'asc')->get();
+
+        return response()->json($data);
+    }
 }

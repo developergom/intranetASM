@@ -37,18 +37,33 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="publisher_id" class="col-sm-2 control-label">Publisher</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <select name="publisher_id" id="publisher_id" class="selectpicker" data-live-search="true" required="true">
+	                        	<option value=""></option>
+                                @foreach ($publisher as $row)
+                                	{!! $selected = '' !!}
+                                	@if($row->publisher_id==old('publisher_id'))
+                                		{!! $selected = 'selected' !!}
+                                	@endif
+								    <option value="{{ $row->publisher_id }}" {{ $selected }}>{{ $row->publisher_name }}</option>
+								@endforeach
+                            </select>
+	                    </div>
+	                    @if ($errors->has('publisher_id'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('publisher_id') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="media_group_id" class="col-sm-2 control-label">Group</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <select name="media_group_id" id="media_group_id" class="selectpicker" data-live-search="true" required="true">
 	                        	<option value=""></option>
-                                @foreach ($mediagroup as $row)
-                                	{!! $selected = '' !!}
-                                	@if($row->media_group_id==old('media_group_id'))
-                                		{!! $selected = 'selected' !!}
-                                	@endif
-								    <option value="{{ $row->media_group_id }}" {{ $selected }}>{{ $row->media_group_name . ' (' . $row->media_group_code . ')' }}</option>
-								@endforeach
                             </select>
 	                    </div>
 	                    @if ($errors->has('media_group_id'))
@@ -131,4 +146,8 @@
 @section('vendorjs')
 <script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/fileinput.min.js') }}"></script>
+@endsection
+
+@section('customjs')
+<script type="text/javascript" src="{{ url('js/master/media-create.js') }}"></script>
 @endsection

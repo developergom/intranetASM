@@ -23,10 +23,18 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="publisher_id" class="col-sm-2 control-label">Publisher</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                    	<input type="text" class="form-control input-sm" name="publisher_id" id="publisher_id" placeholder="Publisher" required="true" maxlength="100" value="{{ $media->mediagroup->publisher->publisher_name }}" disabled="true">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="media_group_id" class="col-sm-2 control-label">Group</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                    	<input type="text" class="form-control input-sm" name="media_group_id" id="media_group_id" placeholder="Media Group" required="true" maxlength="100" value="{{ $media->mediagroup->media_group_name . ' (' . $media->mediagroup->media_group_code . ')' }}" disabled="true">
+	                    	<input type="text" class="form-control input-sm" name="media_group_id" id="media_group_id" placeholder="Media Group" required="true" maxlength="100" value="{{ $media->mediagroup->media_group_name }}" disabled="true">
 	                    </div>
 	                </div>
 	            </div>

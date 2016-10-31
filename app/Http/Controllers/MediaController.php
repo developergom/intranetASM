@@ -12,6 +12,7 @@ use App\Media;
 use App\MediaCategory;
 use App\MediaEdition;
 use App\MediaGroup;
+use App\Publisher;
 
 class MediaController extends Controller
 {
@@ -41,7 +42,8 @@ class MediaController extends Controller
         }
 
         $data = array();
-        $data['mediagroup'] = MediaGroup::where('active','1')->orderBy('media_group_name')->get();
+        $data['publisher'] = Publisher::where('active', '1')->orderBy('publisher_name')->get();
+        //$data['mediagroup'] = MediaGroup::where('active','1')->orderBy('media_group_name')->get();
         $data['mediacategory'] = MediaCategory::where('active','1')->orderBy('media_category_name')->get();
         return view('vendor.material.master.media.create', $data);
     }
@@ -124,6 +126,7 @@ class MediaController extends Controller
         }
 
         $data = array();
+        $data['publisher'] = Publisher::where('active', '1')->orderBy('publisher_name')->get();
         $data['mediagroup'] = MediaGroup::where('active','1')->orderBy('media_group_name')->get();
         $data['mediacategory'] = MediaCategory::where('active','1')->orderBy('media_category_name')->get();
         $data['media'] = Media::where('active','1')->find($id);
