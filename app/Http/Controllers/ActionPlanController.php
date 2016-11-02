@@ -269,7 +269,9 @@ class ActionPlanController extends Controller
 
         $data['actionplan'] = ActionPlan::find($id);
 
-        $data['actiontypes'] = ActionType::where('active', '1')->orderBy('action_type_name')->get();
+        $data['mediagroups'] = MediaGroup::whereHas('users', function($query) use($request){
+                            $query->where('users_media_groups.user_id', '=', $request->user()->user_id);
+                        })->where('media_groups.active', '1')->orderBy('media_group_name')->get();
         $data['medias'] = Media::whereHas('users', function($query) use($request){
                             $query->where('users_medias.user_id', '=', $request->user()->user_id);
                         })->where('medias.active', '1')->orderBy('media_name')->get();
@@ -281,9 +283,7 @@ class ActionPlanController extends Controller
 
         $data['mediaeditions'] = MediaEdition::with('media')->whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
         $startdate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_startdate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_startdate);
-        $enddate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_enddate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_enddate);
         $data['startdate'] = $startdate->format('d/m/Y');
-        $data['enddate'] = $enddate->format('d/m/Y');
         $data['uploadedfiles'] = $data['actionplan']->uploadfiles()->where('revision_no', $data['actionplan']->revision_no)->get();
 
         return view('vendor.material.plan.actionplan.edit', $data);
@@ -299,26 +299,29 @@ class ActionPlanController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'action_type_id' => 'required',
             'action_plan_title' => 'required|max:100',
-            'action_plan_startdate' => 'required|date_format:"d/m/Y"',
-            'action_plan_enddate' => 'required|date_format:"d/m/Y"',
+            'action_plan_desc' => 'required',
+            'action_plan_rubric_desc' => 'required',
+            'action_plan_startdate' => 'date_format:"d/m/Y"',
             'action_plan_pages' => 'numeric',
+            'action_plan_views' => 'numeric',
             'media_edition_id[]' => 'array',
             'media_id[]' => 'array',
+            'media_group_id[]' => 'array',
         ]);
 
         $flow = new FlowLibrary;
         $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
 
         $obj = ActionPlan::find($id);
-        $obj->action_type_id = $request->input('action_type_id');
         $obj->action_plan_title = $request->input('action_plan_title');
-        $obj->action_plan_startdate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_startdate'))->toDateString();
-        $obj->action_plan_enddate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_enddate'))->toDateString();
+        if($request->input('action_plan_startdate')) {
+            $obj->action_plan_startdate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_startdate'))->toDateString();
+        }
         $obj->action_plan_desc = $request->input('action_plan_desc');
         $obj->action_plan_rubric_desc = $request->input('action_plan_rubric_desc');
         $obj->action_plan_pages = $request->input('action_plan_pages');
+        $obj->action_plan_views = $request->input('action_plan_views');
         $obj->flow_no = $nextFlow['flow_no'];
         $obj->current_user = $nextFlow['current_user'];
         $obj->updated_by = $request->user()->user_id;
@@ -360,6 +363,10 @@ class ActionPlanController extends Controller
 
         if(!empty($fileArray)) {
             ActionPlan::find($obj->action_plan_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
+        }
+
+        if(!empty($request->input('media_group_id'))) {
+            ActionPlan::find($obj->action_plan_id)->mediagroups()->sync($request->input('media_group_id'));
         }
 
         if(!empty($request->input('media_id'))) {
