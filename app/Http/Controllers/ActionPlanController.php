@@ -15,6 +15,7 @@ use App\ActionPlanHistory;
 use App\UploadFile;
 use App\ActionType;
 use App\Media;
+use App\MediaGroup;
 use App\MediaEdition;
 use App\User;
 
@@ -74,10 +75,12 @@ class ActionPlanController extends Controller
 
         $data = array();
 
-        $data['actiontypes'] = ActionType::where('active', '1')->orderBy('action_type_name')->get();
-        $data['medias'] = Media::whereHas('users', function($query) use($request){
+        $data['mediagroups'] = MediaGroup::whereHas('users', function($query) use($request){
+                            $query->where('users_media_groups.user_id', '=', $request->user()->user_id);
+                        })->where('media_groups.active', '1')->orderBy('media_group_name')->get();
+        /*$data['medias'] = Media::whereHas('users', function($query) use($request){
                             $query->where('users_medias.user_id', '=', $request->user()->user_id);
-                        })->where('medias.active', '1')->orderBy('media_name')->get();
+                        })->where('medias.active', '1')->orderBy('media_name')->get();*/
 
         /*$m = MediaEdition::whereHas('media', function($query) use($data){
             $query->where('mediaeditions.media_id', '=', $data['medias']);
@@ -85,13 +88,13 @@ class ActionPlanController extends Controller
         /*$m = MediaEdition::where('mediaeditions.media_id', 'IN', $data['medias'])->where('mediaeditions.active', '1')->orderBy('media_edition_no')->get();*/
 
 
-        $medias = array();
+        /*$medias = array();
         foreach ($data['medias'] as $key => $value) {
             array_push($medias, $value['media_id']);
-        }
+        }*/
         /*dd($medias);*/
 
-        $data['mediaeditions'] = MediaEdition::with('media')->whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
+        //$data['mediaeditions'] = MediaEdition::with('media')->whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
 
         return view('vendor.material.plan.actionplan.create', $data);
     }
@@ -105,26 +108,29 @@ class ActionPlanController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'action_type_id' => 'required',
             'action_plan_title' => 'required|max:100',
-            'action_plan_startdate' => 'required|date_format:"d/m/Y"',
-            'action_plan_enddate' => 'required|date_format:"d/m/Y"',
+            'action_plan_desc' => 'required',
+            'action_plan_rubric_desc' => 'required',
+            'action_plan_startdate' => 'date_format:"d/m/Y"',
             'action_plan_pages' => 'numeric',
+            'action_plan_views' => 'numeric',
             'media_edition_id[]' => 'array',
             'media_id[]' => 'array',
+            'media_group_id[]' => 'array',
         ]);
 
         $flow = new FlowLibrary;
         $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
 
         $obj = new ActionPlan;
-        $obj->action_type_id = $request->input('action_type_id');
         $obj->action_plan_title = $request->input('action_plan_title');
-        $obj->action_plan_startdate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_startdate'))->toDateString();
-        $obj->action_plan_enddate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_enddate'))->toDateString();
+        if($request->input('action_plan_startdate')) {
+            $obj->action_plan_startdate = Carbon::createFromFormat('d/m/Y', $request->input('action_plan_startdate'))->toDateString();
+        }
         $obj->action_plan_desc = $request->input('action_plan_desc');
         $obj->action_plan_rubric_desc = $request->input('action_plan_rubric_desc');
         $obj->action_plan_pages = $request->input('action_plan_pages');
+        $obj->action_plan_views = $request->input('action_plan_views');
         $obj->flow_no = $nextFlow['flow_no'];
         $obj->current_user = $nextFlow['current_user'];
         $obj->revision_no = 0;
@@ -170,6 +176,10 @@ class ActionPlanController extends Controller
             ActionPlan::find($obj->action_plan_id)->uploadfiles()->sync($fileArray);    
         }
 
+        if(!empty($request->input('media_group_id'))) {
+            ActionPlan::find($obj->action_plan_id)->mediagroups()->sync($request->input('media_group_id'));
+        }
+
         if(!empty($request->input('media_id'))) {
             ActionPlan::find($obj->action_plan_id)->medias()->sync($request->input('media_id'));
         }
@@ -210,7 +220,9 @@ class ActionPlanController extends Controller
 
         $data['actionplan'] = ActionPlan::with('actionplanhistories', 'actionplanhistories.approvaltype')->find($id);
 
-        $data['actiontypes'] = ActionType::where('active', '1')->orderBy('action_type_name')->get();
+        $data['mediagroups'] = MediaGroup::whereHas('users', function($query) use($request){
+                            $query->where('users_media_groups.user_id', '=', $request->user()->user_id);
+                        })->where('media_groups.active', '1')->orderBy('media_group_name')->get();
         $data['medias'] = Media::whereHas('users', function($query) use($request){
                             $query->where('users_medias.user_id', '=', $request->user()->user_id);
                         })->where('medias.active', '1')->orderBy('media_name')->get();
@@ -222,10 +234,21 @@ class ActionPlanController extends Controller
 
         $data['mediaeditions'] = MediaEdition::with('media')->whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
         $startdate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_startdate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_startdate);
-        $enddate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_enddate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_enddate);
         $data['startdate'] = $startdate->format('d/m/Y');
-        $data['enddate'] = $enddate->format('d/m/Y');
         $data['uploadedfiles'] = $data['actionplan']->uploadfiles()->where('revision_no', $data['actionplan']->revision_no)->get();
+
+        $data['printmedia'] = false;
+        $data['digitalmedia'] = false;
+        foreach($data['actionplan']->medias as $media)
+        {
+            if($media->media_category_id == '1') {
+                $data['printmedia'] = true;        
+            }
+
+            if($media->media_category_id == '2') {
+                $data['digitalmedia'] = true;        
+            }            
+        }
 
         return view('vendor.material.plan.actionplan.show', $data);
     }
@@ -404,7 +427,8 @@ class ActionPlanController extends Controller
         $data['searchPhrase'] = $searchPhrase;
 
         if($listtype == 'onprocess') {
-            $data['rows'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+            $data['rows'] = ActionPlan::join('action_plan_media_group', 'action_plan_media_group.action_plan_id', '=', 'action_plans.action_plan_id')
+                                ->join('media_groups', 'media_groups.media_group_id', '=', 'action_plan_media_group.media_group_id')
                                 ->join('users','users.user_id', '=', 'action_plans.current_user')
                                 ->where('action_plans.flow_no','<>','98')
                                 ->where('action_plans.active', '=', '1')
@@ -414,15 +438,14 @@ class ActionPlanController extends Controller
                                             ->orWhereIn('action_plans.created_by', $subordinate);
                                 })
                                 ->where(function($query) use($searchPhrase) {
-                                    $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%')
+                                    $query->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
+                                            ->orWhere('media_group_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+            $data['total'] = ActionPlan::join('action_plan_media_group', 'action_plan_media_group.action_plan_id', '=', 'action_plans.action_plan_id')
+                                ->join('media_groups', 'media_groups.media_group_id', '=', 'action_plan_media_group.media_group_id')
                                 ->join('users','users.user_id', '=', 'action_plans.current_user')
                                 ->where('action_plans.flow_no','<>','98')
                                 ->where('action_plans.active', '=', '1')
@@ -432,43 +455,40 @@ class ActionPlanController extends Controller
                                             ->orWhereIn('action_plans.created_by', $subordinate);
                                 })
                                 ->where(function($query) use($searchPhrase) {
-                                    $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%')
+                                    $query->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
+                                            ->orWhere('media_group_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })->count();    
         }elseif($listtype == 'needchecking') {
-            $data['rows'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+            $data['rows'] = ActionPlan::join('action_plan_media_group', 'action_plan_media_group.action_plan_id', '=', 'action_plans.action_plan_id')
+                                ->join('media_groups', 'media_groups.media_group_id', '=', 'action_plan_media_group.media_group_id')
                                 ->join('users','users.user_id', '=', 'action_plans.created_by')
                                 ->where('action_plans.active','1')
                                 ->where('action_plans.flow_no','<>','98')
                                 ->where('action_plans.flow_no','<>','99')
                                 ->where('action_plans.current_user', '=' , $request->user()->user_id)
                                 ->where(function($query) use($searchPhrase) {
-                                    $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%')
+                                    $query->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
+                                            ->orWhere('media_group_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+            $data['total'] = ActionPlan::join('action_plan_media_group', 'action_plan_media_group.action_plan_id', '=', 'action_plans.action_plan_id')
+                                ->join('media_groups', 'media_groups.media_group_id', '=', 'action_plan_media_group.media_group_id')
                                 ->join('users','users.user_id', '=', 'action_plans.created_by')
                                 ->where('action_plans.active','1')
                                 ->where('action_plans.flow_no','<>','98')
                                 ->where('action_plans.flow_no','<>','99')
                                 ->where('action_plans.current_user', '=' , $request->user()->user_id)
                                 ->where(function($query) use($searchPhrase) {
-                                    $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%')
+                                    $query->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
+                                            ->orWhere('media_group_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })->count();
         }elseif($listtype == 'finished') {
-            $data['rows'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+            $data['rows'] = ActionPlan::join('action_plan_media_group', 'action_plan_media_group.action_plan_id', '=', 'action_plans.action_plan_id')
+                                ->join('media_groups', 'media_groups.media_group_id', '=', 'action_plan_media_group.media_group_id')
                                 ->join('users','users.user_id', '=', 'action_plans.created_by')
                                 ->where('action_plans.active','1')
                                 ->where('action_plans.flow_no','=','98')
@@ -477,15 +497,14 @@ class ActionPlanController extends Controller
                                             ->orWhereIn('action_plans.created_by', $subordinate);
                                 })
                                 ->where(function($query) use($searchPhrase) {
-                                    $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%')
+                                    $query->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
+                                            ->orWhere('media_group_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+            $data['total'] = ActionPlan::join('action_plan_media_group', 'action_plan_media_group.action_plan_id', '=', 'action_plans.action_plan_id')
+                                ->join('media_groups', 'media_groups.media_group_id', '=', 'action_plan_media_group.media_group_id')
                                 ->join('users','users.user_id', '=', 'action_plans.created_by')
                                 ->where('action_plans.active','1')
                                 ->where('action_plans.flow_no','=','98')
@@ -494,14 +513,13 @@ class ActionPlanController extends Controller
                                             ->orWhereIn('action_plans.created_by', $subordinate);
                                 })
                                 ->where(function($query) use($searchPhrase) {
-                                    $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%')
+                                    $query->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
+                                            ->orWhere('media_group_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })->count();
         }elseif($listtype == 'canceled') {
-            $data['rows'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+            $data['rows'] = ActionPlan::join('action_plan_media_group', 'action_plan_media_group.action_plan_id', '=', 'action_plans.action_plan_id')
+                                ->join('media_groups', 'media_groups.media_group_id', '=', 'action_plan_media_group.media_group_id')
                                 ->join('users','users.user_id', '=', 'action_plans.created_by')
                                 ->where('action_plans.active','0')
                                 ->where(function($query) use($request, $subordinate){
@@ -509,15 +527,14 @@ class ActionPlanController extends Controller
                                             ->orWhereIn('action_plans.created_by', $subordinate);
                                 })
                                 ->where(function($query) use($searchPhrase) {
-                                    $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%')
+                                    $query->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
+                                            ->orWhere('media_group_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = ActionPlan::join('action_types','action_types.action_type_id', '=', 'action_plans.action_type_id')
+            $data['total'] = ActionPlan::join('action_plan_media_group', 'action_plan_media_group.action_plan_id', '=', 'action_plans.action_plan_id')
+                                ->join('media_groups', 'media_groups.media_group_id', '=', 'action_plan_media_group.media_group_id')
                                 ->join('users','users.user_id', '=', 'action_plans.created_by')
                                 ->where('action_plans.active','0')
                                 ->where(function($query) use($request, $subordinate){
@@ -525,10 +542,8 @@ class ActionPlanController extends Controller
                                             ->orWhereIn('action_plans.created_by', $subordinate);
                                 })
                                 ->where(function($query) use($searchPhrase) {
-                                    $query->orWhere('action_type_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_startdate','like','%' . $searchPhrase . '%')
-                                            ->orWhere('action_plan_enddate','like','%' . $searchPhrase . '%')
+                                    $query->orWhere('action_plan_title','like','%' . $searchPhrase . '%')
+                                            ->orWhere('media_group_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })->count();
         }
@@ -603,7 +618,9 @@ class ActionPlanController extends Controller
 
         $data['actionplan'] = ActionPlan::find($id);
 
-        $data['actiontypes'] = ActionType::where('active', '1')->orderBy('action_type_name')->get();
+        $data['mediagroups'] = MediaGroup::whereHas('users', function($query) use($request){
+                            $query->where('users_media_groups.user_id', '=', $request->user()->user_id);
+                        })->where('media_groups.active', '1')->orderBy('media_group_name')->get();
         $data['medias'] = Media::whereHas('users', function($query) use($request){
                             $query->where('users_medias.user_id', '=', $request->user()->user_id);
                         })->where('medias.active', '1')->orderBy('media_name')->get();
@@ -615,10 +632,21 @@ class ActionPlanController extends Controller
 
         $data['mediaeditions'] = MediaEdition::whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
         $startdate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_startdate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_startdate);
-        $enddate = Carbon::createFromFormat('Y-m-d', ($data['actionplan']->action_plan_enddate==null) ? date('Y-m-d') : $data['actionplan']->action_plan_enddate);
         $data['startdate'] = $startdate->format('d/m/Y');
-        $data['enddate'] = $enddate->format('d/m/Y');
         $data['uploadedfiles'] = $data['actionplan']->uploadfiles()->where('revision_no', $data['actionplan']->revision_no)->get();
+
+        $data['printmedia'] = false;
+        $data['digitalmedia'] = false;
+        foreach($data['actionplan']->medias as $media)
+        {
+            if($media->media_category_id == '1') {
+                $data['printmedia'] = true;        
+            }
+
+            if($media->media_category_id == '2') {
+                $data['digitalmedia'] = true;        
+            }            
+        }
 
         return view('vendor.material.plan.actionplan.approve', $data);
     }
@@ -691,6 +719,50 @@ class ActionPlanController extends Controller
             $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'actionplanreject', 'Action Plan "' . $actionplan->action_plan_title . '" rejected.', $id);
 
             $request->session()->flash('status', 'Data has been saved!');
+        }
+
+    }
+
+    public function apiGetMediaPerMediaGroup(Request $request)
+    {
+        if(Gate::denies('Action Plan-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        //$media_group_id = $request->input('media_group_id');
+
+        if($request->input('media_group_id')) {
+            $media_group_id = $request->input('media_group_id');
+            $result = collect();
+
+            $user_medias = Media::whereHas('users', function($query) use($request){
+                                $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                            })->where('medias.active', '1')->orderBy('media_name')->get();
+            //$x = $users_medias->toArray();
+            //dd($user_medias);
+
+            foreach ($media_group_id as $key => $value) {
+                $tmp = Media::where('media_group_id', $value)->where('active', '1')->get();
+                foreach ($tmp as $k => $v) {
+                    $result->push($v);
+                }
+            }
+
+            //$data = array_intersect($result, $user_medias->toArray());
+            $data['media'] = $result->intersect($user_medias);
+            $medias = array();
+            foreach ($data['media'] as $key => $value) {
+                array_push($medias, $value['media_id']);
+            }
+
+            $data['mediaedition'] = MediaEdition::with('media')->whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
+            //dd($media_group_id);
+            //dd($data);
+            //echo $data->count();
+            return response()->json($data);
+        }else{
+            $data = collect();
+            return response()->json($data);
         }
 
     }

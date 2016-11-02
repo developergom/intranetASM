@@ -168,6 +168,18 @@
                         </dd>
                     </dl>
                     <dl class="dl-horizontal">
+                        <dt>Media Group(s)</dt>
+                        <dd>
+                            @foreach ($mediagroups as $row)
+                                @foreach ($user->mediagroups as $mediagroup)
+                                    @if($mediagroup->media_group_id==$row->media_group_id)
+                                        <span class="badge">{{ $row->media_group_name }}</span>
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        </dd>
+                    </dl>
+                    <dl class="dl-horizontal">
                         <dt>Media(s)</dt>
                         <dd>
                         	@foreach ($medias as $row)

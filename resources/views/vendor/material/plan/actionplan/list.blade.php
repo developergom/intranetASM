@@ -30,10 +30,8 @@
                         <table id="grid-data-needchecking" class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th data-column-id="action_type_name" data-order="asc">Type</th>
                                     <th data-column-id="action_plan_title" data-order="asc">Title</th>
-                                    <th data-column-id="action_plan_startdate" data-converter="datetime" data-order="asc">Start Period</th>
-                                    <th data-column-id="action_plan_enddate" data-converter="datetime" data-order="asc">End Period</th>
+                                    <th data-column-id="media_group_name" data-order="asc">Media Group</th>
                                     <th data-column-id="user_firstname" data-order="asc">Created By</th>
                                     @can('Action Plan-Update')
                                         @can('Action Plan-Approval')
@@ -60,10 +58,8 @@
                         <table id="grid-data-onprocess" class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th data-column-id="action_type_name" data-order="asc">Type</th>
                                     <th data-column-id="action_plan_title" data-order="asc">Title</th>
-                                    <th data-column-id="action_plan_startdate" data-converter="datetime" data-order="asc">Start Period</th>
-                                    <th data-column-id="action_plan_enddate" data-converter="datetime" data-order="asc">End Period</th>
+                                    <th data-column-id="media_group_name" data-order="asc">Media Group</th>
                                     <th data-column-id="user_firstname" data-order="asc">Current User</th>
                                     @can('Action Plan-Delete')
                                         <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
@@ -84,10 +80,8 @@
                         <table id="grid-data-finished" class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th data-column-id="action_type_name" data-order="asc">Type</th>
                                     <th data-column-id="action_plan_title" data-order="asc">Title</th>
-                                    <th data-column-id="action_plan_startdate" data-converter="datetime" data-order="asc">Start Period</th>
-                                    <th data-column-id="action_plan_enddate" data-converter="datetime" data-order="asc">End Period</th>
+                                    <th data-column-id="media_group_name" data-order="asc">Media Group</th>
                                     <th data-column-id="user_firstname" data-order="asc">Created By</th>
                                     <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
                                 </tr>
@@ -104,10 +98,8 @@
                         <table id="grid-data-canceled" class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th data-column-id="action_type_name" data-order="asc">Type</th>
                                     <th data-column-id="action_plan_title" data-order="asc">Title</th>
-                                    <th data-column-id="action_plan_startdate" data-converter="datetime" data-order="asc">Start Period</th>
-                                    <th data-column-id="action_plan_enddate" data-converter="datetime" data-order="asc">End Period</th>
+                                    <th data-column-id="media_group_name" data-order="asc">Media Group</th>
                                     <th data-column-id="user_firstname" data-order="asc">Created By</th>
                                     <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
                                 </tr>

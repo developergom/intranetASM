@@ -62,7 +62,7 @@ class HomeController extends Controller
             $ap['id'] = $value->action_plan_id;
             $ap['name'] = $value->action_plan_title;
             $ap['startdate'] = $value->action_plan_startdate;
-            $ap['enddate'] = $value->action_plan_enddate;
+            $ap['enddate'] = $value->action_plan_startdate;
             $ap['starttime'] = '0:00';
             $ap['endtime'] = '23:59';
             $ap['color'] = '#FFB128';

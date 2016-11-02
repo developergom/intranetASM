@@ -232,6 +232,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::resource('actionplan', 'ActionPlanController');
         Route::get('actionplan/approve/{flow_no}/{id}', 'ActionPlanController@approve');
         Route::post('actionplan/approve/{flow_no}/{id}', 'ActionPlanController@postApprove');
+        Route::post('actionplan/apigetmediapermediagroup', 'ActionPlanController@apiGetMediaPerMediaGroup');
 
         //Creative Plan
         Route::post('creativeplan/apiList/{listtype}', 'CreativeController@apiList');
