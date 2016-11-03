@@ -117,8 +117,31 @@ class HomeController extends Controller
         $data = array();
         $data['monthly'] = array();
 
-        $actionplan = ActionPlan::select('
-                                    action_plans.*',
+        $actionplan = ActionPlan::join('action_plan_media_edition', 'action_plan_media_edition.action_plan_id', '=', 'action_plans.action_plan_id')
+                                ->join('media_editions', 'media_editions.media_edition_id', '=', 'action_plan_media_edition.media_edition_id')
+                                ->select(DB::raw('action_plans.*, media_edition_deadline_date, ABS(datediff("'.$curdate.'", media_edition_deadline_date)) AS timeto'))
+                                ->where('action_plans.active', '1')
+                                ->where('flow_no', '98')
+                                ->where(DB::raw('datediff("'.$curdate.'", media_edition_deadline_date)'), $sym, $day)
+                                ->where(DB::raw('datediff("'.$curdate.'", media_edition_deadline_date)'), '<', 0)
+                                ->orderBy('media_edition_deadline_date', 'asc')
+                                ->take(5)
+                                ->get();
+        foreach ($actionplan as $key => $value) {
+            $ap = array();
+            $ap['id'] = $value->action_plan_id;
+            $ap['name'] = $value->action_plan_title;
+            $ap['startdate'] = $value->media_edition_deadline_date;
+            $ap['enddate'] = $value->media_edition_deadline_date;
+            $ap['starttime'] = '0:00';
+            $ap['endtime'] = '23:59';
+            $ap['color'] = '#FFB128';
+            $ap['url'] = '#';
+            $ap['timeto'] = $value->timeto;
+            array_push($data['monthly'], $ap);
+        }
+
+        $digitalplan = ActionPlan::select('action_plans.*',
                                     DB::raw('ABS(datediff("'.$curdate.'", action_plan_startdate)) AS timeto')
                                 )
                                 ->where('active', '1')
@@ -128,18 +151,18 @@ class HomeController extends Controller
                                 ->orderBy('action_plan_startdate', 'asc')
                                 ->take(5)
                                 ->get();
-        foreach ($actionplan as $key => $value) {
-            $ap = array();
-            $ap['id'] = $value->action_plan_id;
-            $ap['name'] = $value->action_plan_title;
-            $ap['startdate'] = $value->action_plan_startdate;
-            $ap['enddate'] = $value->action_plan_enddate;
-            $ap['starttime'] = '0:00';
-            $ap['endtime'] = '23:59';
-            $ap['color'] = '#FFB128';
-            $ap['url'] = '#';
-            $ap['timeto'] = $value->timeto;
-            array_push($data['monthly'], $ap);
+        foreach ($digitalplan as $key => $value) {
+            $dp = array();
+            $dp['id'] = $value->action_plan_id;
+            $dp['name'] = $value->action_plan_title;
+            $dp['startdate'] = $value->action_plan_startdate;
+            $dp['enddate'] = $value->action_plan_startdate;
+            $dp['starttime'] = '0:00';
+            $dp['endtime'] = '23:59';
+            $dp['color'] = '#FFB128';
+            $dp['url'] = '#';
+            $dp['timeto'] = $value->timeto;
+            array_push($data['monthly'], $dp);
         }
 
         $eventplan = EventPlan::select('event_plans.*',DB::raw('ABS(datediff("'.$curdate.'", event_plan_deadline)) AS timeto'))->where('active', '1')->where('flow_no', '98')->where(DB::raw('datediff("'.$curdate.'", event_plan_deadline)'), $sym, $day)->where(DB::raw('datediff("'.$curdate.'", event_plan_deadline)'), '<', 0)->orderBy('event_plan_deadline', 'asc')->take(5)->get();
