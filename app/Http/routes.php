@@ -193,6 +193,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('paper/apiDelete', 'PaperController@apiDelete');
         Route::resource('paper', 'PaperController');
 
+        //Price Type
+        Route::post('pricetype/apiList', 'PriceTypeController@apiList');
+        Route::post('pricetype/apiDelete', 'PriceTypeController@apiDelete');
+        Route::resource('pricetype', 'PriceTypeController');
+
         //Proposal Type
         Route::post('proposaltype/apiList', 'ProposalTypeController@apiList');
         Route::post('proposaltype/apiDelete', 'ProposalTypeController@apiDelete');
