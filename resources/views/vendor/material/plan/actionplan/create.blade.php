@@ -13,24 +13,6 @@
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form" method="POST" action="{{ url('plan/actionplan') }}">
         		{{ csrf_field() }}
-        		<div class="form-group">
-        			<label for="action_type_id" class="col-sm-2 control-label">Type</label>
-        			<div class="col-sm-10">
-        				<div class="fg-line">
-	        				<select name="action_type_id" id="action_type_id" class="selectpicker" data-live-search="true" required="true">
-	        					<option value=""></option>
-	        					@foreach($actiontypes as $row)
-	        						<option value="{{ $row->action_type_id }}">{{ $row->action_type_name }}</option>
-	        					@endforeach
-	        				</select>
-	        			</div>
-        			</div>
-        			@if ($errors->has('action_type_id'))
-		                <span class="help-block">
-		                    <strong>{{ $errors->first('action_type_id') }}</strong>
-		                </span>
-		            @endif
-        		</div>
 	            <div class="form-group">
 	                <label for="action_plan_title" class="col-sm-2 control-label">Title</label>
 	                <div class="col-sm-10">
@@ -40,45 +22,6 @@
 	                    @if ($errors->has('action_plan_title'))
 			                <span class="help-block">
 			                    <strong>{{ $errors->first('action_plan_title') }}</strong>
-			                </span>
-			            @endif
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="action_plan_startdate" class="col-sm-2 control-label">Start Date</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="action_plan_startdate" id="action_plan_startdate" placeholder="e.g 17/08/1945" required="true" maxlength="10" value="{{ old('action_plan_startdate') }}" autocomplete="off" data-mask="00/00/0000">
-	                    </div>
-	                    @if ($errors->has('action_plan_startdate'))
-			                <span class="help-block">
-			                    <strong>{{ $errors->first('action_plan_startdate') }}</strong>
-			                </span>
-			            @endif
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="action_plan_enddate" class="col-sm-2 control-label">End Date</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="action_plan_enddate" id="action_plan_enddate" placeholder="e.g 17/08/1945" required="true" maxlength="10" value="{{ old('action_plan_enddate') }}" autocomplete="off" data-mask="00/00/0000">
-	                    </div>
-	                    @if ($errors->has('action_plan_enddate'))
-			                <span class="help-block">
-			                    <strong>{{ $errors->first('action_plan_enddate') }}</strong>
-			                </span>
-			            @endif
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="action_plan_pages" class="col-sm-2 control-label">Total Pages / Appearance</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="action_plan_pages" id="action_plan_pages" placeholder="Total Pages / Appearance (numeric)" required="true" maxlength="20" value="{{ old('action_plan_pages') }}">
-	                    </div>
-	                    @if ($errors->has('action_plan_pages'))
-			                <span class="help-block">
-			                    <strong>{{ $errors->first('action_plan_pages') }}</strong>
 			                </span>
 			            @endif
 	                </div>
@@ -110,22 +53,37 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="media_id" class="col-sm-2 control-label">Media</label>
+	                <label for="media_group_id" class="col-sm-2 control-label">Media Group</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="media_id[]" id="media_id" class="selectpicker" data-live-search="true" multiple required="true">
+	                        <select name="media_group_id[]" id="media_group_id" class="selectpicker" data-live-search="true" multiple required="true">
 	                        	<!-- <option value=""></option> -->
-                                @foreach ($medias as $row)
+                                @foreach ($mediagroups as $row)
                                 	{!! $selected = '' !!}
-                                	@if(old('media_id'))
-	                                	@foreach (old('media_id') as $key => $value)
-	                                		@if($value==$row->media_id)
+                                	@if(old('media_group_id'))
+	                                	@foreach (old('media_group_id') as $key => $value)
+	                                		@if($value==$row->media_group_id)
 	                                			{!! $selected = 'selected' !!}
 	                                		@endif
 	                                	@endforeach
                                 	@endif
-								    <option value="{{ $row->media_id }}" {{ $selected }}>{{ $row->media_name }}</option>
+								    <option value="{{ $row->media_group_id }}" {{ $selected }}>{{ $row->media_group_name }}</option>
 								@endforeach
+                            </select>
+	                    </div>
+	                    @if ($errors->has('media_group_id'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('media_group_id') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="media_id" class="col-sm-2 control-label">Media</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <select name="media_id[]" id="media_id" class="selectpicker" data-live-search="true" multiple required="true">
+	                        	<option value=""></option>
                             </select>
 	                    </div>
 	                    @if ($errors->has('media_id'))
@@ -135,28 +93,57 @@
 			            @endif
 	                </div>
 	            </div>
-	            <div class="form-group">
+
+	            <div class="form-group" id="media_edition_id_container">
 	                <label for="media_edition_id" class="col-sm-2 control-label">Media Edition</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <select name="media_edition_id[]" id="media_edition_id" class="selectpicker" data-live-search="true" multiple>
-	                        	<!-- <option value=""></option> -->
-                                @foreach ($mediaeditions as $row)
-                                	{!! $selected = '' !!}
-                                	@if(old('media_edition_id'))
-	                                	@foreach (old('media_edition_id') as $key => $value)
-	                                		@if($value==$row->media_edition_id)
-	                                			{!! $selected = 'selected' !!}
-	                                		@endif
-	                                	@endforeach
-                                	@endif
-								    <option value="{{ $row->media_edition_id }}" {{ $selected }}>{{ $row->media->media_name .' - '. $row->media_edition_no }}</option>
-								@endforeach
+	                        	<option value=""></option>
                             </select>
 	                    </div>
 	                    @if ($errors->has('media_edition_id'))
 			                <span class="help-block">
 			                    <strong>{{ $errors->first('media_edition_id') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group" id="action_plan_pages_container">
+	                <label for="action_plan_pages" class="col-sm-2 control-label">Total Pages</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="action_plan_pages" id="action_plan_pages" placeholder="Total Pages (numeric)" maxlength="20" value="{{ old('action_plan_pages') }}">
+	                    </div>
+	                    @if ($errors->has('action_plan_pages'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('action_plan_pages') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group" id="action_plan_startdate_container">
+	                <label for="action_plan_startdate" class="col-sm-2 control-label">Start Date</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm input-mask" name="action_plan_startdate" id="action_plan_startdate" placeholder="e.g 17/08/1945" maxlength="10" value="{{ old('action_plan_startdate') }}" autocomplete="off" data-mask="00/00/0000">
+	                    </div>
+	                    @if ($errors->has('action_plan_startdate'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('action_plan_startdate') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group" id="action_plan_views_container">
+	                <label for="action_plan_views" class="col-sm-2 control-label">Total Views</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="action_plan_views" id="action_plan_views" placeholder="Total Views (numeric)" maxlength="20" value="{{ old('action_plan_views') }}">
+	                    </div>
+	                    @if ($errors->has('action_plan_views'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('action_plan_views') }}</strong>
 			                </span>
 			            @endif
 	                </div>

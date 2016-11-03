@@ -11,49 +11,11 @@
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form">
         		{{ csrf_field() }}
-        		<div class="form-group">
-        			<label for="action_type_id" class="col-sm-2 control-label">Type</label>
-        			<div class="col-sm-10">
-        				<div class="fg-line">
-	        				<select name="action_type_id" id="action_type_id" class="selectpicker" data-live-search="true" disabled="true">
-	        					@foreach($actiontypes as $row)
-	        						@if($actionplan->action_type_id == $row->action_type_id)
-	        							<option value="{{ $row->action_type_id }}" selected>{{ $row->action_type_name }}</option>
-	        						@endif
-	        					@endforeach
-	        				</select>
-	        			</div>
-        			</div>
-        		</div>
 	            <div class="form-group">
 	                <label for="action_plan_title" class="col-sm-2 control-label">Title</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <input type="text" class="form-control input-sm" name="action_plan_title" id="action_plan_title" placeholder="Action Plan Title" disabled="true" maxlength="100" value="{{ $actionplan->action_plan_title }}">
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="action_plan_startdate" class="col-sm-2 control-label">Start Date</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="action_plan_startdate" id="action_plan_startdate" placeholder="e.g 17/08/1945" disabled="true" maxlength="10" value="{{ $startdate }}" autocomplete="off" data-mask="00/00/0000">
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="action_plan_enddate" class="col-sm-2 control-label">End Date</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="action_plan_enddate" id="action_plan_enddate" placeholder="e.g 17/08/1945" disabled="true" maxlength="10" value="{{ $enddate }}" autocomplete="off" data-mask="00/00/0000">
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="action_plan_pages" class="col-sm-2 control-label">Total Pages / Appearance</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="action_plan_pages" id="action_plan_pages" placeholder="Total Pages / Appearance (numeric)" required="true" maxlength="20" value="{{ $actionplan->action_plan_pages }}" disabled="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -74,6 +36,20 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="media_group_id" class="col-sm-2 control-label">Media Group</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+                            @foreach ($mediagroups as $row)
+                            	@foreach ($actionplan->mediagroups as $mediagroup)
+                            		@if($mediagroup->media_group_id==$row->media_group_id)
+                            			<span class="badge">{{ $row->media_group_name }}</span>
+                            		@endif
+                            	@endforeach
+							@endforeach
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="media_id" class="col-sm-2 control-label">Media</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
@@ -87,6 +63,7 @@
 	                    </div>
 	                </div>
 	            </div>
+	            @if($printmedia==true)
 	            <div class="form-group">
 	                <label for="media_edition_id" class="col-sm-2 control-label">Media Edition</label>
 	                <div class="col-sm-10">
@@ -101,6 +78,33 @@
 	                    </div>
 	                </div>
 	            </div>
+	            <div class="form-group">
+	                <label for="action_plan_pages" class="col-sm-2 control-label">Total Pages</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="action_plan_pages" id="action_plan_pages" placeholder="Total Pages" required="true" maxlength="20" value="{{ $actionplan->action_plan_pages }}" disabled="true">
+	                    </div>
+	                </div>
+	            </div>
+	            @endif
+	            @if($digitalmedia==true)
+	            <div class="form-group">
+	                <label for="action_plan_startdate" class="col-sm-2 control-label">Start Date</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm input-mask" name="action_plan_startdate" id="action_plan_startdate" placeholder="e.g 17/08/1945" disabled="true" maxlength="10" value="{{ $startdate }}" autocomplete="off" data-mask="00/00/0000">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="action_plan_views" class="col-sm-2 control-label">Total Views</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="action_plan_views" id="action_plan_views" placeholder="Total Views" required="true" maxlength="20" value="{{ $actionplan->action_plan_views }}" disabled="true">
+	                    </div>
+	                </div>
+	            </div>
+	            @endif
 	            <div class="form-group">
 	                <label for="upload_file" class="col-sm-2 control-label">Uploaded File(s)</label>
 	                <div class="col-sm-10">

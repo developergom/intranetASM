@@ -102,6 +102,20 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="media_group_id" class="col-sm-2 control-label">Media Group</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+                            @foreach ($mediagroups as $row)
+                            	@foreach ($user->mediagroups as $mediagroup)
+                            		@if($mediagroup->media_group_id==$row->media_group_id)
+                            			<span class="badge">{{ $row->media_group_name }}</span>
+                            		@endif
+                            	@endforeach
+							@endforeach
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="media_id" class="col-sm-2 control-label">Media</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">

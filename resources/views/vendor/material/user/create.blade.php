@@ -189,6 +189,32 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="media_group_id" class="col-sm-2 control-label">Media Group</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <select name="media_group_id[]" id="media_group_id" class="selectpicker" data-live-search="true" multiple required="true">
+	                        	<!-- <option value=""></option> -->
+                                @foreach ($mediagroups as $row)
+                                	{!! $selected = '' !!}
+                                	@if(old('media_group_id'))
+	                                	@foreach (old('media_group_id') as $key => $value)
+	                                		@if($value==$row->media_group_id)
+	                                			{!! $selected = 'selected' !!}
+	                                		@endif
+	                                	@endforeach
+                                	@endif
+								    <option value="{{ $row->media_group_id }}" {{ $selected }}>{{ $row->media_group_name }}</option>
+								@endforeach
+                            </select>
+	                    </div>
+	                    @if ($errors->has('media_group_id'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('media_group_id') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="media_id" class="col-sm-2 control-label">Media</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">

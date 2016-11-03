@@ -11,21 +11,24 @@ class ActionPlan extends Model
 	protected $primaryKey = 'action_plan_id';
 
 	protected $fillable = [
-				'action_type_id', 
 				'action_plan_title', 
 				'action_plan_desc', 
 				'action_plan_startdate',
-				'action_plan_enddate',
 				'action_plan_pages',
-				'action_plan_rubric_desc'
+				'action_plan_views',
+				'action_plan_rubric_desc',
+				'flow_no',
+				'revision_no',
+				'current_user'
 	];
 
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
 
-	public function actiontype() {
-		return $this->belongsTo('App\ActionType', 'action_type_id');
+	public function mediagroups() 
+	{
+		return $this->belongsToMany('App\MediaGroup', 'action_plan_media_group');
 	}
 
 	public function medias() 

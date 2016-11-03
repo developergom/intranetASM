@@ -12,6 +12,7 @@ use App\Http\Requests;
 use App\User;
 use App\Group;
 use App\Media;
+use App\MediaGroup;
 use App\Religion;
 use App\Role;
 
@@ -59,6 +60,7 @@ class UserController extends Controller
         $data['roles'] = Role::where('active','1')->orderBy('role_name')->get();
         $data['groups'] = Group::where('active','1')->orderBy('group_name')->get();
         $data['medias'] = Media::where('active','1')->orderBy('media_name')->get();
+        $data['mediagroups'] = MediaGroup::where('active','1')->orderBy('media_group_name')->get();
 
         return view('vendor.material.user.create', $data);
     }
@@ -83,6 +85,7 @@ class UserController extends Controller
             'role_id[]' => 'array',
             'group_id[]' => 'array',
             'media_id[]' => 'array',
+            'media_group_id[]' => 'array',
         ]);
 
         $obj = new User;
@@ -105,6 +108,7 @@ class UserController extends Controller
         User::find($obj->user_id)->roles()->sync($request->input('role_id'));
         User::find($obj->user_id)->groups()->sync($request->input('group_id'));
         User::find($obj->user_id)->medias()->sync($request->input('media_id'));
+        User::find($obj->user_id)->mediagroups()->sync($request->input('media_group_id'));
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -128,9 +132,10 @@ class UserController extends Controller
         $data['user'] = User::with('religion')->find($id);
         $birthdate = Carbon::createFromFormat('Y-m-d', ($data['user']->user_birthdate==null) ? date('Y-m-d') : $data['user']->user_birthdate);
         $data['birthdate'] = $birthdate->format('d/m/Y');
-        $data['roles'] = Role::where('active','1')->get();
-        $data['groups'] = Group::where('active','1')->get();
-        $data['medias'] = Media::where('active','1')->get();
+        $data['roles'] = Role::where('active','1')->orderBy('role_name')->get();
+        $data['groups'] = Group::where('active','1')->orderBy('group_name')->get();
+        $data['medias'] = Media::where('active','1')->orderBy('media_name')->get();
+        $data['mediagroups'] = MediaGroup::where('active','1')->orderBy('media_group_name')->get();
         return view('vendor.material.user.show', $data);
     }
 
@@ -155,6 +160,7 @@ class UserController extends Controller
         $data['roles'] = Role::where('active','1')->orderBy('role_name')->get();
         $data['groups'] = Group::where('active','1')->orderBy('group_name')->get();
         $data['medias'] = Media::where('active','1')->orderBy('media_name')->get();
+        $data['mediagroups'] = MediaGroup::where('active','1')->orderBy('media_group_name')->get();
         return view('vendor.material.user.edit', $data);
     }
 
@@ -179,6 +185,7 @@ class UserController extends Controller
             'role_id[]' => 'array',
             'group_id[]' => 'array',
             'media_id[]' => 'array',
+            'media_group_id[]' => 'array'
         ]);
 
         $obj = User::find($id);
@@ -198,6 +205,7 @@ class UserController extends Controller
         User::find($id)->roles()->sync($request->input('role_id'));
         User::find($id)->groups()->sync($request->input('group_id'));
         User::find($id)->medias()->sync($request->input('media_id'));
+        User::find($id)->mediagroups()->sync($request->input('media_group_id'));
 
         $request->session()->flash('status', 'Data has been updated!');
 
@@ -325,6 +333,7 @@ class UserController extends Controller
         $data['roles'] = Role::where('active','1')->get();
         $data['groups'] = Group::where('active','1')->get();
         $data['medias'] = Media::where('active','1')->get();
+        $data['mediagroups'] = MediaGroup::where('active','1')->get();
 
         return view('vendor.material.user.profile', $data);
     }

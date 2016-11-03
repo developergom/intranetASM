@@ -1,4 +1,76 @@
 $(document).ready(function(){
+	var tmp_media_group_id = [];
+	collapseAllField();
+
+	$('#media_group_id').change(function(){
+		tmp_media_group_id = $(this).val();
+
+		$.ajax({
+			url: base_url + 'plan/actionplan/apigetmediapermediagroup',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+					media_group_id : tmp_media_group_id,
+					'_token' : $('meta[name="csrf-token"]').attr('content')
+					},
+			error: function(data){
+				console.log(data);
+			},
+			success: function(data){
+				$('#media_id').empty();
+				$.each(data.media, function(i, item){
+					$('#media_id').append('<option label="' + item.media_category_id + '" value="' + item.media_id + '">' + item.media_name + '</option>');
+				});
+				$('#media_id').selectpicker('refresh');
+
+				$('#media_edition_id').empty();
+				$.each(data.mediaedition, function(i, item){
+					$('#media_edition_id').append('<option value="' + item.media_edition_id + '">' + item.media.media_name + ', ' + item.media_edition_no + ', Publish Date : ' + item.media_edition_publish_date + '</option>');
+				});
+				$('#media_edition_id').selectpicker('refresh');
+			}
+		})
+	});
+	
+
+	var tmp_media_category = [];
+	//iniliasisasi
+	$.each($('#media_id').find('option:selected'), function(i, item){
+		tmp_media_category.push(item.label);
+	});
+
+	if($.inArray("1", tmp_media_category) !== -1) {
+		expandPrint();
+	}else{
+		collapsePrint();
+	}
+
+	if($.inArray("2", tmp_media_category) !== -1) {
+		expandDigital();
+	}else{
+		collapseDigital();
+	}
+
+	$('#media_id').change(function(){
+		tmp_media_category = [];
+		$.each($(this).find('option:selected'), function(i, item){
+			tmp_media_category.push(item.label);
+		});
+		//console.log(tmp_media_category);
+
+		if($.inArray("1", tmp_media_category) !== -1) {
+			expandPrint();
+		}else{
+			collapsePrint();
+		}
+
+		if($.inArray("2", tmp_media_category) !== -1) {
+			expandDigital();
+		}else{
+			collapseDigital();
+		}		
+	});
+
 	Dropzone.autoDiscover = false;
 	/*$('div#upload_file_area').dropzone({
 		url: '/test'
@@ -93,5 +165,30 @@ $(document).ready(function(){
 				});
 			}
 		});
+	}
+
+	function collapseAllField() {
+		collapsePrint();
+		collapseDigital();
+	}
+
+	function expandPrint() {
+		$('#media_edition_id_container').show();
+		$('#action_plan_pages_container').show();
+	}
+
+	function collapsePrint() {
+		$('#media_edition_id_container').hide();
+		$('#action_plan_pages_container').hide();
+	}
+
+	function expandDigital() {
+		$('#action_plan_startdate_container').show();
+		$('#action_plan_views_container').show();
+	}
+
+	function collapseDigital() {
+		$('#action_plan_startdate_container').hide();
+		$('#action_plan_views_container').hide();
 	}
 });
