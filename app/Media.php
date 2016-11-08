@@ -56,4 +56,14 @@ class Media extends Model
     {
     	return $this->belongsToMany('App\EventPlan','action_plans_medias');
     }
+
+    public function inventoriesplanner()
+	{
+		return $this->belongsToMany('App\InventoryPlanner', 'inventory_planner_media');
+	}
+
+	public function inventoryplannerprices()
+	{
+		return $this->hasMany('App\InventoryPlannerPrice', 'media_id');
+	}
 }
