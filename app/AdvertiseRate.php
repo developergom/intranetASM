@@ -13,7 +13,10 @@ class AdvertiseRate extends Model
 				'media_id',
 				'advertise_position_id',
 				'advertise_size_id',
+				'paper_id',
 				'advertise_rate_code',
+				'advertise_rate_startdate',
+				'advertise_rate_enddate',
 				'advertise_rate_normal',
 				'advertise_rate_discount',
 	];
@@ -35,5 +38,10 @@ class AdvertiseRate extends Model
 	public function advertiseposition()
 	{
 		return $this->belongsTo('App\AdvertisePosition','advertise_position_id');
+	}
+
+	public function paper()
+	{
+		return $this->belongsTo('App\Paper', 'paper_id');
 	}
 }

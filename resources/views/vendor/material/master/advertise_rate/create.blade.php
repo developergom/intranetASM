@@ -77,6 +77,28 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="paper_id" class="col-sm-2 control-label">Paper</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <select name="paper_id" id="paper_id" class="selectpicker" data-live-search="true" required="true">
+	                        	<option value=""></option>
+                                @foreach ($paper as $row)
+                                	{!! $selected = '' !!}
+                                	@if($row->paper_id==old('paper_id'))
+                                		{!! $selected = 'selected' !!}
+                                	@endif
+								    <option value="{{ $row->paper_id }}" {{ $selected }}>{{ $row->paper_name . ' ( ' . $row->paper_width . ' x ' . $row->paper_length . ' ' . $row->unit->unit_code . ' )' }}</option>
+								@endforeach
+                            </select>
+	                    </div>
+	                    @if ($errors->has('paper_id'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('paper_id') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="advertise_rate_code" class="col-sm-2 control-label">Code</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
@@ -85,6 +107,32 @@
 	                    @if ($errors->has('advertise_rate_code'))
 			                <span class="help-block">
 			                    <strong>{{ $errors->first('advertise_rate_code') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="advertise_rate_startdate" class="col-sm-2 control-label">Start Date</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm input-mask" name="advertise_rate_startdate" id="advertise_rate_startdate" placeholder="e.g 17/08/1945" required="true" maxlength="10" value="{{ old('advertise_rate_startdate') }}" autocomplete="off" data-mask="00/00/0000">
+	                    </div>
+	                    @if ($errors->has('advertise_rate_startdate'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('advertise_rate_startdate') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="advertise_rate_enddate" class="col-sm-2 control-label">End Date</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm input-mask" name="advertise_rate_enddate" id="advertise_rate_enddate" placeholder="e.g 17/08/1945" required="true" maxlength="10" value="{{ old('advertise_rate_enddate') }}" autocomplete="off" data-mask="00/00/0000">
+	                    </div>
+	                    @if ($errors->has('advertise_rate_enddate'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('advertise_rate_enddate') }}</strong>
 			                </span>
 			            @endif
 	                </div>
@@ -131,6 +179,7 @@
 @section('vendorjs')
 <script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/jquery.price_format.min.js') }}"></script>
+<script src="{{ url('js/input-mask.min.js') }}"></script>
 @endsection
 
 @section('customjs')
