@@ -16,6 +16,7 @@
                     <th data-column-id="media_name" data-order="asc">Media</th>
                     <th data-column-id="advertise_position_name" data-order="asc">Position</th>
                     <th data-column-id="advertise_size_name" data-order="asc">Size</th>
+                    <th data-column-id="paper_name" data-order="asc">Paper</th>
                     <th data-column-id="advertise_rate_code" data-order="asc">Code</th>
                     <th data-column-id="advertise_rate_normal" data-converter="price" data-order="asc">Normal Rate</th>
                     <th data-column-id="advertise_rate_discount" data-converter="price" data-order="asc">Discount Rate</th>

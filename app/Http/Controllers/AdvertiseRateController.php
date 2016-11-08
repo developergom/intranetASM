@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Carbon\Carbon;
 
 use Gate;
 use App\Http\Requests;
@@ -11,6 +12,7 @@ use App\AdvertisePosition;
 use App\AdvertiseRate;
 use App\AdvertiseSize;
 use App\Media;
+use App\Paper;
 
 class AdvertiseRateController extends Controller
 {
@@ -41,6 +43,7 @@ class AdvertiseRateController extends Controller
         $data['advertiseposition'] = AdvertisePosition::where('active','1')->orderBy('advertise_position_name')->get();
         $data['advertisesize'] = AdvertiseSize::where('active','1')->orderBy('advertise_size_name')->get();
         $data['media'] = Media::where('active','1')->orderBy('media_name')->get();
+        $data['paper'] = Paper::with('unit')->where('active','1')->orderBy('paper_name')->get();
         return view('vendor.material.master.advertise_rate.create', $data);
     }
 
@@ -56,7 +59,10 @@ class AdvertiseRateController extends Controller
             'media_id' => 'required',
             'advertise_position_id' => 'required',
             'advertise_size_id' => 'required',
+            'paper_id' => 'required',
             'advertise_rate_code' => 'required|max:15|unique:advertise_rates,advertise_rate_code',
+            'advertise_rate_startdate' => 'required|date_format:"d/m/Y"',
+            'advertise_rate_enddate' => 'required|date_format:"d/m/Y"',
             'advertise_rate_normal' => 'required|numeric|between:0,999999999999',
             'advertise_rate_discount' => 'numeric|between:0,999999999999',
         ]);
@@ -66,7 +72,10 @@ class AdvertiseRateController extends Controller
         $obj->media_id = $request->input('media_id');
         $obj->advertise_position_id = $request->input('advertise_position_id');
         $obj->advertise_size_id = $request->input('advertise_size_id');
+        $obj->paper_id = $request->input('paper_id');
         $obj->advertise_rate_code = $request->input('advertise_rate_code');
+        $obj->advertise_rate_startdate = Carbon::createFromFormat('d/m/Y', $request->input('advertise_rate_startdate'))->toDateString();
+        $obj->advertise_rate_enddate = Carbon::createFromFormat('d/m/Y', $request->input('advertise_rate_enddate'))->toDateString();
         $obj->advertise_rate_normal = $request->input('advertise_rate_normal');
         $obj->advertise_rate_discount = $request->input('advertise_rate_discount');
         $obj->active = '1';
@@ -91,7 +100,11 @@ class AdvertiseRateController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $data = array();
-        $data['advertiserate'] = AdvertiseRate::where('active','1')->find($id);
+        $data['advertiserate'] = AdvertiseRate::with('paper', 'advertisesize', 'advertiseposition')->where('advertise_rates.active','1')->find($id);
+        $advertise_rate_startdate = Carbon::createFromFormat('Y-m-d', ($data['advertiserate']->advertise_rate_startdate==null) ? date('Y-m-d') : $data['advertiserate']->advertise_rate_startdate);
+        $advertise_rate_enddate = Carbon::createFromFormat('Y-m-d', ($data['advertiserate']->advertise_rate_enddate==null) ? date('Y-m-d') : $data['advertiserate']->advertise_rate_enddate);
+        $data['advertise_rate_startdate'] = $advertise_rate_startdate->format('d/m/Y');
+        $data['advertise_rate_enddate'] = $advertise_rate_enddate->format('d/m/Y');
         return view('vendor.material.master.advertise_rate.show', $data);
     }
 
@@ -110,7 +123,14 @@ class AdvertiseRateController extends Controller
         $data['advertiseposition'] = AdvertisePosition::where('active','1')->orderBy('advertise_position_name')->get();
         $data['advertisesize'] = AdvertiseSize::where('active','1')->orderBy('advertise_size_name')->get();
         $data['media'] = Media::where('active','1')->orderBy('media_name')->get();
-        $data['advertiserate'] = AdvertiseRate::where('active','1')->find($id);
+        $data['advertiserate'] = AdvertiseRate::with('paper', 'advertisesize', 'advertiseposition')->where('active','1')->find($id);
+        $data['paper'] = Paper::with('unit')->where('active','1')->orderBy('paper_name')->get();
+
+        $advertise_rate_startdate = Carbon::createFromFormat('Y-m-d', ($data['advertiserate']->advertise_rate_startdate==null) ? date('Y-m-d') : $data['advertiserate']->advertise_rate_startdate);
+        $advertise_rate_enddate = Carbon::createFromFormat('Y-m-d', ($data['advertiserate']->advertise_rate_enddate==null) ? date('Y-m-d') : $data['advertiserate']->advertise_rate_enddate);
+        $data['advertise_rate_startdate'] = $advertise_rate_startdate->format('d/m/Y');
+        $data['advertise_rate_enddate'] = $advertise_rate_enddate->format('d/m/Y');
+        
         return view('vendor.material.master.advertise_rate.edit', $data);
     }
 
@@ -127,7 +147,10 @@ class AdvertiseRateController extends Controller
             'media_id' => 'required',
             'advertise_position_id' => 'required',
             'advertise_size_id' => 'required',
+            'paper_id' => 'required',
             'advertise_rate_code' => 'required|max:15|unique:advertise_rates,advertise_rate_code,' . $id . ',advertise_rate_id',
+            'advertise_rate_startdate' => 'required|date_format:"d/m/Y"',
+            'advertise_rate_enddate' => 'required|date_format:"d/m/Y"',
             'advertise_rate_normal' => 'required|numeric|between:0,999999999999',
             'advertise_rate_discount' => 'numeric|between:0,999999999999',
         ]);
@@ -137,7 +160,10 @@ class AdvertiseRateController extends Controller
         $obj->media_id = $request->input('media_id');
         $obj->advertise_position_id = $request->input('advertise_position_id');
         $obj->advertise_size_id = $request->input('advertise_size_id');
+        $obj->paper_id = $request->input('paper_id');
         $obj->advertise_rate_code = $request->input('advertise_rate_code');
+        $obj->advertise_rate_startdate = Carbon::createFromFormat('d/m/Y', $request->input('advertise_rate_startdate'))->toDateString();
+        $obj->advertise_rate_enddate = Carbon::createFromFormat('d/m/Y', $request->input('advertise_rate_enddate'))->toDateString();
         $obj->advertise_rate_normal = $request->input('advertise_rate_normal');
         $obj->advertise_rate_discount = $request->input('advertise_rate_discount');
         $obj->updated_by = $request->user()->user_id;
@@ -185,10 +211,12 @@ class AdvertiseRateController extends Controller
         $data['rows'] = AdvertiseRate::join('advertise_positions','advertise_positions.advertise_position_id','=','advertise_rates.advertise_position_id')
                             ->join('advertise_sizes','advertise_sizes.advertise_size_id','=','advertise_rates.advertise_size_id')
                             ->join('medias','medias.media_id','=','advertise_rates.media_id')
+                            ->join('papers','papers.paper_id','=','advertise_rates.paper_id')
                             ->where('advertise_rates.active','1')
                             ->where(function($query) use($searchPhrase) {
                                 $query->where('advertise_position_name','like','%' . $searchPhrase . '%')
                                         ->orWhere('advertise_size_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('paper_name','like','%' . $searchPhrase . '%')
                                         ->orWhere('media_name','like','%' . $searchPhrase . '%')
                                         ->orWhere('advertise_rate_code','like','%' . $searchPhrase . '%')
                                         ->orWhere('advertise_rate_normal','like','%' . $searchPhrase . '%')
@@ -199,10 +227,12 @@ class AdvertiseRateController extends Controller
         $data['total'] = AdvertiseRate::join('advertise_positions','advertise_positions.advertise_position_id','=','advertise_rates.advertise_position_id')
                             ->join('advertise_sizes','advertise_sizes.advertise_size_id','=','advertise_rates.advertise_size_id')
                             ->join('medias','medias.media_id','=','advertise_rates.media_id')
+                            ->join('papers','papers.paper_id','=','advertise_rates.paper_id')
                             ->where('advertise_rates.active','1')
                             ->where(function($query) use($searchPhrase) {
                                 $query->where('advertise_position_name','like','%' . $searchPhrase . '%')
                                         ->orWhere('advertise_size_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('paper_name','like','%' . $searchPhrase . '%')
                                         ->orWhere('media_name','like','%' . $searchPhrase . '%')
                                         ->orWhere('advertise_rate_code','like','%' . $searchPhrase . '%')
                                         ->orWhere('advertise_rate_normal','like','%' . $searchPhrase . '%')

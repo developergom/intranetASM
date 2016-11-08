@@ -25,4 +25,9 @@ class Paper extends Model
 	{
 		return $this->belongsTo('App\Unit','unit_id');
 	}
+
+	public function advertiserate()
+    {
+    	return $this->hasMany('App\AdvertiseRate','paper_id');
+    }
 }

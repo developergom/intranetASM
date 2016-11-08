@@ -30,10 +30,34 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="paper_id" class="col-sm-2 control-label">Paper</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                    	<input type="text" class="form-control input-sm" value="{{ $advertiserate->paper->paper_name }}" disabled="true">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="advertise_rate_code" class="col-sm-2 control-label">Code</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <input type="text" class="form-control input-sm" name="advertise_rate_code" id="advertise_rate_code" placeholder="Advertise Rate Code" required="true" maxlength="15" value="{{ $advertiserate->advertise_rate_code }}" disabled="true">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="advertise_rate_startdate" class="col-sm-2 control-label">Start Date</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm input-mask" name="advertise_rate_startdate" id="advertise_rate_startdate" placeholder="e.g 17/08/1945" required="true" maxlength="10" value="{{ $advertise_rate_startdate }}" disabled="true">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="advertise_rate_enddate" class="col-sm-2 control-label">End Date</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm input-mask" name="advertise_rate_enddate" id="advertise_rate_enddate" placeholder="e.g 17/08/1945" required="true" maxlength="10" value="{{ $advertise_rate_enddate }}" disabled="true">
 	                    </div>
 	                </div>
 	            </div>

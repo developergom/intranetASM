@@ -19,6 +19,6 @@ class AdvertisePosition extends Model
 
 	public function advertiserate()
     {
-    	return $this->hasMany('App\AdvertiseRate','advertise_rate_id');
+    	return $this->hasMany('App\AdvertiseRate','advertise_position_id');
     }
 }
