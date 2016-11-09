@@ -19,6 +19,7 @@ class CreateInventoriesPlannerTable extends Migration
                 $table->string('inventory_planner_title');
                 $table->date('inventory_planner_deadline');
                 $table->text('inventory_planner_desc');
+                $table->char('inventory_planner_year', 4);
                 $table->integer('flow_no');
                 $table->integer('revision_no');
                 $table->integer('current_user');
