@@ -41,6 +41,11 @@ class EventPlan extends Model
 		return $this->belongsToMany('App\Implementation', 'event_plans_implementations');
 	}
 
+	public function inventoriesplanner()
+	{
+		return $this->belongsToMany('App\InventoryPlanner', 'inventory_planner_event_plan');
+	}
+
 	public function eventplanhistories()
 	{
 		return $this->hasMany('App\EventPlanHistory', 'event_plan_id');

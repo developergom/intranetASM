@@ -16,4 +16,9 @@ class PriceType extends Model
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
+
+	public function inventoryplannerprices()
+	{
+		return $this->hasMany('App\InventoryPlannerPrice', 'price_type_id');
+	}
 }

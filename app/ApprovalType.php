@@ -28,4 +28,8 @@ class ApprovalType extends Model
 	public function creativehistories() {
 		return $this->hasMany('App\CreativeHistory', 'approval_type_id');
 	}
+
+	public function inventoryplannerhistories() {
+		return $this->hasMany('App\InventoryPlannerHistory', 'approval_type_id');
+	}
 }

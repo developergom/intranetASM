@@ -44,4 +44,9 @@ class AdvertiseRate extends Model
 	{
 		return $this->belongsTo('App\Paper', 'paper_id');
 	}
+
+	public function inventoryplannerprices()
+	{
+		return $this->hasMany('App\InventoryPlannerPrice', 'advertise_rate_id');
+	}
 }

@@ -17,8 +17,8 @@ class InventoryType extends Model
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
 
-	/*public function inventory()
+	public function inventoriesplanner()
 	{
-		return $this->hasMany('App\Inventory', 'inventory_id');
-	}*/
+		return $this->hasMany('App\InventoryPlanner', 'inventory_type_id');
+	}
 }

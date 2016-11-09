@@ -21,4 +21,9 @@ class Implementation extends Model
     {
     	return $this->belongsToMany('App\EventPlan','action_plans_implementations');
     }
+
+    public function inventoriesplanner()
+    {
+    	return $this->belongsToMany('App\InventoryPlanner', 'inventory_planner_implementation');
+    }
 }
