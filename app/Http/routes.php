@@ -261,6 +261,15 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::resource('plan', 'AgendaController');
     });
 
+    Route::group(['prefix' => 'inventory'], function() {
+        //Inventory Planner
+        Route::post('inventoryplanner/apiList/{listtype}', 'InventoryPlannerController@apiList');
+        Route::post('inventoryplanner/apiDelete', 'InventoryPlannerController@apiDelete');
+        Route::resource('inventoryplanner', 'InventoryPlannerController');
+        Route::get('inventoryplanner/approve/{flow_no}/{id}', 'InventoryPlannerController@approve');
+        Route::post('inventoryplanner/approve/{flow_no}/{id}', 'InventoryPlannerController@postApprove');
+    });
+
     Route::group(['prefix' => 'config'], function() {
         //Announcement Management
         Route::post('announcement/apiList', 'AnnouncementController@apiList');
