@@ -78,23 +78,6 @@ class ActionPlanController extends Controller
         $data['mediagroups'] = MediaGroup::whereHas('users', function($query) use($request){
                             $query->where('users_media_groups.user_id', '=', $request->user()->user_id);
                         })->where('media_groups.active', '1')->orderBy('media_group_name')->get();
-        /*$data['medias'] = Media::whereHas('users', function($query) use($request){
-                            $query->where('users_medias.user_id', '=', $request->user()->user_id);
-                        })->where('medias.active', '1')->orderBy('media_name')->get();*/
-
-        /*$m = MediaEdition::whereHas('media', function($query) use($data){
-            $query->where('mediaeditions.media_id', '=', $data['medias']);
-        })->where('mediaeditions.active', '1')->orderBy('media_edition_no')->get();*/
-        /*$m = MediaEdition::where('mediaeditions.media_id', 'IN', $data['medias'])->where('mediaeditions.active', '1')->orderBy('media_edition_no')->get();*/
-
-
-        /*$medias = array();
-        foreach ($data['medias'] as $key => $value) {
-            array_push($medias, $value['media_id']);
-        }*/
-        /*dd($medias);*/
-
-        //$data['mediaeditions'] = MediaEdition::with('media')->whereIn('media_id', $medias)->where('active', '1')->orderBy('media_edition_no')->get();
 
         return view('vendor.material.plan.actionplan.create', $data);
     }

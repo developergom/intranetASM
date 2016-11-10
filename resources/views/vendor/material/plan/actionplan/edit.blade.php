@@ -100,7 +100,7 @@
 	                </div>
 	            </div>
 	            <div class="form-group" id="media_edition_id_container">
-	                <label for="media_edition_id" class="col-sm-2 control-label">Media Edition</label>
+	                <label for="media_edition_id" class="col-sm-2 control-label">Media Edition (Print Media)</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <select name="media_edition_id[]" id="media_edition_id" class="selectpicker" data-live-search="true" multiple>
@@ -123,7 +123,7 @@
 	                </div>
 	            </div>
 	            <div class="form-group" id="action_plan_pages_container">
-	                <label for="action_plan_pages" class="col-sm-2 control-label">Total Pages</label>
+	                <label for="action_plan_pages" class="col-sm-2 control-label">Total Pages (Print Media)</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <input type="text" class="form-control input-sm" name="action_plan_pages" id="action_plan_pages" placeholder="Total Pages (numeric)" maxlength="20" value="{{ $actionplan->action_plan_pages }}">
@@ -136,7 +136,7 @@
 	                </div>
 	            </div>
 	            <div class="form-group" id="action_plan_startdate_container">
-	                <label for="action_plan_startdate" class="col-sm-2 control-label">Start Date</label>
+	                <label for="action_plan_startdate" class="col-sm-2 control-label">Start Date (Digital Media)</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <input type="text" class="form-control input-sm input-mask" name="action_plan_startdate" id="action_plan_startdate" placeholder="e.g 17/08/1945" maxlength="10" value="{{ $startdate }}" autocomplete="off" data-mask="00/00/0000">
@@ -149,7 +149,7 @@
 	                </div>
 	            </div>
 	            <div class="form-group" id="action_plan_views_container">
-	                <label for="action_plan_views" class="col-sm-2 control-label">Total Views</label>
+	                <label for="action_plan_views" class="col-sm-2 control-label">Total Views (Digital Media)</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <input type="text" class="form-control input-sm" name="action_plan_views" id="action_plan_views" placeholder="Total Views (numeric)" maxlength="20" value="{{ $actionplan->action_plan_views }}">
