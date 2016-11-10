@@ -11,7 +11,9 @@ use Gate;
 use App\Http\Requests;
 use App\UploadFile;
 use App\ActionPlan;
+use App\AdvertisePosition;
 use App\AdvertiseRate;
+use App\AdvertiseSize;
 use App\EventPlan;
 use App\InventoryPlanner;
 use App\InventoryType;
@@ -21,6 +23,8 @@ use App\Implementation;
 use App\Media;
 use App\MediaGroup;
 use App\MediaEdition;
+use App\Paper;
+use App\PriceType;
 use App\User;
 
 use App\Ibrol\Libraries\FlowLibrary;
@@ -58,6 +62,28 @@ class InventoryPlannerController extends Controller
         $data = array();
 
         return view('vendor.material.inventory.inventoryplanner.list', $data);
+    }
+
+    public function create()
+    {
+		if(Gate::denies('Inventory Planner-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['inventory_types'] = InventoryType::where('active', '1')->orderBy('inventory_type_name')->get();
+        $data['implementations'] = Implementation::where('active', '1')->orderBy('implementation_month')->get();
+        $data['medias'] = Media::where('active', '1')->orderBy('media_name')->get();
+        $data['action_plans'] = ActionPlan::where('active', '1')->orderBy('action_plan_title')->get();
+        $data['event_plans'] = EventPlan::where('active', '1')->orderBy('event_plan_name')->get();
+
+        $data['advertise_sizes'] = AdvertiseSize::where('active', '1')->orderBy('advertise_size_name')->get();
+        $data['advertise_positions'] = AdvertisePosition::where('active', '1')->orderBy('advertise_position_name')->get();
+        $data['papers'] = Paper::where('active', '1')->orderBy('paper_name')->get();
+        $data['price_types'] = PriceType::where('active', '1')->orderBy('price_type_name')->get();
+
+     	return view('vendor.material.inventory.inventoryplanner.create', $data);   
     }
 
     public function apiList($listtype, Request $request)
