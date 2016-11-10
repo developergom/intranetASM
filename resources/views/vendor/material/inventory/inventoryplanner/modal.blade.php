@@ -132,6 +132,42 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="modal_add_inventory_planner_price_surcharge" class="col-sm-2 control-label">Surcharge</label>
+                        <div class="col-sm-10">
+                            <div class="fg-line">
+                                <input type="text" class="form-control input-sm input-mask" name="modal_add_inventory_planner_price_surcharge" id="modal_add_inventory_planner_price_surcharge" placeholder="Surcharge" required="true" maxlength="20" value="{{ old('modal_add_inventory_planner_price_surcharge') }}">
+                            </div>
+                            <small class="help-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal_add_inventory_planner_price_total_gross_rate" class="col-sm-2 control-label">Total Gross Rate</label>
+                        <div class="col-sm-10">
+                            <div class="fg-line">
+                                <input type="text" class="form-control input-sm input-mask" name="modal_add_inventory_planner_price_total_gross_rate" id="modal_add_inventory_planner_price_total_gross_rate" placeholder="Total Gross Rate" required="true" maxlength="20" value="{{ old('modal_add_inventory_planner_price_total_gross_rate') }}">
+                            </div>
+                            <small class="help-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal_add_inventory_planner_price_discount" class="col-sm-2 control-label">Discount</label>
+                        <div class="col-sm-10">
+                            <div class="fg-line">
+                                <input type="text" class="form-control input-sm input-mask" name="modal_add_inventory_planner_price_discount" id="modal_add_inventory_planner_price_discount" placeholder="Discount" required="true" maxlength="20" value="{{ old('modal_add_inventory_planner_price_discount') }}">
+                            </div>
+                            <small class="help-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal_add_inventory_planner_price_nett_rate" class="col-sm-2 control-label">Nett Rate</label>
+                        <div class="col-sm-10">
+                            <div class="fg-line">
+                                <input type="text" class="form-control input-sm input-mask" name="modal_add_inventory_planner_price_nett_rate" id="modal_add_inventory_planner_price_nett_rate" placeholder="Nett Rate" required="true" maxlength="20" value="{{ old('modal_add_inventory_planner_price_nett_rate') }}">
+                            </div>
+                            <small class="help-block"></small>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="modal_add_inventory_planner_price_remarks" class="col-sm-2 control-label">Remarks</label>
                         <div class="col-sm-10">
                             <div class="fg-line">
