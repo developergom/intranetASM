@@ -76,8 +76,8 @@ class ActionPlanController extends Controller
         $data = array();
 
         $data['mediagroups'] = MediaGroup::whereHas('users', function($query) use($request){
-                            $query->where('users_media_groups.user_id', '=', $request->user()->user_id);
-                        })->where('media_groups.active', '1')->orderBy('media_group_name')->get();
+                                $query->where('users_media_groups.user_id', '=', $request->user()->user_id);
+                            })->where('media_groups.active', '1')->orderBy('media_group_name')->get();
 
         return view('vendor.material.plan.actionplan.create', $data);
     }
