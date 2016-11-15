@@ -121,8 +121,12 @@ $(document).ready(function(){
 		getRates();
 	});
 
-	$('#modal_add_advertise_rate_id, #modal_add_inventory_planner_price_startdate, #modal_add_inventory_planner_price_enddate, #modal_add_inventory_planner_price_discount, #modal_add_inventory_planner_price_surcharge'). change(function() {
+	$('#modal_add_advertise_rate_id, #modal_add_inventory_planner_price_startdate, #modal_add_inventory_planner_price_enddate, #modal_add_inventory_planner_price_gross_rate, #modal_add_inventory_planner_price_discount, #modal_add_inventory_planner_price_surcharge'). change(function() {
 		getBasicRate($('#modal_add_advertise_rate_id').val());
+	});
+
+	$('.btn-add-inventory-planner-price').click(function() {
+		save_price();
 	});
 
 	function getPreviousUploaded() {
@@ -259,46 +263,43 @@ $(document).ready(function(){
 	}
 
 	function getBasicRate(advertise_rate_id) {
-		$.ajax({
-			url: base_url + 'inventory/inventoryplanner/api/getBasicRate',
-			dataType: 'json',
-			data: {
-					advertise_rate_id: advertise_rate_id,
-					_token: myToken
+		if(($('#modal_add_price_type_id').val() == '1') || ($('#modal_add_price_type_id').val() == '2') || ($('#modal_add_price_type_id').val() == '4')){
+			$.ajax({
+				url: base_url + 'inventory/inventoryplanner/api/getBasicRate',
+				dataType: 'json',
+				data: {
+						advertise_rate_id: advertise_rate_id,
+						_token: myToken
+					},
+				type: 'POST',
+				error: function(data) {
+					$('#modal_add_inventory_planner_price_gross_rate').val(0);
 				},
-			type: 'POST',
-			error: function(data) {
-				$('#modal_add_inventory_planner_price_gross_rate').val(0);
-			},
-			success: function(data) {
-				basic_rate = data.basic_rate;
-				
-				if($('#modal_add_price_type_id').val() == '1') {
-					//print
-					$('#modal_add_inventory_planner_price_gross_rate').val(basic_rate);
-				}else if($('#modal_add_price_type_id').val() == '2') {
-					//digital
-					var modal_start_date = generateDate($('#modal_add_inventory_planner_price_startdate').val());
-					var modal_end_date = generateDate($('#modal_add_inventory_planner_price_enddate').val());
-					//var diff = 2;
-					var diff = diffDate(modal_start_date, modal_end_date);
-					$('#modal_add_inventory_planner_price_gross_rate').val(basic_rate * diff);
-				}else if($('#modal_add_price_type_id').val() == '3') {
-					//event
+				success: function(data) {
+					basic_rate = data.basic_rate;
 					
-				}else if($('#modal_add_price_type_id').val() == '4') {
-					//creative
-					$('#modal_add_inventory_planner_price_gross_rate').val(basic_rate);
-				}else if($('#modal_add_price_type_id').val() == '5') {
-					//other
-					
-				}else{
-					
-				}
+					if($('#modal_add_price_type_id').val() == '1') {
+						//print
+						$('#modal_add_inventory_planner_price_gross_rate').val(basic_rate);
+					}else if($('#modal_add_price_type_id').val() == '2') {
+						//digital
+						var modal_start_date = generateDate($('#modal_add_inventory_planner_price_startdate').val());
+						var modal_end_date = generateDate($('#modal_add_inventory_planner_price_enddate').val());
+						//var diff = 2;
+						var diff = diffDate(modal_start_date, modal_end_date);
+						$('#modal_add_inventory_planner_price_gross_rate').val(basic_rate * diff);
+					}else if($('#modal_add_price_type_id').val() == '4') {
+						//creative
+						$('#modal_add_inventory_planner_price_gross_rate').val(basic_rate);
+					}
 
-				calculateRate();
-			}
-		});
+					calculateRate();
+				}
+			});
+		}else{
+
+			calculateRate();
+		}
 	}
 
 	function calculateRate() {
@@ -315,20 +316,152 @@ $(document).ready(function(){
 	}
 
 	function generateDate(dateString) { //format dd/mm/yyyy
-		var splitDate = dateString.split('/');
-		var hari = splitDate[0];
-		var bulan = splitDate[1];
-		var tahun = splitDate[2];
-
-		//return new Date(tahun, bulan, hari);
 		return moment(dateString, "DD-MM-YYYY");
 	}
 
 	function diffDate(date1, date2) {
-		/*var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-		var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); */
-
-
 		return date2.diff(date1, 'days');
+	}
+
+	function save_price() {
+		var isValid = false;
+		if($('#modal_add_price_type_id').val() == '1') {
+			//print
+			if($('#modal_add_media_id').val() == '') {
+				$('#modal_add_media_id').parents('.form-group').addClass('has-error').find('.help-block').html('Media Must Be Choosen.');
+		        $('#modal_add_media_id').focus();
+		        isValid = false;
+			}else if($('#modal_add_advertise_position_id').val() == '') {
+				$('#modal_add_advertise_position_id').parents('.form-group').addClass('has-error').find('.help-block').html('Advertise Position Must Be Choosen.');
+		        $('#modal_add_advertise_position_id').focus();
+		        isValid = false;
+			}else if($('#modal_add_advertise_size_id').val() == '') {
+				$('#modal_add_advertise_size_id').parents('.form-group').addClass('has-error').find('.help-block').html('Advertise Size Must Be Choosen.');
+		        $('#modal_add_advertise_size_id').focus();
+		        isValid = false;
+			}else if($('#modal_add_paper_id').val() == '') {
+				$('#modal_add_paper_id').parents('.form-group').addClass('has-error').find('.help-block').html('Paper Must Be Choosen.');
+		        $('#modal_add_paper_id').focus();
+		        isValid = false;
+			}else if($('#modal_add_advertise_rate_id').val() == '') {
+				$('#modal_add_advertise_rate_id').parents('.form-group').addClass('has-error').find('.help-block').html('Advertise Rate Must Be Choosen.');
+		        $('#modal_add_advertise_rate_id').focus();
+		        isValid = false;
+			}else{
+				$('#modal_add_media_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_advertise_position_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_advertise_size_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_paper_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_advertise_rate_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				isValid = true;
+
+				alert('Recording..');
+			}
+			
+		}else if($('#modal_add_price_type_id').val() == '2') {
+			//digital
+			if($('#modal_add_media_id').val() == '') {
+				$('#modal_add_media_id').parents('.form-group').addClass('has-error').find('.help-block').html('Media Must Be Choosen.');
+		        $('#modal_add_media_id').focus();
+		        isValid = false;
+			}else if($('#modal_add_advertise_position_id').val() == '') {
+				$('#modal_add_advertise_position_id').parents('.form-group').addClass('has-error').find('.help-block').html('Advertise Position Must Be Choosen.');
+		        $('#modal_add_advertise_position_id').focus();
+		        isValid = false;
+			}else if($('#modal_add_advertise_size_id').val() == '') {
+				$('#modal_add_advertise_size_id').parents('.form-group').addClass('has-error').find('.help-block').html('Advertise Size Must Be Choosen.');
+		        $('#modal_add_advertise_size_id').focus();
+		        isValid = false;
+			}else if($('#modal_add_paper_id').val() == '') {
+				$('#modal_add_paper_id').parents('.form-group').addClass('has-error').find('.help-block').html('Paper Must Be Choosen.');
+		        $('#modal_add_paper_id').focus();
+		        isValid = false;
+			}else if($('#modal_add_advertise_rate_id').val() == '') {
+				$('#modal_add_advertise_rate_id').parents('.form-group').addClass('has-error').find('.help-block').html('Advertise Rate Must Be Choosen.');
+		        $('#modal_add_advertise_rate_id').focus();
+		        isValid = false;
+			}else if($('#modal_add_inventory_planner_price_startdate').val() == '') {
+				$('#modal_add_inventory_planner_price_startdate').parents('.form-group').addClass('has-error').find('.help-block').html('Start Date Must Be Filled.');
+		        $('#modal_add_inventory_planner_price_startdate').focus();
+		        isValid = false;
+			}else if($('#modal_add_inventory_planner_price_enddate').val() == '') {
+				$('#modal_add_inventory_planner_price_enddate').parents('.form-group').addClass('has-error').find('.help-block').html('End Date Must Be Filled.');
+		        $('#modal_add_inventory_planner_price_enddate').focus();
+		        isValid = false;
+			}else if($('#modal_add_inventory_planner_price_deadline').val() == '') {
+				$('#modal_add_inventory_planner_price_deadline').parents('.form-group').addClass('has-error').find('.help-block').html('Deadline Must Be Filled.');
+		        $('#modal_add_inventory_planner_price_deadline').focus();
+		        isValid = false;
+			}else{
+				$('#modal_add_media_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_advertise_position_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_advertise_size_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_paper_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_advertise_rate_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_inventory_planner_price_startdate').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_inventory_planner_price_enddate').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_inventory_planner_price_deadline').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				isValid = true;
+
+				alert('Recording..');
+			}
+		}else if($('#modal_add_price_type_id').val() == '3') {
+			//event
+			if($('#modal_add_media_id').val() == '') {
+				$('#modal_add_media_id').parents('.form-group').addClass('has-error').find('.help-block').html('Media Must Be Choosen.');
+		        $('#modal_add_media_id').focus();
+		        isValid = false;
+			}else if($('#modal_add_inventory_planner_price_gross_rate').val() == '') {
+				$('#modal_add_inventory_planner_price_gross_rate').parents('.form-group').addClass('has-error').find('.help-block').html('Gross Rate Must Be Filled.');
+		        $('#modal_add_inventory_planner_price_gross_rate').focus();
+		        isValid = false;
+			}else{
+				$('#modal_add_media_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_advertise_position_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_advertise_size_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_paper_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_advertise_rate_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				isValid = true;
+
+				alert('Recording..');
+			}
+		}else if($('#modal_add_price_type_id').val() == '4') {
+			//creative
+			if($('#modal_add_media_id').val() == '') {
+				$('#modal_add_media_id').parents('.form-group').addClass('has-error').find('.help-block').html('Media Must Be Choosen.');
+		        $('#modal_add_media_id').focus();
+		        isValid = false;
+			}else if($('#modal_add_advertise_position_id').val() == '') {
+				$('#modal_add_advertise_position_id').parents('.form-group').addClass('has-error').find('.help-block').html('Advertise Position Must Be Choosen.');
+		        $('#modal_add_advertise_position_id').focus();
+		        isValid = false;
+			}else if($('#modal_add_advertise_size_id').val() == '') {
+				$('#modal_add_advertise_size_id').parents('.form-group').addClass('has-error').find('.help-block').html('Advertise Size Must Be Choosen.');
+		        $('#modal_add_advertise_size_id').focus();
+		        isValid = false;
+			}else if($('#modal_add_paper_id').val() == '') {
+				$('#modal_add_paper_id').parents('.form-group').addClass('has-error').find('.help-block').html('Paper Must Be Choosen.');
+		        $('#modal_add_paper_id').focus();
+		        isValid = false;
+			}else if($('#modal_add_advertise_rate_id').val() == '') {
+				$('#modal_add_advertise_rate_id').parents('.form-group').addClass('has-error').find('.help-block').html('Advertise Rate Must Be Choosen.');
+		        $('#modal_add_advertise_rate_id').focus();
+		        isValid = false;
+			}else{
+				$('#modal_add_media_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_advertise_position_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_advertise_size_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_paper_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_advertise_rate_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				isValid = true;
+
+				alert('Recording..');
+			}
+		}else if($('#modal_add_price_type_id').val() == '5') {
+			//other
+			
+		}else{
+			
+		}
 	}
 });
