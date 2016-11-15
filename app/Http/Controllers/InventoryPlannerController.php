@@ -291,7 +291,7 @@ class InventoryPlannerController extends Controller
 
     	$media_id = $request->input('media_id');
     	$advertise_position_id = $request->input('advertise_position_id');
-    	$advertise_size_id = $request->input('advertise_position_id');
+    	$advertise_size_id = $request->input('advertise_size_id');
     	$paper_id = $request->input('paper_id');
 
     	$data['rates'] = AdvertiseRate::where('media_id', $media_id)
@@ -302,5 +302,21 @@ class InventoryPlannerController extends Controller
     									->orderBy('advertise_rate_code')
     									->get();
     	return response()->json($data);
+    }
+
+    public function apiGetBasicRate(Request $request) {
+    	$data = array();
+
+    	$advertise_rate_id = $request->input('advertise_rate_id') or 0;
+    	if($advertise_rate_id != 0) {
+    		$rate = AdvertiseRate::find($advertise_rate_id);
+
+    		$data['basic_rate'] = $rate->advertise_rate_normal;	
+    	}else{
+    		$data['basic_rate'] = 0;
+    	}
+    	
+
+    	return $data;
     }
 }
