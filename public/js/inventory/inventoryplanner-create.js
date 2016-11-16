@@ -459,7 +459,24 @@ $(document).ready(function(){
 			}
 		}else if($('#modal_add_price_type_id').val() == '5') {
 			//other
-			
+			if($('#modal_add_media_id').val() == '') {
+				$('#modal_add_media_id').parents('.form-group').addClass('has-error').find('.help-block').html('Media Must Be Choosen.');
+		        $('#modal_add_media_id').focus();
+		        isValid = false;
+			}else if($('#modal_add_inventory_planner_price_gross_rate').val() == '') {
+				$('#modal_add_inventory_planner_price_gross_rate').parents('.form-group').addClass('has-error').find('.help-block').html('Gross Rate Must Be Filled.');
+		        $('#modal_add_inventory_planner_price_gross_rate').focus();
+		        isValid = false;
+			}else{
+				$('#modal_add_media_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_advertise_position_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_advertise_size_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_paper_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				$('#modal_add_advertise_rate_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
+				isValid = true;
+
+				alert('Recording..');
+			}
 		}else{
 			
 		}
