@@ -345,7 +345,15 @@ class InventoryPlannerController extends Controller
 
     	$price_type_id = $request->input('price_type_id');
     	$media_id = $request->input('media_id');
+    	$media_name = $request->input('media_name');
+    	$advertise_position_id = $request->input('advertise_position_id');
+    	$advertise_position_name = $request->input('advertise_position_name');
+    	$advertise_size_id = $request->input('advertise_size_id');
+    	$advertise_size_name = $request->input('advertise_size_name');
+    	$paper_id = $request->input('paper_id');
+    	$paper_name = $request->input('paper_name');
     	$advertise_rate_id = $request->input('advertise_rate_id');
+    	$advertise_rate_name = $request->input('advertise_rate_name');
     	$inventory_planner_print_price_gross_rate = $request->input('inventory_planner_print_price_gross_rate');
     	$inventory_planner_print_price_surcharge = $request->input('inventory_planner_print_price_surcharge');
     	$inventory_planner_print_price_total_gross_rate = $request->input('inventory_planner_print_price_total_gross_rate');
@@ -356,7 +364,15 @@ class InventoryPlannerController extends Controller
     	$price = array();
     	$price['price_type_id'] = $price_type_id;
     	$price['media_id'] = $media_id;
+    	$price['media_name'] = $media_name;
+    	$price['advertise_position_id'] = $advertise_position_id;
+    	$price['advertise_position_name'] = $advertise_position_name;
+    	$price['advertise_size_id'] = $advertise_size_id;
+    	$price['advertise_size_name'] = $advertise_size_name;
+    	$price['paper_id'] = $paper_id;
+    	$price['paper_name'] = $paper_name;
     	$price['advertise_rate_id'] = $advertise_rate_id;
+    	$price['advertise_rate_name'] = $advertise_rate_name;
     	$price['inventory_planner_print_price_gross_rate'] = $inventory_planner_print_price_gross_rate;
     	$price['inventory_planner_print_price_surcharge'] = $inventory_planner_print_price_surcharge;
     	$price['inventory_planner_print_price_total_gross_rate'] = $inventory_planner_print_price_total_gross_rate;

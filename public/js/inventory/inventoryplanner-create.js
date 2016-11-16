@@ -365,7 +365,15 @@ $(document).ready(function(){
 					data: {
 							price_type_id : $('#modal_add_price_type_id').val(),
 					    	media_id : $('#modal_add_media_id').val(),
+					    	media_name : $('#modal_add_media_id option:selected').text(),
+					    	advertise_position_id : $('#modal_add_advertise_position_id').val(),
+					    	advertise_position_name : $('#modal_add_advertise_position_id option:selected').text(),
+					    	advertise_size_id : $('#modal_add_advertise_size_id').val(),
+					    	advertise_size_name : $('#modal_add_advertise_size_id option:selected').text(),
+					    	paper_id : $('#modal_add_paper_id').val(),
+					    	paper_name : $('#modal_add_paper_id option:selected').text(),
 					    	advertise_rate_id : $('#modal_add_advertise_rate_id').val(),
+					    	advertise_rate_name : $('#modal_add_advertise_rate_id option:selected').text(),
 					    	inventory_planner_print_price_gross_rate : $('#modal_add_inventory_planner_price_gross_rate').val(),
 					    	inventory_planner_print_price_surcharge : $('#modal_add_inventory_planner_price_surcharge').val(),
 					    	inventory_planner_print_price_total_gross_rate : $('#modal_add_inventory_planner_price_total_gross_rate').val(),
@@ -381,6 +389,7 @@ $(document).ready(function(){
 					success: function(data) {
 						if(data.status == '200') {
 							alert('success');
+							load_print_prices();
 						}else{
 							alert('failed');
 						}
@@ -529,9 +538,23 @@ $(document).ready(function(){
 				$.each(data.prices, function(key, value) {
 					console.log(value);
 					html += '<tr>';
-					html += '<td></td>';
+					html += '<td>' + value.media_name + '</td>';
+					html += '<td>' + value.advertise_position_name + '</td>';
+					html += '<td>' + value.advertise_size_name + '</td>';
+					html += '<td>' + value.paper_name + '</td>';
+					html += '<td>' + value.advertise_rate_name + '</td>';
+					html += '<td>' + value.inventory_planner_print_price_gross_rate + '</td>';
+					html += '<td>' + value.inventory_planner_print_price_surcharge + '</td>';
+					html += '<td>' + value.inventory_planner_print_price_total_gross_rate + '</td>';
+					html += '<td>' + value.inventory_planner_print_price_discount + '</td>';
+					html += '<td>' + value.inventory_planner_print_price_nett_rate + '</td>';
+					html += '<td>' + value.inventory_planner_print_price_remarks + '</td>';
+					html += '<td>' + key + '</td>';
 					html += '</tr>';
 				});
+
+				$('#grid-data-listprint tbody').empty();
+				$('#grid-data-listprint tbody').append(html);
 			}
 		});
 	}
