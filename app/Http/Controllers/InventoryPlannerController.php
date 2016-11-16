@@ -23,7 +23,6 @@ use App\InventoryPlannerPrintPrice;
 use App\InventoryPlannerDigitalPrice;
 use App\InventoryPlannerCreativePrice;
 use App\InventoryPlannerEventPrice;
-use App\InventoryPlannerDigitalPrice;
 use App\Implementation;
 use App\Media;
 use App\MediaGroup;
@@ -323,5 +322,68 @@ class InventoryPlannerController extends Controller
     	
 
     	return $data;
+    }
+
+    public function apiLoadPrintPrices(Request $request) {
+    	if(Gate::denies('Inventory Planner-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+    	$data = array();
+
+    	$data['prices'] = $request->session()->get('inventory_print_prices_' . $request->user()->user_id);
+
+    	return response()->json($data);
+    }
+
+    public function apiStorePrintPrices(Request $request) {
+    	if(Gate::denies('Inventory Planner-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+    	$data = array();
+
+    	$price_type_id = $request->input('price_type_id');
+    	$media_id = $request->input('media_id');
+    	$advertise_rate_id = $request->input('advertise_rate_id');
+    	$inventory_planner_print_price_gross_rate = $request->input('inventory_planner_print_price_gross_rate');
+    	$inventory_planner_print_price_surcharge = $request->input('inventory_planner_print_price_surcharge');
+    	$inventory_planner_print_price_total_gross_rate = $request->input('inventory_planner_print_price_total_gross_rate');
+    	$inventory_planner_print_price_discount = $request->input('inventory_planner_print_price_discount');
+    	$inventory_planner_print_price_nett_rate = $request->input('inventory_planner_print_price_nett_rate');
+    	$inventory_planner_print_price_remarks = $request->input('inventory_planner_print_price_remarks');
+
+    	$price = array();
+    	$price['price_type_id'] = $price_type_id;
+    	$price['media_id'] = $media_id;
+    	$price['advertise_rate_id'] = $advertise_rate_id;
+    	$price['inventory_planner_print_price_gross_rate'] = $inventory_planner_print_price_gross_rate;
+    	$price['inventory_planner_print_price_surcharge'] = $inventory_planner_print_price_surcharge;
+    	$price['inventory_planner_print_price_total_gross_rate'] = $inventory_planner_print_price_total_gross_rate;
+    	$price['inventory_planner_print_price_discount'] = $inventory_planner_print_price_discount;
+    	$price['inventory_planner_print_price_nett_rate'] = $inventory_planner_print_price_nett_rate;
+    	$price['inventory_planner_print_price_remarks'] = $inventory_planner_print_price_remarks;
+
+    	$prices = array();
+    	if($request->session()->has('inventory_print_prices_' . $request->user()->user_id)) {
+    		$prices = $request->session()->get('inventory_print_prices_' . $request->user()->user_id);
+    		$request->session()->forget('inventory_print_prices_' . $request->user()->user_id);
+    		$i = count($prices) + 1;
+    	}else{
+    		$i = 1;
+    	}
+
+    	$prices[$i] = $price;
+
+    	$request->session()->put('inventory_print_prices_' . $request->user()->user_id, $prices);
+    	
+    	/*if($request->session()->put('inventory_print_prices_' . $request->user()->user_id, $prices)) {
+    		$data['status'] = '200';
+    	}else{
+    		$data['status'] = '500';
+    	}*/
+    	$data['status'] = '200';
+
+    	return response()->json($data);
     }
 }

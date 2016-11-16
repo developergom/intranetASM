@@ -271,6 +271,8 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('inventoryplanner/api/getMedias', 'InventoryPlannerController@apiGetMedias');
         Route::post('inventoryplanner/api/getRates', 'InventoryPlannerController@apiGetRates');
         Route::post('inventoryplanner/api/getBasicRate', 'InventoryPlannerController@apiGetBasicRate');
+        Route::post('inventoryplanner/api/storePrintPrices', 'InventoryPlannerController@apiStorePrintPrices');
+        Route::get('inventoryplanner/api/loadPrintPrices', 'InventoryPlannerController@apiLoadPrintPrices');
     });
 
     Route::group(['prefix' => 'config'], function() {

@@ -53,6 +53,8 @@ $(document).ready(function(){
 		});
 	});
 
+	//load all prices
+	load_all_prices();
 
 	//modal
 	$(".command-add-inventory-planner-price").click(function(){
@@ -356,6 +358,34 @@ $(document).ready(function(){
 				isValid = true;
 
 				alert('Recording..');
+
+				$.ajax({
+					url: base_url + 'inventory/inventoryplanner/api/storePrintPrices',
+					dataType: 'json',
+					data: {
+							price_type_id : $('#modal_add_price_type_id').val(),
+					    	media_id : $('#modal_add_media_id').val(),
+					    	advertise_rate_id : $('#modal_add_advertise_rate_id').val(),
+					    	inventory_planner_print_price_gross_rate : $('#modal_add_inventory_planner_price_gross_rate').val(),
+					    	inventory_planner_print_price_surcharge : $('#modal_add_inventory_planner_price_surcharge').val(),
+					    	inventory_planner_print_price_total_gross_rate : $('#modal_add_inventory_planner_price_total_gross_rate').val(),
+					    	inventory_planner_print_price_discount : $('#modal_add_inventory_planner_price_discount').val(),
+					    	inventory_planner_print_price_nett_rate : $('#modal_add_inventory_planner_price_nett_rate').val(),
+					    	inventory_planner_print_price_remarks : $('#modal_add_inventory_planner_price_remarks').val(),
+							_token: myToken
+						},
+					type: 'POST',
+					error: function(data) {
+						alert('error');
+					},
+					success: function(data) {
+						if(data.status == '200') {
+							alert('success');
+						}else{
+							alert('failed');
+						}
+					}
+				});
 			}
 			
 		}else if($('#modal_add_price_type_id').val() == '2') {
@@ -480,5 +510,29 @@ $(document).ready(function(){
 		}else{
 			
 		}
+	}
+
+	function load_all_prices() {
+		load_print_prices();
+	}
+
+	function load_print_prices() {
+		$.ajax({
+			url: base_url + 'inventory/inventoryplanner/api/loadPrintPrices',
+			dataType: 'json',
+			type: 'GET',
+			error: function(data) {
+				alert('error');
+			},
+			success: function(data) {
+				var html = '';
+				$.each(data.prices, function(key, value) {
+					console.log(value);
+					html += '<tr>';
+					html += '<td></td>';
+					html += '</tr>';
+				});
+			}
+		});
 	}
 });
