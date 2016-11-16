@@ -31,7 +31,7 @@
                             <small class="help-block"></small>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="modal_add_media_edition_id" class="col-sm-2 control-label">Edition No</label>
                         <div class="col-sm-10">
                             <div class="fg-line">
@@ -41,7 +41,7 @@
                             </div>
                             <small class="help-block"></small>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <label for="modal_add_advertise_position_id" class="col-sm-2 control-label">Position</label>
                         <div class="col-sm-10">

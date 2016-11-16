@@ -64,7 +64,7 @@ class InventoryPlannerController extends Controller
         return view('vendor.material.inventory.inventoryplanner.list', $data);
     }
 
-    public function create()
+    public function create(Request $request)
     {
 		if(Gate::denies('Inventory Planner-Create')) {
             abort(403, 'Unauthorized action.');
@@ -74,7 +74,9 @@ class InventoryPlannerController extends Controller
 
         $data['inventory_types'] = InventoryType::where('active', '1')->orderBy('inventory_type_name')->get();
         $data['implementations'] = Implementation::where('active', '1')->orderBy('implementation_month')->get();
-        $data['medias'] = Media::where('active', '1')->orderBy('media_name')->get();
+        $data['medias'] = Media::whereHas('users', function($query) use($request){
+	                                $query->where('users_medias.user_id', '=', $request->user()->user_id);
+	                            })->where('medias.active', '1')->orderBy('media_name')->get();
         $data['action_plans'] = ActionPlan::where('active', '1')->orderBy('action_plan_title')->get();
         $data['event_plans'] = EventPlan::where('active', '1')->orderBy('event_plan_name')->get();
 
@@ -271,5 +273,50 @@ class InventoryPlannerController extends Controller
         
 
         return response()->json($data);
+    }
+
+
+    public function apiGetMedias(Request $request) {
+    	$data = array();
+
+    	$medias = $request->input('medias');
+
+    	$data['media'] = Media::whereIn('media_id', $medias)->where('active', '1')->orderBy('media_name')->get();
+
+    	return response()->json($data);
+    }
+
+    public function apiGetRates(Request $request) {
+    	$data = array();
+
+    	$media_id = $request->input('media_id');
+    	$advertise_position_id = $request->input('advertise_position_id');
+    	$advertise_size_id = $request->input('advertise_size_id');
+    	$paper_id = $request->input('paper_id');
+
+    	$data['rates'] = AdvertiseRate::where('media_id', $media_id)
+    									->where('advertise_position_id', $advertise_position_id)
+    									->where('advertise_size_id', $advertise_size_id)
+    									->where('paper_id', $paper_id)
+    									->where('advertise_rates.active', '1')
+    									->orderBy('advertise_rate_code')
+    									->get();
+    	return response()->json($data);
+    }
+
+    public function apiGetBasicRate(Request $request) {
+    	$data = array();
+
+    	$advertise_rate_id = $request->input('advertise_rate_id') or 0;
+    	if($advertise_rate_id != 0) {
+    		$rate = AdvertiseRate::find($advertise_rate_id);
+
+    		$data['basic_rate'] = $rate->advertise_rate_normal;	
+    	}else{
+    		$data['basic_rate'] = 0;
+    	}
+    	
+
+    	return $data;
     }
 }

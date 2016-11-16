@@ -268,6 +268,9 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::resource('inventoryplanner', 'InventoryPlannerController');
         Route::get('inventoryplanner/approve/{flow_no}/{id}', 'InventoryPlannerController@approve');
         Route::post('inventoryplanner/approve/{flow_no}/{id}', 'InventoryPlannerController@postApprove');
+        Route::post('inventoryplanner/api/getMedias', 'InventoryPlannerController@apiGetMedias');
+        Route::post('inventoryplanner/api/getRates', 'InventoryPlannerController@apiGetRates');
+        Route::post('inventoryplanner/api/getBasicRate', 'InventoryPlannerController@apiGetBasicRate');
     });
 
     Route::group(['prefix' => 'config'], function() {

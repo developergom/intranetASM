@@ -207,6 +207,136 @@
 	            	</div>
 	            </div>
 	            <div class="form-group">
+	            	<div class="col-sm-12">
+	            		<div role="tabpanel">
+				            <ul class="tab-nav" role="tablist">
+				                <li class="active"><a href="#listprint" aria-controls="listprint" role="tab" data-toggle="tab">Print</a></li>
+				                <li><a href="#listdigital" aria-controls="listdigital" role="tab" data-toggle="tab">Digital</a></li>
+				                <li><a href="#listevent" aria-controls="listevent" role="tab" data-toggle="tab">Event</a></li>
+				                <li><a href="#listcreative" aria-controls="listcreative" role="tab" data-toggle="tab">Creative</a></li>
+				                <li><a href="#listother" aria-controls="listother" role="tab" data-toggle="tab">Others</a></li>
+				            </ul>
+				            <div class="tab-content">
+				                <div role="tabpanel" class="tab-pane active" id="listprint">
+				                   <div class="table-responsive">
+				                        <table id="grid-data-listprint" class="table table-hover">
+				                            <thead>
+				                                <tr>
+				                                    <th data-column-id="print_media_name" data-order="asc">Media</th>
+				                                    <th data-column-id="print_advertise_position_name" data-order="asc">Position</th>
+				                                    <th data-column-id="print_advertise_size_name" data-order="asc">Size</th>
+				                                    <th data-column-id="print_paper_name" data-order="asc">Paper</th>
+				                                    <th data-column-id="print_advertise_rate_normal" data-order="asc">Rate</th>
+				                                    <th data-column-id="print_gross_rate" data-order="asc">Gross Rate</th>
+				                                    <th data-column-id="print_surcharge" data-order="asc">Surcharge</th>
+				                                    <th data-column-id="print_total_gross_rate" data-order="asc">Total Gross Rate</th>
+				                                    <th data-column-id="print_discount" data-order="asc">Discount</th>
+				                                    <th data-column-id="print_nett_rate" data-order="asc">Nett Rate</th>
+				                                    <th data-column-id="print_remarks" data-order="asc">Remarks</th>
+				                                    <th data-column-id="print_link" data-formatter="link-rua" data-sortable="false">Action</th>
+				                                </tr>
+				                            </thead>
+				                            <tbody>
+				                            </tbody>
+				                        </table>
+				                    </div>                 
+				                </div>
+				                <div role="tabpanel" class="tab-pane" id="listdigital">
+				                   <div class="table-responsive">
+				                        <table id="grid-data-listdigital" class="table table-hover">
+				                            <thead>
+				                                <tr>
+				                                    <th data-column-id="digital_media_name" data-order="asc">Media</th>
+				                                    <th data-column-id="digital_advertise_position_name" data-order="asc">Position</th>
+				                                    <th data-column-id="digital_advertise_size_name" data-order="asc">Size</th>
+				                                    <th data-column-id="digital_paper_name" data-order="asc">Paper</th>
+				                                    <th data-column-id="digital_advertise_rate_normal" data-order="asc">Rate</th>
+				                                    <th data-column-id="digital_startdate" data-order="asc">Start Date</th>
+				                                    <th data-column-id="digital_enddate" data-order="asc">End Date</th>
+				                                    <th data-column-id="digital_deadline" data-order="asc">Deadline</th>
+				                                    <th data-column-id="digital_gross_rate" data-order="asc">Gross Rate</th>
+				                                    <th data-column-id="digital_surcharge" data-order="asc">Surcharge</th>
+				                                    <th data-column-id="digital_total_gross_rate" data-order="asc">Total Gross Rate</th>
+				                                    <th data-column-id="digital_discount" data-order="asc">Discount</th>
+				                                    <th data-column-id="digital_nett_rate" data-order="asc">Nett Rate</th>
+				                                    <th data-column-id="digital_remarks" data-order="asc">Remarks</th>
+				                                    <th data-column-id="digital_link" data-formatter="link-rua" data-sortable="false">Action</th>
+				                                </tr>
+				                            </thead>
+				                            <tbody>
+				                            </tbody>
+				                        </table>
+				                    </div>                 
+				                </div>
+				                <div role="tabpanel" class="tab-pane" id="listevent">
+				                   <div class="table-responsive">
+				                        <table id="grid-data-listevent" class="table table-hover">
+				                            <thead>
+				                                <tr>
+				                                    <th data-column-id="event_media_name" data-order="asc">Media</th>
+				                                    <th data-column-id="event_gross_rate" data-order="asc">Gross Rate</th>
+				                                    <th data-column-id="event_surcharge" data-order="asc">Surcharge</th>
+				                                    <th data-column-id="event_total_gross_rate" data-order="asc">Total Gross Rate</th>
+				                                    <th data-column-id="event_discount" data-order="asc">Discount</th>
+				                                    <th data-column-id="event_nett_rate" data-order="asc">Nett Rate</th>
+				                                    <th data-column-id="event_remarks" data-order="asc">Remarks</th>
+				                                    <th data-column-id="event_link" data-formatter="link-rua" data-sortable="false">Action</th>
+				                                </tr>
+				                            </thead>
+				                            <tbody>
+				                            </tbody>
+				                        </table>
+				                    </div>                 
+				                </div>
+				                <div role="tabpanel" class="tab-pane" id="listcreative">
+				                   <div class="table-responsive">
+				                        <table id="grid-data-listcreative" class="table table-hover">
+				                            <thead>
+				                                <tr>
+				                                    <th data-column-id="creative_media_name" data-order="asc">Media</th>
+				                                    <th data-column-id="creative_advertise_position_name" data-order="asc">Position</th>
+				                                    <th data-column-id="creative_advertise_size_name" data-order="asc">Size</th>
+				                                    <th data-column-id="creative_paper_name" data-order="asc">Paper</th>
+				                                    <th data-column-id="creative_advertise_rate_normal" data-order="asc">Rate</th>
+				                                    <th data-column-id="creative_gross_rate" data-order="asc">Gross Rate</th>
+				                                    <th data-column-id="creative_surcharge" data-order="asc">Surcharge</th>
+				                                    <th data-column-id="creative_total_gross_rate" data-order="asc">Total Gross Rate</th>
+				                                    <th data-column-id="creative_discount" data-order="asc">Discount</th>
+				                                    <th data-column-id="creative_nett_rate" data-order="asc">Nett Rate</th>
+				                                    <th data-column-id="creative_remarks" data-order="asc">Remarks</th>
+				                                    <th data-column-id="creative_link" data-formatter="link-rua" data-sortable="false">Action</th>
+				                                </tr>
+				                            </thead>
+				                            <tbody>
+				                            </tbody>
+				                        </table>
+				                    </div>                 
+				                </div>
+				                <div role="tabpanel" class="tab-pane" id="listother">
+				                   <div class="table-responsive">
+				                        <table id="grid-data-listother" class="table table-hover">
+				                            <thead>
+				                                <tr>
+				                                    <th data-column-id="other_media_name" data-order="asc">Media</th>
+				                                    <th data-column-id="other_gross_rate" data-order="asc">Gross Rate</th>
+				                                    <th data-column-id="other_surcharge" data-order="asc">Surcharge</th>
+				                                    <th data-column-id="other_total_gross_rate" data-order="asc">Total Gross Rate</th>
+				                                    <th data-column-id="other_discount" data-order="asc">Discount</th>
+				                                    <th data-column-id="other_nett_rate" data-order="asc">Nett Rate</th>
+				                                    <th data-column-id="other_remarks" data-order="asc">Remarks</th>
+				                                    <th data-column-id="other_link" data-formatter="link-rua" data-sortable="false">Action</th>
+				                                </tr>
+				                            </thead>
+				                            <tbody>
+				                            </tbody>
+				                        </table>
+				                    </div>                 
+				                </div>
+				            </div>
+				        </div>
+	            	</div>
+	            </div>
+	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
 	                    <a href="{{ url('inventory/inventoryplanner') }}" class="btn btn-danger btn-sm">Back</a>
