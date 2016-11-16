@@ -66,4 +66,29 @@ class Media extends Model
 	{
 		return $this->hasMany('App\InventoryPlannerPrice', 'media_id');
 	}
+
+	public function inventoryplannerprintprices()
+	{
+		return $this->hasMany('App\InventoryPlannerPrintPrice', 'media_id');
+	}
+
+	public function inventoryplannerdigitalprices()
+	{
+		return $this->hasMany('App\InventoryPlannerDigitalPrice', 'media_id');
+	}
+
+	public function inventoryplannereventprices()
+	{
+		return $this->hasMany('App\InventoryPlannerEventPrice', 'media_id');
+	}
+
+	public function inventoryplannercreativeprices()
+	{
+		return $this->hasMany('App\InventoryPlannerCreativePrice', 'media_id');
+	}
+
+	public function inventoryplannerotherprices()
+	{
+		return $this->hasMany('App\InventoryPlannerOtherPrice', 'media_id');
+	}
 }

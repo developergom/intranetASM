@@ -58,6 +58,31 @@ class InventoryPlanner extends Model
 		return $this->hasMany('App\InventoryPlannerPrice', 'inventory_planner_id');
 	}
 
+	public function inventoryplannerprintprices()
+	{
+		return $this->hasMany('App\InventoryPlannerPrintPrice', 'inventory_planner_id');
+	}
+
+	public function inventoryplannerdigitalprices()
+	{
+		return $this->hasMany('App\InventoryPlannerDigitalPrice', 'inventory_planner_id');
+	}
+
+	public function inventoryplannereventprices()
+	{
+		return $this->hasMany('App\InventoryPlannerEventPrice', 'inventory_planner_id');
+	}
+
+	public function inventoryplannercreativeprices()
+	{
+		return $this->hasMany('App\InventoryPlannerCreativePrice', 'inventory_planner_id');
+	}
+
+	public function inventoryplannerotherprices()
+	{
+		return $this->hasMany('App\InventoryPlannerOtherPrice', 'inventory_planner_id');
+	}
+
 	public function inventoryhistories()
 	{
 		return $this->hasMany('App\InventoryPlannerHistory', 'inventory_planner_id');
