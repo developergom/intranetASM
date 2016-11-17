@@ -283,6 +283,9 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('inventoryplanner/api/storeCreativePrices', 'InventoryPlannerController@apiStoreCreativePrices');
         Route::post('inventoryplanner/api/deleteCreativePrices', 'InventoryPlannerController@apiDeleteCreativePrices');
         Route::get('inventoryplanner/api/loadCreativePrices', 'InventoryPlannerController@apiLoadCreativePrices');
+        Route::post('inventoryplanner/api/storeOtherPrices', 'InventoryPlannerController@apiStoreOtherPrices');
+        Route::post('inventoryplanner/api/deleteOtherPrices', 'InventoryPlannerController@apiDeleteOtherPrices');
+        Route::get('inventoryplanner/api/loadOtherPrices', 'InventoryPlannerController@apiLoadOtherPrices');
     });
 
     Route::group(['prefix' => 'config'], function() {
