@@ -199,6 +199,9 @@ $(document).ready(function(){
 		$('#modal_add_inventory_planner_price_total_gross_rate').val(total_gross_rate);
 		$('#modal_add_inventory_planner_price_discount').val(discount);
 		$('#modal_add_inventory_planner_price_nett_rate').val(nett_rate);
+		$('#modal_add_inventory_planner_price_gross_rate_mask').val();
+		$('#modal_add_inventory_planner_price_total_gross_rate_mask').val();
+		$('#modal_add_inventory_planner_price_nett_rate_mask').val();
 	}
 
 	function enabledModalAdd() {
@@ -300,6 +303,7 @@ $(document).ready(function(){
 					if($('#modal_add_price_type_id').val() == '1') {
 						//print
 						$('#modal_add_inventory_planner_price_gross_rate').val(basic_rate);
+						$('#modal_add_inventory_planner_price_gross_rate_mask').val(convertNumber(basic_rate));
 					}else if($('#modal_add_price_type_id').val() == '2') {
 						//digital
 						var modal_start_date = generateDate($('#modal_add_inventory_planner_price_startdate').val());
@@ -307,9 +311,11 @@ $(document).ready(function(){
 						//var diff = 2;
 						var diff = diffDate(modal_start_date, modal_end_date);
 						$('#modal_add_inventory_planner_price_gross_rate').val(basic_rate * diff);
+						$('#modal_add_inventory_planner_price_gross_rate_mask').val(convertNumber(basic_rate * diff));
 					}else if($('#modal_add_price_type_id').val() == '4') {
 						//creative
 						$('#modal_add_inventory_planner_price_gross_rate').val(basic_rate);
+						$('#modal_add_inventory_planner_price_gross_rate_mask').val(convertNumber(gross_rate));
 					}
 
 					calculateRate();
@@ -332,6 +338,9 @@ $(document).ready(function(){
 		$('#modal_add_inventory_planner_price_total_gross_rate').val(total_gross_rate);
 		$('#modal_add_inventory_planner_price_discount').val(discount);
 		$('#modal_add_inventory_planner_price_nett_rate').val(nett_rate);
+
+		$('#modal_add_inventory_planner_price_total_gross_rate_mask').val(convertNumber(total_gross_rate));
+		$('#modal_add_inventory_planner_price_nett_rate_mask').val(convertNumber(nett_rate));
 	}
 
 	function generateDate(dateString) { //format dd/mm/yyyy
@@ -405,6 +414,7 @@ $(document).ready(function(){
 						if(data.status == '200') {
 							swal("Success!", "Your package has been added.", "success");
 							load_print_prices();
+							$('.btn-close-inventory-planner-price').click();
 						}else{
 							swal("Failed!", "Adding data failed.", "error");
 						}
@@ -581,12 +591,12 @@ $(document).ready(function(){
 					html += '<td>' + value.advertise_size_name + '</td>';
 					html += '<td>' + value.paper_name + '</td>';
 					html += '<td>' + value.advertise_rate_name + '</td>';
-					html += '<td>' + value.inventory_planner_print_price_gross_rate + '</td>';
-					html += '<td>' + value.inventory_planner_print_price_surcharge + '</td>';
-					html += '<td>' + value.inventory_planner_print_price_total_gross_rate + '</td>';
-					html += '<td>' + value.inventory_planner_print_price_discount + '</td>';
-					html += '<td>' + value.inventory_planner_print_price_nett_rate + '</td>';
-					html += '<td>' + value.inventory_planner_print_price_remarks + '</td>';
+					html += '<td>' + convertNumber(value.inventory_planner_print_price_gross_rate) + '</td>';
+					html += '<td>' + convertNumber(value.inventory_planner_print_price_surcharge) + '</td>';
+					html += '<td>' + convertNumber(value.inventory_planner_print_price_total_gross_rate) + '</td>';
+					html += '<td>' + convertNumber(value.inventory_planner_print_price_discount) + '</td>';
+					html += '<td>' + convertNumber(value.inventory_planner_print_price_nett_rate) + '</td>';
+					html += '<td>' + convertNumber(value.inventory_planner_print_price_remarks) + '</td>';
 					html += '<td><a title="Delete Price" href="javascript:void(0);" class="btn btn-icon btn-delete-print-prices waves-effect waves-circle" type="button" data-key="' + key + '"><span class="zmdi zmdi-delete"></span></a></td>';
 					html += '</tr>';
 				});
@@ -596,4 +606,6 @@ $(document).ready(function(){
 			}
 		});
 	}
+
+	function convertNumber(value) { return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."); }
 });

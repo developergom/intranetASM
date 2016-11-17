@@ -389,7 +389,7 @@ class InventoryPlannerController extends Controller
     		$i = 1;
     	}
 
-    	$prices[$i] = $price;
+    	$prices[] = $price;
 
     	$request->session()->put('inventory_print_prices_' . $request->user()->user_id, $prices);
     	

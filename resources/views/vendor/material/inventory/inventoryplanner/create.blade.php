@@ -228,9 +228,9 @@
 				                                    <th data-column-id="print_paper_name" data-order="asc">Paper</th>
 				                                    <th data-column-id="print_advertise_rate_normal" data-order="asc">Rate</th>
 				                                    <th data-column-id="print_gross_rate" data-order="asc">Gross Rate</th>
-				                                    <th data-column-id="print_surcharge" data-order="asc">Surcharge</th>
+				                                    <th data-column-id="print_surcharge" data-order="asc">Surcharge (%)</th>
 				                                    <th data-column-id="print_total_gross_rate" data-order="asc">Total Gross Rate</th>
-				                                    <th data-column-id="print_discount" data-order="asc">Discount</th>
+				                                    <th data-column-id="print_discount" data-order="asc">Discount (%)</th>
 				                                    <th data-column-id="print_nett_rate" data-order="asc">Nett Rate</th>
 				                                    <th data-column-id="print_remarks" data-order="asc">Remarks</th>
 				                                    <th data-column-id="print_link" data-formatter="link-rua" data-sortable="false">Action</th>
@@ -255,9 +255,9 @@
 				                                    <th data-column-id="digital_enddate" data-order="asc">End Date</th>
 				                                    <th data-column-id="digital_deadline" data-order="asc">Deadline</th>
 				                                    <th data-column-id="digital_gross_rate" data-order="asc">Gross Rate</th>
-				                                    <th data-column-id="digital_surcharge" data-order="asc">Surcharge</th>
+				                                    <th data-column-id="digital_surcharge" data-order="asc">Surcharge (%)</th>
 				                                    <th data-column-id="digital_total_gross_rate" data-order="asc">Total Gross Rate</th>
-				                                    <th data-column-id="digital_discount" data-order="asc">Discount</th>
+				                                    <th data-column-id="digital_discount" data-order="asc">Discount (%)</th>
 				                                    <th data-column-id="digital_nett_rate" data-order="asc">Nett Rate</th>
 				                                    <th data-column-id="digital_remarks" data-order="asc">Remarks</th>
 				                                    <th data-column-id="digital_link" data-formatter="link-rua" data-sortable="false">Action</th>
@@ -275,9 +275,9 @@
 				                                <tr>
 				                                    <th data-column-id="event_media_name" data-order="asc">Media</th>
 				                                    <th data-column-id="event_gross_rate" data-order="asc">Gross Rate</th>
-				                                    <th data-column-id="event_surcharge" data-order="asc">Surcharge</th>
+				                                    <th data-column-id="event_surcharge" data-order="asc">Surcharge (%)</th>
 				                                    <th data-column-id="event_total_gross_rate" data-order="asc">Total Gross Rate</th>
-				                                    <th data-column-id="event_discount" data-order="asc">Discount</th>
+				                                    <th data-column-id="event_discount" data-order="asc">Discount (%)</th>
 				                                    <th data-column-id="event_nett_rate" data-order="asc">Nett Rate</th>
 				                                    <th data-column-id="event_remarks" data-order="asc">Remarks</th>
 				                                    <th data-column-id="event_link" data-formatter="link-rua" data-sortable="false">Action</th>
@@ -299,9 +299,9 @@
 				                                    <th data-column-id="creative_paper_name" data-order="asc">Paper</th>
 				                                    <th data-column-id="creative_advertise_rate_normal" data-order="asc">Rate</th>
 				                                    <th data-column-id="creative_gross_rate" data-order="asc">Gross Rate</th>
-				                                    <th data-column-id="creative_surcharge" data-order="asc">Surcharge</th>
+				                                    <th data-column-id="creative_surcharge" data-order="asc">Surcharge (%)</th>
 				                                    <th data-column-id="creative_total_gross_rate" data-order="asc">Total Gross Rate</th>
-				                                    <th data-column-id="creative_discount" data-order="asc">Discount</th>
+				                                    <th data-column-id="creative_discount" data-order="asc">Discount (%)</th>
 				                                    <th data-column-id="creative_nett_rate" data-order="asc">Nett Rate</th>
 				                                    <th data-column-id="creative_remarks" data-order="asc">Remarks</th>
 				                                    <th data-column-id="creative_link" data-formatter="link-rua" data-sortable="false">Action</th>
@@ -319,9 +319,9 @@
 				                                <tr>
 				                                    <th data-column-id="other_media_name" data-order="asc">Media</th>
 				                                    <th data-column-id="other_gross_rate" data-order="asc">Gross Rate</th>
-				                                    <th data-column-id="other_surcharge" data-order="asc">Surcharge</th>
+				                                    <th data-column-id="other_surcharge" data-order="asc">Surcharge (%)</th>
 				                                    <th data-column-id="other_total_gross_rate" data-order="asc">Total Gross Rate</th>
-				                                    <th data-column-id="other_discount" data-order="asc">Discount</th>
+				                                    <th data-column-id="other_discount" data-order="asc">Discount (%)</th>
 				                                    <th data-column-id="other_nett_rate" data-order="asc">Nett Rate</th>
 				                                    <th data-column-id="other_remarks" data-order="asc">Remarks</th>
 				                                    <th data-column-id="other_link" data-formatter="link-rua" data-sortable="false">Action</th>
