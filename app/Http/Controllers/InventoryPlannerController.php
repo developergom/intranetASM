@@ -529,4 +529,89 @@ class InventoryPlannerController extends Controller
 
 
     }
+
+
+    public function apiLoadEventPrices(Request $request) {
+    	if(Gate::denies('Inventory Planner-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+    	$data = array();
+
+    	$data['prices'] = $request->session()->get('inventory_event_prices_' . $request->user()->user_id);
+
+    	return response()->json($data);
+    }
+
+    public function apiStoreEventPrices(Request $request) {
+    	if(Gate::denies('Inventory Planner-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+    	$data = array();
+
+    	$price_type_id = $request->input('price_type_id');
+    	$media_id = $request->input('media_id');
+    	$media_name = $request->input('media_name');
+    	$inventory_planner_event_price_gross_rate = $request->input('inventory_planner_event_price_gross_rate');
+    	$inventory_planner_event_price_surcharge = $request->input('inventory_planner_event_price_surcharge');
+    	$inventory_planner_event_price_total_gross_rate = $request->input('inventory_planner_event_price_total_gross_rate');
+    	$inventory_planner_event_price_discount = $request->input('inventory_planner_event_price_discount');
+    	$inventory_planner_event_price_nett_rate = $request->input('inventory_planner_event_price_nett_rate');
+    	$inventory_planner_event_price_remarks = $request->input('inventory_planner_event_price_remarks');
+
+    	$price = array();
+    	$price['price_type_id'] = $price_type_id;
+    	$price['media_id'] = $media_id;
+    	$price['media_name'] = $media_name;
+    	$price['inventory_planner_event_price_gross_rate'] = $inventory_planner_event_price_gross_rate;
+    	$price['inventory_planner_event_price_surcharge'] = $inventory_planner_event_price_surcharge;
+    	$price['inventory_planner_event_price_total_gross_rate'] = $inventory_planner_event_price_total_gross_rate;
+    	$price['inventory_planner_event_price_discount'] = $inventory_planner_event_price_discount;
+    	$price['inventory_planner_event_price_nett_rate'] = $inventory_planner_event_price_nett_rate;
+    	$price['inventory_planner_event_price_remarks'] = $inventory_planner_event_price_remarks;
+
+    	$prices = array();
+    	if($request->session()->has('inventory_event_prices_' . $request->user()->user_id)) {
+    		$prices = $request->session()->get('inventory_event_prices_' . $request->user()->user_id);
+    		$request->session()->forget('inventory_event_prices_' . $request->user()->user_id);
+    		$i = count($prices) + 1;
+    	}else{
+    		$i = 1;
+    	}
+
+    	$prices[] = $price;
+
+    	$request->session()->put('inventory_event_prices_' . $request->user()->user_id, $prices);
+    	
+    	$data['status'] = '200';
+
+    	return response()->json($data);
+    }
+
+    public function apiDeleteEventPrices(Request $request) {
+    	$data = array();
+
+    	$key = $request->input('key');
+
+    	$prices = array();
+    	if($request->session()->has('inventory_event_prices_' . $request->user()->user_id)) {
+    		$prices = $request->session()->get('inventory_event_prices_' . $request->user()->user_id);
+    		$request->session()->forget('inventory_event_prices_' . $request->user()->user_id);
+
+    		unset($prices[$key]);
+
+    		$request->session()->put('inventory_event_prices_' . $request->user()->user_id, $prices);
+    	
+	    	$data['status'] = '200';
+
+	    	return response()->json($data);	
+    	}else{
+    		$data['status'] = '500';
+
+	    	return response()->json($data);
+    	}
+
+
+    }
 }
