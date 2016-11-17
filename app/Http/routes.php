@@ -271,6 +271,21 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('inventoryplanner/api/getMedias', 'InventoryPlannerController@apiGetMedias');
         Route::post('inventoryplanner/api/getRates', 'InventoryPlannerController@apiGetRates');
         Route::post('inventoryplanner/api/getBasicRate', 'InventoryPlannerController@apiGetBasicRate');
+        Route::post('inventoryplanner/api/storePrintPrices', 'InventoryPlannerController@apiStorePrintPrices');
+        Route::post('inventoryplanner/api/deletePrintPrices', 'InventoryPlannerController@apiDeletePrintPrices');
+        Route::get('inventoryplanner/api/loadPrintPrices', 'InventoryPlannerController@apiLoadPrintPrices');
+        Route::post('inventoryplanner/api/storeDigitalPrices', 'InventoryPlannerController@apiStoreDigitalPrices');
+        Route::post('inventoryplanner/api/deleteDigitalPrices', 'InventoryPlannerController@apiDeleteDigitalPrices');
+        Route::get('inventoryplanner/api/loadDigitalPrices', 'InventoryPlannerController@apiLoadDigitalPrices');
+        Route::post('inventoryplanner/api/storeEventPrices', 'InventoryPlannerController@apiStoreEventPrices');
+        Route::post('inventoryplanner/api/deleteEventPrices', 'InventoryPlannerController@apiDeleteEventPrices');
+        Route::get('inventoryplanner/api/loadEventPrices', 'InventoryPlannerController@apiLoadEventPrices');
+        Route::post('inventoryplanner/api/storeCreativePrices', 'InventoryPlannerController@apiStoreCreativePrices');
+        Route::post('inventoryplanner/api/deleteCreativePrices', 'InventoryPlannerController@apiDeleteCreativePrices');
+        Route::get('inventoryplanner/api/loadCreativePrices', 'InventoryPlannerController@apiLoadCreativePrices');
+        Route::post('inventoryplanner/api/storeOtherPrices', 'InventoryPlannerController@apiStoreOtherPrices');
+        Route::post('inventoryplanner/api/deleteOtherPrices', 'InventoryPlannerController@apiDeleteOtherPrices');
+        Route::get('inventoryplanner/api/loadOtherPrices', 'InventoryPlannerController@apiLoadOtherPrices');
     });
 
     Route::group(['prefix' => 'config'], function() {

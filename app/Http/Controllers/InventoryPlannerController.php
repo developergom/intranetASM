@@ -19,6 +19,10 @@ use App\InventoryPlanner;
 use App\InventoryType;
 use App\InventoryPlannerHistory;
 use App\InventoryPlannerPrice;
+use App\InventoryPlannerPrintPrice;
+use App\InventoryPlannerDigitalPrice;
+use App\InventoryPlannerCreativePrice;
+use App\InventoryPlannerEventPrice;
 use App\Implementation;
 use App\Media;
 use App\MediaGroup;
@@ -318,5 +322,481 @@ class InventoryPlannerController extends Controller
     	
 
     	return $data;
+    }
+
+    public function apiLoadPrintPrices(Request $request) {
+    	if(Gate::denies('Inventory Planner-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+    	$data = array();
+
+    	$data['prices'] = $request->session()->get('inventory_print_prices_' . $request->user()->user_id);
+
+    	return response()->json($data);
+    }
+
+    public function apiStorePrintPrices(Request $request) {
+    	if(Gate::denies('Inventory Planner-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+    	$data = array();
+
+    	$price_type_id = $request->input('price_type_id');
+    	$media_id = $request->input('media_id');
+    	$media_name = $request->input('media_name');
+    	$advertise_position_id = $request->input('advertise_position_id');
+    	$advertise_position_name = $request->input('advertise_position_name');
+    	$advertise_size_id = $request->input('advertise_size_id');
+    	$advertise_size_name = $request->input('advertise_size_name');
+    	$paper_id = $request->input('paper_id');
+    	$paper_name = $request->input('paper_name');
+    	$advertise_rate_id = $request->input('advertise_rate_id');
+    	$advertise_rate_name = $request->input('advertise_rate_name');
+    	$inventory_planner_print_price_gross_rate = $request->input('inventory_planner_print_price_gross_rate');
+    	$inventory_planner_print_price_surcharge = $request->input('inventory_planner_print_price_surcharge');
+    	$inventory_planner_print_price_total_gross_rate = $request->input('inventory_planner_print_price_total_gross_rate');
+    	$inventory_planner_print_price_discount = $request->input('inventory_planner_print_price_discount');
+    	$inventory_planner_print_price_nett_rate = $request->input('inventory_planner_print_price_nett_rate');
+    	$inventory_planner_print_price_remarks = $request->input('inventory_planner_print_price_remarks');
+
+    	$price = array();
+    	$price['price_type_id'] = $price_type_id;
+    	$price['media_id'] = $media_id;
+    	$price['media_name'] = $media_name;
+    	$price['advertise_position_id'] = $advertise_position_id;
+    	$price['advertise_position_name'] = $advertise_position_name;
+    	$price['advertise_size_id'] = $advertise_size_id;
+    	$price['advertise_size_name'] = $advertise_size_name;
+    	$price['paper_id'] = $paper_id;
+    	$price['paper_name'] = $paper_name;
+    	$price['advertise_rate_id'] = $advertise_rate_id;
+    	$price['advertise_rate_name'] = $advertise_rate_name;
+    	$price['inventory_planner_print_price_gross_rate'] = $inventory_planner_print_price_gross_rate;
+    	$price['inventory_planner_print_price_surcharge'] = $inventory_planner_print_price_surcharge;
+    	$price['inventory_planner_print_price_total_gross_rate'] = $inventory_planner_print_price_total_gross_rate;
+    	$price['inventory_planner_print_price_discount'] = $inventory_planner_print_price_discount;
+    	$price['inventory_planner_print_price_nett_rate'] = $inventory_planner_print_price_nett_rate;
+    	$price['inventory_planner_print_price_remarks'] = $inventory_planner_print_price_remarks;
+
+    	$prices = array();
+    	if($request->session()->has('inventory_print_prices_' . $request->user()->user_id)) {
+    		$prices = $request->session()->get('inventory_print_prices_' . $request->user()->user_id);
+    		$request->session()->forget('inventory_print_prices_' . $request->user()->user_id);
+    		$i = count($prices) + 1;
+    	}else{
+    		$i = 1;
+    	}
+
+    	$prices[] = $price;
+
+    	$request->session()->put('inventory_print_prices_' . $request->user()->user_id, $prices);
+    	
+    	$data['status'] = '200';
+
+    	return response()->json($data);
+    }
+
+    public function apiDeletePrintPrices(Request $request) {
+    	$data = array();
+
+    	$key = $request->input('key');
+
+    	$prices = array();
+    	if($request->session()->has('inventory_print_prices_' . $request->user()->user_id)) {
+    		$prices = $request->session()->get('inventory_print_prices_' . $request->user()->user_id);
+    		$request->session()->forget('inventory_print_prices_' . $request->user()->user_id);
+
+    		unset($prices[$key]);
+
+    		$request->session()->put('inventory_print_prices_' . $request->user()->user_id, $prices);
+    	
+	    	$data['status'] = '200';
+
+	    	return response()->json($data);	
+    	}else{
+    		$data['status'] = '500';
+
+	    	return response()->json($data);
+    	}
+
+
+    }
+
+    public function apiLoadDigitalPrices(Request $request) {
+    	if(Gate::denies('Inventory Planner-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+    	$data = array();
+
+    	$data['prices'] = $request->session()->get('inventory_digital_prices_' . $request->user()->user_id);
+
+    	return response()->json($data);
+    }
+
+    public function apiStoreDigitalPrices(Request $request) {
+    	if(Gate::denies('Inventory Planner-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+    	$data = array();
+
+    	$price_type_id = $request->input('price_type_id');
+    	$media_id = $request->input('media_id');
+    	$media_name = $request->input('media_name');
+    	$advertise_position_id = $request->input('advertise_position_id');
+    	$advertise_position_name = $request->input('advertise_position_name');
+    	$advertise_size_id = $request->input('advertise_size_id');
+    	$advertise_size_name = $request->input('advertise_size_name');
+    	$paper_id = $request->input('paper_id');
+    	$paper_name = $request->input('paper_name');
+    	$advertise_rate_id = $request->input('advertise_rate_id');
+    	$advertise_rate_name = $request->input('advertise_rate_name');
+    	$inventory_planner_digital_price_startdate = $request->input('inventory_planner_digital_price_startdate');
+    	$inventory_planner_digital_price_enddate = $request->input('inventory_planner_digital_price_enddate');
+    	$inventory_planner_digital_price_deadline = $request->input('inventory_planner_digital_price_deadline');
+    	$inventory_planner_digital_price_gross_rate = $request->input('inventory_planner_digital_price_gross_rate');
+    	$inventory_planner_digital_price_surcharge = $request->input('inventory_planner_digital_price_surcharge');
+    	$inventory_planner_digital_price_total_gross_rate = $request->input('inventory_planner_digital_price_total_gross_rate');
+    	$inventory_planner_digital_price_discount = $request->input('inventory_planner_digital_price_discount');
+    	$inventory_planner_digital_price_nett_rate = $request->input('inventory_planner_digital_price_nett_rate');
+    	$inventory_planner_digital_price_remarks = $request->input('inventory_planner_digital_price_remarks');
+
+    	$price = array();
+    	$price['price_type_id'] = $price_type_id;
+    	$price['media_id'] = $media_id;
+    	$price['media_name'] = $media_name;
+    	$price['advertise_position_id'] = $advertise_position_id;
+    	$price['advertise_position_name'] = $advertise_position_name;
+    	$price['advertise_size_id'] = $advertise_size_id;
+    	$price['advertise_size_name'] = $advertise_size_name;
+    	$price['paper_id'] = $paper_id;
+    	$price['paper_name'] = $paper_name;
+    	$price['advertise_rate_id'] = $advertise_rate_id;
+    	$price['advertise_rate_name'] = $advertise_rate_name;
+    	$price['inventory_planner_digital_price_startdate'] = $inventory_planner_digital_price_startdate;
+    	$price['inventory_planner_digital_price_enddate'] = $inventory_planner_digital_price_enddate;
+    	$price['inventory_planner_digital_price_deadline'] = $inventory_planner_digital_price_deadline;
+    	$price['inventory_planner_digital_price_gross_rate'] = $inventory_planner_digital_price_gross_rate;
+    	$price['inventory_planner_digital_price_surcharge'] = $inventory_planner_digital_price_surcharge;
+    	$price['inventory_planner_digital_price_total_gross_rate'] = $inventory_planner_digital_price_total_gross_rate;
+    	$price['inventory_planner_digital_price_discount'] = $inventory_planner_digital_price_discount;
+    	$price['inventory_planner_digital_price_nett_rate'] = $inventory_planner_digital_price_nett_rate;
+    	$price['inventory_planner_digital_price_remarks'] = $inventory_planner_digital_price_remarks;
+
+    	$prices = array();
+    	if($request->session()->has('inventory_digital_prices_' . $request->user()->user_id)) {
+    		$prices = $request->session()->get('inventory_digital_prices_' . $request->user()->user_id);
+    		$request->session()->forget('inventory_digital_prices_' . $request->user()->user_id);
+    		$i = count($prices) + 1;
+    	}else{
+    		$i = 1;
+    	}
+
+    	$prices[] = $price;
+
+    	$request->session()->put('inventory_digital_prices_' . $request->user()->user_id, $prices);
+    	
+    	$data['status'] = '200';
+
+    	return response()->json($data);
+    }
+
+    public function apiDeleteDigitalPrices(Request $request) {
+    	$data = array();
+
+    	$key = $request->input('key');
+
+    	$prices = array();
+    	if($request->session()->has('inventory_digital_prices_' . $request->user()->user_id)) {
+    		$prices = $request->session()->get('inventory_digital_prices_' . $request->user()->user_id);
+    		$request->session()->forget('inventory_digital_prices_' . $request->user()->user_id);
+
+    		unset($prices[$key]);
+
+    		$request->session()->put('inventory_digital_prices_' . $request->user()->user_id, $prices);
+    	
+	    	$data['status'] = '200';
+
+	    	return response()->json($data);	
+    	}else{
+    		$data['status'] = '500';
+
+	    	return response()->json($data);
+    	}
+
+
+    }
+
+
+    public function apiLoadEventPrices(Request $request) {
+    	if(Gate::denies('Inventory Planner-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+    	$data = array();
+
+    	$data['prices'] = $request->session()->get('inventory_event_prices_' . $request->user()->user_id);
+
+    	return response()->json($data);
+    }
+
+    public function apiStoreEventPrices(Request $request) {
+    	if(Gate::denies('Inventory Planner-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+    	$data = array();
+
+    	$price_type_id = $request->input('price_type_id');
+    	$media_id = $request->input('media_id');
+    	$media_name = $request->input('media_name');
+    	$inventory_planner_event_price_gross_rate = $request->input('inventory_planner_event_price_gross_rate');
+    	$inventory_planner_event_price_surcharge = $request->input('inventory_planner_event_price_surcharge');
+    	$inventory_planner_event_price_total_gross_rate = $request->input('inventory_planner_event_price_total_gross_rate');
+    	$inventory_planner_event_price_discount = $request->input('inventory_planner_event_price_discount');
+    	$inventory_planner_event_price_nett_rate = $request->input('inventory_planner_event_price_nett_rate');
+    	$inventory_planner_event_price_remarks = $request->input('inventory_planner_event_price_remarks');
+
+    	$price = array();
+    	$price['price_type_id'] = $price_type_id;
+    	$price['media_id'] = $media_id;
+    	$price['media_name'] = $media_name;
+    	$price['inventory_planner_event_price_gross_rate'] = $inventory_planner_event_price_gross_rate;
+    	$price['inventory_planner_event_price_surcharge'] = $inventory_planner_event_price_surcharge;
+    	$price['inventory_planner_event_price_total_gross_rate'] = $inventory_planner_event_price_total_gross_rate;
+    	$price['inventory_planner_event_price_discount'] = $inventory_planner_event_price_discount;
+    	$price['inventory_planner_event_price_nett_rate'] = $inventory_planner_event_price_nett_rate;
+    	$price['inventory_planner_event_price_remarks'] = $inventory_planner_event_price_remarks;
+
+    	$prices = array();
+    	if($request->session()->has('inventory_event_prices_' . $request->user()->user_id)) {
+    		$prices = $request->session()->get('inventory_event_prices_' . $request->user()->user_id);
+    		$request->session()->forget('inventory_event_prices_' . $request->user()->user_id);
+    		$i = count($prices) + 1;
+    	}else{
+    		$i = 1;
+    	}
+
+    	$prices[] = $price;
+
+    	$request->session()->put('inventory_event_prices_' . $request->user()->user_id, $prices);
+    	
+    	$data['status'] = '200';
+
+    	return response()->json($data);
+    }
+
+    public function apiDeleteEventPrices(Request $request) {
+    	$data = array();
+
+    	$key = $request->input('key');
+
+    	$prices = array();
+    	if($request->session()->has('inventory_event_prices_' . $request->user()->user_id)) {
+    		$prices = $request->session()->get('inventory_event_prices_' . $request->user()->user_id);
+    		$request->session()->forget('inventory_event_prices_' . $request->user()->user_id);
+
+    		unset($prices[$key]);
+
+    		$request->session()->put('inventory_event_prices_' . $request->user()->user_id, $prices);
+    	
+	    	$data['status'] = '200';
+
+	    	return response()->json($data);	
+    	}else{
+    		$data['status'] = '500';
+
+	    	return response()->json($data);
+    	}
+
+
+    }
+
+
+    public function apiLoadCreativePrices(Request $request) {
+    	if(Gate::denies('Inventory Planner-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+    	$data = array();
+
+    	$data['prices'] = $request->session()->get('inventory_creative_prices_' . $request->user()->user_id);
+
+    	return response()->json($data);
+    }
+
+    public function apiStoreCreativePrices(Request $request) {
+    	if(Gate::denies('Inventory Planner-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+    	$data = array();
+
+    	$price_type_id = $request->input('price_type_id');
+    	$media_id = $request->input('media_id');
+    	$media_name = $request->input('media_name');
+    	$advertise_position_id = $request->input('advertise_position_id');
+    	$advertise_position_name = $request->input('advertise_position_name');
+    	$advertise_size_id = $request->input('advertise_size_id');
+    	$advertise_size_name = $request->input('advertise_size_name');
+    	$paper_id = $request->input('paper_id');
+    	$paper_name = $request->input('paper_name');
+    	$advertise_rate_id = $request->input('advertise_rate_id');
+    	$advertise_rate_name = $request->input('advertise_rate_name');
+    	$inventory_planner_creative_price_gross_rate = $request->input('inventory_planner_creative_price_gross_rate');
+    	$inventory_planner_creative_price_surcharge = $request->input('inventory_planner_creative_price_surcharge');
+    	$inventory_planner_creative_price_total_gross_rate = $request->input('inventory_planner_creative_price_total_gross_rate');
+    	$inventory_planner_creative_price_discount = $request->input('inventory_planner_creative_price_discount');
+    	$inventory_planner_creative_price_nett_rate = $request->input('inventory_planner_creative_price_nett_rate');
+    	$inventory_planner_creative_price_remarks = $request->input('inventory_planner_creative_price_remarks');
+
+    	$price = array();
+    	$price['price_type_id'] = $price_type_id;
+    	$price['media_id'] = $media_id;
+    	$price['media_name'] = $media_name;
+    	$price['advertise_position_id'] = $advertise_position_id;
+    	$price['advertise_position_name'] = $advertise_position_name;
+    	$price['advertise_size_id'] = $advertise_size_id;
+    	$price['advertise_size_name'] = $advertise_size_name;
+    	$price['paper_id'] = $paper_id;
+    	$price['paper_name'] = $paper_name;
+    	$price['advertise_rate_id'] = $advertise_rate_id;
+    	$price['advertise_rate_name'] = $advertise_rate_name;
+    	$price['inventory_planner_creative_price_gross_rate'] = $inventory_planner_creative_price_gross_rate;
+    	$price['inventory_planner_creative_price_surcharge'] = $inventory_planner_creative_price_surcharge;
+    	$price['inventory_planner_creative_price_total_gross_rate'] = $inventory_planner_creative_price_total_gross_rate;
+    	$price['inventory_planner_creative_price_discount'] = $inventory_planner_creative_price_discount;
+    	$price['inventory_planner_creative_price_nett_rate'] = $inventory_planner_creative_price_nett_rate;
+    	$price['inventory_planner_creative_price_remarks'] = $inventory_planner_creative_price_remarks;
+
+    	$prices = array();
+    	if($request->session()->has('inventory_creative_prices_' . $request->user()->user_id)) {
+    		$prices = $request->session()->get('inventory_creative_prices_' . $request->user()->user_id);
+    		$request->session()->forget('inventory_creative_prices_' . $request->user()->user_id);
+    		$i = count($prices) + 1;
+    	}else{
+    		$i = 1;
+    	}
+
+    	$prices[] = $price;
+
+    	$request->session()->put('inventory_creative_prices_' . $request->user()->user_id, $prices);
+    	
+    	$data['status'] = '200';
+
+    	return response()->json($data);
+    }
+
+    public function apiDeleteCreativePrices(Request $request) {
+    	$data = array();
+
+    	$key = $request->input('key');
+
+    	$prices = array();
+    	if($request->session()->has('inventory_creative_prices_' . $request->user()->user_id)) {
+    		$prices = $request->session()->get('inventory_creative_prices_' . $request->user()->user_id);
+    		$request->session()->forget('inventory_creative_prices_' . $request->user()->user_id);
+
+    		unset($prices[$key]);
+
+    		$request->session()->put('inventory_creative_prices_' . $request->user()->user_id, $prices);
+    	
+	    	$data['status'] = '200';
+
+	    	return response()->json($data);	
+    	}else{
+    		$data['status'] = '500';
+
+	    	return response()->json($data);
+    	}
+
+
+    }
+
+    public function apiLoadOtherPrices(Request $request) {
+    	if(Gate::denies('Inventory Planner-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+    	$data = array();
+
+    	$data['prices'] = $request->session()->get('inventory_other_prices_' . $request->user()->user_id);
+
+    	return response()->json($data);
+    }
+
+    public function apiStoreOtherPrices(Request $request) {
+    	if(Gate::denies('Inventory Planner-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+    	$data = array();
+
+    	$price_type_id = $request->input('price_type_id');
+    	$media_id = $request->input('media_id');
+    	$media_name = $request->input('media_name');
+    	$inventory_planner_other_price_gross_rate = $request->input('inventory_planner_other_price_gross_rate');
+    	$inventory_planner_other_price_surcharge = $request->input('inventory_planner_other_price_surcharge');
+    	$inventory_planner_other_price_total_gross_rate = $request->input('inventory_planner_other_price_total_gross_rate');
+    	$inventory_planner_other_price_discount = $request->input('inventory_planner_other_price_discount');
+    	$inventory_planner_other_price_nett_rate = $request->input('inventory_planner_other_price_nett_rate');
+    	$inventory_planner_other_price_remarks = $request->input('inventory_planner_other_price_remarks');
+
+    	$price = array();
+    	$price['price_type_id'] = $price_type_id;
+    	$price['media_id'] = $media_id;
+    	$price['media_name'] = $media_name;
+    	$price['inventory_planner_other_price_gross_rate'] = $inventory_planner_other_price_gross_rate;
+    	$price['inventory_planner_other_price_surcharge'] = $inventory_planner_other_price_surcharge;
+    	$price['inventory_planner_other_price_total_gross_rate'] = $inventory_planner_other_price_total_gross_rate;
+    	$price['inventory_planner_other_price_discount'] = $inventory_planner_other_price_discount;
+    	$price['inventory_planner_other_price_nett_rate'] = $inventory_planner_other_price_nett_rate;
+    	$price['inventory_planner_other_price_remarks'] = $inventory_planner_other_price_remarks;
+
+    	$prices = array();
+    	if($request->session()->has('inventory_other_prices_' . $request->user()->user_id)) {
+    		$prices = $request->session()->get('inventory_other_prices_' . $request->user()->user_id);
+    		$request->session()->forget('inventory_other_prices_' . $request->user()->user_id);
+    		$i = count($prices) + 1;
+    	}else{
+    		$i = 1;
+    	}
+
+    	$prices[] = $price;
+
+    	$request->session()->put('inventory_other_prices_' . $request->user()->user_id, $prices);
+    	
+    	$data['status'] = '200';
+
+    	return response()->json($data);
+    }
+
+    public function apiDeleteOtherPrices(Request $request) {
+    	$data = array();
+
+    	$key = $request->input('key');
+
+    	$prices = array();
+    	if($request->session()->has('inventory_other_prices_' . $request->user()->user_id)) {
+    		$prices = $request->session()->get('inventory_other_prices_' . $request->user()->user_id);
+    		$request->session()->forget('inventory_other_prices_' . $request->user()->user_id);
+
+    		unset($prices[$key]);
+
+    		$request->session()->put('inventory_other_prices_' . $request->user()->user_id, $prices);
+    	
+	    	$data['status'] = '200';
+
+	    	return response()->json($data);	
+    	}else{
+    		$data['status'] = '500';
+
+	    	return response()->json($data);
+    	}
+
+
     }
 }

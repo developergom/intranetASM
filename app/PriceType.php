@@ -21,4 +21,29 @@ class PriceType extends Model
 	{
 		return $this->hasMany('App\InventoryPlannerPrice', 'price_type_id');
 	}
+
+	public function inventoryplannerprintprices()
+	{
+		return $this->hasMany('App\InventoryPlannerPrintPrice', 'price_type_id');
+	}
+
+	public function inventoryplannerdigitalprices()
+	{
+		return $this->hasMany('App\InventoryPlannerDigitalPrice', 'price_type_id');
+	}
+
+	public function inventoryplannereventprices()
+	{
+		return $this->hasMany('App\InventoryPlannerEventPrice', 'price_type_id');
+	}
+
+	public function inventoryplannercreativeprices()
+	{
+		return $this->hasMany('App\InventoryPlannerCreativePrice', 'price_type_id');
+	}
+
+	public function inventoryplannerotherprices()
+	{
+		return $this->hasMany('App\InventoryPlannerOtherPrice', 'price_type_id');
+	}
 }
