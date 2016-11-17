@@ -182,6 +182,23 @@ $(document).ready(function(){
 		});
 	});
 
+	$('body').on('click','.btn-delete-creative-prices', function(){
+		var key = $(this).data('key');
+
+		swal({
+			title: "Are you sure?",
+			text: "You will not be able to recover this data!",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Yes",
+			closeOnConfirm: false
+		},
+		function(){
+			delete_creative_price(key);
+		});
+	});
+
 	function getPreviousUploaded() {
 		$('#uploadFileArea').empty();
 
@@ -621,7 +638,43 @@ $(document).ready(function(){
 				$('#modal_add_advertise_rate_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
 				isValid = true;
 
-				alert('Recording..');
+				$.ajax({
+					url: base_url + 'inventory/inventoryplanner/api/storeCreativePrices',
+					dataType: 'json',
+					data: {
+							price_type_id : $('#modal_add_price_type_id').val(),
+					    	media_id : $('#modal_add_media_id').val(),
+					    	media_name : $('#modal_add_media_id option:selected').text(),
+					    	advertise_position_id : $('#modal_add_advertise_position_id').val(),
+					    	advertise_position_name : $('#modal_add_advertise_position_id option:selected').text(),
+					    	advertise_size_id : $('#modal_add_advertise_size_id').val(),
+					    	advertise_size_name : $('#modal_add_advertise_size_id option:selected').text(),
+					    	paper_id : $('#modal_add_paper_id').val(),
+					    	paper_name : $('#modal_add_paper_id option:selected').text(),
+					    	advertise_rate_id : $('#modal_add_advertise_rate_id').val(),
+					    	advertise_rate_name : $('#modal_add_advertise_rate_id option:selected').text(),
+					    	inventory_planner_creative_price_gross_rate : $('#modal_add_inventory_planner_price_gross_rate').val(),
+					    	inventory_planner_creative_price_surcharge : $('#modal_add_inventory_planner_price_surcharge').val(),
+					    	inventory_planner_creative_price_total_gross_rate : $('#modal_add_inventory_planner_price_total_gross_rate').val(),
+					    	inventory_planner_creative_price_discount : $('#modal_add_inventory_planner_price_discount').val(),
+					    	inventory_planner_creative_price_nett_rate : $('#modal_add_inventory_planner_price_nett_rate').val(),
+					    	inventory_planner_creative_price_remarks : $('#modal_add_inventory_planner_price_remarks').val(),
+							_token: myToken
+						},
+					type: 'POST',
+					error: function(data) {
+						swal("Failed!", "Adding data failed.", "error");
+					},
+					success: function(data) {
+						if(data.status == '200') {
+							swal("Success!", "Your package has been added.", "success");
+							load_creative_prices();
+							$('.btn-close-inventory-planner-price').click();
+						}else{
+							swal("Failed!", "Adding data failed.", "error");
+						}
+					}
+				});
 			}
 		}else if($('#modal_add_price_type_id').val() == '5') {
 			//other
@@ -717,10 +770,34 @@ $(document).ready(function(){
 		});
 	}
 
+	function delete_creative_price(key) {
+		$.ajax({
+			url: base_url + 'inventory/inventoryplanner/api/deleteCreativePrices',
+			dataType: 'json',
+			data: {
+					key : key,
+					_token: myToken
+				},
+			type: 'POST',
+			error: function(data) {
+				swal("Failed!", "Deleting data failed.", "error");
+			},
+			success: function(data) {
+				if(data.status == '200') {
+					swal("Success!", "Your data has been deleted.", "success");
+					load_creative_prices();
+				}else{
+					swal("Failed!", "Deleting data failed.", "error");
+				}
+			}
+		});
+	}
+
 	function load_all_prices() {
 		load_print_prices();
 		load_digital_prices();
 		load_event_prices();
+		load_creative_prices();
 	}
 
 	function load_print_prices() {
@@ -820,6 +897,40 @@ $(document).ready(function(){
 
 				$('#grid-data-listevent tbody').empty();
 				$('#grid-data-listevent tbody').append(html);
+			}
+		});
+	}
+
+	function load_creative_prices() {
+		$.ajax({
+			url: base_url + 'inventory/inventoryplanner/api/loadCreativePrices',
+			dataType: 'json',
+			type: 'GET',
+			error: function(data) {
+				alert('error');
+			},
+			success: function(data) {
+				var html = '';
+				$.each(data.prices, function(key, value) {
+					console.log(value);
+					html += '<tr>';
+					html += '<td>' + value.media_name + '</td>';
+					html += '<td>' + value.advertise_position_name + '</td>';
+					html += '<td>' + value.advertise_size_name + '</td>';
+					html += '<td>' + value.paper_name + '</td>';
+					html += '<td>' + value.advertise_rate_name + '</td>';
+					html += '<td>' + convertNumber(value.inventory_planner_creative_price_gross_rate) + '</td>';
+					html += '<td>' + convertNumber(value.inventory_planner_creative_price_surcharge) + '</td>';
+					html += '<td>' + convertNumber(value.inventory_planner_creative_price_total_gross_rate) + '</td>';
+					html += '<td>' + convertNumber(value.inventory_planner_creative_price_discount) + '</td>';
+					html += '<td>' + convertNumber(value.inventory_planner_creative_price_nett_rate) + '</td>';
+					html += '<td>' + convertNumber(value.inventory_planner_creative_price_remarks) + '</td>';
+					html += '<td><a title="Delete Price" href="javascript:void(0);" class="btn btn-icon btn-delete-creative-prices waves-effect waves-circle" type="button" data-key="' + key + '"><span class="zmdi zmdi-delete"></span></a></td>';
+					html += '</tr>';
+				});
+
+				$('#grid-data-listcreative tbody').empty();
+				$('#grid-data-listcreative tbody').append(html);
 			}
 		});
 	}
