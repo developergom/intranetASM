@@ -131,6 +131,23 @@ $(document).ready(function(){
 		save_price();
 	});
 
+	$('body').on('click','.btn-delete-print-prices', function(){
+		var key = $(this).data('key');
+
+		swal({
+			title: "Are you sure?",
+			text: "You will not be able to recover this data!",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Yes",
+			closeOnConfirm: false
+		},
+		function(){
+			delete_print_price(key);
+		});
+	});
+
 	function getPreviousUploaded() {
 		$('#uploadFileArea').empty();
 
@@ -357,8 +374,6 @@ $(document).ready(function(){
 				$('#modal_add_advertise_rate_id').parents('.form-group').removeClass('has-error').find('.help-block').html('');
 				isValid = true;
 
-				alert('Recording..');
-
 				$.ajax({
 					url: base_url + 'inventory/inventoryplanner/api/storePrintPrices',
 					dataType: 'json',
@@ -384,14 +399,14 @@ $(document).ready(function(){
 						},
 					type: 'POST',
 					error: function(data) {
-						alert('error');
+						swal("Failed!", "Adding data failed.", "error");
 					},
 					success: function(data) {
 						if(data.status == '200') {
-							alert('success');
+							swal("Success!", "Your package has been added.", "success");
 							load_print_prices();
 						}else{
-							alert('failed');
+							swal("Failed!", "Adding data failed.", "error");
 						}
 					}
 				});
@@ -521,6 +536,29 @@ $(document).ready(function(){
 		}
 	}
 
+	function delete_print_price(key) {
+		$.ajax({
+			url: base_url + 'inventory/inventoryplanner/api/deletePrintPrices',
+			dataType: 'json',
+			data: {
+					key : key,
+					_token: myToken
+				},
+			type: 'POST',
+			error: function(data) {
+				swal("Failed!", "Deleting data failed.", "error");
+			},
+			success: function(data) {
+				if(data.status == '200') {
+					swal("Success!", "Your data has been deleted.", "success");
+					load_print_prices();
+				}else{
+					swal("Failed!", "Deleting data failed.", "error");
+				}
+			}
+		});
+	}
+
 	function load_all_prices() {
 		load_print_prices();
 	}
@@ -549,7 +587,7 @@ $(document).ready(function(){
 					html += '<td>' + value.inventory_planner_print_price_discount + '</td>';
 					html += '<td>' + value.inventory_planner_print_price_nett_rate + '</td>';
 					html += '<td>' + value.inventory_planner_print_price_remarks + '</td>';
-					html += '<td>' + key + '</td>';
+					html += '<td><a title="Delete Price" href="javascript:void(0);" class="btn btn-icon btn-delete-print-prices waves-effect waves-circle" type="button" data-key="' + key + '"><span class="zmdi zmdi-delete"></span></a></td>';
 					html += '</tr>';
 				});
 

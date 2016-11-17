@@ -272,6 +272,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('inventoryplanner/api/getRates', 'InventoryPlannerController@apiGetRates');
         Route::post('inventoryplanner/api/getBasicRate', 'InventoryPlannerController@apiGetBasicRate');
         Route::post('inventoryplanner/api/storePrintPrices', 'InventoryPlannerController@apiStorePrintPrices');
+        Route::post('inventoryplanner/api/deletePrintPrices', 'InventoryPlannerController@apiDeletePrintPrices');
         Route::get('inventoryplanner/api/loadPrintPrices', 'InventoryPlannerController@apiLoadPrintPrices');
     });
 

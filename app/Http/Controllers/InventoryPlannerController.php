@@ -393,13 +393,34 @@ class InventoryPlannerController extends Controller
 
     	$request->session()->put('inventory_print_prices_' . $request->user()->user_id, $prices);
     	
-    	/*if($request->session()->put('inventory_print_prices_' . $request->user()->user_id, $prices)) {
-    		$data['status'] = '200';
-    	}else{
-    		$data['status'] = '500';
-    	}*/
     	$data['status'] = '200';
 
     	return response()->json($data);
+    }
+
+    public function apiDeletePrintPrices(Request $request) {
+    	$data = array();
+
+    	$key = $request->input('key');
+
+    	$prices = array();
+    	if($request->session()->has('inventory_print_prices_' . $request->user()->user_id)) {
+    		$prices = $request->session()->get('inventory_print_prices_' . $request->user()->user_id);
+    		$request->session()->forget('inventory_print_prices_' . $request->user()->user_id);
+
+    		unset($prices[$key]);
+
+    		$request->session()->put('inventory_print_prices_' . $request->user()->user_id, $prices);
+    	
+	    	$data['status'] = '200';
+
+	    	return response()->json($data);	
+    	}else{
+    		$data['status'] = '500';
+
+	    	return response()->json($data);
+    	}
+
+
     }
 }
