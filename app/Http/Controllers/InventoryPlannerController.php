@@ -97,8 +97,6 @@ class InventoryPlannerController extends Controller
         $u = new UserLibrary;
         $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
 
-        //dd($subordinate);
-
         $current = $request->input('current') or 1;
         $rowCount = $request->input('rowCount') or 10;
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
