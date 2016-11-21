@@ -21,12 +21,8 @@
 	        					<option value=""></option>
 	        					@foreach($inventory_types as $row)
 	        						{!! $selected = '' !!}
-                                	@if(old('inventory_type_id'))
-	                                	@foreach (old('inventory_type_id') as $key => $value)
-	                                		@if($value==$row->inventory_type_id)
-	                                			{!! $selected = 'selected' !!}
-	                                		@endif
-	                                	@endforeach
+                                	@if(old('inventory_type_id')==$row->inventory_type_id)
+	                                	{!! $selected = 'selected' !!}
                                 	@endif
 	        						<option value="{{ $row->inventory_type_id }}" {{ $selected }}>{{ $row->inventory_type_name }}</option>
 	        					@endforeach
@@ -145,7 +141,7 @@
 	                <label for="action_plan_id" class="col-sm-2 control-label">Action Plan</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="action_plan_id[]" id="action_plan_id" class="selectpicker" data-live-search="true" multiple required="true">
+	                        <select name="action_plan_id[]" id="action_plan_id" class="selectpicker" data-live-search="true" multiple>
                                 @foreach ($action_plans as $row)
                                 	{!! $selected = '' !!}
                                 	@if(old('action_plan_id'))
@@ -170,7 +166,7 @@
 	                <label for="event_plan_id" class="col-sm-2 control-label">Event Plan</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="event_plan_id[]" id="event_plan_id" class="selectpicker" data-live-search="true" multiple required="true">
+	                        <select name="event_plan_id[]" id="event_plan_id" class="selectpicker" data-live-search="true" multiple>
                                 @foreach ($event_plans as $row)
                                 	{!! $selected = '' !!}
                                 	@if(old('event_plan_id'))
@@ -335,6 +331,30 @@
 				            </div>
 				        </div>
 	            	</div>
+	            </div>
+	            <div class="form-group">
+	                <label for="total_value" class="col-sm-2 control-label">Total Value</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="total_value" id="total_value" placeholder="Total Value" maxlength="20" value="" disabled="true">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="total_nett" class="col-sm-2 control-label">Total Nett</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="total_nett" id="total_nett" placeholder="Total Nett" maxlength="20" value="" disabled="true">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="saving_value" class="col-sm-2 control-label">Saving Value</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="saving_value" id="saving_value" placeholder="Saving Value" maxlength="20" value="" disabled="true">
+	                    </div>
+	                </div>
 	            </div>
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">

@@ -5,6 +5,20 @@ var total_gross_rate = 0;
 var discount = 0;
 var nett_rate = 0;
 
+var total_nett_print = 0;
+var total_nett_digital = 0;
+var total_nett_event = 0;
+var total_nett_creative = 0;
+var total_nett_other = 0;
+var total_nett = 0;
+var total_value_print = 0;
+var total_value_digital = 0;
+var total_value_event = 0;
+var total_value_creative = 0;
+var total_value_other = 0;
+var total_value = 0;
+var saving_value = 0;
+
 $(document).ready(function(){
 	Dropzone.autoDiscover = false;
 	
@@ -317,7 +331,7 @@ $(document).ready(function(){
 	}
 
 	function getRates() {
-		var media_id = $('#media_id').val();
+		var media_id = $('#modal_add_media_id').val();
 		var advertise_position_id = $('#modal_add_advertise_position_id').val();
 		var advertise_size_id = $('#modal_add_advertise_size_id').val();
 		var paper_id = $('#modal_add_paper_id').val();
@@ -867,6 +881,8 @@ $(document).ready(function(){
 		load_event_prices();
 		load_creative_prices();
 		load_other_prices();
+
+		calculateTotal();
 	}
 
 	function load_print_prices() {
@@ -879,6 +895,8 @@ $(document).ready(function(){
 			},
 			success: function(data) {
 				var html = '';
+				total_value_print = 0;
+				total_nett_print = 0;
 				$.each(data.prices, function(key, value) {
 					console.log(value);
 					html += '<tr>';
@@ -895,10 +913,14 @@ $(document).ready(function(){
 					html += '<td>' + convertNumber(value.inventory_planner_print_price_remarks) + '</td>';
 					html += '<td><a title="Delete Price" href="javascript:void(0);" class="btn btn-icon btn-delete-print-prices waves-effect waves-circle" type="button" data-key="' + key + '"><span class="zmdi zmdi-delete"></span></a></td>';
 					html += '</tr>';
+					total_value_print = Number(total_value_print) + Number(value.inventory_planner_print_price_total_gross_rate);
+					total_nett_print = Number(total_nett_print) + Number(value.inventory_planner_print_price_nett_rate);
 				});
 
 				$('#grid-data-listprint tbody').empty();
 				$('#grid-data-listprint tbody').append(html);
+
+				calculateTotal();
 			}
 		});
 	}
@@ -913,6 +935,8 @@ $(document).ready(function(){
 			},
 			success: function(data) {
 				var html = '';
+				total_value_digital = 0;
+				total_nett_digital = 0;
 				$.each(data.prices, function(key, value) {
 					console.log(value);
 					html += '<tr>';
@@ -932,10 +956,14 @@ $(document).ready(function(){
 					html += '<td>' + convertNumber(value.inventory_planner_digital_price_remarks) + '</td>';
 					html += '<td><a title="Delete Price" href="javascript:void(0);" class="btn btn-icon btn-delete-digital-prices waves-effect waves-circle" type="button" data-key="' + key + '"><span class="zmdi zmdi-delete"></span></a></td>';
 					html += '</tr>';
+					total_value_digital = Number(total_value_digital) + Number(value.inventory_planner_digital_price_total_gross_rate);
+					total_nett_digital = Number(total_nett_digital) + Number(value.inventory_planner_digital_price_nett_rate);
 				});
 
 				$('#grid-data-listdigital tbody').empty();
 				$('#grid-data-listdigital tbody').append(html);
+
+				calculateTotal();
 			}
 		});
 	}
@@ -950,6 +978,8 @@ $(document).ready(function(){
 			},
 			success: function(data) {
 				var html = '';
+				total_value_event = 0;
+				total_nett_event = 0;
 				$.each(data.prices, function(key, value) {
 					console.log(value);
 					html += '<tr>';
@@ -962,10 +992,14 @@ $(document).ready(function(){
 					html += '<td>' + convertNumber(value.inventory_planner_event_price_remarks) + '</td>';
 					html += '<td><a title="Delete Price" href="javascript:void(0);" class="btn btn-icon btn-delete-event-prices waves-effect waves-circle" type="button" data-key="' + key + '"><span class="zmdi zmdi-delete"></span></a></td>';
 					html += '</tr>';
+					total_value_event = Number(total_value_event) + Number(value.inventory_planner_event_price_total_gross_rate);
+					total_nett_event = Number(total_nett_event) + Number(value.inventory_planner_event_price_nett_rate);
 				});
 
 				$('#grid-data-listevent tbody').empty();
 				$('#grid-data-listevent tbody').append(html);
+
+				calculateTotal();
 			}
 		});
 	}
@@ -980,6 +1014,8 @@ $(document).ready(function(){
 			},
 			success: function(data) {
 				var html = '';
+				total_value_creative = 0;
+				total_nett_creative = 0;
 				$.each(data.prices, function(key, value) {
 					console.log(value);
 					html += '<tr>';
@@ -996,10 +1032,14 @@ $(document).ready(function(){
 					html += '<td>' + convertNumber(value.inventory_planner_creative_price_remarks) + '</td>';
 					html += '<td><a title="Delete Price" href="javascript:void(0);" class="btn btn-icon btn-delete-creative-prices waves-effect waves-circle" type="button" data-key="' + key + '"><span class="zmdi zmdi-delete"></span></a></td>';
 					html += '</tr>';
+					total_value_creative = Number(total_value_creative) + Number(value.inventory_planner_creative_price_total_gross_rate);
+					total_nett_creative = Number(total_nett_creative) + Number(value.inventory_planner_creative_price_nett_rate);
 				});
 
 				$('#grid-data-listcreative tbody').empty();
 				$('#grid-data-listcreative tbody').append(html);
+
+				calculateTotal();
 			}
 		});
 	}
@@ -1014,6 +1054,8 @@ $(document).ready(function(){
 			},
 			success: function(data) {
 				var html = '';
+				total_value_other = 0;
+				total_nett_other = 0;
 				$.each(data.prices, function(key, value) {
 					console.log(value);
 					html += '<tr>';
@@ -1026,12 +1068,26 @@ $(document).ready(function(){
 					html += '<td>' + convertNumber(value.inventory_planner_other_price_remarks) + '</td>';
 					html += '<td><a title="Delete Price" href="javascript:void(0);" class="btn btn-icon btn-delete-other-prices waves-effect waves-circle" type="button" data-key="' + key + '"><span class="zmdi zmdi-delete"></span></a></td>';
 					html += '</tr>';
+					total_value_other = Number(total_value_other) + Number(value.inventory_planner_other_price_total_gross_rate);
+					total_nett_other = Number(total_nett_other) + Number(value.inventory_planner_other_price_nett_rate);
 				});
 
 				$('#grid-data-listother tbody').empty();
 				$('#grid-data-listother tbody').append(html);
+
+				calculateTotal();
 			}
 		});
+	}
+
+	function calculateTotal() {
+		total_nett = total_nett_print + total_nett_digital + total_nett_event + total_nett_creative + total_nett_other;
+		total_value = total_value_print + total_value_digital + total_value_event + total_value_creative + total_value_other;
+		saving_value = total_value - total_nett;
+
+		$('#total_value').val(convertNumber(total_value));
+		$('#total_nett').val(convertNumber(total_nett));
+		$('#saving_value').val(convertNumber(saving_value));
 	}
 
 	function convertNumber(value) { return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."); }
