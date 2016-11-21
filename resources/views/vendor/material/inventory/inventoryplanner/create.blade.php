@@ -43,7 +43,7 @@
 	                <label for="inventory_planner_title" class="col-sm-2 control-label">Title</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="inventory_planner_title" id="inventory_planner_title" placeholder="Inventory Planner Title" required="true" maxlength="255" value="{{ old('inventory_planner_title') }}">
+	                        <input type="text" class="form-control input-sm" name="inventory_planner_title" id="inventory_planner_title" placeholder="Inventory Planner Title" required="true" maxlength="100" value="{{ old('inventory_planner_title') }}">
 	                    </div>
 	                    @if ($errors->has('inventory_planner_title'))
 			                <span class="help-block">
