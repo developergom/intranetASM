@@ -317,6 +317,68 @@ class InventoryPlannerController extends Controller
         return redirect('inventory/inventoryplanner');
     }
 
+    public function show(Request $request, $id)
+    {
+    	if(Gate::denies('Inventory Planner-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['inventoryplanner'] = InventoryPlanner::with(
+        												'inventorytype', 
+        												'implementations',
+        												'medias',
+        												'actionplans',
+        												'eventplans',
+        												'uploadfiles',
+        												'inventoryplannerprintprices',
+        												'inventoryplannerprintprices.pricetype',
+        												'inventoryplannerprintprices.media',
+        												'inventoryplannerprintprices.advertiserate',
+        												'inventoryplannerprintprices.advertiserate.paper',
+        												'inventoryplannerprintprices.advertiserate.advertisesize',
+        												'inventoryplannerprintprices.advertiserate.advertiseposition',
+        												'inventoryplannerdigitalprices',
+        												'inventoryplannerdigitalprices.pricetype',
+        												'inventoryplannerdigitalprices.media',
+        												'inventoryplannerdigitalprices.advertiserate.paper',
+        												'inventoryplannerdigitalprices.advertiserate.advertisesize',
+        												'inventoryplannerdigitalprices.advertiserate.advertiseposition',
+        												'inventoryplannereventprices',
+        												'inventoryplannereventprices.pricetype',
+        												'inventoryplannereventprices.media',
+        												'inventoryplannercreativeprices',
+        												'inventoryplannercreativeprices.pricetype',
+        												'inventoryplannercreativeprices.media',
+        												'inventoryplannercreativeprices.advertiserate',
+        												'inventoryplannercreativeprices.advertiserate.paper',
+        												'inventoryplannercreativeprices.advertiserate.advertisesize',
+        												'inventoryplannercreativeprices.advertiserate.advertiseposition',
+        												'inventoryplannerotherprices',
+        												'inventoryplannerotherprices.pricetype',
+        												'inventoryplannerotherprices.media'
+        												)->find($id);
+
+		$grossprint = $data['inventoryplanner']->inventoryplannerprintprices->sum('inventory_planner_print_price_total_gross_rate');
+		$grossdigital = $data['inventoryplanner']->inventoryplannerdigitalprices->sum('inventory_planner_digital_price_total_gross_rate');
+		$grossevent = $data['inventoryplanner']->inventoryplannereventprices->sum('inventory_planner_event_price_total_gross_rate');
+		$grosscreative = $data['inventoryplanner']->inventoryplannercreativeprices->sum('inventory_planner_creative_price_total_gross_rate');
+		$grossother = $data['inventoryplanner']->inventoryplannerotherprices->sum('inventory_planner_other_price_total_gross_rate');
+
+		$nettprint = $data['inventoryplanner']->inventoryplannerprintprices->sum('inventory_planner_print_price_nett_rate');
+		$nettdigital = $data['inventoryplanner']->inventoryplannerdigitalprices->sum('inventory_planner_digital_price_nett_rate');
+		$nettevent = $data['inventoryplanner']->inventoryplannereventprices->sum('inventory_planner_event_price_nett_rate');
+		$nettcreative = $data['inventoryplanner']->inventoryplannercreativeprices->sum('inventory_planner_creative_price_nett_rate');
+		$nettother = $data['inventoryplanner']->inventoryplannerotherprices->sum('inventory_planner_other_price_nett_rate');
+
+		$data['total_value'] = $grossprint + $grossdigital + $grossevent + $grosscreative + $grossother;
+		$data['total_nett'] = $nettprint + $nettdigital + $nettevent + $nettcreative + $nettother;
+		$data['saving_value'] = $data['total_value'] - $data['total_nett'];
+
+        return view('vendor.material.inventory.inventoryplanner.show', $data);
+    }
+
     public function apiList($listtype, Request $request)
     {
         $u = new UserLibrary;
@@ -1022,5 +1084,21 @@ class InventoryPlannerController extends Controller
     	}
 
 
+    }
+
+    public function calculateAllPrices($id) {
+    	$data = array();
+
+    	$grossprint = InventoryPlannerPrintPrice::where('inventory_planner_id', $id)->sum('inventory_planner_print_price_total_gross_rate');
+    	$grossdigital = InventoryPlannerDigitalPrice::where('inventory_planner_id', $id)->sum('inventory_planner_digital_price_total_gross_rate');
+    	$grossevent = InventoryPlannerEventPrice::where('inventory_planner_id', $id)->sum('inventory_planner_event_price_total_gross_rate');
+    	$grosscreative = InventoryPlannerCreativePrice::where('inventory_planner_id', $id)->sum('inventory_planner_creative_price_total_gross_rate');
+    	$grossother = InventoryPlannerOtherPrice::where('inventory_planner_id', $id)->sum('inventory_planner_other_price_total_gross_rate');
+
+    	$nettprint = InventoryPlannerPrintPrice::where('inventory_planner_id', $id)->sum('inventory_planner_print_price_total_gross_rate');
+    	$nettdigital = InventoryPlannerDigitalPrice::where('inventory_planner_id', $id)->sum('inventory_planner_digital_price_total_gross_rate');
+    	$nettevent = InventoryPlannerEventPrice::where('inventory_planner_id', $id)->sum('inventory_planner_event_price_total_gross_rate');
+    	$nettcreative = InventoryPlannerCreativePrice::where('inventory_planner_id', $id)->sum('inventory_planner_creative_price_total_gross_rate');
+    	$nettother = InventoryPlannerOtherPrice::where('inventory_planner_id', $id)->sum('inventory_planner_other_price_total_gross_rate');
     }
 }
