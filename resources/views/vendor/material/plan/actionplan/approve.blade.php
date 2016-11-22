@@ -161,7 +161,11 @@
                                 <div class="tv-body">
 									<p>
 										{{ $value->action_plan_history_text }}
-									</p>                                    
+									</p>
+									<div class="clearfix"></div>
+									<ul class="tvb-stats">
+										<li class="tvbs-likes">{{ $value->approvaltype->approval_type_name }}</li>
+									</ul>                            
                                 </div>
                             </div>
                         @endforeach

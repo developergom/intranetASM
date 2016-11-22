@@ -83,8 +83,20 @@ class InventoryPlanner extends Model
 		return $this->hasMany('App\InventoryPlannerOtherPrice', 'inventory_planner_id');
 	}
 
-	public function inventoryhistories()
+	public function inventoryplannerhistories()
 	{
 		return $this->hasMany('App\InventoryPlannerHistory', 'inventory_planner_id');
+	}
+
+	public function getCreatedByAttribute($value)
+	{
+		$user = User::find($value); 
+		return $user;
+	}
+
+	public function getUpdatedByAttribute($value)
+	{
+		$user = User::find($value); 
+		return $user;
 	}
 }

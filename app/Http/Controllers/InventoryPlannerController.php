@@ -379,6 +379,157 @@ class InventoryPlannerController extends Controller
         return view('vendor.material.inventory.inventoryplanner.show', $data);
     }
 
+    public function approve(Request $request, $flow_no, $id)
+    {
+        if($flow_no == 1) {
+            return $this->approveFlowNo1($request, $id);
+        }elseif($flow_no == 2) {
+            return $this->approveFlowNo2($request, $id);
+        }
+    }
+
+    public function postApprove(Request $request, $flow_no, $id)
+    {
+        if($flow_no == 1) {
+            $this->postApproveFlowNo1($request, $id);
+        }elseif($flow_no == 2) {
+            $this->postApproveFlowNo2($request, $id);
+        }
+
+        return redirect('inventory/inventoryplanner');
+    }
+
+    private function approveFlowNo2(Request $request, $id)
+    {
+        if(Gate::denies('Inventory Planner-Approval')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['inventoryplanner'] = InventoryPlanner::with(
+        												'inventorytype', 
+        												'implementations',
+        												'medias',
+        												'actionplans',
+        												'eventplans',
+        												'uploadfiles',
+        												'inventoryplannerprintprices',
+        												'inventoryplannerprintprices.pricetype',
+        												'inventoryplannerprintprices.media',
+        												'inventoryplannerprintprices.advertiserate',
+        												'inventoryplannerprintprices.advertiserate.paper',
+        												'inventoryplannerprintprices.advertiserate.advertisesize',
+        												'inventoryplannerprintprices.advertiserate.advertiseposition',
+        												'inventoryplannerdigitalprices',
+        												'inventoryplannerdigitalprices.pricetype',
+        												'inventoryplannerdigitalprices.media',
+        												'inventoryplannerdigitalprices.advertiserate.paper',
+        												'inventoryplannerdigitalprices.advertiserate.advertisesize',
+        												'inventoryplannerdigitalprices.advertiserate.advertiseposition',
+        												'inventoryplannereventprices',
+        												'inventoryplannereventprices.pricetype',
+        												'inventoryplannereventprices.media',
+        												'inventoryplannercreativeprices',
+        												'inventoryplannercreativeprices.pricetype',
+        												'inventoryplannercreativeprices.media',
+        												'inventoryplannercreativeprices.advertiserate',
+        												'inventoryplannercreativeprices.advertiserate.paper',
+        												'inventoryplannercreativeprices.advertiserate.advertisesize',
+        												'inventoryplannercreativeprices.advertiserate.advertiseposition',
+        												'inventoryplannerotherprices',
+        												'inventoryplannerotherprices.pricetype',
+        												'inventoryplannerotherprices.media',
+        												'inventoryplannerhistories'
+        												)->find($id);
+
+		$grossprint = $data['inventoryplanner']->inventoryplannerprintprices->sum('inventory_planner_print_price_total_gross_rate');
+		$grossdigital = $data['inventoryplanner']->inventoryplannerdigitalprices->sum('inventory_planner_digital_price_total_gross_rate');
+		$grossevent = $data['inventoryplanner']->inventoryplannereventprices->sum('inventory_planner_event_price_total_gross_rate');
+		$grosscreative = $data['inventoryplanner']->inventoryplannercreativeprices->sum('inventory_planner_creative_price_total_gross_rate');
+		$grossother = $data['inventoryplanner']->inventoryplannerotherprices->sum('inventory_planner_other_price_total_gross_rate');
+
+		$nettprint = $data['inventoryplanner']->inventoryplannerprintprices->sum('inventory_planner_print_price_nett_rate');
+		$nettdigital = $data['inventoryplanner']->inventoryplannerdigitalprices->sum('inventory_planner_digital_price_nett_rate');
+		$nettevent = $data['inventoryplanner']->inventoryplannereventprices->sum('inventory_planner_event_price_nett_rate');
+		$nettcreative = $data['inventoryplanner']->inventoryplannercreativeprices->sum('inventory_planner_creative_price_nett_rate');
+		$nettother = $data['inventoryplanner']->inventoryplannerotherprices->sum('inventory_planner_other_price_nett_rate');
+
+		$data['total_value'] = $grossprint + $grossdigital + $grossevent + $grosscreative + $grossother;
+		$data['total_nett'] = $nettprint + $nettdigital + $nettevent + $nettcreative + $nettother;
+		$data['saving_value'] = $data['total_value'] - $data['total_nett'];
+
+        return view('vendor.material.inventory.inventoryplanner.approve', $data);
+    }
+
+    private function postApproveFlowNo2(Request $request, $id)
+    {
+        if(Gate::denies('Inventory Planner-Approval')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $this->validate($request, [
+            'approval' => 'required',
+            'comment' => 'required',
+        ]);
+
+        if($request->input('approval') == '1') 
+        {
+            //approve
+            $inventoryplanner = InventoryPlanner::find($id);
+
+            $flow = new FlowLibrary;
+            $nextFlow = $flow->getNextFlow($this->flow_group_id, $inventoryplanner->flow_no, $request->user()->user_id, '', $inventoryplanner->created_by->user_id);
+
+            $inventoryplanner->flow_no = $nextFlow['flow_no'];
+            $inventoryplanner->current_user = $nextFlow['current_user'];
+            $inventoryplanner->updated_by = $request->user()->user_id;
+            $inventoryplanner->save();
+
+            $his = new InventoryPlannerHistory;
+            $his->inventory_planner_id = $id;
+            $his->approval_type_id = 2;
+            $his->inventory_planner_history_text = $request->input('comment');
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
+            $this->notif->remove($request->user()->user_id, 'inventoryplannerapproval', $inventoryplanner->inventory_planner_id);
+            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'inventoryplannerfinished', 'Inventory Planner "' . $inventoryplanner->inventory_planner_title . '" has been approved.', $id);
+
+            $request->session()->flash('status', 'Data has been saved!');
+
+        }else{
+            //reject
+            $inventoryplanner = InventoryPlanner::find($id);
+
+            $flow = new FlowLibrary;
+            $prevFlow = $flow->getPreviousFlow($this->flow_group_id, $inventoryplanner->flow_no, $request->user()->user_id, '', $inventoryplanner->created_by->user_id);
+
+            $inventoryplanner->flow_no = $prevFlow['flow_no'];
+            $inventoryplanner->revision_no = $inventoryplanner->revision_no + 1;
+            $inventoryplanner->current_user = $prevFlow['current_user'];
+            $inventoryplanner->updated_by = $request->user()->user_id;
+            $inventoryplanner->save();
+
+            $his = new InventoryPlannerHistory;
+            $his->inventory_planner_id = $id;
+            $his->approval_type_id = 3;
+            $his->inventory_planner_history_text = $request->input('comment');
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
+            $this->notif->remove($request->user()->user_id, 'inventoryplannerapproval', $inventoryplanner->inventory_planner_id);
+            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'inventoryplannerreject', 'Inventory Planner "' . $inventoryplanner->inventory_planner_title . '" rejected.', $id);
+
+            $request->session()->flash('status', 'Data has been saved!');
+        }
+
+    }
+
     public function apiList($listtype, Request $request)
     {
         $u = new UserLibrary;
