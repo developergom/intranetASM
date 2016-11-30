@@ -23,6 +23,10 @@
         <div class="lc-block toggled" id="l-login">
             <form method="POST" role="form" action="{{ url('/login') }}" id="form-login">
             {{ csrf_field() }}
+            <div>
+                <h3>{!! Cache::get('setting_app_name') !!}</h3><br/>
+            </div>
+            <div class="clearfix"></div>
             <div class="input-group m-b-20 {{ $errors->has('user_name') ? ' has-error' : '' }}">
                 <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
                 <div class="fg-line">

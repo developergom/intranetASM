@@ -36,7 +36,6 @@ class ActionPlanController extends Controller
         $this->flow_group_id = $this->flows[0]->flow_group_id;
 
         $this->notif = new NotificationLibrary;
-        //dd();
     }
 
     /**
