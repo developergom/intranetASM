@@ -9,6 +9,7 @@ use Auth;
 
 use App\Ibrol\Libraries\Recursive;
 use App\Ibrol\Libraries\MenuLibrary;
+use App\Ibrol\Libraries\LogLibrary;
 use App\Http\Requests;
 
 class MenuMiddleware
@@ -27,6 +28,10 @@ class MenuMiddleware
             $datamenu = $menulibrary->getMenuFromDatabase();
             Cache::add('datamenus-'.Auth::user()->user_id,$datamenu,60);
         }
+
+        //store log
+        $log = new LogLibrary;
+        $log->store($request);
 
         return $next($request);
     }
