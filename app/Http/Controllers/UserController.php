@@ -200,6 +200,10 @@ class UserController extends Controller
         $obj->user_phone = $request->input('user_phone');
         $obj->updated_by = $request->user()->user_id;
 
+        if($request->input('reset_password')=='yes') {
+            $obj->password = bcrypt('password');
+        }
+
         $obj->save();
 
         User::find($id)->roles()->sync($request->input('role_id'));

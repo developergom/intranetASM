@@ -234,6 +234,18 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="reset_password" class="col-sm-2 control-label"></label>
+	                <div class="col-sm-10">
+	                	<div class="checkbox m-b-15">
+	                		<label>
+	                            <input value="yes" type="checkbox" name="reset_password">
+	                            <i class="input-helper"></i>
+	                            Please check if you want to reset the password
+	                        </label>
+	                	</div>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
 	                    <a href="{{ url('user') }}" class="btn btn-danger btn-sm">Back</a>
