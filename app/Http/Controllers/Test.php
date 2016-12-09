@@ -37,7 +37,7 @@ class Test extends Controller{
 				$row = $item->toArray();
 				//dd($row);
 
-				/*if(!ClientContact::find($row['contactid'])) {
+				if(!ClientContact::find($row['contactid'])) {
 					//belum ada
 					//dd('belumada');
 
@@ -62,10 +62,10 @@ class Test extends Controller{
 				}else{	
 					//sudah ada
 					//dd('sudahada');
-				}*/
+				}
 
 
-				if(!Client::find($row['clientid'])) {
+				/*if(!Client::find($row['clientid'])) {
 					//belum ada
 					//dd('belumada');
 
@@ -97,7 +97,7 @@ class Test extends Controller{
 				}else{	
 					//sudah ada
 					//dd('sudahada');
-				}
+				}*/
 			}
 
 			//dd($items);
