@@ -159,6 +159,7 @@ return [
         App\Providers\ComposerServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         hisorange\BrowserDetect\Provider\BrowserDetectService::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
     ],
 
@@ -208,7 +209,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'BrowserDetect' => hisorange\BrowserDetect\Facade\Parser::class,
-
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];
