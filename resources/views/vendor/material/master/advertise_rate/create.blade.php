@@ -65,7 +65,7 @@
                                 	@if($row->advertise_size_id==old('advertise_size_id'))
                                 		{!! $selected = 'selected' !!}
                                 	@endif
-								    <option value="{{ $row->advertise_size_id }}" {{ $selected }}>{{ $row->advertise_size_name }}</option>
+								    <option value="{{ $row->advertise_size_id }}" {{ $selected }}>{{ $row->advertise_size_name . ' ' . $row->advertise_size_width . ' x ' . $row->advertise_size_length . ' ' . $row->unit->unit_code }}</option>
 								@endforeach
                             </select>
 	                    </div>

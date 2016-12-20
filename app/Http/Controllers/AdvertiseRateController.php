@@ -41,7 +41,7 @@ class AdvertiseRateController extends Controller
         }
         $data = array();
         $data['advertiseposition'] = AdvertisePosition::where('active','1')->orderBy('advertise_position_name')->get();
-        $data['advertisesize'] = AdvertiseSize::where('active','1')->orderBy('advertise_size_name')->get();
+        $data['advertisesize'] = AdvertiseSize::with('unit')->where('active','1')->orderBy('advertise_size_name')->get();
         $data['media'] = Media::where('active','1')->orderBy('media_name')->get();
         $data['paper'] = Paper::with('unit')->where('active','1')->orderBy('paper_name')->get();
         return view('vendor.material.master.advertise_rate.create', $data);
@@ -100,7 +100,7 @@ class AdvertiseRateController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $data = array();
-        $data['advertiserate'] = AdvertiseRate::with('paper', 'advertisesize', 'advertiseposition')->where('advertise_rates.active','1')->find($id);
+        $data['advertiserate'] = AdvertiseRate::with('paper', 'advertisesize', 'advertiseposition', 'advertisesize.unit')->where('advertise_rates.active','1')->find($id);
         $advertise_rate_startdate = Carbon::createFromFormat('Y-m-d', ($data['advertiserate']->advertise_rate_startdate==null) ? date('Y-m-d') : $data['advertiserate']->advertise_rate_startdate);
         $advertise_rate_enddate = Carbon::createFromFormat('Y-m-d', ($data['advertiserate']->advertise_rate_enddate==null) ? date('Y-m-d') : $data['advertiserate']->advertise_rate_enddate);
         $data['advertise_rate_startdate'] = $advertise_rate_startdate->format('d/m/Y');
@@ -121,7 +121,7 @@ class AdvertiseRateController extends Controller
         }
         $data = array();
         $data['advertiseposition'] = AdvertisePosition::where('active','1')->orderBy('advertise_position_name')->get();
-        $data['advertisesize'] = AdvertiseSize::where('active','1')->orderBy('advertise_size_name')->get();
+        $data['advertisesize'] = AdvertiseSize::with('unit')->where('active','1')->orderBy('advertise_size_name')->get();
         $data['media'] = Media::where('active','1')->orderBy('media_name')->get();
         $data['advertiserate'] = AdvertiseRate::with('paper', 'advertisesize', 'advertiseposition')->where('active','1')->find($id);
         $data['paper'] = Paper::with('unit')->where('active','1')->orderBy('paper_name')->get();

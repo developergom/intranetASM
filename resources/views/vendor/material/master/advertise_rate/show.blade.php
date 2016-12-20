@@ -25,7 +25,7 @@
 	                <label for="advertise_size_id" class="col-sm-2 control-label">Size</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                    	<input type="text" class="form-control input-sm" value="{{ $advertiserate->advertisesize->advertise_size_name }}" disabled="true">
+	                    	<input type="text" class="form-control input-sm" value="{{ $advertiserate->advertisesize->advertise_size_name . ' ' . $advertiserate->advertisesize->advertise_size_width . ' x ' . $advertiserate->advertisesize->advertise_size_length . ' ' . $advertiserate->advertisesize->unit->unit_code }}" disabled="true">
 	                    </div>
 	                </div>
 	            </div>
