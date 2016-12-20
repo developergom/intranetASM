@@ -62,6 +62,7 @@ class MediaController extends Controller
             'media_code' => 'required|max:12|unique:medias,media_code',
             'media_name' => 'required|max:100',
             'media_logo' => 'image|max:2000',
+            'media_circulation' => 'numeric',
         ]);
 
         if ($request->hasFile('media_logo')) {
@@ -85,6 +86,7 @@ class MediaController extends Controller
         $obj->media_code = $request->input('media_code');
         $obj->media_name = $request->input('media_name');
         $obj->media_logo = $media_logo;
+        $obj->media_circulation = $request->input('media_circulation');
         $obj->media_desc = $request->input('media_desc');
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
@@ -148,6 +150,7 @@ class MediaController extends Controller
             'media_code' => 'required|max:12|unique:medias,media_code,' . $id . ',media_id',
             'media_name' => 'required|max:100',
             'media_logo' => 'image|max:2000',
+            'media_circulation' => 'numeric',
         ]);
 
         $obj = Media::find($id);
@@ -156,6 +159,7 @@ class MediaController extends Controller
         $obj->media_group_id = $request->input('media_group_id');
         $obj->media_code = $request->input('media_code');
         $obj->media_name = $request->input('media_name');
+        $obj->media_circulation = $request->input('media_circulation');
         $obj->media_desc = $request->input('media_desc');
         $obj->updated_by = $request->user()->user_id;
 

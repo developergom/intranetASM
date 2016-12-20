@@ -15,6 +15,7 @@ class Media extends Model
 				'media_code',
 				'media_name',
 				'media_logo',
+				'media_circulation',
 				'media_desc',
 	];
 

@@ -102,6 +102,19 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="media_circulation" class="col-sm-2 control-label">Circulation</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="media_circulation" id="media_circulation" placeholder="Media Circulation ex: 50000" maxlength="10" value="{{ $media->media_circulation }}">
+	                    </div>
+	                    @if ($errors->has('media_circulation'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('media_circulation') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="media_desc" class="col-sm-2 control-label">Logo</label>
 	                <div class="col-sm-10">
 	                    <div class="fileinput fileinput-new" data-provides="fileinput">
