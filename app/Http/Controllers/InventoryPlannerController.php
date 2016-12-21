@@ -564,6 +564,235 @@ class InventoryPlannerController extends Controller
         return view('vendor.material.inventory.inventoryplanner.edit', $data);
     }
 
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'inventory_type_id' => 'required',
+            'inventory_planner_title' => 'required|max:100',
+            'inventory_planner_desc' => 'required',
+            'inventory_planner_year' => 'required|max:4',
+            'inventory_planner_deadline' => 'required|date_format:"d/m/Y"',
+            'action_plan_pages' => 'numeric',
+            'action_plan_views' => 'numeric',
+            'implementation_id[]' => 'array',
+            'media_id[]' => 'array',
+            'action_plan_id[]' => 'array',
+            'event_plan_id[]' => 'array',
+        ]);
+
+        $flow = new FlowLibrary;
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
+
+        $obj = InventoryPlanner::find($id);
+        $obj->inventory_type_id = $request->input('inventory_type_id');
+        $obj->inventory_planner_title = $request->input('inventory_planner_title');
+        $obj->inventory_planner_desc = $request->input('inventory_planner_desc');
+        $obj->inventory_planner_deadline = Carbon::createFromFormat('d/m/Y', $request->input('inventory_planner_deadline'))->toDateString();
+        $obj->inventory_planner_year = $request->input('inventory_planner_year');
+        $obj->flow_no = $nextFlow['flow_no'];
+        $obj->current_user = $nextFlow['current_user'];
+        $obj->updated_by = $request->user()->user_id;
+
+        $obj->save();
+
+
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => $obj->revision_no ];
+            }
+        }
+
+        if(!empty($fileArray)) {
+            InventoryPlanner::find($obj->inventory_planner_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
+        }
+
+        if(!empty($request->input('implementation_id'))) {
+            InventoryPlanner::find($obj->inventory_planner_id)->implementations()->sync($request->input('implementation_id'));
+        }
+
+        if(!empty($request->input('media_id'))) {
+            InventoryPlanner::find($obj->inventory_planner_id)->medias()->sync($request->input('media_id'));
+        }
+        
+        if(!empty($request->input('action_plan_id'))) {
+            InventoryPlanner::find($obj->inventory_planner_id)->actionplans()->sync($request->input('action_plan_id'));
+        }
+
+        if(!empty($request->input('event_plan_id'))) {
+            InventoryPlanner::find($obj->inventory_planner_id)->eventplans()->sync($request->input('event_plan_id'));
+        }
+
+        $his = new InventoryPlannerHistory;
+        $his->inventory_planner_id = $obj->inventory_planner_id;
+        $his->approval_type_id = 1;
+        $his->inventory_planner_history_text = $request->input('inventory_planner_desc');
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        //remove & store print price items
+        InventoryPlannerPrintPrice::where('inventory_planner_id', $obj->inventory_planner_id)->delete();
+        if($request->session()->has('inventory_print_prices_' . $request->user()->user_id)) {
+            $prices = $request->session()->get('inventory_print_prices_' . $request->user()->user_id);
+            foreach($prices as $price) {
+                $ippp = new InventoryPlannerPrintPrice;
+                $ippp->inventory_planner_id = $obj->inventory_planner_id;
+                $ippp->price_type_id = $price['price_type_id'];
+                $ippp->media_id = $price['media_id'];
+                /*$ippp->media_edition_id = $price->media_edition_id;*/
+                $ippp->advertise_rate_id = $price['advertise_rate_id'];
+                $ippp->inventory_planner_print_price_remarks = $price['inventory_planner_print_price_remarks'];
+                $ippp->inventory_planner_print_price_gross_rate = $price['inventory_planner_print_price_gross_rate'];
+                $ippp->inventory_planner_print_price_surcharge = $price['inventory_planner_print_price_surcharge'];
+                $ippp->inventory_planner_print_price_total_gross_rate = $price['inventory_planner_print_price_total_gross_rate'];
+                $ippp->inventory_planner_print_price_discount = $price['inventory_planner_print_price_discount'];
+                $ippp->inventory_planner_print_price_nett_rate = $price['inventory_planner_print_price_nett_rate'];
+                $ippp->active = '1';
+                $ippp->created_by = $request->user()->user_id;
+
+                $ippp->save();
+            }
+
+            $request->session()->forget('inventory_print_prices_' . $request->user()->user_id);
+        }
+
+        //remove & store digital price items
+        InventoryPlannerDigitalPrice::where('inventory_planner_id', $obj->inventory_planner_id)->delete();
+        if($request->session()->has('inventory_digital_prices_' . $request->user()->user_id)) {
+            $prices = $request->session()->get('inventory_digital_prices_' . $request->user()->user_id);
+            foreach($prices as $price) {
+                $ipdp = new InventoryPlannerDigitalPrice;
+                $ipdp->inventory_planner_id = $obj->inventory_planner_id;
+                $ipdp->price_type_id = $price['price_type_id'];
+                $ipdp->media_id = $price['media_id'];
+                $ipdp->advertise_rate_id = $price['advertise_rate_id'];
+                $ipdp->inventory_planner_digital_price_startdate = Carbon::createFromFormat('d/m/Y', $price['inventory_planner_digital_price_startdate'])->toDateString();
+                $ipdp->inventory_planner_digital_price_enddate = Carbon::createFromFormat('d/m/Y', $price['inventory_planner_digital_price_enddate'])->toDateString();
+                $ipdp->inventory_planner_digital_price_deadline = Carbon::createFromFormat('d/m/Y', $price['inventory_planner_digital_price_deadline'])->toDateString();
+                $ipdp->inventory_planner_digital_price_remarks = $price['inventory_planner_digital_price_remarks'];
+                $ipdp->inventory_planner_digital_price_gross_rate = $price['inventory_planner_digital_price_gross_rate'];
+                $ipdp->inventory_planner_digital_price_surcharge = $price['inventory_planner_digital_price_surcharge'];
+                $ipdp->inventory_planner_digital_price_total_gross_rate = $price['inventory_planner_digital_price_total_gross_rate'];
+                $ipdp->inventory_planner_digital_price_discount = $price['inventory_planner_digital_price_discount'];
+                $ipdp->inventory_planner_digital_price_nett_rate = $price['inventory_planner_digital_price_nett_rate'];
+                $ipdp->active = '1';
+                $ipdp->created_by = $request->user()->user_id;
+
+                $ipdp->save();
+            }
+
+            $request->session()->forget('inventory_digital_prices_' . $request->user()->user_id);
+        }
+
+        //remove & store event price items
+        InventoryPlannerEventPrice::where('inventory_planner_id', $obj->inventory_planner_id)->delete();
+        if($request->session()->has('inventory_event_prices_' . $request->user()->user_id)) {
+            $prices = $request->session()->get('inventory_event_prices_' . $request->user()->user_id);
+            foreach($prices as $price) {
+                $ipdp = new InventoryPlannerEventPrice;
+                $ipdp->inventory_planner_id = $obj->inventory_planner_id;
+                $ipdp->price_type_id = $price['price_type_id'];
+                $ipdp->media_id = $price['media_id'];
+                $ipdp->inventory_planner_event_price_remarks = $price['inventory_planner_event_price_remarks'];
+                $ipdp->inventory_planner_event_price_gross_rate = $price['inventory_planner_event_price_gross_rate'];
+                $ipdp->inventory_planner_event_price_surcharge = $price['inventory_planner_event_price_surcharge'];
+                $ipdp->inventory_planner_event_price_total_gross_rate = $price['inventory_planner_event_price_total_gross_rate'];
+                $ipdp->inventory_planner_event_price_discount = $price['inventory_planner_event_price_discount'];
+                $ipdp->inventory_planner_event_price_nett_rate = $price['inventory_planner_event_price_nett_rate'];
+                $ipdp->active = '1';
+                $ipdp->created_by = $request->user()->user_id;
+
+                $ipdp->save();
+            }
+
+            $request->session()->forget('inventory_event_prices_' . $request->user()->user_id);
+        }
+
+        //remove & store creative price items
+        InventoryPlannerCreativePrice::where('inventory_planner_id', $obj->inventory_planner_id)->delete();
+        if($request->session()->has('inventory_creative_prices_' . $request->user()->user_id)) {
+            $prices = $request->session()->get('inventory_creative_prices_' . $request->user()->user_id);
+            foreach($prices as $price) {
+                $ippp = new InventoryPlannerCreativePrice;
+                $ippp->inventory_planner_id = $obj->inventory_planner_id;
+                $ippp->price_type_id = $price['price_type_id'];
+                $ippp->media_id = $price['media_id'];
+                $ippp->advertise_rate_id = $price['advertise_rate_id'];
+                $ippp->inventory_planner_creative_price_remarks = $price['inventory_planner_creative_price_remarks'];
+                $ippp->inventory_planner_creative_price_gross_rate = $price['inventory_planner_creative_price_gross_rate'];
+                $ippp->inventory_planner_creative_price_surcharge = $price['inventory_planner_creative_price_surcharge'];
+                $ippp->inventory_planner_creative_price_total_gross_rate = $price['inventory_planner_creative_price_total_gross_rate'];
+                $ippp->inventory_planner_creative_price_discount = $price['inventory_planner_creative_price_discount'];
+                $ippp->inventory_planner_creative_price_nett_rate = $price['inventory_planner_creative_price_nett_rate'];
+                $ippp->active = '1';
+                $ippp->created_by = $request->user()->user_id;
+
+                $ippp->save();
+            }
+
+            $request->session()->forget('inventory_creative_prices_' . $request->user()->user_id);
+        }
+
+        //remove & store other price items
+        InventoryPlannerOtherPrice::where('inventory_planner_id', $obj->inventory_planner_id)->delete();
+        if($request->session()->has('inventory_other_prices_' . $request->user()->user_id)) {
+            $prices = $request->session()->get('inventory_other_prices_' . $request->user()->user_id);
+            foreach($prices as $price) {
+                $ipdp = new InventoryPlannerOtherPrice;
+                $ipdp->inventory_planner_id = $obj->inventory_planner_id;
+                $ipdp->price_type_id = $price['price_type_id'];
+                $ipdp->media_id = $price['media_id'];
+                $ipdp->inventory_planner_other_price_remarks = $price['inventory_planner_other_price_remarks'];
+                $ipdp->inventory_planner_other_price_gross_rate = $price['inventory_planner_other_price_gross_rate'];
+                $ipdp->inventory_planner_other_price_surcharge = $price['inventory_planner_other_price_surcharge'];
+                $ipdp->inventory_planner_other_price_total_gross_rate = $price['inventory_planner_other_price_total_gross_rate'];
+                $ipdp->inventory_planner_other_price_discount = $price['inventory_planner_other_price_discount'];
+                $ipdp->inventory_planner_other_price_nett_rate = $price['inventory_planner_other_price_nett_rate'];
+                $ipdp->active = '1';
+                $ipdp->created_by = $request->user()->user_id;
+
+                $ipdp->save();
+            }
+
+            $request->session()->forget('inventory_other_prices_' . $request->user()->user_id);
+        }
+
+        $this->notif->remove($request->user()->user_id, 'inventoryplannerreject', $obj->inventory_planner_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'inventoryplannerapproval', 'Please check Inventory Planner "' . $obj->inventory_planner_title . '"', $obj->inventory_planner_id);
+
+        $request->session()->flash('status', 'Data has been saved!');
+
+        return redirect('inventory/inventoryplanner');
+    }
+
     public function approve(Request $request, $flow_no, $id)
     {
         if($flow_no == 1) {

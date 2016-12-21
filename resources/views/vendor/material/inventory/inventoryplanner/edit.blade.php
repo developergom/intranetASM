@@ -11,7 +11,7 @@
     <div class="card">
         <div class="card-header"><h2>Inventory Planner<small>Edit Inventory Planner</small></h2></div>
         <div class="card-body card-padding">
-        	<form class="form-horizontal" role="form" method="POST" action="{{ url('inventory/inventoryplanner/' . $inventory->inventory_id) }}">
+        	<form class="form-horizontal" role="form" method="POST" action="{{ url('inventory/inventoryplanner/' . $inventory->inventory_planner_id) }}">
         		{{ csrf_field() }}
         		<input type="hidden" name="_method" value="PUT">
         		<div class="form-group">

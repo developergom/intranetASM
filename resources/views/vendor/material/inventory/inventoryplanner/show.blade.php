@@ -80,7 +80,7 @@
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        @foreach($inventoryplanner->eventplans as $row)
-	                        	<span class="badge">{{ $row->event_plan_title }}</span>
+	                        	<span class="badge">{{ $row->event_plan_name }}</span>
 	                        @endforeach
 	                    </div>
 	                </div>
