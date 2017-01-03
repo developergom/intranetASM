@@ -17,8 +17,13 @@ class Industry extends Model
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
 
-	public function subindustry()
+	public function subindustries()
 	{
 		return $this->hasMany('App\SubIndustry', 'subindustry_id');
+	}
+
+	public function proposals()
+	{
+		return $this->belongsToMany('App\Proposal', 'proposal_industry');
 	}
 }

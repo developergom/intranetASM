@@ -45,4 +45,9 @@ class UploadFile extends Model
 	{
 		return $this->belongsToMany('App\Creative', 'creative_upload_file');
 	}
+
+	public function proposals()
+	{
+		return $this->belongsToMany('App\Proposal', 'proposal_upload_file');
+	}
 }

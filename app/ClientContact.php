@@ -38,4 +38,9 @@ class ClientContact extends Model
 	public function agendas() {
 		return $this->belongsToMany('App\Agenda', 'agendas_clients');
 	}
+
+	public function proposals()
+	{
+		return $this->belongsToMany('App\Proposal', 'proposal_client_contact');
+	}
 }

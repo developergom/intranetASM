@@ -64,4 +64,19 @@ class AdvertiseRate extends Model
 	{
 		return $this->hasMany('App\InventoryPlannerCreativePrice', 'advertise_rate_id');
 	}
+
+	public function proposalprintprices()
+	{
+		return $this->hasMany('App\ProposalPrintPrice', 'advertise_rate_id');
+	}
+
+	public function proposaldigitalprices()
+	{
+		return $this->hasMany('App\ProposalDigitalPrice', 'advertise_rate_id');
+	}
+
+	public function proposalcreativeprices()
+	{
+		return $this->hasMany('App\ProposalCreativePrice', 'advertise_rate_id');
+	}
 }

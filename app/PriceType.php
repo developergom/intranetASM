@@ -46,4 +46,29 @@ class PriceType extends Model
 	{
 		return $this->hasMany('App\InventoryPlannerOtherPrice', 'price_type_id');
 	}
+
+	public function proposalprintprices()
+	{
+		return $this->hasMany('App\ProposalPrintPrice', 'price_type_id');
+	}
+
+	public function proposaldigitalprices()
+	{
+		return $this->hasMany('App\ProposalDigitalPrice', 'price_type_id');
+	}
+
+	public function proposaleventprices()
+	{
+		return $this->hasMany('App\ProposalEventPrice', 'price_type_id');
+	}
+
+	public function proposalcreativeprices()
+	{
+		return $this->hasMany('App\ProposalCreativePrice', 'price_type_id');
+	}
+
+	public function proposalotherprices()
+	{
+		return $this->hasMany('App\ProposalOtherPrice', 'price_type_id');
+	}
 }

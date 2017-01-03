@@ -40,4 +40,9 @@ class MediaEdition extends Model
 	{
 		return $this->hasMany('App\InventoryPlannerPrintPrice', 'media_edition_id');
 	}
+
+	public function proposalprintprices()
+	{
+		return $this->hasMany('App\ProposalPrintPrice', 'media_edition_id');
+	}
 }

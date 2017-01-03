@@ -88,6 +88,11 @@ class InventoryPlanner extends Model
 		return $this->hasMany('App\InventoryPlannerHistory', 'inventory_planner_id');
 	}
 
+	public function proposals()
+	{
+		return $this->belongsToMany('App\Proposal', 'proposal_inventory_planner');
+	}
+
 	public function getCreatedByAttribute($value)
 	{
 		$user = User::find($value); 
