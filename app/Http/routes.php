@@ -288,6 +288,14 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('inventoryplanner/api/loadOtherPrices', 'InventoryPlannerController@apiLoadOtherPrices');
     });
 
+    Route::group(['prefix' => 'workorder'], function() {
+        Route::post('proposal/apiList/{listtype}', 'ProposalController@apiList');
+        Route::post('proposal/apiDelete', 'ProposalController@apiDelete');
+        Route::resource('proposal', 'ProposalController');
+        Route::get('proposal/approve/{flow_no}/{id}', 'ProposalController@approve');
+        Route::post('proposal/approve/{flow_no}/{id}', 'ProposalController@postApprove');
+    });
+
     Route::group(['prefix' => 'config'], function() {
         //Announcement Management
         Route::post('announcement/apiList', 'AnnouncementController@apiList');
