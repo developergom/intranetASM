@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ImplementationsTableSeeder::class);
         $this->call(PriceTypesTableSeeder::class);
         $this->call(ProposalStatusTableSeeder::class);
+        $this->call(ProposalMethodsTableSeeder::class);
     }
 }

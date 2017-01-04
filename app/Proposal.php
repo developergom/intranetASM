@@ -39,6 +39,11 @@ class Proposal extends Model
 		return $this->belongsTo('App\ProposalStatus', 'proposal_status_id');
 	}
 
+	public function proposalmethod()
+	{
+		return $this->belongsTo('App\ProposalMethod', 'proposal_method_id');
+	}
+
 	public function medias() 
 	{
 		return $this->belongsToMany('App\Media', 'proposal_media');
