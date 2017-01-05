@@ -300,4 +300,18 @@ class ClientController extends Controller
 
         return response()->json($result, 200);
     }
+
+    public function apiSearchPost(Request $request)
+    {
+        if(Gate::denies('Home-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        //$clientName = $request->input('clientName');
+        $clientName = $request->clientName;
+
+        $result = Client::where('client_name','like','%' . $clientName . '%')->where('active', '1')->take(5)->get();
+
+        return response()->json($result, 200);
+    }
 }

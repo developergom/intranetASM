@@ -3,6 +3,7 @@
 @section('vendorcss')
 <link href="{{ url('css/chosen.css') }}" rel="stylesheet">
 <link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
+<link href="{{ url('css/ajax-bootstrap-select.min.css') }}" rel="stylesheet">
 <link href="{{ url('css/basic.min.css') }}" rel="stylesheet">
 <link href="{{ url('css/dropzone.min.css') }}" rel="stylesheet">
 @endsection
@@ -103,18 +104,8 @@
 	                <label for="client_id" class="col-sm-2 control-label">Client</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="client_id" id="client_id" class="selectpicker" data-live-search="true" required="true">
-                                @foreach ($clients as $row)
-                                	{!! $selected = '' !!}
-                                	@if(old('client_id'))
-	                                	@foreach (old('client_id') as $key => $value)
-	                                		@if($value==$row->client_id)
-	                                			{!! $selected = 'selected' !!}
-	                                		@endif
-	                                	@endforeach
-                                	@endif
-								    <option value="{{ $row->client_id }}" {{ $selected }}>{{ $row->client_name }}</option>
-								@endforeach
+	                        <select name="client_id" id="client_id" class="selectpicker with-ajax" data-live-search="true" required="true">
+                                
                             </select>
 	                    </div>
 	                    @if ($errors->has('client_id'))
@@ -398,6 +389,7 @@
 @section('vendorjs')
 <script src="{{ url('js/chosen.jquery.js') }}"></script>
 <script src="{{ url('js/bootstrap-select.min.js') }}"></script>
+<script src="{{ url('js/ajax-bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/dropzone.min.js') }}"></script>
 <script src="{{ url('js/input-mask.min.js') }}"></script>
 @endsection

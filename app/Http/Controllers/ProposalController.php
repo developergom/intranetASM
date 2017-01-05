@@ -79,19 +79,20 @@ class ProposalController extends Controller
 
         $data = array();
 
-        $data['proposal_types'] = ProposalType::where('active', '1')->orderBy('proposal_type_name')->get();
-        $data['clients'] = Client::where('active', '1')->orderBy('client_name')->get();
-        $data['brands'] = Brand::where('active', '1')->orderBy('brand_name')->get();
-        $data['industries'] = Industry::where('active', '1')->orderBy('industry_name')->get();
-        $data['inventories'] = InventoryPlanner::where('active', '1')->orderBy('inventory_planner_title')->get();
-        $data['medias'] = Media::whereHas('users', function($query) use($request){
+        $data['proposal_types'] = ProposalType::select('proposal_type_id','proposal_type_name')->where('active', '1')->orderBy('proposal_type_name')->get();
+        //$data['clients'] = Client::where('active', '1')->orderBy('client_name')->get();
+        //$data['clients'] = Client::where('active', '1')->lists('client_name', 'client_id')->all();
+        $data['brands'] = Brand::select('brand_id','brand_name')->where('active', '1')->orderBy('brand_name')->get();
+        $data['industries'] = Industry::select('industry_id','industry_name')->where('active', '1')->orderBy('industry_name')->get();
+        $data['inventories'] = InventoryPlanner::select('inventory_planner_id','inventory_planner_title')->where('active', '1')->orderBy('inventory_planner_title')->get();
+        $data['medias'] = Media::select('media_id','media_name')->whereHas('users', function($query) use($request){
                                     $query->where('users_medias.user_id', '=', $request->user()->user_id);
                                 })->where('medias.active', '1')->orderBy('media_name')->get();
 
-        $data['advertise_sizes'] = AdvertiseSize::where('active', '1')->orderBy('advertise_size_name')->get();
-        $data['advertise_positions'] = AdvertisePosition::where('active', '1')->orderBy('advertise_position_name')->get();
-        $data['papers'] = Paper::where('active', '1')->orderBy('paper_name')->get();
-        $data['price_types'] = PriceType::where('active', '1')->orderBy('price_type_name')->get();
+        $data['advertise_sizes'] = AdvertiseSize::select('advertise_size_id','advertise_size_name')->where('active', '1')->orderBy('advertise_size_name')->get();
+        $data['advertise_positions'] = AdvertisePosition::select('advertise_position_id','advertise_position_name')->where('active', '1')->orderBy('advertise_position_name')->get();
+        $data['papers'] = Paper::select('paper_id','paper_name')->where('active', '1')->orderBy('paper_name')->get();
+        $data['price_types'] = PriceType::select('price_type_id','price_type_name')->where('active', '1')->orderBy('price_type_name')->get();
 
         return view('vendor.material.workorder.proposal.create', $data);   
     }

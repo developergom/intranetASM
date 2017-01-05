@@ -89,6 +89,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('client/apiList', 'ClientController@apiList');
         Route::post('client/apiDelete', 'ClientController@apiDelete');
         Route::get('client/apiSearch/{query}', 'ClientController@apiSearch');
+        Route::post('client/apiSearch', 'ClientController@apiSearchPost');
         Route::resource('client', 'ClientController');
 
         //Client Contact
