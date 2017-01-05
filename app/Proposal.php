@@ -16,6 +16,7 @@ class Proposal extends Model
 				'proposal_desc',
 				'proposal_no',
 				'proposal_status_id',
+				'proposal_method_id',
 				'proposal_ready_date',
 				'proposal_delivery_date',
 				'client_id',

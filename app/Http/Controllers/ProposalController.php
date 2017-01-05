@@ -13,6 +13,10 @@ use App\UploadFile;
 use App\AdvertisePosition;
 use App\AdvertiseRate;
 use App\AdvertiseSize;
+use App\Brand;
+use App\Client;
+use App\ClientContact;
+use App\Industry;
 use App\InventoryPlanner;
 use App\Media;
 use App\MediaGroup;
@@ -65,6 +69,31 @@ class ProposalController extends Controller
         $data = array();
 
         return view('vendor.material.workorder.proposal.list', $data);
+    }
+
+    public function create(Request $request)
+    {
+        if(Gate::denies('Inventory Planner-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['proposal_types'] = ProposalType::where('active', '1')->orderBy('proposal_type_name')->get();
+        $data['clients'] = Client::where('active', '1')->orderBy('client_name')->get();
+        $data['brands'] = Brand::where('active', '1')->orderBy('brand_name')->get();
+        $data['industries'] = Industry::where('active', '1')->orderBy('industry_name')->get();
+        $data['inventories'] = InventoryPlanner::where('active', '1')->orderBy('inventory_planner_title')->get();
+        $data['medias'] = Media::whereHas('users', function($query) use($request){
+                                    $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                                })->where('medias.active', '1')->orderBy('media_name')->get();
+
+        $data['advertise_sizes'] = AdvertiseSize::where('active', '1')->orderBy('advertise_size_name')->get();
+        $data['advertise_positions'] = AdvertisePosition::where('active', '1')->orderBy('advertise_position_name')->get();
+        $data['papers'] = Paper::where('active', '1')->orderBy('paper_name')->get();
+        $data['price_types'] = PriceType::where('active', '1')->orderBy('price_type_name')->get();
+
+        return view('vendor.material.workorder.proposal.create', $data);   
     }
 
     public function apiList($listtype, Request $request)
