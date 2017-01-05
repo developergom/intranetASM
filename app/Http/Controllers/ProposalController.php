@@ -73,7 +73,7 @@ class ProposalController extends Controller
 
     public function create(Request $request)
     {
-        if(Gate::denies('Inventory Planner-Create')) {
+        if(Gate::denies('Proposal-Create')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -231,5 +231,542 @@ class ProposalController extends Controller
         
 
         return response()->json($data);
+    }
+
+    public function apiGetMedias(Request $request) {
+        $data = array();
+
+        $medias = $request->input('medias');
+
+        $data['media'] = Media::whereIn('media_id', $medias)->where('active', '1')->orderBy('media_name')->get();
+
+        return response()->json($data);
+    }
+
+    public function apiGetRates(Request $request) {
+        $data = array();
+
+        $media_id = $request->input('media_id');
+        $advertise_position_id = $request->input('advertise_position_id');
+        $advertise_size_id = $request->input('advertise_size_id');
+        $paper_id = $request->input('paper_id');
+
+        $data['rates'] = AdvertiseRate::where('media_id', $media_id)
+                                        ->where('advertise_position_id', $advertise_position_id)
+                                        ->where('advertise_size_id', $advertise_size_id)
+                                        ->where('paper_id', $paper_id)
+                                        ->where('advertise_rates.active', '1')
+                                        ->orderBy('advertise_rate_code')
+                                        ->get();
+        return response()->json($data);
+    }
+
+    public function apiGetBasicRate(Request $request) {
+        $data = array();
+
+        //$advertise_rate_id = $request->input('advertise_rate_id') or 0;
+        $advertise_rate_id = $request->input('advertise_rate_id');
+        if($advertise_rate_id != 0) {
+            $rate = AdvertiseRate::find($advertise_rate_id);
+
+            $data['basic_rate'] = $rate->advertise_rate_normal; 
+        }else{
+            $data['basic_rate'] = 0;
+        }
+        
+
+        return $data;
+    }
+
+    public function apiLoadPrintPrices(Request $request) {
+        if(Gate::denies('Proposal-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['prices'] = $request->session()->get('proposal_print_prices_' . $request->user()->user_id);
+
+        return response()->json($data);
+    }
+
+    public function apiStorePrintPrices(Request $request) {
+        if(Gate::denies('Proposal-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $price_type_id = $request->input('price_type_id');
+        $media_id = $request->input('media_id');
+        $media_name = $request->input('media_name');
+        $advertise_position_id = $request->input('advertise_position_id');
+        $advertise_position_name = $request->input('advertise_position_name');
+        $advertise_size_id = $request->input('advertise_size_id');
+        $advertise_size_name = $request->input('advertise_size_name');
+        $paper_id = $request->input('paper_id');
+        $paper_name = $request->input('paper_name');
+        $advertise_rate_id = $request->input('advertise_rate_id');
+        $advertise_rate_name = $request->input('advertise_rate_name');
+        $proposal_print_price_gross_rate = $request->input('proposal_print_price_gross_rate');
+        $proposal_print_price_surcharge = $request->input('proposal_print_price_surcharge');
+        $proposal_print_price_total_gross_rate = $request->input('proposal_print_price_total_gross_rate');
+        $proposal_print_price_discount = $request->input('proposal_print_price_discount');
+        $proposal_print_price_nett_rate = $request->input('proposal_print_price_nett_rate');
+        $proposal_print_price_remarks = $request->input('proposal_print_price_remarks');
+
+        $price = array();
+        $price['price_type_id'] = $price_type_id;
+        $price['media_id'] = $media_id;
+        $price['media_name'] = $media_name;
+        $price['advertise_position_id'] = $advertise_position_id;
+        $price['advertise_position_name'] = $advertise_position_name;
+        $price['advertise_size_id'] = $advertise_size_id;
+        $price['advertise_size_name'] = $advertise_size_name;
+        $price['paper_id'] = $paper_id;
+        $price['paper_name'] = $paper_name;
+        $price['advertise_rate_id'] = $advertise_rate_id;
+        $price['advertise_rate_name'] = $advertise_rate_name;
+        $price['proposal_print_price_gross_rate'] = $proposal_print_price_gross_rate;
+        $price['proposal_print_price_surcharge'] = $proposal_print_price_surcharge;
+        $price['proposal_print_price_total_gross_rate'] = $proposal_print_price_total_gross_rate;
+        $price['proposal_print_price_discount'] = $proposal_print_price_discount;
+        $price['proposal_print_price_nett_rate'] = $proposal_print_price_nett_rate;
+        $price['proposal_print_price_remarks'] = $proposal_print_price_remarks;
+
+        $prices = array();
+        if($request->session()->has('proposal_print_prices_' . $request->user()->user_id)) {
+            $prices = $request->session()->get('proposal_print_prices_' . $request->user()->user_id);
+            $request->session()->forget('proposal_print_prices_' . $request->user()->user_id);
+            $i = count($prices) + 1;
+        }else{
+            $i = 1;
+        }
+
+        $prices[] = $price;
+
+        $request->session()->put('proposal_print_prices_' . $request->user()->user_id, $prices);
+        
+        $data['status'] = '200';
+
+        return response()->json($data);
+    }
+
+    public function apiDeletePrintPrices(Request $request) {
+        $data = array();
+
+        $key = $request->input('key');
+
+        $prices = array();
+        if($request->session()->has('proposal_print_prices_' . $request->user()->user_id)) {
+            $prices = $request->session()->get('proposal_print_prices_' . $request->user()->user_id);
+            $request->session()->forget('proposal_print_prices_' . $request->user()->user_id);
+
+            unset($prices[$key]);
+
+            $request->session()->put('proposal_print_prices_' . $request->user()->user_id, $prices);
+        
+            $data['status'] = '200';
+
+            return response()->json($data); 
+        }else{
+            $data['status'] = '500';
+
+            return response()->json($data);
+        }
+
+
+    }
+
+    public function apiLoadDigitalPrices(Request $request) {
+        if(Gate::denies('Proposal-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['prices'] = $request->session()->get('proposal_digital_prices_' . $request->user()->user_id);
+
+        return response()->json($data);
+    }
+
+    public function apiStoreDigitalPrices(Request $request) {
+        if(Gate::denies('Proposal-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $price_type_id = $request->input('price_type_id');
+        $media_id = $request->input('media_id');
+        $media_name = $request->input('media_name');
+        $advertise_position_id = $request->input('advertise_position_id');
+        $advertise_position_name = $request->input('advertise_position_name');
+        $advertise_size_id = $request->input('advertise_size_id');
+        $advertise_size_name = $request->input('advertise_size_name');
+        $paper_id = $request->input('paper_id');
+        $paper_name = $request->input('paper_name');
+        $advertise_rate_id = $request->input('advertise_rate_id');
+        $advertise_rate_name = $request->input('advertise_rate_name');
+        $proposal_digital_price_startdate = $request->input('proposal_digital_price_startdate');
+        $proposal_digital_price_enddate = $request->input('proposal_digital_price_enddate');
+        $proposal_digital_price_deadline = $request->input('proposal_digital_price_deadline');
+        $proposal_digital_price_gross_rate = $request->input('proposal_digital_price_gross_rate');
+        $proposal_digital_price_surcharge = $request->input('proposal_digital_price_surcharge');
+        $proposal_digital_price_total_gross_rate = $request->input('proposal_digital_price_total_gross_rate');
+        $proposal_digital_price_discount = $request->input('proposal_digital_price_discount');
+        $proposal_digital_price_nett_rate = $request->input('proposal_digital_price_nett_rate');
+        $proposal_digital_price_remarks = $request->input('proposal_digital_price_remarks');
+
+        $price = array();
+        $price['price_type_id'] = $price_type_id;
+        $price['media_id'] = $media_id;
+        $price['media_name'] = $media_name;
+        $price['advertise_position_id'] = $advertise_position_id;
+        $price['advertise_position_name'] = $advertise_position_name;
+        $price['advertise_size_id'] = $advertise_size_id;
+        $price['advertise_size_name'] = $advertise_size_name;
+        $price['paper_id'] = $paper_id;
+        $price['paper_name'] = $paper_name;
+        $price['advertise_rate_id'] = $advertise_rate_id;
+        $price['advertise_rate_name'] = $advertise_rate_name;
+        $price['proposal_digital_price_startdate'] = $proposal_digital_price_startdate;
+        $price['proposal_digital_price_enddate'] = $proposal_digital_price_enddate;
+        $price['proposal_digital_price_deadline'] = $proposal_digital_price_deadline;
+        $price['proposal_digital_price_gross_rate'] = $proposal_digital_price_gross_rate;
+        $price['proposal_digital_price_surcharge'] = $proposal_digital_price_surcharge;
+        $price['proposal_digital_price_total_gross_rate'] = $proposal_digital_price_total_gross_rate;
+        $price['proposal_digital_price_discount'] = $proposal_digital_price_discount;
+        $price['proposal_digital_price_nett_rate'] = $proposal_digital_price_nett_rate;
+        $price['proposal_digital_price_remarks'] = $proposal_digital_price_remarks;
+
+        $prices = array();
+        if($request->session()->has('proposal_digital_prices_' . $request->user()->user_id)) {
+            $prices = $request->session()->get('proposal_digital_prices_' . $request->user()->user_id);
+            $request->session()->forget('proposal_digital_prices_' . $request->user()->user_id);
+            $i = count($prices) + 1;
+        }else{
+            $i = 1;
+        }
+
+        $prices[] = $price;
+
+        $request->session()->put('proposal_digital_prices_' . $request->user()->user_id, $prices);
+        
+        $data['status'] = '200';
+
+        return response()->json($data);
+    }
+
+    public function apiDeleteDigitalPrices(Request $request) {
+        $data = array();
+
+        $key = $request->input('key');
+
+        $prices = array();
+        if($request->session()->has('proposal_digital_prices_' . $request->user()->user_id)) {
+            $prices = $request->session()->get('proposal_digital_prices_' . $request->user()->user_id);
+            $request->session()->forget('proposal_digital_prices_' . $request->user()->user_id);
+
+            unset($prices[$key]);
+
+            $request->session()->put('proposal_digital_prices_' . $request->user()->user_id, $prices);
+        
+            $data['status'] = '200';
+
+            return response()->json($data); 
+        }else{
+            $data['status'] = '500';
+
+            return response()->json($data);
+        }
+
+
+    }
+
+
+    public function apiLoadEventPrices(Request $request) {
+        if(Gate::denies('Proposal-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['prices'] = $request->session()->get('proposal_event_prices_' . $request->user()->user_id);
+
+        return response()->json($data);
+    }
+
+    public function apiStoreEventPrices(Request $request) {
+        if(Gate::denies('Proposal-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $price_type_id = $request->input('price_type_id');
+        $media_id = $request->input('media_id');
+        $media_name = $request->input('media_name');
+        $proposal_event_price_gross_rate = $request->input('proposal_event_price_gross_rate');
+        $proposal_event_price_surcharge = $request->input('proposal_event_price_surcharge');
+        $proposal_event_price_total_gross_rate = $request->input('proposal_event_price_total_gross_rate');
+        $proposal_event_price_discount = $request->input('proposal_event_price_discount');
+        $proposal_event_price_nett_rate = $request->input('proposal_event_price_nett_rate');
+        $proposal_event_price_remarks = $request->input('proposal_event_price_remarks');
+
+        $price = array();
+        $price['price_type_id'] = $price_type_id;
+        $price['media_id'] = $media_id;
+        $price['media_name'] = $media_name;
+        $price['proposal_event_price_gross_rate'] = $proposal_event_price_gross_rate;
+        $price['proposal_event_price_surcharge'] = $proposal_event_price_surcharge;
+        $price['proposal_event_price_total_gross_rate'] = $proposal_event_price_total_gross_rate;
+        $price['proposal_event_price_discount'] = $proposal_event_price_discount;
+        $price['proposal_event_price_nett_rate'] = $proposal_event_price_nett_rate;
+        $price['proposal_event_price_remarks'] = $proposal_event_price_remarks;
+
+        $prices = array();
+        if($request->session()->has('proposal_event_prices_' . $request->user()->user_id)) {
+            $prices = $request->session()->get('proposal_event_prices_' . $request->user()->user_id);
+            $request->session()->forget('proposal_event_prices_' . $request->user()->user_id);
+            $i = count($prices) + 1;
+        }else{
+            $i = 1;
+        }
+
+        $prices[] = $price;
+
+        $request->session()->put('proposal_event_prices_' . $request->user()->user_id, $prices);
+        
+        $data['status'] = '200';
+
+        return response()->json($data);
+    }
+
+    public function apiDeleteEventPrices(Request $request) {
+        $data = array();
+
+        $key = $request->input('key');
+
+        $prices = array();
+        if($request->session()->has('proposal_event_prices_' . $request->user()->user_id)) {
+            $prices = $request->session()->get('proposal_event_prices_' . $request->user()->user_id);
+            $request->session()->forget('proposal_event_prices_' . $request->user()->user_id);
+
+            unset($prices[$key]);
+
+            $request->session()->put('proposal_event_prices_' . $request->user()->user_id, $prices);
+        
+            $data['status'] = '200';
+
+            return response()->json($data); 
+        }else{
+            $data['status'] = '500';
+
+            return response()->json($data);
+        }
+
+
+    }
+
+
+    public function apiLoadCreativePrices(Request $request) {
+        if(Gate::denies('Proposal-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['prices'] = $request->session()->get('proposal_creative_prices_' . $request->user()->user_id);
+
+        return response()->json($data);
+    }
+
+    public function apiStoreCreativePrices(Request $request) {
+        if(Gate::denies('Proposal-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $price_type_id = $request->input('price_type_id');
+        $media_id = $request->input('media_id');
+        $media_name = $request->input('media_name');
+        $advertise_position_id = $request->input('advertise_position_id');
+        $advertise_position_name = $request->input('advertise_position_name');
+        $advertise_size_id = $request->input('advertise_size_id');
+        $advertise_size_name = $request->input('advertise_size_name');
+        $paper_id = $request->input('paper_id');
+        $paper_name = $request->input('paper_name');
+        $advertise_rate_id = $request->input('advertise_rate_id');
+        $advertise_rate_name = $request->input('advertise_rate_name');
+        $proposal_creative_price_gross_rate = $request->input('proposal_creative_price_gross_rate');
+        $proposal_creative_price_surcharge = $request->input('proposal_creative_price_surcharge');
+        $proposal_creative_price_total_gross_rate = $request->input('proposal_creative_price_total_gross_rate');
+        $proposal_creative_price_discount = $request->input('proposal_creative_price_discount');
+        $proposal_creative_price_nett_rate = $request->input('proposal_creative_price_nett_rate');
+        $proposal_creative_price_remarks = $request->input('proposal_creative_price_remarks');
+
+        $price = array();
+        $price['price_type_id'] = $price_type_id;
+        $price['media_id'] = $media_id;
+        $price['media_name'] = $media_name;
+        $price['advertise_position_id'] = $advertise_position_id;
+        $price['advertise_position_name'] = $advertise_position_name;
+        $price['advertise_size_id'] = $advertise_size_id;
+        $price['advertise_size_name'] = $advertise_size_name;
+        $price['paper_id'] = $paper_id;
+        $price['paper_name'] = $paper_name;
+        $price['advertise_rate_id'] = $advertise_rate_id;
+        $price['advertise_rate_name'] = $advertise_rate_name;
+        $price['proposal_creative_price_gross_rate'] = $proposal_creative_price_gross_rate;
+        $price['proposal_creative_price_surcharge'] = $proposal_creative_price_surcharge;
+        $price['proposal_creative_price_total_gross_rate'] = $proposal_creative_price_total_gross_rate;
+        $price['proposal_creative_price_discount'] = $proposal_creative_price_discount;
+        $price['proposal_creative_price_nett_rate'] = $proposal_creative_price_nett_rate;
+        $price['proposal_creative_price_remarks'] = $proposal_creative_price_remarks;
+
+        $prices = array();
+        if($request->session()->has('proposal_creative_prices_' . $request->user()->user_id)) {
+            $prices = $request->session()->get('proposal_creative_prices_' . $request->user()->user_id);
+            $request->session()->forget('proposal_creative_prices_' . $request->user()->user_id);
+            $i = count($prices) + 1;
+        }else{
+            $i = 1;
+        }
+
+        $prices[] = $price;
+
+        $request->session()->put('proposal_creative_prices_' . $request->user()->user_id, $prices);
+        
+        $data['status'] = '200';
+
+        return response()->json($data);
+    }
+
+    public function apiDeleteCreativePrices(Request $request) {
+        $data = array();
+
+        $key = $request->input('key');
+
+        $prices = array();
+        if($request->session()->has('proposal_creative_prices_' . $request->user()->user_id)) {
+            $prices = $request->session()->get('proposal_creative_prices_' . $request->user()->user_id);
+            $request->session()->forget('proposal_creative_prices_' . $request->user()->user_id);
+
+            unset($prices[$key]);
+
+            $request->session()->put('proposal_creative_prices_' . $request->user()->user_id, $prices);
+        
+            $data['status'] = '200';
+
+            return response()->json($data); 
+        }else{
+            $data['status'] = '500';
+
+            return response()->json($data);
+        }
+
+
+    }
+
+    public function apiLoadOtherPrices(Request $request) {
+        if(Gate::denies('Proposal-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['prices'] = $request->session()->get('proposal_other_prices_' . $request->user()->user_id);
+
+        return response()->json($data);
+    }
+
+    public function apiStoreOtherPrices(Request $request) {
+        if(Gate::denies('Proposal-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $price_type_id = $request->input('price_type_id');
+        $media_id = $request->input('media_id');
+        $media_name = $request->input('media_name');
+        $proposal_other_price_gross_rate = $request->input('proposal_other_price_gross_rate');
+        $proposal_other_price_surcharge = $request->input('proposal_other_price_surcharge');
+        $proposal_other_price_total_gross_rate = $request->input('proposal_other_price_total_gross_rate');
+        $proposal_other_price_discount = $request->input('proposal_other_price_discount');
+        $proposal_other_price_nett_rate = $request->input('proposal_other_price_nett_rate');
+        $proposal_other_price_remarks = $request->input('proposal_other_price_remarks');
+
+        $price = array();
+        $price['price_type_id'] = $price_type_id;
+        $price['media_id'] = $media_id;
+        $price['media_name'] = $media_name;
+        $price['proposal_other_price_gross_rate'] = $proposal_other_price_gross_rate;
+        $price['proposal_other_price_surcharge'] = $proposal_other_price_surcharge;
+        $price['proposal_other_price_total_gross_rate'] = $proposal_other_price_total_gross_rate;
+        $price['proposal_other_price_discount'] = $proposal_other_price_discount;
+        $price['proposal_other_price_nett_rate'] = $proposal_other_price_nett_rate;
+        $price['proposal_other_price_remarks'] = $proposal_other_price_remarks;
+
+        $prices = array();
+        if($request->session()->has('proposal_other_prices_' . $request->user()->user_id)) {
+            $prices = $request->session()->get('proposal_other_prices_' . $request->user()->user_id);
+            $request->session()->forget('proposal_other_prices_' . $request->user()->user_id);
+            $i = count($prices) + 1;
+        }else{
+            $i = 1;
+        }
+
+        $prices[] = $price;
+
+        $request->session()->put('proposal_other_prices_' . $request->user()->user_id, $prices);
+        
+        $data['status'] = '200';
+
+        return response()->json($data);
+    }
+
+    public function apiDeleteOtherPrices(Request $request) {
+        $data = array();
+
+        $key = $request->input('key');
+
+        $prices = array();
+        if($request->session()->has('proposal_other_prices_' . $request->user()->user_id)) {
+            $prices = $request->session()->get('proposal_other_prices_' . $request->user()->user_id);
+            $request->session()->forget('proposal_other_prices_' . $request->user()->user_id);
+
+            unset($prices[$key]);
+
+            $request->session()->put('proposal_other_prices_' . $request->user()->user_id, $prices);
+        
+            $data['status'] = '200';
+
+            return response()->json($data); 
+        }else{
+            $data['status'] = '500';
+
+            return response()->json($data);
+        }
+
+
+    }
+
+    public function calculateAllPrices($id) {
+        $data = array();
+
+        $grossprint = ProposalPrintPrice::where('proposal_id', $id)->sum('proposal_print_price_total_gross_rate');
+        $grossdigital = ProposalDigitalPrice::where('proposal_id', $id)->sum('proposal_digital_price_total_gross_rate');
+        $grossevent = ProposalEventPrice::where('proposal_id', $id)->sum('proposal_event_price_total_gross_rate');
+        $grosscreative = ProposalCreativePrice::where('proposal_id', $id)->sum('proposal_creative_price_total_gross_rate');
+        $grossother = ProposalOtherPrice::where('proposal_id', $id)->sum('proposal_other_price_total_gross_rate');
+
+        $nettprint = ProposalPrintPrice::where('proposal_id', $id)->sum('proposal_print_price_total_gross_rate');
+        $nettdigital = ProposalDigitalPrice::where('proposal_id', $id)->sum('proposal_digital_price_total_gross_rate');
+        $nettevent = ProposalEventPrice::where('proposal_id', $id)->sum('proposal_event_price_total_gross_rate');
+        $nettcreative = ProposalCreativePrice::where('proposal_id', $id)->sum('proposal_creative_price_total_gross_rate');
+        $nettother = ProposalOtherPrice::where('proposal_id', $id)->sum('proposal_other_price_total_gross_rate');
     }
 }

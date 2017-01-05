@@ -294,6 +294,24 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::resource('proposal', 'ProposalController');
         Route::get('proposal/approve/{flow_no}/{id}', 'ProposalController@approve');
         Route::post('proposal/approve/{flow_no}/{id}', 'ProposalController@postApprove');
+        Route::post('proposal/api/getMedias', 'ProposalController@apiGetMedias');
+        Route::post('proposal/api/getRates', 'ProposalController@apiGetRates');
+        Route::post('proposal/api/getBasicRate', 'ProposalController@apiGetBasicRate');
+        Route::post('proposal/api/storePrintPrices', 'ProposalController@apiStorePrintPrices');
+        Route::post('proposal/api/deletePrintPrices', 'ProposalController@apiDeletePrintPrices');
+        Route::get('proposal/api/loadPrintPrices', 'ProposalController@apiLoadPrintPrices');
+        Route::post('proposal/api/storeDigitalPrices', 'ProposalController@apiStoreDigitalPrices');
+        Route::post('proposal/api/deleteDigitalPrices', 'ProposalController@apiDeleteDigitalPrices');
+        Route::get('proposal/api/loadDigitalPrices', 'ProposalController@apiLoadDigitalPrices');
+        Route::post('proposal/api/storeEventPrices', 'ProposalController@apiStoreEventPrices');
+        Route::post('proposal/api/deleteEventPrices', 'ProposalController@apiDeleteEventPrices');
+        Route::get('proposal/api/loadEventPrices', 'ProposalController@apiLoadEventPrices');
+        Route::post('proposal/api/storeCreativePrices', 'ProposalController@apiStoreCreativePrices');
+        Route::post('proposal/api/deleteCreativePrices', 'ProposalController@apiDeleteCreativePrices');
+        Route::get('proposal/api/loadCreativePrices', 'ProposalController@apiLoadCreativePrices');
+        Route::post('proposal/api/storeOtherPrices', 'ProposalController@apiStoreOtherPrices');
+        Route::post('proposal/api/deleteOtherPrices', 'ProposalController@apiDeleteOtherPrices');
+        Route::get('proposal/api/loadOtherPrices', 'ProposalController@apiLoadOtherPrices');
     });
 
     Route::group(['prefix' => 'config'], function() {
