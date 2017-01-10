@@ -49,11 +49,13 @@ class ProposalTypeController extends Controller
     {
         $this->validate($request, [
             'proposal_type_name' => 'required|max:100',
+            'proposal_type_duration' => 'required|numeric',
         ]);
 
         $obj = new ProposalType;
 
         $obj->proposal_type_name = $request->input('proposal_type_name');
+        $obj->proposal_type_duration = $request->input('proposal_type_duration');
         $obj->proposal_type_desc = $request->input('proposal_type_desc');
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
@@ -110,11 +112,13 @@ class ProposalTypeController extends Controller
     {
         $this->validate($request, [
             'proposal_type_name' => 'required|max:100',
+            'proposal_type_duration' => 'required|numeric',
         ]);
 
         $obj = Proposaltype::find($id);
 
         $obj->proposal_type_name = $request->input('proposal_type_name');
+        $obj->proposal_type_duration = $request->input('proposal_type_duration');
         $obj->proposal_type_desc = $request->input('proposal_type_desc');
         $obj->updated_by = $request->user()->user_id;
 
@@ -161,6 +165,7 @@ class ProposalTypeController extends Controller
         $data['rows'] = ProposalType::where('active','1')
                             ->where(function($query) use($searchPhrase) {
                                 $query->orWhere('proposal_type_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('proposal_type_duration','like','%' . $searchPhrase . '%')
                                         ->orWhere('proposal_type_desc','like','%' . $searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
@@ -168,6 +173,7 @@ class ProposalTypeController extends Controller
         $data['total'] = ProposalType::where('active','1')
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('proposal_type_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('proposal_type_duration','like','%' . $searchPhrase . '%')
                                         ->orWhere('proposal_type_desc','like','%' . $searchPhrase . '%');
                                 })->count();
 

@@ -14,6 +14,7 @@
             <thead>
                 <tr>
                     <th data-column-id="proposal_type_name" data-order="asc">Name</th>
+                    <th data-column-id="proposal_type_duration" data-order="asc">Duration (day)</th>
                     <th data-column-id="proposal_type_desc" data-order="asc">Description</th>
                     @can('Proposal Types Management-Update')
                         @can('Proposal Types Management-Delete')

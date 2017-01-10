@@ -10,7 +10,7 @@ class ProposalType extends Model
 	protected $primaryKey = 'proposal_type_id';
 
 	protected $fillable = [
-				'proposal_type_name', 'proposal_type_desc'
+				'proposal_type_name', 'proposal_type_duration', 'proposal_type_desc'
 	];
 
 	protected $hidden = [

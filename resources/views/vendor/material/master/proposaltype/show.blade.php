@@ -14,6 +14,14 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="proposal_type_duration" class="col-sm-2 control-label">Duration (day)</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="proposal_type_duration" id="proposal_type_duration" placeholder="Proposal Type Duration (day)" required="true" maxlength="2" value="{{ $proposaltype->proposal_type_duration }}" disabled="true">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="proposal_type_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
