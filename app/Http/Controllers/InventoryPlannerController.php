@@ -1666,4 +1666,17 @@ class InventoryPlannerController extends Controller
     	$nettcreative = InventoryPlannerCreativePrice::where('inventory_planner_id', $id)->sum('inventory_planner_creative_price_total_gross_rate');
     	$nettother = InventoryPlannerOtherPrice::where('inventory_planner_id', $id)->sum('inventory_planner_other_price_total_gross_rate');
     }
+
+    public function apiSearch(Request $request)
+    {
+        if(Gate::denies('Home-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $inventory_planner_title = $request->inventory_planner_title;
+
+        $result = InventoryPlanner::where('inventory_planner_title','like','%' . $inventory_planner_title . '%')->where('active', '1')->take(5)->orderBy('inventory_planner_title')->get();
+
+        return response()->json($result, 200);
+    }
 }

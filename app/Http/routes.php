@@ -84,6 +84,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('brand/apiList', 'BrandController@apiList');
         Route::post('brand/apiDelete', 'BrandController@apiDelete');
         Route::resource('brand', 'BrandController');
+        Route::post('brand/apiSearch', 'BrandController@apiSearch');
 
         //Client
         Route::post('client/apiList', 'ClientController@apiList');
@@ -98,6 +99,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('clientcontact/apiList', 'ClientContactController@apiList');
         Route::post('clientcontact/apiEdit', 'ClientContactController@apiEdit');
         Route::get('clientcontact/apiSearch/{query}', 'ClientContactController@apiSearch');
+        Route::post('clientcontact/apiSearchPerClient', 'ClientContactController@apiSearchPerClient');
 
         //Client Type
         Route::post('clienttype/apiList', 'ClientTypeController@apiList');
@@ -287,6 +289,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('inventoryplanner/api/storeOtherPrices', 'InventoryPlannerController@apiStoreOtherPrices');
         Route::post('inventoryplanner/api/deleteOtherPrices', 'InventoryPlannerController@apiDeleteOtherPrices');
         Route::get('inventoryplanner/api/loadOtherPrices', 'InventoryPlannerController@apiLoadOtherPrices');
+        Route::post('inventoryplanner/apiSearch', 'InventoryPlannerController@apiSearch');
     });
 
     Route::group(['prefix' => 'workorder'], function() {
@@ -296,6 +299,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('proposal/approve/{flow_no}/{id}', 'ProposalController@approve');
         Route::post('proposal/approve/{flow_no}/{id}', 'ProposalController@postApprove');
         Route::post('proposal/api/getMedias', 'ProposalController@apiGetMedias');
+        Route::post('proposal/api/generateDeadline', 'ProposalController@apiGenerateDeadline');
         Route::post('proposal/api/getRates', 'ProposalController@apiGetRates');
         Route::post('proposal/api/getBasicRate', 'ProposalController@apiGetBasicRate');
         Route::post('proposal/api/storePrintPrices', 'ProposalController@apiStorePrintPrices');

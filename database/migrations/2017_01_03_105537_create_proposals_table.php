@@ -17,7 +17,7 @@ class CreateProposalsTable extends Migration
                 $table->increments('proposal_id');
                 $table->integer('proposal_type_id');
                 $table->string('proposal_name');
-                $table->date('proposal_deadline');
+                $table->dateTime('proposal_deadline');
                 $table->text('proposal_desc');
                 $table->string('proposal_no');
                 $table->integer('proposal_status_id');

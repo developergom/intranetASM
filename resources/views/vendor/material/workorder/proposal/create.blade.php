@@ -25,7 +25,7 @@
                                 	@if(old('proposal_type_id')==$row->proposal_type_id)
 	                                	{!! $selected = 'selected' !!}
                                 	@endif
-	        						<option value="{{ $row->proposal_type_id }}" {{ $selected }}>{{ $row->proposal_type_name }}</option>
+	        						<option value="{{ $row->proposal_type_id }}" {{ $selected }}>{{ $row->proposal_type_name . ' - ' . $row->proposal_type_duration . ' day'}}</option>
 	        					@endforeach
 	        				</select>
 	        			</div>
@@ -78,7 +78,7 @@
 	                <label for="proposal_deadline" class="col-sm-2 control-label">Deadline</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="proposal_deadline" id="proposal_deadline" placeholder="Deadline" required="true" maxlength="100" value="{{ old('proposal_deadline') }}">
+	                        <input type="text" class="form-control input-sm" name="proposal_deadline" id="proposal_deadline" placeholder="Deadline" required="true" maxlength="100" value="{{ old('proposal_deadline') }}" readonly="true">
 	                    </div>
 	                    @if ($errors->has('proposal_deadline'))
 			                <span class="help-block">
@@ -134,17 +134,6 @@
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <select name="brand_id" id="brand_id" class="selectpicker" data-live-search="true" required="true">
-                                @foreach ($brands as $row)
-                                	{!! $selected = '' !!}
-                                	@if(old('brand_id'))
-	                                	@foreach (old('brand_id') as $key => $value)
-	                                		@if($value==$row->brand_id)
-	                                			{!! $selected = 'selected' !!}
-	                                		@endif
-	                                	@endforeach
-                                	@endif
-								    <option value="{{ $row->brand_id }}" {{ $selected }}>{{ $row->brand_name }}</option>
-								@endforeach
                             </select>
 	                    </div>
 	                    @if ($errors->has('brand_id'))
@@ -183,18 +172,8 @@
 	                <label for="inventory_planner_id" class="col-sm-2 control-label">Inventory Planner</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="inventory_planner_id[]" id="inventory_planner_id" class="selectpicker" data-live-search="true" multiple>
-                                @foreach ($inventories as $row)
-                                	{!! $selected = '' !!}
-                                	@if(old('inventory_planner_id'))
-	                                	@foreach (old('inventory_planner_id') as $key => $value)
-	                                		@if($value==$row->inventory_planner_id)
-	                                			{!! $selected = 'selected' !!}
-	                                		@endif
-	                                	@endforeach
-                                	@endif
-								    <option value="{{ $row->inventory_planner_id }}" {{ $selected }}>{{ $row->inventory_planner_title }}</option>
-								@endforeach
+	                        <select name="inventory_planner_id[]" id="inventory_planner_id" class="selectpicker with-ajax" data-live-search="true" multiple>
+                                
                             </select>
 	                    </div>
 	                    @if ($errors->has('inventory_planner_id'))

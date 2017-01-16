@@ -159,8 +159,17 @@ class ClientContactController extends Controller
 
         $clientContactName = $query;
 
-        $result = ClientContact::join('clients', 'clients.client_id', '=', 'client_contacts.client_id')->where('client_contact_name','like','%' . $clientContactName . '%')->where('client_contacts.active', '1')->take(5)->get();
+        $result = ClientContact::join('clients', 'clients.client_id', '=', 'client_contacts.client_id')->where('client_contact_name','like','%' . $clientContactName . '%')->where('client_contacts.active', '1')->take(5)->orderBy('contact_client_name')->get();
 
         return response()->json($result, 200);
+    }
+
+    public function apiSearchPerClient(Request $request)
+    {
+        $client_id = $request->client_id;
+
+        $result = ClientContact::select('client_contact_id','client_contact_name','client_contact_position')->where('client_id', $client_id)->where('active', '1')->orderBy('contact_client_name')->get();
+
+        return response()->json($result);
     }
 }

@@ -218,4 +218,17 @@ class BrandController extends Controller
             return response()->json(200); //failed
         }
     }
+
+    public function apiSearch(Request $request)
+    {
+        if(Gate::denies('Home-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $brand_name = $request->brand_name;
+
+        $result = Brand::where('brand_name','like','%' . $brand_name . '%')->where('active', '1')->take(5)->orderBy('brand_name')->get();
+
+        return response()->json($result, 200);
+    }
 }

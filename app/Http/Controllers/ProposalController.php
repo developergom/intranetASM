@@ -79,12 +79,12 @@ class ProposalController extends Controller
 
         $data = array();
 
-        $data['proposal_types'] = ProposalType::select('proposal_type_id','proposal_type_name')->where('active', '1')->orderBy('proposal_type_name')->get();
+        $data['proposal_types'] = ProposalType::select('proposal_type_id','proposal_type_name', 'proposal_type_duration')->where('active', '1')->orderBy('proposal_type_name')->get();
         //$data['clients'] = Client::where('active', '1')->orderBy('client_name')->get();
         //$data['clients'] = Client::where('active', '1')->lists('client_name', 'client_id')->all();
-        $data['brands'] = Brand::select('brand_id','brand_name')->where('active', '1')->orderBy('brand_name')->get();
+        //$data['brands'] = Brand::select('brand_id','brand_name')->where('active', '1')->orderBy('brand_name')->get();
         $data['industries'] = Industry::select('industry_id','industry_name')->where('active', '1')->orderBy('industry_name')->get();
-        $data['inventories'] = InventoryPlanner::select('inventory_planner_id','inventory_planner_title')->where('active', '1')->orderBy('inventory_planner_title')->get();
+        //$data['inventories'] = InventoryPlanner::select('inventory_planner_id','inventory_planner_title')->where('active', '1')->orderBy('inventory_planner_title')->get();
         $data['medias'] = Media::select('media_id','media_name')->whereHas('users', function($query) use($request){
                                     $query->where('users_medias.user_id', '=', $request->user()->user_id);
                                 })->where('medias.active', '1')->orderBy('media_name')->get();
@@ -232,6 +232,17 @@ class ProposalController extends Controller
         
 
         return response()->json($data);
+    }
+
+    public function apiGenerateDeadline(Request $request)
+    {
+        $proposal_type_id = $request->proposal_type_id;
+
+        $proposaltype = ProposalType::select('proposal_type_id','proposal_type_name', 'proposal_type_duration')->find($proposal_type_id);
+
+        $deadline = Carbon::now()->addDays($proposaltype->proposal_type_duration);
+
+        echo $deadline;
     }
 
     public function apiGetMedias(Request $request) {
