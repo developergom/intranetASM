@@ -24,6 +24,7 @@ Route::get('/api/loadPlan', 'HomeController@apiPlan')->middleware(['auth','menu'
 Route::get('/api/loadUpcomingPlan/{mode}/{day}', 'HomeController@apiUpcomingPlan')->middleware(['auth','menu']);
 
 Route::get('/test', 'Test@index');
+Route::get('/import_data/{table}', 'Test@import_data');
 
 Route::get('/download/file/{id}', 'DownloadController@downloadFile');
 Route::get('/api/loadNotification', 'NotificationController@loadNotification');

@@ -5,8 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Excel;
+use App\AdvertisePosition;
 use App\ClientContact;
 use App\Client;
+use App\CreativeFormat;
+use App\Industry;
+use App\MediaCategory;
+use App\MediaGroup;
+use App\Paper;
+use App\SubIndustry;
 
 class Test extends Controller{
 	public function __construct() {
@@ -103,6 +110,222 @@ class Test extends Controller{
 			//dd($items);
 		});
 	
+	}
+
+	public function import_data($table) 
+	{
+		if($table == 'advertise_positions') {
+			Excel::selectSheets('advertise_positions')->load('Master Data Intranet ASM 2017.xls', function($reader) {
+				$result = $reader->all();
+
+				$items = $result->all();
+
+				$i = 0;
+				foreach ($items as $item) {
+					$row = $item->toArray();
+					
+					$data = new AdvertisePosition;
+					$data->advertise_position_name = $row['advertise_position_name'];
+					$data->advertise_position_desc = $row['advertise_position_desc'];
+					$data->active = '1';
+					$data->created_by = '1';
+
+					$data->save();
+					$i++;
+				}
+
+				echo $i . ' rows has been saved...';
+			});
+		}elseif($table == 'creative_formats') {
+			Excel::selectSheets('creative_formats')->load('Master Data Intranet ASM 2017.xls', function($reader) {
+				$result = $reader->all();
+
+				$items = $result->all();
+
+				$i = 0;
+				foreach ($items as $item) {
+					$row = $item->toArray();
+					
+					$data = new CreativeFormat;
+					$data->creative_format_name = $row['creative_format_name'];
+					$data->creative_format_desc = (is_null($row['creative_format_desc'])) ? '' : $row['creative_format_desc'];
+					$data->active = '1';
+					$data->created_by = '1';
+
+					$data->save();
+					$i++;
+				}
+
+				echo $i . ' rows has been saved...';
+			});	
+		}elseif($table == 'industries') {
+			Excel::selectSheets('industries')->load('Master Data Intranet ASM 2017.xls', function($reader) {
+				$result = $reader->all();
+
+				$items = $result->all();
+
+				$i = 0;
+				foreach ($items as $item) {
+					$row = $item->toArray();
+					
+					$data = new Industry;
+					$data->industry_code = $row['industry_code'];
+					$data->industry_name = $row['industry_name'];
+					$data->industry_desc = (is_null($row['industry_desc'])) ? '' : $row['industry_desc'];
+					$data->active = '1';
+					$data->created_by = '1';
+
+					$data->save();
+					$i++;
+				}
+
+				echo $i . ' rows has been saved...';
+			});
+		}elseif($table == 'media_categories') {
+			Excel::selectSheets('media_categories')->load('Master Data Intranet ASM 2017.xls', function($reader) {
+				$result = $reader->all();
+
+				$items = $result->all();
+
+				$i = 0;
+				foreach ($items as $item) {
+					$row = $item->toArray();
+					
+					$data = new MediaCategory;
+					$data->media_category_name = $row['media_category_name'];
+					$data->media_category_desc = (is_null($row['media_category_desc'])) ? '' : $row['media_category_desc'];
+					$data->active = '1';
+					$data->created_by = '1';
+
+					$data->save();
+					$i++;
+				}
+
+				echo $i . ' rows has been saved...';
+			});
+		}elseif($table == 'media_groups') {
+			Excel::selectSheets('media_groups')->load('Master Data Intranet ASM 2017.xls', function($reader) {
+				$result = $reader->all();
+
+				$items = $result->all();
+
+				$i = 0;
+				foreach ($items as $item) {
+					$row = $item->toArray();
+					
+					$data = new MediaGroup;
+					$data->publisher_id = $row['publisher_id'];
+					$data->media_group_code = $row['media_group_code'];
+					$data->media_group_name = $row['media_group_name'];
+					$data->media_group_desc = (is_null($row['media_group_desc'])) ? '' : $row['media_group_desc'];
+					$data->active = '1';
+					$data->created_by = '1';
+
+					$data->save();
+					$i++;
+				}
+
+				echo $i . ' rows has been saved...';
+			});
+		}elseif($table == 'papers') {
+			Excel::selectSheets('papers')->load('Master Data Intranet ASM 2017.xls', function($reader) {
+				$result = $reader->all();
+
+				$items = $result->all();
+
+				$i = 0;
+				foreach ($items as $item) {
+					$row = $item->toArray();
+					
+					$data = new Paper;
+					$data->unit_id = $row['unit_id'];
+					$data->paper_name = $row['paper_name'];
+					$data->paper_width = 0;
+					$data->paper_length = 0;
+					$data->paper_desc = (is_null($row['paper_desc'])) ? '' : $row['paper_desc'];
+					$data->active = '1';
+					$data->created_by = '1';
+
+					$data->save();
+					$i++;
+				}
+
+				echo $i . ' rows has been saved...';
+			});
+		}elseif($table == 'subindustries') {
+			Excel::selectSheets('subindustries')->load('Master Data Intranet ASM 2017.xls', function($reader) {
+				$result = $reader->all();
+
+				$items = $result->all();
+
+				$i = 0;
+				foreach ($items as $item) {
+					$row = $item->toArray();
+					
+					$data = new SubIndustry;
+					$data->subindustry_code = $row['subindustry_code'];
+					$data->industry_id = $row['industry_id'];
+					$data->subindustry_name = $row['subindustry_name'];
+					$data->subindustry_desc = (is_null($row['subindustry_desc'])) ? '' : $row['subindustry_desc'];
+					$data->active = '1';
+					$data->created_by = '1';
+
+					$data->save();
+					$i++;
+				}
+
+				echo $i . ' rows has been saved...';
+			});
+		}elseif($table == 'units') {
+			Excel::selectSheets('units')->load('Master Data Intranet ASM 2017.xls', function($reader) {
+				$result = $reader->all();
+
+				$items = $result->all();
+
+				dd($items);
+			});
+		}elseif($table == 'medias') {
+			Excel::selectSheets('medias')->load('Master Data Intranet ASM 2017.xls', function($reader) {
+				$result = $reader->all();
+
+				$items = $result->all();
+
+				dd($items);
+			});
+		}elseif($table == 'advertise_sizes') {
+			Excel::selectSheets('advertise_sizes')->load('Master Data Intranet ASM 2017.xls', function($reader) {
+				$result = $reader->all();
+
+				$items = $result->all();
+
+				dd($items);
+			});
+		}elseif($table == 'proposal_types') {
+			Excel::selectSheets('proposal_types')->load('Master Data Intranet ASM 2017.xls', function($reader) {
+				$result = $reader->all();
+
+				$items = $result->all();
+
+				dd($items);
+			});
+		}elseif($table == 'inventory_types') {
+			Excel::selectSheets('inventory_types')->load('Master Data Intranet ASM 2017.xls', function($reader) {
+				$result = $reader->all();
+
+				$items = $result->all();
+
+				dd($items);
+			});
+		}elseif($table == 'media_editions') {
+			Excel::selectSheets('media_editions')->load('Master Data Intranet ASM 2017.xls', function($reader) {
+				$result = $reader->all();
+
+				$items = $result->all();
+
+				dd($items);
+			});
+		}
+
 	}
 
 }
