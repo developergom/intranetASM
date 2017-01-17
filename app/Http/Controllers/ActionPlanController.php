@@ -755,4 +755,18 @@ class ActionPlanController extends Controller
         }
 
     }
+
+
+    public function apiSearch(Request $request)
+    {
+        if(Gate::denies('Home-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $action_plan_title = $request->action_plan_title;
+
+        $result = ActionPlan::where('action_plan_title','like','%' . $action_plan_title . '%')->where('active', '1')->take(5)->orderBy('action_plan_title')->get();
+
+        return response()->json($result, 200);
+    }
 }

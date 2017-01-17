@@ -67,6 +67,120 @@ $(document).ready(function(){
 		});
 	});
 
+	//ajax bootstrap select
+	$('#action_plan_id')
+    .selectpicker({
+        liveSearch: true
+    })
+    .ajaxSelectPicker({
+        ajax: {
+            url: base_url + '/plan/actionplan/apiSearch',
+            data: function () {
+                var params = {
+                	_token: myToken,
+                    action_plan_title: '{{{q}}}'
+                };
+                return params;
+            }
+        },
+        locale: {
+            emptyTitle: 'NOTHING SELECTED'
+        },
+        preprocessData: function(data){
+        	/*console.log(data);*/
+            var actionplans = [];
+            var len = data.length;
+            for(var i = 0; i < len; i++){
+                var curr = data[i];
+                actionplans.push(
+                    {
+                        'value': curr.action_plan_id,
+                        'text': curr.action_plan_title,
+                        'disabled': false
+                    }
+                );
+            }            
+            return actionplans;
+        },
+        preserveSelected: true
+    });
+
+    //ajax bootstrap select
+	$('#action_plan_id')
+    .selectpicker({
+        liveSearch: true
+    })
+    .ajaxSelectPicker({
+        ajax: {
+            url: base_url + '/plan/actionplan/apiSearch',
+            data: function () {
+                var params = {
+                	_token: myToken,
+                    action_plan_title: '{{{q}}}'
+                };
+                return params;
+            }
+        },
+        locale: {
+            emptyTitle: 'NOTHING SELECTED'
+        },
+        preprocessData: function(data){
+        	/*console.log(data);*/
+            var actionplans = [];
+            var len = data.length;
+            for(var i = 0; i < len; i++){
+                var curr = data[i];
+                actionplans.push(
+                    {
+                        'value': curr.action_plan_id,
+                        'text': curr.action_plan_title,
+                        'disabled': false
+                    }
+                );
+            }            
+            return actionplans;
+        },
+        preserveSelected: true
+    });
+
+    //ajax bootstrap select
+	$('#event_plan_id')
+    .selectpicker({
+        liveSearch: true
+    })
+    .ajaxSelectPicker({
+        ajax: {
+            url: base_url + '/plan/eventplan/apiSearch',
+            data: function () {
+                var params = {
+                	_token: myToken,
+                    event_plan_name: '{{{q}}}'
+                };
+                return params;
+            }
+        },
+        locale: {
+            emptyTitle: 'NOTHING SELECTED'
+        },
+        preprocessData: function(data){
+        	/*console.log(data);*/
+            var eventplans = [];
+            var len = data.length;
+            for(var i = 0; i < len; i++){
+                var curr = data[i];
+                eventplans.push(
+                    {
+                        'value': curr.event_plan_id,
+                        'text': curr.event_plan_name,
+                        'disabled': false
+                    }
+                );
+            }            
+            return eventplans;
+        },
+        preserveSelected: true
+    });
+
 	//load all prices
 	load_all_prices();
 

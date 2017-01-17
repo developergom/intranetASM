@@ -3,6 +3,7 @@
 @section('vendorcss')
 <link href="{{ url('css/chosen.css') }}" rel="stylesheet">
 <link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
+<link href="{{ url('css/ajax-bootstrap-select.min.css') }}" rel="stylesheet">
 <link href="{{ url('css/basic.min.css') }}" rel="stylesheet">
 <link href="{{ url('css/dropzone.min.css') }}" rel="stylesheet">
 @endsection
@@ -142,17 +143,6 @@
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <select name="action_plan_id[]" id="action_plan_id" class="selectpicker" data-live-search="true" multiple>
-                                @foreach ($action_plans as $row)
-                                	{!! $selected = '' !!}
-                                	@if(old('action_plan_id'))
-	                                	@foreach (old('action_plan_id') as $key => $value)
-	                                		@if($value==$row->action_plan_id)
-	                                			{!! $selected = 'selected' !!}
-	                                		@endif
-	                                	@endforeach
-                                	@endif
-								    <option value="{{ $row->action_plan_id }}" {{ $selected }}>{{ $row->action_plan_title }}</option>
-								@endforeach
                             </select>
 	                    </div>
 	                    @if ($errors->has('action_plan_id'))
@@ -167,17 +157,6 @@
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <select name="event_plan_id[]" id="event_plan_id" class="selectpicker" data-live-search="true" multiple>
-                                @foreach ($event_plans as $row)
-                                	{!! $selected = '' !!}
-                                	@if(old('event_plan_id'))
-	                                	@foreach (old('event_plan_id') as $key => $value)
-	                                		@if($value==$row->event_plan_id)
-	                                			{!! $selected = 'selected' !!}
-	                                		@endif
-	                                	@endforeach
-                                	@endif
-								    <option value="{{ $row->event_plan_id }}" {{ $selected }}>{{ $row->event_plan_name }}</option>
-								@endforeach
                             </select>
 	                    </div>
 	                    @if ($errors->has('event_plan_id'))
@@ -372,6 +351,7 @@
 @section('vendorjs')
 <script src="{{ url('js/chosen.jquery.js') }}"></script>
 <script src="{{ url('js/bootstrap-select.min.js') }}"></script>
+<script src="{{ url('js/ajax-bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/dropzone.min.js') }}"></script>
 <script src="{{ url('js/input-mask.min.js') }}"></script>
 @endsection

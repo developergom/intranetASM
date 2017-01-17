@@ -241,6 +241,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('actionplan/approve/{flow_no}/{id}', 'ActionPlanController@approve');
         Route::post('actionplan/approve/{flow_no}/{id}', 'ActionPlanController@postApprove');
         Route::post('actionplan/apigetmediapermediagroup', 'ActionPlanController@apiGetMediaPerMediaGroup');
+        Route::post('actionplan/apiSearch', 'ActionPlanController@apiSearch');
 
         //Creative Plan
         Route::post('creativeplan/apiList/{listtype}', 'CreativeController@apiList');
@@ -255,6 +256,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::resource('eventplan', 'EventPlanController');
         Route::get('eventplan/approve/{flow_no}/{id}', 'EventPlanController@approve');
         Route::post('eventplan/approve/{flow_no}/{id}', 'EventPlanController@postApprove');
+        Route::post('eventplan/apiSearch', 'EventPlanController@apiSearch');
     });
 
     Route::group(['prefix' => 'agenda'], function() {

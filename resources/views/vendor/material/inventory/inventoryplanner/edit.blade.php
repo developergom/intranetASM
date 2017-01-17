@@ -149,10 +149,10 @@
 	                                	@foreach ($inventory->actionplans as $key => $value)
 	                                		@if($value->action_plan_id==$row->action_plan_id)
 	                                			{!! $selected = 'selected' !!}
+	                                			<option value="{{ $row->action_plan_id }}" {{ $selected }}>{{ $row->action_plan_title }}</option>
 	                                		@endif
 	                                	@endforeach
                                 	@endif
-								    <option value="{{ $row->action_plan_id }}" {{ $selected }}>{{ $row->action_plan_title }}</option>
 								@endforeach
                             </select>
 	                    </div>
@@ -174,10 +174,10 @@
 	                                	@foreach ($inventory->eventplans as $key => $value)
 	                                		@if($value->event_plan_id==$row->event_plan_id)
 	                                			{!! $selected = 'selected' !!}
+	                                			<option value="{{ $row->event_plan_id }}" {{ $selected }}>{{ $row->event_plan_name }}</option>
 	                                		@endif
 	                                	@endforeach
                                 	@endif
-								    <option value="{{ $row->event_plan_id }}" {{ $selected }}>{{ $row->event_plan_name }}</option>
 								@endforeach
                             </select>
 	                    </div>

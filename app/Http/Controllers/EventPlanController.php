@@ -686,4 +686,18 @@ class EventPlanController extends Controller
         }
 
     }
+
+
+    public function apiSearch(Request $request)
+    {
+        if(Gate::denies('Home-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $event_plan_name = $request->event_plan_name;
+
+        $result = EventPlan::where('event_plan_name','like','%' . $event_plan_name . '%')->where('active', '1')->take(5)->orderBy('event_plan_name')->get();
+
+        return response()->json($result, 200);
+    }
 }
