@@ -10,9 +10,11 @@ use App\ClientContact;
 use App\Client;
 use App\CreativeFormat;
 use App\Industry;
+use App\InventoryType;
 use App\MediaCategory;
 use App\MediaGroup;
 use App\Paper;
+use App\ProposalType;
 use App\SubIndustry;
 
 class Test extends Controller{
@@ -306,7 +308,22 @@ class Test extends Controller{
 
 				$items = $result->all();
 
-				dd($items);
+				$i = 0;
+				foreach ($items as $item) {
+					$row = $item->toArray();
+					
+					$data = new ProposalType;
+					$data->proposal_type_name = $row['proposal_type_name'];
+					$data->proposal_type_duration = $row['proposal_type_duration'];
+					$data->proposal_type_desc = (is_null($row['proposal_type_desc'])) ? '' : $row['proposal_type_desc'];
+					$data->active = '1';
+					$data->created_by = '1';
+
+					$data->save();
+					$i++;
+				}
+
+				echo $i . ' rows has been saved...';
 			});
 		}elseif($table == 'inventory_types') {
 			Excel::selectSheets('inventory_types')->load('Master Data Intranet ASM 2017.xls', function($reader) {
@@ -314,7 +331,22 @@ class Test extends Controller{
 
 				$items = $result->all();
 
-				dd($items);
+				$i = 0;
+				foreach ($items as $item) {
+					$row = $item->toArray();
+					
+					$data = new InventoryType;
+					$data->inventory_type_name = $row['inventory_type_name'];
+					$data->inventory_type_duration = $row['inventory_type_duration'];
+					$data->inventory_type_desc = (is_null($row['inventory_type_desc'])) ? '' : $row['inventory_type_desc'];
+					$data->active = '1';
+					$data->created_by = '1';
+
+					$data->save();
+					$i++;
+				}
+
+				echo $i . ' rows has been saved...';
 			});
 		}elseif($table == 'media_editions') {
 			Excel::selectSheets('media_editions')->load('Master Data Intranet ASM 2017.xls', function($reader) {
