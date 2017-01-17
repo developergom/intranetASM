@@ -296,7 +296,7 @@ class ClientController extends Controller
         //$clientName = $request->input('clientName');
         $clientName = $query;
 
-        $result = Client::where('client_name','like','%' . $clientName . '%')->where('active', '1')->take(5)->->orderBy('client_name')->get();
+        $result = Client::where('client_name','like','%' . $clientName . '%')->where('active', '1')->take(5)->orderBy('client_name')->get();
 
         return response()->json($result, 200);
     }

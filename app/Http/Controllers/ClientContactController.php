@@ -168,7 +168,7 @@ class ClientContactController extends Controller
     {
         $client_id = $request->client_id;
 
-        $result = ClientContact::select('client_contact_id','client_contact_name','client_contact_position')->where('client_id', $client_id)->where('active', '1')->orderBy('contact_client_name')->get();
+        $result = ClientContact::select('client_contact_id','client_contact_name','client_contact_position')->where('client_id', $client_id)->where('active', '1')->orderBy('client_contact_name')->get();
 
         return response()->json($result);
     }

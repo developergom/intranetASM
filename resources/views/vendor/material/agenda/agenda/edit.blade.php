@@ -2,6 +2,7 @@
 
 @section('vendorcss')
 <link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
+<link href="{{ url('css/ajax-bootstrap-select.min.css') }}" rel="stylesheet">
 <link href="{{ url('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
 @endsection
 
@@ -64,20 +65,24 @@
 	                <label for="client" class="col-sm-2 control-label">Client</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="client" id="client" placeholder="Client" maxlength="100" autocomplete="off">
+	                        <select name="client_id[]" id="client_id" class="selectpicker" data-live-search="true">
+                            	@foreach ($agenda->clients as $key => $value)
+                            		<option value="{{ $value->client_id }}" selected>{{ $value->client_name }}</option>
+                            	@endforeach
+                            </select>
 	                    </div>
-	                    <div id="list-client-id">
-						</div>
 	                </div>
 	            </div>
 	            <div class="form-group">
 	                <label for="clientcontact" class="col-sm-2 control-label">Contact</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="clientcontact" id="clientcontact" placeholder="Contact" maxlength="100" autocomplete="off">
+	                        <select name="client_contact_id[]" id="client_contact_id" class="selectpicker" data-live-search="true" multiple>
+                            	@foreach ($agenda->clientcontacts as $key => $value)
+                            		<option value="{{ $value->client_contact_id }}" selected>{{ $value->client_contact_name }}</option>
+                            	@endforeach
+                            </select>
 	                    </div>
-	                    <div id="list-clientcontact-id">
-						</div>
 	                </div>
 	            </div>
 	            <div class="form-group">
@@ -106,19 +111,11 @@
 
 @section('vendorjs')
 <script src="{{ url('js/bootstrap-select.min.js') }}"></script>
+<script src="{{ url('js/ajax-bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/bootstrap-datetimepicker.min.js') }}"></script>
 <script src="{{ url('js/typeahead.bundle.min.js') }}"></script>
 @endsection
 
 @section('customjs')
 <script src="{{ url('js/agenda/agenda-create.js') }}"></script>
-<script type="text/javascript">
-@foreach($agenda->clients as $client)
-	$('#list-client-id').append('<input type="hidden" name="client_id[]" id="client-id-{{ $client->client_id }}" value="{{ $client->client_id }}"><span id="span-client-id-{{ $client->client_id }}" class="badge">{{ $client->client_name }}&nbsp;<a href="javascript:void(0)" style="color:#fff;" class="delete-client-id" data-clientid="{{ $client->client_id }}"> x </a></span>&nbsp;&nbsp;');
-@endforeach
-
-@foreach($agenda->clientcontacts as $clientcontact)
-	$('#list-clientcontact-id').append('<input type="hidden" name="client_contact_id[]" id="clientcontact-id-{{ $clientcontact->client_contact_id }}" value="{{ $clientcontact->client_contact_id }}"><span id="span-clientcontact-id-{{ $clientcontact->client_contact_id }}" class="badge">{{ $clientcontact->client_contact_name . ' - ' . $clientcontact->client->client_name }}&nbsp;<a href="javascript:void(0)" style="color:#fff;" class="delete-clientcontact-id" data-clientcontactid="{{ $clientcontact->client_contact_id }}"> x </a></span>&nbsp;&nbsp;');
-@endforeach
-</script>
 @endsection

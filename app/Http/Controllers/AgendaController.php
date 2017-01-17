@@ -67,6 +67,7 @@ class AgendaController extends Controller
 
         $obj->agenda_date = Carbon::createFromFormat('d/m/Y', $request->input('agenda_date'))->toDateString();
         $obj->agenda_type_id = $request->input('agenda_type_id');
+        $obj->agenda_parent = 0;
         $obj->agenda_destination = $request->input('agenda_destination');
         $obj->agenda_desc = $request->input('agenda_desc');
         $obj->active = '1';
@@ -74,7 +75,15 @@ class AgendaController extends Controller
 
         $obj->save();
 
-        if(!is_null($request->input('client_id'))) {
+        if(!empty($request->input('client_id'))) {
+            Agenda::find($obj->agenda_id)->clients()->sync($request->input('client_id'));
+        }
+
+        if(!empty($request->input('client_contact_id'))) {
+            Agenda::find($obj->agenda_id)->clientcontacts()->sync($request->input('client_contact_id'));
+        }
+
+        /*if(!is_null($request->input('client_id'))) {
             if(!empty($request->input('client_id'))) {
                 Agenda::find($obj->agenda_id)->clients()->sync($request->input('client_id'));
             }            
@@ -84,7 +93,7 @@ class AgendaController extends Controller
             if(!empty($request->input('client_contact_id'))) {
                 Agenda::find($obj->agenda_id)->clientcontacts()->sync($request->input('client_contact_id'));
             }            
-        }
+        }*/
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -157,7 +166,7 @@ class AgendaController extends Controller
 
         $obj->save();
 
-        if(!is_null($request->input('client_id'))) {
+        /*if(!is_null($request->input('client_id'))) {
             if(!empty($request->input('client_id'))) {
                 Agenda::find($obj->agenda_id)->clients()->sync($request->input('client_id'));
             }            
@@ -171,6 +180,14 @@ class AgendaController extends Controller
             }            
         }else{
             Agenda::find($obj->agenda_id)->clientcontacts()->sync([]);
+        }*/
+
+        if(!empty($request->input('client_id'))) {
+            Agenda::find($obj->agenda_id)->clients()->sync($request->input('client_id'));
+        }
+
+        if(!empty($request->input('client_contact_id'))) {
+            Agenda::find($obj->agenda_id)->clientcontacts()->sync($request->input('client_contact_id'));
         }
 
         $request->session()->flash('status', 'Data has been updated!');

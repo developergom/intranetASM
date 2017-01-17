@@ -10,7 +10,7 @@ class Agenda extends Model
 	protected $primaryKey = 'agenda_id';
 
 	protected $fillable = [
-				'agenda_type_id', 'agenda_date', 'agenda_destination', 'agenda_desc'
+				'agenda_type_id', 'agenda_parent', 'agenda_date', 'agenda_destination', 'agenda_desc'
 	];
 
 	protected $hidden = [
