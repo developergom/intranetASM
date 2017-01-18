@@ -55,6 +55,26 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="inventory_planner_id" class="col-sm-2 control-label">Inventory Planner</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+                        	@foreach ($agenda->inventories as $key => $value)
+                        		<span id="span-inventory-id-{{ $value->inventory_planner_id }}" class="badge">{{ $value->inventory_planner_title }}&nbsp;</span>&nbsp;
+                        	@endforeach
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="proposal_id" class="col-sm-2 control-label">Proposal</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+                        	@foreach ($agenda->proposals as $key => $value)
+                        		<span id="span-proposal-id-{{ $value->proposal_id }}"class="badge">{{ $value->proposal_name }}&nbsp;</span>&nbsp;
+                        	@endforeach
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="agenda_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">

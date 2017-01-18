@@ -777,4 +777,17 @@ class ProposalController extends Controller
         $nettcreative = ProposalCreativePrice::where('proposal_id', $id)->sum('proposal_creative_price_total_gross_rate');
         $nettother = ProposalOtherPrice::where('proposal_id', $id)->sum('proposal_other_price_total_gross_rate');
     }
+
+    public function apiSearch(Request $request)
+    {
+        if(Gate::denies('Home-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $proposal_name = $request->proposal_name;
+
+        $result = Proposal::where('proposal_name','like','%' . $proposal_name . '%')->where('active', '1')->take(5)->orderBy('proposal_name')->get();
+
+        return response()->json($result, 200);
+    }
 }

@@ -86,6 +86,30 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="inventory_planner_id" class="col-sm-2 control-label">Inventory Planner</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <select name="inventory_planner_id[]" id="inventory_planner_id" class="selectpicker" data-live-search="true" multiple>
+	                        	@foreach ($agenda->inventories as $key => $value)
+                            		<option value="{{ $value->inventory_planner_id }}" selected>{{ $value->inventory_planner_title }}</option>
+                            	@endforeach
+                            </select>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="proposal_id" class="col-sm-2 control-label">Proposal</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <select name="proposal_id[]" id="proposal_id" class="selectpicker" data-live-search="true" multiple>
+	                        	@foreach ($agenda->proposals as $key => $value)
+                            		<option value="{{ $value->proposal_id }}" selected>{{ $value->proposal_name }}</option>
+                            	@endforeach
+                            </select>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="agenda_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">

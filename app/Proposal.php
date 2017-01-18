@@ -30,6 +30,11 @@ class Proposal extends Model
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
 
+	public function agendas()
+	{
+		return $this->belongsToMany('App\Agenda', 'agendas_proposals');
+	}
+
 	public function proposaltype()
 	{
 		return $this->belongsTo('App\ProposalType', 'proposal_type_id');

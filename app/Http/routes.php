@@ -320,6 +320,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('proposal/api/storeOtherPrices', 'ProposalController@apiStoreOtherPrices');
         Route::post('proposal/api/deleteOtherPrices', 'ProposalController@apiDeleteOtherPrices');
         Route::get('proposal/api/loadOtherPrices', 'ProposalController@apiLoadOtherPrices');
+        Route::post('proposal/apiSearch', 'ProposalController@apiSearch');
     });
 
     Route::group(['prefix' => 'config'], function() {

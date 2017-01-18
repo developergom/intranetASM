@@ -118,7 +118,6 @@ $(document).ready(function(){
             emptyTitle: 'NOTHING SELECTED'
         },
         preprocessData: function(data){
-        	/*console.log(data);*/
             var clients = [];
             var len = data.length;
             for(var i = 0; i < len; i++){
@@ -159,5 +158,78 @@ $(document).ready(function(){
             	$('#client_contact_id').selectpicker('refresh');
             }
     	});
+    });
+
+
+    $('#inventory_planner_id')
+    .selectpicker({
+        liveSearch: true
+    })
+    .ajaxSelectPicker({
+        ajax: {
+            url: base_url + '/inventory/inventoryplanner/apiSearch',
+            data: function () {
+                var params = {
+                	_token: myToken,
+                    inventory_planner_title: '{{{q}}}'
+                };
+                return params;
+            }
+        },
+        locale: {
+            emptyTitle: 'NOTHING SELECTED'
+        },
+        preprocessData: function(data){
+            var inventories = [];
+            var len = data.length;
+            for(var i = 0; i < len; i++){
+                var curr = data[i];
+                inventories.push(
+                    {
+                        'value': curr.inventory_planner_id,
+                        'text': curr.inventory_planner_title,
+                        'disabled': false
+                    }
+                );
+            }            
+            return inventories;
+        },
+        preserveSelected: true
+    });
+
+    $('#proposal_id')
+    .selectpicker({
+        liveSearch: true
+    })
+    .ajaxSelectPicker({
+        ajax: {
+            url: base_url + '/workorder/proposal/apiSearch',
+            data: function () {
+                var params = {
+                	_token: myToken,
+                    proposal_name: '{{{q}}}'
+                };
+                return params;
+            }
+        },
+        locale: {
+            emptyTitle: 'NOTHING SELECTED'
+        },
+        preprocessData: function(data){
+            var proposals = [];
+            var len = data.length;
+            for(var i = 0; i < len; i++){
+                var curr = data[i];
+                proposals.push(
+                    {
+                        'value': curr.proposal_id,
+                        'text': curr.proposal_name,
+                        'disabled': false
+                    }
+                );
+            }            
+            return proposals;
+        },
+        preserveSelected: true
     });
 });

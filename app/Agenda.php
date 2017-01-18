@@ -32,4 +32,14 @@ class Agenda extends Model
 	public function users() {
 		return $this->belongsToMany('App\User', 'agendas_users');
 	}
+
+	public function inventories()
+	{
+		return $this->belongsToMany('App\InventoryPlanner', 'agendas_inventories');
+	}
+
+	public function proposals()
+	{
+		return $this->belongsToMany('App\Proposal', 'agendas_proposals');
+	}
 }

@@ -83,6 +83,14 @@ class AgendaController extends Controller
             Agenda::find($obj->agenda_id)->clientcontacts()->sync($request->input('client_contact_id'));
         }
 
+        if(!empty($request->input('inventory_planner_id'))) {
+            Agenda::find($obj->agenda_id)->inventories()->sync($request->input('inventory_planner_id'));
+        }
+
+        if(!empty($request->input('proposal_id'))) {
+            Agenda::find($obj->agenda_id)->proposals()->sync($request->input('proposal_id'));
+        }
+
         /*if(!is_null($request->input('client_id'))) {
             if(!empty($request->input('client_id'))) {
                 Agenda::find($obj->agenda_id)->clients()->sync($request->input('client_id'));
@@ -188,6 +196,14 @@ class AgendaController extends Controller
 
         if(!empty($request->input('client_contact_id'))) {
             Agenda::find($obj->agenda_id)->clientcontacts()->sync($request->input('client_contact_id'));
+        }
+
+        if(!empty($request->input('inventory_planner_id'))) {
+            Agenda::find($obj->agenda_id)->inventories()->sync($request->input('inventory_planner_id'));
+        }
+
+        if(!empty($request->input('proposal_id'))) {
+            Agenda::find($obj->agenda_id)->proposals()->sync($request->input('proposal_id'));
         }
 
         $request->session()->flash('status', 'Data has been updated!');

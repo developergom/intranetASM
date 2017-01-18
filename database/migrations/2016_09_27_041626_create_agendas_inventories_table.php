@@ -15,7 +15,7 @@ class CreateAgendasInventoriesTable extends Migration
         if (!Schema::hasTable('agendas_inventories')) {
             Schema::create('agendas_inventories', function (Blueprint $table) {
                 $table->integer('agenda_id');
-                $table->integer('inventory_id');
+                $table->integer('inventory_planner_id');
             });
         }
     }
