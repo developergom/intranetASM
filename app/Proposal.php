@@ -35,6 +35,11 @@ class Proposal extends Model
 		return $this->belongsToMany('App\Agenda', 'agendas_proposals');
 	}
 
+	public function activities()
+	{
+		return $this->belongsToMany('App\Activity', 'activities_proposals');
+	}
+
 	public function proposaltype()
 	{
 		return $this->belongsTo('App\ProposalType', 'proposal_type_id');

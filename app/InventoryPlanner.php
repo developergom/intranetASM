@@ -28,6 +28,11 @@ class InventoryPlanner extends Model
 		return $this->belongsToMany('App\Agenda', 'agendas_inventories');
 	}
 
+	public function activities()
+	{
+		return $this->belongsToMany('App\Activity', 'activites_inventories');
+	}
+
 	public function inventorytype()
 	{
 		return $this->belongsTo('App\InventoryType', 'inventory_type_id');

@@ -21,6 +21,10 @@ class Agenda extends Model
 		return $this->belongsTo('App\AgendaType', 'agenda_type_id');
 	}
 
+	public function activities() {
+		return $this->belongsToMany('App\Activity', 'activities_agendas');
+	}
+
 	public function clients() {
 		return $this->belongsToMany('App\Client', 'agendas_clients');
 	}

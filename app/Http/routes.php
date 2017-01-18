@@ -266,6 +266,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
     });
 
     Route::group(['prefix' => 'agenda'], function() {
+        //Activity
+        Route::post('activity/apiList', 'ActivityController@apiList');
+        Route::post('activity/apiDelete', 'ActivityController@apiDelete');
+        Route::resource('activity', 'ActivityController');
+
         //Agenda Plan
         Route::post('plan/apiList', 'AgendaController@apiList');
         Route::post('plan/apiDelete', 'AgendaController@apiDelete');

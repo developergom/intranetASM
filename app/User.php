@@ -70,6 +70,10 @@ class User extends Authenticatable
     }
 
     public function agendas() {
-        return $this->belongsToMany('App\Agenda', 'agendas_clients');
+        return $this->belongsToMany('App\Agenda', 'agendas_users');
+    }
+
+    public function activities() {
+        return $this->belongsToMany('App\Activity', 'activities_users');
     }
 }
