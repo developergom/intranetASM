@@ -61,6 +61,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('actiontype/apiDelete', 'ActionTypeController@apiDelete');
         Route::resource('actiontype', 'ActionTypeController');
 
+        //Activity Type
+        Route::post('activitytype/apiList', 'ActivityTypeController@apiList');
+        Route::post('activitytype/apiDelete', 'ActivityTypeController@apiDelete');
+        Route::resource('activitytype', 'ActivityTypeController');
+
         //Advertise Position
         Route::post('advertiseposition/apiList', 'AdvertisePositionController@apiList');
         Route::post('advertiseposition/apiDelete', 'AdvertisePositionController@apiDelete');
