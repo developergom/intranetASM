@@ -339,6 +339,13 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('proposal/apiSearch', 'ProposalController@apiSearch');
     });
 
+    Route::group(['prefix' => 'grid'], function() {
+        //Activity
+        Route::post('project/apiList', 'ProjectController@apiList');
+        Route::post('project/apiDelete', 'ProjectController@apiDelete');
+        Route::resource('project', 'ProjectController');
+    });
+
     Route::group(['prefix' => 'config'], function() {
         //Announcement Management
         Route::post('announcement/apiList', 'AnnouncementController@apiList');
