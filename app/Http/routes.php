@@ -343,6 +343,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         //Project
         Route::post('project/apiList', 'ProjectController@apiList');
         Route::post('project/apiDelete', 'ProjectController@apiDelete');
+        Route::post('project/apiSearch', 'ProjectController@apiSearch');
         Route::resource('project', 'ProjectController');
 
         //Project Task

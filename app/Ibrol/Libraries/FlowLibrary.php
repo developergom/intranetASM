@@ -19,7 +19,7 @@ class FlowLibrary{
 		return $tmp;
 	}
 
-	public function getNextFlow($flow_group_id, $flow_no, $user_id, $pic = '', $author = '')
+	public function getNextFlow($flow_group_id, $flow_no, $user_id, $pic = '', $author = '', $manual_user = '')
 	{
 		$nextFlow = array();
 
@@ -27,7 +27,7 @@ class FlowLibrary{
 		if(Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $flow_no  + 1)->where('active', '1')->count() > 0)
 		{
 			$flow = Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $flow_no  + 1)->where('active', '1')->first();
-			$nextUser = $this->getNextUser($flow->flow_by, $flow->role_id, $user_id, $pic, $author);
+			$nextUser = $this->getNextUser($flow->flow_by, $flow->role_id, $user_id, $pic, $author, $manual_user);
 			//dd($flow);
 
 			$nextFlow['flow_no'] = $flow->flow_no;

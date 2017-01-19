@@ -50,6 +50,107 @@ class ProjectTaskController extends Controller
         return view('vendor.material.grid.projecttask.list', $data);
     }
 
+    public function create(Request $request)
+    {
+		if(Gate::denies('Project Task-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['project_task_types'] = ProjectTaskType::with('user')->where('active', '1')->orderBy('project_task_type_name')->get();
+
+     	return view('vendor.material.grid.projecttask.create', $data);   
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+        	'project_task_type_id' => 'required',
+            'project_task_name' => 'required|max:100',
+            'project_task_deadline' => 'required|date_format:"d/m/Y"',
+            'project_task_desc' => 'required',
+            'project_id' => 'required'
+        ]);
+
+        $projecttasktype = ProjectTaskType::find($request->input('project_task_type_id'));
+
+        $flow = new FlowLibrary;
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id, '', '', $projecttasktype->user_id);
+
+        $obj = new ProjectTask;
+        $obj->project_task_type_id = $request->input('project_task_type_id');
+        $obj->project_task_name = $request->input('project_task_name');
+        $obj->project_task_deadline = Carbon::createFromFormat('d/m/Y', $request->input('project_task_deadline'))->toDateString();
+        $obj->project_task_desc = $request->input('project_task_desc');
+        $obj->project_id = $request->input('project_id');
+        $obj->flow_no = $nextFlow['flow_no'];
+        $obj->current_user = $nextFlow['current_user'];
+        $obj->revision_no = 0;
+        $obj->active = '1';
+        $obj->created_by = $request->user()->user_id;
+
+        $obj->save();
+
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => 0 ];
+            }
+        }
+
+        if(!empty($fileArray)) {
+            ProjectTask::find($obj->project_task_id)->uploadfiles()->sync($fileArray);    
+        }
+
+        $his = new ProjectTaskHistory;
+        $his->project_task_id = $obj->project_task_id;
+        $his->approval_type_id = 1;
+        $his->project_task_history_text = $request->input('project_task_desc');
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskappoval', 'Please check Project Task "' . $obj->project_task_name . '"', $obj->project_task_id);
+
+        $request->session()->flash('status', 'Data has been saved!');
+
+        return redirect('grid/projecttask');
+    }
+
     public function apiList($listtype, Request $request)
     {
         $u = new UserLibrary;

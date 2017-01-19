@@ -245,4 +245,17 @@ class ProjectController extends Controller
         return $code;
 
     }
+
+    public function apiSearch(Request $request)
+    {
+        if(Gate::denies('Home-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $project_name = $request->project_name;
+
+        $result = Project::where('project_name','like','%' . $project_name . '%')->where('active', '1')->take(5)->orderBy('project_name')->get();
+
+        return response()->json($result, 200);
+    }
 }
