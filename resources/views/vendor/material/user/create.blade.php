@@ -192,7 +192,7 @@
 	                <label for="media_group_id" class="col-sm-2 control-label">Media Group</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="media_group_id[]" id="media_group_id" class="selectpicker" data-live-search="true" multiple required="true">
+	                        <select name="media_group_id[]" id="media_group_id" class="selectpicker" data-live-search="true" multiple>
 	                        	<!-- <option value=""></option> -->
                                 @foreach ($mediagroups as $row)
                                 	{!! $selected = '' !!}
@@ -218,7 +218,7 @@
 	                <label for="media_id" class="col-sm-2 control-label">Media</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="media_id[]" id="media_id" class="selectpicker" data-live-search="true" multiple required="true">
+	                        <select name="media_id[]" id="media_id" class="selectpicker" data-live-search="true" multiple>
 	                        	<!-- <option value=""></option> -->
                                 @foreach ($medias as $row)
                                 	{!! $selected = '' !!}

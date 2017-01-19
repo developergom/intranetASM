@@ -340,10 +340,15 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
     });
 
     Route::group(['prefix' => 'grid'], function() {
-        //Activity
+        //Project
         Route::post('project/apiList', 'ProjectController@apiList');
         Route::post('project/apiDelete', 'ProjectController@apiDelete');
         Route::resource('project', 'ProjectController');
+
+        //Project Task
+        Route::post('projecttask/apiList', 'ProjectTaskController@apiList');
+        Route::post('projecttask/apiDelete', 'ProjectTaskController@apiDelete');
+        Route::resource('projecttask', 'ProjectTaskController');
     });
 
     Route::group(['prefix' => 'config'], function() {

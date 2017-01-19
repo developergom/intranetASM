@@ -107,8 +107,13 @@ class UserController extends Controller
 
         User::find($obj->user_id)->roles()->sync($request->input('role_id'));
         User::find($obj->user_id)->groups()->sync($request->input('group_id'));
-        User::find($obj->user_id)->medias()->sync($request->input('media_id'));
-        User::find($obj->user_id)->mediagroups()->sync($request->input('media_group_id'));
+        if(!empty($request->input('media_id'))) {
+            User::find($obj->user_id)->medias()->sync($request->input('media_id'));
+        }
+
+        if(!empty($request->input('media_group_id'))) {
+            User::find($obj->user_id)->mediagroups()->sync($request->input('media_group_id'));
+        }
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -208,8 +213,13 @@ class UserController extends Controller
 
         User::find($id)->roles()->sync($request->input('role_id'));
         User::find($id)->groups()->sync($request->input('group_id'));
-        User::find($id)->medias()->sync($request->input('media_id'));
-        User::find($id)->mediagroups()->sync($request->input('media_group_id'));
+        if(!empty($request->input('media_id'))) {
+            User::find($id)->medias()->sync($request->input('media_id'));
+        }
+
+        if(!empty($request->input('media_group_id'))) {
+            User::find($id)->mediagroups()->sync($request->input('media_group_id'));
+        }
 
         $request->session()->flash('status', 'Data has been updated!');
 
