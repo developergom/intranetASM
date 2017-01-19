@@ -346,7 +346,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::resource('project', 'ProjectController');
 
         //Project Task
-        Route::post('projecttask/apiList', 'ProjectTaskController@apiList');
+        Route::post('projecttask/apiList/{listtype}', 'ProjectTaskController@apiList');
         Route::post('projecttask/apiDelete', 'ProjectTaskController@apiDelete');
         Route::resource('projecttask', 'ProjectTaskController');
     });
