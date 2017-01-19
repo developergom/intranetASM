@@ -47,4 +47,9 @@ class Client extends Model
 	public function activities() {
 		return $this->belongsToMany('App\Activity', 'activities_clients');
 	}
+
+	public function projects()
+	{
+		return $this->hasMany('App\Project', 'client_id');	
+	}
 }

@@ -41,7 +41,7 @@ class FlowLibrary{
 		return $nextFlow;
 	}
 
-	private function getNextUser($flow_by, $role_id, $user_id, $pic = '', $author = '') 
+	private function getNextUser($flow_by, $role_id, $user_id, $pic = '', $author = '', $manual_user = '') 
 	{
 		$nextUser = $author;
 
@@ -76,6 +76,9 @@ class FlowLibrary{
 			})->first();
 
 			$nextUser = $user->user_id;
+		}elseif($flow_by == 'MANUAL')
+		{
+			$nextUser = $manual_user;
 		}
 
 		return $nextUser;

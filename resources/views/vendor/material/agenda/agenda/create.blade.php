@@ -86,7 +86,7 @@
 	                <label for="inventory_planner_id" class="col-sm-2 control-label">Inventory Planner</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="inventory_planner_id[]" id="inventory_planner_id" class="selectpicker" data-live-search="true" multiple>
+	                        <select name="inventory_planner_id[]" id="inventory_planner_id" class="selectpicker with-ajax" data-live-search="true" multiple>
                             </select>
 	                    </div>
 	                </div>
@@ -95,7 +95,7 @@
 	                <label for="proposal_id" class="col-sm-2 control-label">Proposal</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="proposal_id[]" id="proposal_id" class="selectpicker" data-live-search="true" multiple>
+	                        <select name="proposal_id[]" id="proposal_id" class="selectpicker with-ajax" data-live-search="true" multiple>
                             </select>
 	                    </div>
 	                </div>

@@ -39,6 +39,7 @@ Route::get('/home', 'HomeController@index')->middleware(['auth','menu']);
 Route::group(['middleware' => ['auth', 'menu']], function(){
     Route::post('user/apiList', 'UserController@apiList');
     Route::post('user/apiDelete', 'UserController@apiDelete');
+    Route::post('user/apiSearch', 'UserController@apiSearch');
     Route::get('change-password', 'UserController@changePassword');
     Route::post('change-password', 'UserController@postChangePassword');
     Route::get('profile', 'UserController@viewProfile');
@@ -206,6 +207,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('pricetype/apiList', 'PriceTypeController@apiList');
         Route::post('pricetype/apiDelete', 'PriceTypeController@apiDelete');
         Route::resource('pricetype', 'PriceTypeController');
+
+        //Project Task Type
+        Route::post('projecttasktype/apiList', 'ProjectTaskTypeController@apiList');
+        Route::post('projecttasktype/apiDelete', 'ProjectTaskTypeController@apiDelete');
+        Route::resource('projecttasktype', 'ProjectTaskTypeController');
 
         //Proposal Type
         Route::post('proposaltype/apiList', 'ProposalTypeController@apiList');

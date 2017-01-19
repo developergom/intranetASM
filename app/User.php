@@ -76,4 +76,9 @@ class User extends Authenticatable
     public function activities() {
         return $this->belongsToMany('App\Activity', 'activities_users');
     }
+
+    public function projecttasktypes()
+    {
+        return $this->hasMany('App\ProjectTaskType', 'user_id');
+    }
 }

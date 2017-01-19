@@ -21,6 +21,7 @@ class Proposal extends Model
 				'proposal_delivery_date',
 				'client_id',
 				'brand_id',
+				'pic',
 				'flow_no',
 				'revision_no',
 				'current_user',

@@ -36,4 +36,8 @@ class ApprovalType extends Model
 	public function proposalhistories() {
 		return $this->hasMany('App\ProposalHistory', 'approval_type_id');
 	}
+
+	public function projecttaskhistories() {
+		return $this->hasMany('App\ProjectTaskHistory', 'approval_type_id');
+	}
 }

@@ -22,7 +22,8 @@ class Flow extends Model
 				'INDUSTRY' => 'Industry',
 				'MEDIA' => 'Media',
 				'PIC' => 'PIC',
-				'GROUP' => 'Group'
+				'GROUP' => 'Group',
+				'MANUAL' => 'Manual'
 	];
 
 	public function flowgroup() {

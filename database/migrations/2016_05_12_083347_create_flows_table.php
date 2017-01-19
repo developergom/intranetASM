@@ -22,7 +22,7 @@ class CreateFlowsTable extends Migration
                 $table->integer('flow_prev');
                 $table->integer('flow_next');
                 $table->integer('role_id');
-                $table->enum('flow_by', ['AUTHOR', 'GROUP', 'INDUSTRY', 'PIC', 'MEDIA']);
+                $table->enum('flow_by', ['AUTHOR', 'GROUP', 'INDUSTRY', 'PIC', 'MEDIA', 'MANUAL']);
                 $table->enum('flow_parallel', ['true', 'false'])->default('false');
                 $table->enum('flow_condition', ['EQUAL','NOT_EQUAL','GREATER','LESS','GREATER_EQUAL','LESS_EQUAL']);
                 $table->integer('flow_condition_value');

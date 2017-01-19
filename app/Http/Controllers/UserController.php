@@ -400,4 +400,19 @@ class UserController extends Controller
             return redirect('profile');
         }
     }
+
+    public function apiSearch(Request $request)
+    {
+        if(Gate::denies('Users Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $query = $request->squery;
+
+        $result = User::where('user_firstname','like','%' . $query . '%')
+                    ->orWhere('user_lastname','like','%' . $query . '%')
+                    ->where('active', '1')->take(5)->orderBy('user_firstname')->get();
+
+        return response()->json($result, 200);
+    }
 }
