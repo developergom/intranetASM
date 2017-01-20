@@ -37,9 +37,9 @@ class ProjectTask extends Model
 		return $this->belongsTo('App\ProjectTaskType', 'project_task_type_id');
 	}
 
-	public function projecthistories()
+	public function projecttaskhistories()
 	{
-		return $this->hasMany('App\ProjectHistory', 'project_id');
+		return $this->hasMany('App\ProjectTaskHistory', 'project_task_id');
 	}
 
 	public function uploadfiles()
