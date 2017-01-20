@@ -145,7 +145,7 @@ class ProjectTaskController extends Controller
 
         $his->save();
 
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskappoval', 'Please check Project Task "' . $obj->project_task_name . '"', $obj->project_task_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Please check Project Task "' . $obj->project_task_name . '"', $obj->project_task_id);
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -170,6 +170,107 @@ class ProjectTaskController extends Controller
         $data['deadline'] = Carbon::createFromFormat('Y-m-d', ($data['projecttask']->project_task_deadline==null) ? date('Y-m-d') : $data['projecttask']->project_task_deadline)->format('d/m/Y');
 
         return view('vendor.material.grid.projecttask.show', $data);
+    }
+
+    public function edit(Request $request, $id)
+    {
+        if(Gate::denies('Project Task-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data['projecttask'] = ProjectTask::with(
+                                            'project', 
+                                            'projecttasktype',
+                                            'uploadfiles',
+                                            'projecttaskhistories',
+                                            'projecttaskhistories.approvaltype'
+                                            )->find($id);
+        $data['project_task_types'] = ProjectTaskType::with('user')->where('active', '1')->orderBy('project_task_type_name')->get();
+        $data['deadline'] = Carbon::createFromFormat('Y-m-d', ($data['projecttask']->project_task_deadline==null) ? date('Y-m-d') : $data['projecttask']->project_task_deadline)->format('d/m/Y');
+
+        return view('vendor.material.grid.projecttask.edit', $data);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'project_task_type_id' => 'required',
+            'project_task_name' => 'required|max:100',
+            'project_task_deadline' => 'required|date_format:"d/m/Y"',
+            'project_task_desc' => 'required',
+            'project_id' => 'required'
+        ]);
+
+        $projecttasktype = ProjectTaskType::find($request->input('project_task_type_id'));
+
+        $flow = new FlowLibrary;
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id, '', '', $projecttasktype->user_id);
+
+        $obj = ProjectTask::find($id);
+        $obj->project_task_type_id = $request->input('project_task_type_id');
+        $obj->project_task_name = $request->input('project_task_name');
+        $obj->project_task_deadline = Carbon::createFromFormat('d/m/Y', $request->input('project_task_deadline'))->toDateString();
+        $obj->project_task_desc = $request->input('project_task_desc');
+        $obj->project_id = $request->input('project_id');
+        $obj->flow_no = $nextFlow['flow_no'];
+        $obj->current_user = $nextFlow['current_user'];
+        $obj->updated_by = $request->user()->user_id;
+
+        $obj->save();
+
+
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => $obj->revision_no ];
+            }
+        }
+
+        if(!empty($fileArray)) {
+            ProjectTask::find($obj->project_task_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
+        }
+
+        $his = new ProjectTaskHistory;
+        $his->project_task_id = $obj->project_task_id;
+        $his->approval_type_id = 1;
+        $his->project_task_history_text = $request->input('project_task_desc');
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        $this->notif->remove($request->user()->user_id, 'projecttaskreject', $obj->project_task_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Please check Project Task "' . $obj->project_task_name . '"', $obj->project_task_id);
+
+        $request->session()->flash('status', 'Data has been saved!');
+
+        return redirect('grid/projecttask');
     }
 
     public function apiList($listtype, Request $request)
@@ -207,7 +308,8 @@ class ProjectTaskController extends Controller
                                 ->where('project_tasks.current_user', '<>' , $request->user()->user_id)
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('project_tasks.created_by', '=' , $request->user()->user_id)
-                                            ->orWhereIn('project_tasks.created_by', $subordinate);
+                                            ->orWhereIn('project_tasks.created_by', $subordinate)
+                                            ->orWhereIn('project_tasks.pic', $subordinate);
                                 })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('project_name','like','%' . $searchPhrase . '%')
@@ -226,7 +328,8 @@ class ProjectTaskController extends Controller
                                 ->where('project_tasks.current_user', '<>' , $request->user()->user_id)
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('project_tasks.created_by', '=' , $request->user()->user_id)
-                                            ->orWhereIn('project_tasks.created_by', $subordinate);
+                                            ->orWhereIn('project_tasks.created_by', $subordinate)
+                                            ->orWhereIn('project_tasks.pic', $subordinate);
                                 })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('project_name','like','%' . $searchPhrase . '%')
@@ -407,6 +510,7 @@ class ProjectTaskController extends Controller
             $flow = new FlowLibrary;
             $nextFlow = $flow->getNextFlow($this->flow_group_id, $projecttask->flow_no, $request->user()->user_id, $request->input('pic'), $projecttask->created_by);
 
+            $projecttask->pic = $request->input('pic');
             $projecttask->flow_no = $nextFlow['flow_no'];
             $projecttask->current_user = $nextFlow['current_user'];
             $projecttask->updated_by = $request->user()->user_id;
