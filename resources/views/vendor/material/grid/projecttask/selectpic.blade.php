@@ -8,7 +8,7 @@
     <div class="card">
         <div class="card-header"><h2>Project Task<small>Approve Project Task</small></h2></div>
         <div class="card-body card-padding">
-        	<form class="form-horizontal" role="form" method="POST" action="{{ url($url) }}">
+        	<form class="form-horizontal" role="form" method="POST" action="{{ url('grid/projecttask/approve/' . $projecttask->flow_no . '/' . $projecttask->project_task_id) }}">
         		{{ csrf_field() }}
         		@include('vendor.material.grid.projecttask.view')
         		@include('vendor.material.grid.projecttask.history')
@@ -28,6 +28,21 @@
 	                        </label>
 	                    </div>
 	                </div>
+	            </div>
+	            <div class="form-group">
+	            	<label for="pic" class="col-sm-2 control-label">PIC</label>
+	            	<div class="col-sm-10">
+	            		<select name="pic" id="pic" class="selectpicker" data-live-search="true" required="true">
+        					<option value=""></option>
+        					@foreach($subordinate as $row)
+        						{!! $selected = '' !!}
+                            	@if(old('pic')==$row->user_id)
+                                	{!! $selected = 'selected' !!}
+                            	@endif
+        						<option value="{{ $row->user_id }}" {{ $selected }}>{{ $row->user_firstname . ' - ' . $row->user_lastname }}</option>
+        					@endforeach
+        				</select>
+	            	</div>
 	            </div>
 	            <div class="form-group">
 	                <label for="comment" class="col-sm-2 control-label">Comment</label>

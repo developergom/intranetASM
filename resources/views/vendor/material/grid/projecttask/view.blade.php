@@ -51,7 +51,7 @@
         			<img src="{{ url('img/filetypes/' . $uploadedfile->upload_file_type . '.png') }}" alt="">
         			@endif
         			<div class="caption">
-        				<h4>{{ $uploadedfile->upload_file_name }}</h4>
+        				<h4>{{ $uploadedfile->upload_file_name . ' Revision (' . $uploadedfile->upload_file_revision . ') ' }}</h4>
         				<p>{{ $uploadedfile->upload_file_desc }}</p>
         				<div class="m-b-5">
         					@can('Project Task-Download')

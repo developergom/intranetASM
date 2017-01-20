@@ -121,6 +121,7 @@ class ProjectTaskController extends Controller
                 $upl->upload_file_name = $file['basename'];
                 $upl->upload_file_path = $file['dirname'];
                 $upl->upload_file_size = $filesize;
+                $upl->upload_file_revision = 0;
                 $upl->upload_file_desc = '';
                 $upl->active = '1';
                 $upl->created_by = $request->user()->user_id;
@@ -241,6 +242,7 @@ class ProjectTaskController extends Controller
                 $upl->upload_file_name = $file['basename'];
                 $upl->upload_file_path = $file['dirname'];
                 $upl->upload_file_size = $filesize;
+                $upl->upload_file_revision = $obj->revision_no;
                 $upl->upload_file_desc = '';
                 $upl->active = '1';
                 $upl->created_by = $request->user()->user_id;
@@ -451,6 +453,8 @@ class ProjectTaskController extends Controller
             return $this->approveFlowNo1($request, $id);
         }elseif($flow_no == 2) {
             return $this->approveFlowNo2($request, $id);
+        }elseif($flow_no == 3) {
+            return $this->approveFlowNo3($request, $id);
         }
     }
 
@@ -460,6 +464,8 @@ class ProjectTaskController extends Controller
             $this->postApproveFlowNo1($request, $id);
         }elseif($flow_no == 2) {
             $this->postApproveFlowNo2($request, $id);
+        }elseif($flow_no == 3) {
+            $this->postApproveFlowNo3($request, $id);
         }
 
         return redirect('grid/projecttask');
@@ -487,7 +493,7 @@ class ProjectTaskController extends Controller
 
         $data['subordinate'] = User::whereIn('user_id',$subordinate)->get();
 
-        return view('vendor.material.grid.projecttask.approve', $data);
+        return view('vendor.material.grid.projecttask.selectpic', $data);
     }
 
     private function postApproveFlowNo2(Request $request, $id)
@@ -525,7 +531,8 @@ class ProjectTaskController extends Controller
 
             $his->save();
 
-            $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $projecttask->project_task_id);
+            $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $id);
+            $this->notif->remove($request->user()->user_id, 'projecttaskreject', $id);
             $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Project Task "' . $projecttask->project_task_name . '" need approval.', $id);
 
             $request->session()->flash('status', 'Data has been saved!');
@@ -552,7 +559,100 @@ class ProjectTaskController extends Controller
 
             $his->save();
 
-            $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $projecttask->project_task_id);
+            $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $id);
+            $this->notif->remove($request->user()->user_id, 'projecttaskreject', $id);
+            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'projecttaskreject', 'Project Task "' . $projecttask->project_task_name . '" rejected.', $id);
+
+            $request->session()->flash('status', 'Data has been saved!');
+        }
+
+    }
+
+    private function approveFlowNo3(Request $request, $id)
+    {
+        if(Gate::denies('Project Task-Approval')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['projecttask'] = ProjectTask::with(
+                                            'project', 
+                                            'projecttasktype',
+                                            'uploadfiles',
+                                            'projecttaskhistories',
+                                            'projecttaskhistories.approvaltype'
+                                            )->find($id);
+        $data['deadline'] = Carbon::createFromFormat('Y-m-d', ($data['projecttask']->project_task_deadline==null) ? date('Y-m-d') : $data['projecttask']->project_task_deadline)->format('d/m/Y');
+        $data['url'] = 'grid/projecttask/approve/' . $data['projecttask']->flow_no . '/' . $id;
+
+        return view('vendor.material.grid.projecttask.approve', $data);
+    }
+
+    private function postApproveFlowNo3(Request $request, $id)
+    {
+        if(Gate::denies('Project Task-Approval')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $this->validate($request, [
+            'approval' => 'required',
+            'comment' => 'required',
+        ]);
+
+        if($request->input('approval') == '1') 
+        {
+            //approve
+            $projecttask = ProjectTask::find($id);
+
+            $flow = new FlowLibrary;
+            $nextFlow = $flow->getNextFlow($this->flow_group_id, $projecttask->flow_no, $request->user()->user_id, $projecttask->pic, $projecttask->created_by);
+
+            $projecttask->flow_no = $nextFlow['flow_no'];
+            $projecttask->current_user = $nextFlow['current_user'];
+            $projecttask->updated_by = $request->user()->user_id;
+            $projecttask->save();
+
+            $his = new ProjectTaskHistory;
+            $his->project_task_id = $id;
+            $his->approval_type_id = 2;
+            $his->project_task_history_text = $request->input('comment');
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
+            $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $id);
+            $this->notif->remove($request->user()->user_id, 'projecttaskreject', $id);
+            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Project Task "' . $projecttask->project_task_name . '" need approval.', $id);
+
+            $request->session()->flash('status', 'Data has been saved!');
+
+        }else{
+            //reject
+            $projecttask = ProjectTask::with('projecttasktype')->find($id);
+
+            $flow = new FlowLibrary;
+            $prevFlow = $flow->getPreviousFlow($this->flow_group_id, $projecttask->flow_no, $request->user()->user_id, $projecttask->pic, $projecttask->created_by, $projecttask->projecttasktype->user_id);
+
+            $projecttask->pic = 0;
+            $projecttask->flow_no = $prevFlow['flow_no'];
+            $projecttask->revision_no = $projecttask->revision_no + 1;
+            $projecttask->current_user = $prevFlow['current_user'];
+            $projecttask->updated_by = $request->user()->user_id;
+            $projecttask->save();
+
+            $his = new ProjectTaskHistory;
+            $his->project_task_id = $id;
+            $his->approval_type_id = 3;
+            $his->project_task_history_text = $request->input('comment');
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
+            $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $id);
+            $this->notif->remove($request->user()->user_id, 'projecttaskreject', $id);
             $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'projecttaskreject', 'Project Task "' . $projecttask->project_task_name . '" rejected.', $id);
 
             $request->session()->flash('status', 'Data has been saved!');

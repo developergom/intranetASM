@@ -84,13 +84,13 @@ class FlowLibrary{
 		return $nextUser;
 	}
 
-	public function getPreviousFlow($flow_group_id, $flow_no, $user_id, $pic = '', $author = '') {
+	public function getPreviousFlow($flow_group_id, $flow_no, $user_id, $pic = '', $author = '', $manual_user = '') {
 		$prevFlow = array();
 
 		$currentFlow = Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $flow_no)->where('active', '1')->first();
 
 		$flow = Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $currentFlow->flow_prev)->where('active', '1')->first();
-		$prevUser = $this->getNextUser($flow->flow_by, $flow->role_id, $user_id, $pic, $author);
+		$prevUser = $this->getNextUser($flow->flow_by, $flow->role_id, $user_id, $pic, $author, $manual_user);
 
 		$prevFlow['flow_no'] = $flow->flow_no;
 		$prevFlow['current_user'] = $prevUser;

@@ -28,14 +28,16 @@ class NotificationLibrary{
 
 	public function remove($receiver, $notification_type_code, $ref_id)
 	{
-		$obj = Notification::where('notification_type_code', $notification_type_code)->where('notification_ref_id', $ref_id)->where('notification_receiver', $receiver)->where('active', '1')->first();
+		$count = Notification::where('notification_type_code', $notification_type_code)->where('notification_ref_id', $ref_id)->where('notification_receiver', $receiver)->where('active', '1')->count();
+		if($count > 0) {
+			$obj = Notification::where('notification_type_code', $notification_type_code)->where('notification_ref_id', $ref_id)->where('notification_receiver', $receiver)->where('active', '1')->first();
 
-		//dd($obj);
+			$obj->notification_status = '1';
+			$obj->active = '0';
+			$obj->updated_by = $receiver;
 
-		$obj->notification_status = '1';
-		$obj->active = '0';
-		$obj->updated_by = $receiver;
-
-		$obj->save();
+			$obj->save();	
+		}
+		
 	}
 }

@@ -148,6 +148,7 @@ class InventoryPlannerController extends Controller
                 $upl->upload_file_name = $file['basename'];
                 $upl->upload_file_path = $file['dirname'];
                 $upl->upload_file_size = $filesize;
+                $upl->upload_file_revision = 0;
                 $upl->upload_file_desc = '';
                 $upl->active = '1';
                 $upl->created_by = $request->user()->user_id;
@@ -618,6 +619,7 @@ class InventoryPlannerController extends Controller
                 $upl->upload_file_name = $file['basename'];
                 $upl->upload_file_path = $file['dirname'];
                 $upl->upload_file_size = $filesize;
+                $upl->upload_file_revision = $obj->revision_no;
                 $upl->upload_file_desc = '';
                 $upl->active = '1';
                 $upl->created_by = $request->user()->user_id;
