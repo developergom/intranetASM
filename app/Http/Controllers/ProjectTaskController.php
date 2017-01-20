@@ -455,6 +455,8 @@ class ProjectTaskController extends Controller
             return $this->approveFlowNo2($request, $id);
         }elseif($flow_no == 3) {
             return $this->approveFlowNo3($request, $id);
+        }elseif($flow_no == 4) {
+            return $this->approveFlowNo4($request, $id);
         }
     }
 
@@ -466,6 +468,8 @@ class ProjectTaskController extends Controller
             $this->postApproveFlowNo2($request, $id);
         }elseif($flow_no == 3) {
             $this->postApproveFlowNo3($request, $id);
+        }elseif($flow_no == 4) {
+            $this->postApproveFlowNo4($request, $id);
         }
 
         return redirect('grid/projecttask');
@@ -657,6 +661,103 @@ class ProjectTaskController extends Controller
 
             $request->session()->flash('status', 'Data has been saved!');
         }
+
+    }
+
+    private function approveFlowNo4(Request $request, $id)
+    {
+        if(Gate::denies('Project Task-Approval')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['projecttask'] = ProjectTask::with(
+                                            'project', 
+                                            'projecttasktype',
+                                            'uploadfiles',
+                                            'projecttaskhistories',
+                                            'projecttaskhistories.approvaltype'
+                                            )->find($id);
+        $data['deadline'] = Carbon::createFromFormat('Y-m-d', ($data['projecttask']->project_task_deadline==null) ? date('Y-m-d') : $data['projecttask']->project_task_deadline)->format('d/m/Y');
+        $data['url'] = 'grid/projecttask/approve/' . $data['projecttask']->flow_no . '/' . $id;
+
+        return view('vendor.material.grid.projecttask.picform', $data);
+    }
+
+    private function postApproveFlowNo4(Request $request, $id)
+    {
+        if(Gate::denies('Project Task-Approval')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $this->validate($request, [
+            'comment' => 'required',
+        ]);
+
+        $projecttask = ProjectTask::find($id);
+
+        $flow = new FlowLibrary;
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, $projecttask->flow_no, $request->user()->user_id, $projecttask->pic, $projecttask->created_by);
+
+        $projecttask->flow_no = $nextFlow['flow_no'];
+        $projecttask->current_user = $nextFlow['current_user'];
+        $projecttask->project_task_ready_date = Carbon::now()->toDateTimeString();
+        $projecttask->updated_by = $request->user()->user_id;
+        $projecttask->save();
+
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_revision = $projecttask->revision_no;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => $projecttask->revision_no ];
+            }
+        }
+
+        if(!empty($fileArray)) {
+            ProjectTask::find($projecttask->project_task_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
+        }
+
+        $his = new ProjectTaskHistory;
+        $his->project_task_id = $id;
+        $his->approval_type_id = 1;
+        $his->project_task_history_text = $request->input('comment');
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $id);
+        $this->notif->remove($request->user()->user_id, 'projecttaskreject', $id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Project Task "' . $projecttask->project_task_name . '" need approval.', $id);
+
+        $request->session()->flash('status', 'Data has been saved!');
 
     }
 }
