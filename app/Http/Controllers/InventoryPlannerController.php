@@ -893,7 +893,7 @@ class InventoryPlannerController extends Controller
             $inventoryplanner = InventoryPlanner::find($id);
 
             $flow = new FlowLibrary;
-            $nextFlow = $flow->getNextFlow($this->flow_group_id, $inventoryplanner->flow_no, $request->user()->user_id, '', $inventoryplanner->created_by->user_id);
+            $nextFlow = $flow->getNextFlow($this->flow_group_id, $inventoryplanner->flow_no, $request->user()->user_id, '', $inventoryplanner->created_by);
 
             $inventoryplanner->flow_no = $nextFlow['flow_no'];
             $inventoryplanner->current_user = $nextFlow['current_user'];
@@ -919,7 +919,7 @@ class InventoryPlannerController extends Controller
             $inventoryplanner = InventoryPlanner::find($id);
 
             $flow = new FlowLibrary;
-            $prevFlow = $flow->getPreviousFlow($this->flow_group_id, $inventoryplanner->flow_no, $request->user()->user_id, '', $inventoryplanner->created_by->user_id);
+            $prevFlow = $flow->getPreviousFlow($this->flow_group_id, $inventoryplanner->flow_no, $request->user()->user_id, '', $inventoryplanner->created_by);
 
             $inventoryplanner->flow_no = $prevFlow['flow_no'];
             $inventoryplanner->revision_no = $inventoryplanner->revision_no + 1;

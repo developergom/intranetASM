@@ -14,6 +14,7 @@ use App\ProjectTask;
 use App\ProjectTaskHistory;
 use App\ProjectTaskType;
 use App\UploadFile;
+use App\User;
 
 use App\Ibrol\Libraries\FlowLibrary;
 use App\Ibrol\Libraries\NotificationLibrary;
@@ -369,68 +370,31 @@ class ProjectTaskController extends Controller
 
         $data = array();
 
-        $data['inventoryplanner'] = InventoryPlanner::with(
-        												'inventorytype', 
-        												'implementations',
-        												'medias',
-        												'actionplans',
-        												'eventplans',
-        												'uploadfiles',
-        												'inventoryplannerprintprices',
-        												'inventoryplannerprintprices.pricetype',
-        												'inventoryplannerprintprices.media',
-        												'inventoryplannerprintprices.advertiserate',
-        												'inventoryplannerprintprices.advertiserate.paper',
-        												'inventoryplannerprintprices.advertiserate.advertisesize',
-        												'inventoryplannerprintprices.advertiserate.advertiseposition',
-        												'inventoryplannerdigitalprices',
-        												'inventoryplannerdigitalprices.pricetype',
-        												'inventoryplannerdigitalprices.media',
-        												'inventoryplannerdigitalprices.advertiserate.paper',
-        												'inventoryplannerdigitalprices.advertiserate.advertisesize',
-        												'inventoryplannerdigitalprices.advertiserate.advertiseposition',
-        												'inventoryplannereventprices',
-        												'inventoryplannereventprices.pricetype',
-        												'inventoryplannereventprices.media',
-        												'inventoryplannercreativeprices',
-        												'inventoryplannercreativeprices.pricetype',
-        												'inventoryplannercreativeprices.media',
-        												'inventoryplannercreativeprices.advertiserate',
-        												'inventoryplannercreativeprices.advertiserate.paper',
-        												'inventoryplannercreativeprices.advertiserate.advertisesize',
-        												'inventoryplannercreativeprices.advertiserate.advertiseposition',
-        												'inventoryplannerotherprices',
-        												'inventoryplannerotherprices.pricetype',
-        												'inventoryplannerotherprices.media',
-        												'inventoryplannerhistories'
-        												)->find($id);
+        $u = new UserLibrary;
+        $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
 
-		$grossprint = $data['inventoryplanner']->inventoryplannerprintprices->sum('inventory_planner_print_price_total_gross_rate');
-		$grossdigital = $data['inventoryplanner']->inventoryplannerdigitalprices->sum('inventory_planner_digital_price_total_gross_rate');
-		$grossevent = $data['inventoryplanner']->inventoryplannereventprices->sum('inventory_planner_event_price_total_gross_rate');
-		$grosscreative = $data['inventoryplanner']->inventoryplannercreativeprices->sum('inventory_planner_creative_price_total_gross_rate');
-		$grossother = $data['inventoryplanner']->inventoryplannerotherprices->sum('inventory_planner_other_price_total_gross_rate');
+        $data['projecttask'] = ProjectTask::with(
+                                            'project', 
+                                            'projecttasktype',
+                                            'uploadfiles',
+                                            'projecttaskhistories',
+                                            'projecttaskhistories.approvaltype'
+                                            )->find($id);
+        $data['deadline'] = Carbon::createFromFormat('Y-m-d', ($data['projecttask']->project_task_deadline==null) ? date('Y-m-d') : $data['projecttask']->project_task_deadline)->format('d/m/Y');
 
-		$nettprint = $data['inventoryplanner']->inventoryplannerprintprices->sum('inventory_planner_print_price_nett_rate');
-		$nettdigital = $data['inventoryplanner']->inventoryplannerdigitalprices->sum('inventory_planner_digital_price_nett_rate');
-		$nettevent = $data['inventoryplanner']->inventoryplannereventprices->sum('inventory_planner_event_price_nett_rate');
-		$nettcreative = $data['inventoryplanner']->inventoryplannercreativeprices->sum('inventory_planner_creative_price_nett_rate');
-		$nettother = $data['inventoryplanner']->inventoryplannerotherprices->sum('inventory_planner_other_price_nett_rate');
+        $data['subordinate'] = User::whereIn('user_id',$subordinate)->get();
 
-		$data['total_value'] = $grossprint + $grossdigital + $grossevent + $grosscreative + $grossother;
-		$data['total_nett'] = $nettprint + $nettdigital + $nettevent + $nettcreative + $nettother;
-		$data['saving_value'] = $data['total_value'] - $data['total_nett'];
-
-        return view('vendor.material.inventory.inventoryplanner.approve', $data);
+        return view('vendor.material.grid.projecttask.approve', $data);
     }
 
     private function postApproveFlowNo2(Request $request, $id)
     {
-        if(Gate::denies('Inventory Planner-Approval')) {
+        if(Gate::denies('Project Task-Approval')) {
             abort(403, 'Unauthorized action.');
         }
 
         $this->validate($request, [
+            'pic' => 'required',
             'approval' => 'required',
             'comment' => 'required',
         ]);
@@ -438,54 +402,54 @@ class ProjectTaskController extends Controller
         if($request->input('approval') == '1') 
         {
             //approve
-            $inventoryplanner = InventoryPlanner::find($id);
+            $projecttask = ProjectTask::find($id);
 
             $flow = new FlowLibrary;
-            $nextFlow = $flow->getNextFlow($this->flow_group_id, $inventoryplanner->flow_no, $request->user()->user_id, '', $inventoryplanner->created_by->user_id);
+            $nextFlow = $flow->getNextFlow($this->flow_group_id, $projecttask->flow_no, $request->user()->user_id, $request->input('pic'), $projecttask->created_by);
 
-            $inventoryplanner->flow_no = $nextFlow['flow_no'];
-            $inventoryplanner->current_user = $nextFlow['current_user'];
-            $inventoryplanner->updated_by = $request->user()->user_id;
-            $inventoryplanner->save();
+            $projecttask->flow_no = $nextFlow['flow_no'];
+            $projecttask->current_user = $nextFlow['current_user'];
+            $projecttask->updated_by = $request->user()->user_id;
+            $projecttask->save();
 
-            $his = new InventoryPlannerHistory;
-            $his->inventory_planner_id = $id;
+            $his = new ProjectTaskHistory;
+            $his->project_task_id = $id;
             $his->approval_type_id = 2;
-            $his->inventory_planner_history_text = $request->input('comment');
+            $his->project_task_history_text = $request->input('comment');
             $his->active = '1';
             $his->created_by = $request->user()->user_id;
 
             $his->save();
 
-            $this->notif->remove($request->user()->user_id, 'inventoryplannerapproval', $inventoryplanner->inventory_planner_id);
-            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'inventoryplannerfinished', 'Inventory Planner "' . $inventoryplanner->inventory_planner_title . '" has been approved.', $id);
+            $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $projecttask->project_task_id);
+            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Project Task "' . $projecttask->project_task_name . '" need approval.', $id);
 
             $request->session()->flash('status', 'Data has been saved!');
 
         }else{
             //reject
-            $inventoryplanner = InventoryPlanner::find($id);
+            $projecttask = ProjectTask::find($id);
 
             $flow = new FlowLibrary;
-            $prevFlow = $flow->getPreviousFlow($this->flow_group_id, $inventoryplanner->flow_no, $request->user()->user_id, '', $inventoryplanner->created_by->user_id);
+            $prevFlow = $flow->getPreviousFlow($this->flow_group_id, $projecttask->flow_no, $request->user()->user_id, '', $projecttask->created_by);
 
-            $inventoryplanner->flow_no = $prevFlow['flow_no'];
-            $inventoryplanner->revision_no = $inventoryplanner->revision_no + 1;
-            $inventoryplanner->current_user = $prevFlow['current_user'];
-            $inventoryplanner->updated_by = $request->user()->user_id;
-            $inventoryplanner->save();
+            $projecttask->flow_no = $prevFlow['flow_no'];
+            $projecttask->revision_no = $projecttask->revision_no + 1;
+            $projecttask->current_user = $prevFlow['current_user'];
+            $projecttask->updated_by = $request->user()->user_id;
+            $projecttask->save();
 
-            $his = new InventoryPlannerHistory;
-            $his->inventory_planner_id = $id;
+            $his = new ProjectTaskHistory;
+            $his->project_task_id = $id;
             $his->approval_type_id = 3;
-            $his->inventory_planner_history_text = $request->input('comment');
+            $his->project_task_history_text = $request->input('comment');
             $his->active = '1';
             $his->created_by = $request->user()->user_id;
 
             $his->save();
 
-            $this->notif->remove($request->user()->user_id, 'inventoryplannerapproval', $inventoryplanner->inventory_planner_id);
-            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'inventoryplannerreject', 'Inventory Planner "' . $inventoryplanner->inventory_planner_title . '" rejected.', $id);
+            $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $projecttask->project_task_id);
+            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'projecttaskreject', 'Project Task "' . $projecttask->project_task_name . '" rejected.', $id);
 
             $request->session()->flash('status', 'Data has been saved!');
         }
