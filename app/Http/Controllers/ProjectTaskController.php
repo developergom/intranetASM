@@ -930,4 +930,34 @@ class ProjectTaskController extends Controller
         }
 
     }
+
+
+    public function apiLoadTaskDeadline(Request $request, $pics = '')
+    {
+        $data = array();
+        $data['monthly'] = array();
+
+        if($pics != '') {
+            $pics = preg_split('[,]', $pics);
+            $projecttasks = ProjectTask::join('users', 'users.user_id', '=', 'project_tasks.pic')->whereIn('project_tasks.pic', $pics)->where('project_tasks.active', '1')->where('project_tasks.flow_no', '98')->get();            
+        }else{
+            $projecttasks = ProjectTask::join('users', 'users.user_id', '=', 'project_tasks.pic')->where('project_tasks.active', '1')->where('project_tasks.flow_no', '98')->get();
+        }
+        
+        
+        foreach ($projecttasks as $key => $value) {
+            $rows = array();
+            $rows['id'] = $value->project_task_id;
+            $rows['name'] = $value->project_task_name . ' - PIC : ' . $value->user_firstname . ' ' . $value->user_lastname;
+            $rows['startdate'] = $value->project_task_deadline;
+            $rows['enddate'] = $value->project_task_deadline;
+            $rows['starttime'] = '0:00';
+            $rows['endtime'] = '';
+            $rows['color'] = '#FFB128';
+            $rows['url'] = url('/grid/projecttask/' . $value->project_task_id);
+            array_push($data['monthly'], $rows);
+        }
+
+        return response()->json($data);
+    }
 }

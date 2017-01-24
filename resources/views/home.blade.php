@@ -1,6 +1,7 @@
 @extends('vendor.material.layouts.app')
 
 @section('vendorcss')
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 <link href="{{ url('css/announcement-home.css') }}" rel="stylesheet">
 <link href="{{ url('css/monthly.css') }}" rel="stylesheet">
 @endsection
@@ -57,6 +58,7 @@
             You are logged in!
         </div>
     </div> -->
+    @can('Action Plan-Read')
     <div class="row">
         <div class="col-sm-6">
             <div class="card">
@@ -88,9 +90,42 @@
             </div>
         </div>
     </div>
+    @endcan
+
+    @can('Project Task-Read')
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header"><h4>Project Task</h4></div>
+                <div class="card-body card-padding">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="project-task-select-pic" class="col-sm-2 control-label">PIC</label>
+                            <div class="col-sm-8">
+                                <div class="fg-line">
+                                    <select name="project-task-select-pic[]" id="project-task-select-pic" class="selectpicker" data-live-search="true" multiple>
+                                        <option value="{{ $project_task_current->user_id }}" selected>{{ $project_task_current->user_firstname . ' ' . $project_task_current->user_lastname }}</option>
+                                        @foreach($project_task_subordinate as $row)
+                                            <option value="{{ $row->user_id }}">{{ $row->user_firstname . ' - ' . $row->user_lastname }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <a class="btn btn-primary waves-effect" id="btn-project-task-process">Process</a>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="monthly" id="project-task-calendar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endcan
 @endsection
 
 @section('vendorjs')
+<script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/jquery.marquee.min.js') }}"></script>
 <script src="{{ url('js/monthly.js') }}"></script>
 @endsection
@@ -104,6 +139,7 @@ $(document).ready(function(){
         duplicated: true
       });
 
+    @can('Action Plan-Read')
     $('#calendar').monthly({
         'mode' : 'event',
         'stylePast' : true,
@@ -144,6 +180,28 @@ $(document).ready(function(){
             });
         }
     });
+    @endcan
+
+    @can('Project Task-Read')
+    $('#project-task-calendar').monthly({
+        'mode' : 'event',
+        'stylePast' : true,
+        'dataType' : 'json',
+        'jsonUrl' : base_url + 'grid/projecttask/api/loadTasks',
+    });
+
+    $('#btn-project-task-process').click(function() {
+        var projecttaskids = $('#project-task-select-pic').val();
+
+        $("#project-task-calendar").empty();
+        $('#project-task-calendar').monthly({
+            'mode' : 'event',
+            'stylePast' : true,
+            'dataType' : 'json',
+            'jsonUrl' : base_url + 'grid/projecttask/api/loadTasks/' + projecttaskids,
+        });
+    });
+    @endcan
 });
 </script>
 @endsection

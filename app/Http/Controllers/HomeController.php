@@ -10,9 +10,12 @@ use App\ActionPlan;
 use App\EventPlan;
 use App\Creative;
 use DB;
+use Gate;
 
 use App\Announcement;
 use Carbon\Carbon;
+
+use App\Ibrol\Libraries\UserLibrary;
 
 class HomeController extends Controller
 {
@@ -31,7 +34,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //dd(Auth::user()->roles);
         $data = array();
@@ -47,6 +50,14 @@ class HomeController extends Controller
 
         /*dd($data);*/
         $data['eventplan'] = EventPlan::where('active', '1')->where('flow_no', '98')->where(DB::raw('datediff("'.date('Y-m-d').'", event_plan_deadline)'), '>', 30)->get();
+
+        if(Gate::allows('Project Task-Approval')) {
+            $u = new UserLibrary;
+            $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+
+            $data['project_task_subordinate'] = User::whereIn('user_id',$subordinate)->get();
+            $data['project_task_current'] = User::find($request->user()->user_id);
+        }
 
         return view('home', $data);
     }

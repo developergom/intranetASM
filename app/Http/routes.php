@@ -349,6 +349,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         //Project Task
         Route::post('projecttask/apiList/{listtype}', 'ProjectTaskController@apiList');
         Route::post('projecttask/apiDelete', 'ProjectTaskController@apiDelete');
+        Route::get('projecttask/api/loadTasks/{pics?}', 'ProjectTaskController@apiLoadTaskDeadline');
         Route::resource('projecttask', 'ProjectTaskController');
         Route::get('projecttask/approve/{flow_no}/{id}', 'ProjectTaskController@approve');
         Route::post('projecttask/approve/{flow_no}/{id}', 'ProjectTaskController@postApprove');
