@@ -18,7 +18,7 @@ class DropzoneController extends Controller
 
     	$rules = array(
     		/*'file' => 'image|max:10000'*/
-    		'file' => 'max:2000'
+    		'file' => 'max:10000'
     	);
 
     	$validation = Validator::make($input, $rules);
@@ -36,12 +36,12 @@ class DropzoneController extends Controller
 
     	$upload_success = Input::file('file')->move($destinationPath, $fileName);
 
-    	/*dd($upload_success);*/
 
     	if($upload_success) {
     		return Response::json('success', 200);
     	}else{
-    		return Response::json('error', 400);
+            dd($upload_success);
+    		//return Response::json('error', 400);
     	}
     }
 

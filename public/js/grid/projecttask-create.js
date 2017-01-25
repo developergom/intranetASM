@@ -14,6 +14,7 @@ $(document).ready(function(){
 			done();
 		},
 		error: function(file, response){
+			console.log(response);
 			alert(response);
 			getPreviousUploaded();
 		},
