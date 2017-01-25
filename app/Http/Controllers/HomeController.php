@@ -11,6 +11,8 @@ use App\EventPlan;
 use App\Creative;
 use DB;
 use Gate;
+use Mail;
+use Log;
 
 use App\Announcement;
 use Carbon\Carbon;
@@ -36,8 +38,10 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        //dd(Auth::user()->roles);
         $data = array();
+
+        $data['waktu'] = date('Y-m-d H:i:s');
+
         $today = date('Y-m-d');
 
         $data['announcements'] = Announcement::where(function($query) use($today) {

@@ -57,10 +57,4 @@ class ProjectTask extends Model
 	{
 		return $this->belongsTo('App\User', 'pic');	
 	}
-
-	public function _readydate()
-	{
-		//return Carbon::createFromFormat('Y-m-d', ($this->project_task_ready_date=='0000-00-00 00:00:00') ? '' : $this->project_task_ready_date)->format('d/m/Y');
-		return 'aa';
-	}
 }

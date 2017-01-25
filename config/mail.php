@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => env('MAIL_FROM_ADDRESS', 'soni@gramedia-majalah.com'), 'name' => env('MAIL_FROM_NAME', 'Gramedia Majalah')],
 
     /*
     |--------------------------------------------------------------------------
@@ -108,5 +108,6 @@ return [
     */
 
     'sendmail' => '/usr/sbin/sendmail -bs',
+    'pretend' => false,
 
 ];
