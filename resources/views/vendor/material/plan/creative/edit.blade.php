@@ -160,6 +160,9 @@
 	                        	
 	                        </div>
 	                    </div>
+	                    <span class="help-block">
+		                    <strong>Max filesize: 10 MB. Allowed File(s): .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .rar, .zip</strong>
+		                </span>
 	                </div>
 	            </div>
 	            <div class="form-group">

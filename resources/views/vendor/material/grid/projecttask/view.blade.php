@@ -34,7 +34,23 @@
     <label for="project_id" class="col-sm-2 control-label">Project</label>
     <div class="col-sm-10">
         <div class="fg-line">
-     		<input type="text" class="form-control" disabled="true" value="{{ $projecttask->project->project_name }}">       
+            <a href="{{ url('/grid/project/' . $projecttask->project_id) }}" target="_blank">{{ $projecttask->project->project_name . ' - ' . $projecttask->project->client->client_name }}</a>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="current_user" class="col-sm-2 control-label">Current User</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <input type="text" class="form-control input-sm" name="current_user" id="current_user" placeholder="Current User" required="true" maxlength="100" value="{{ $projecttask->_currentuser->user_firstname }}" disabled="true">
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="puc" class="col-sm-2 control-label">PIC</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <input type="text" class="form-control input-sm" name="pic" id="pic" placeholder="PIC" required="true" maxlength="100" value="{{ ($projecttask->pic == 0) ? '-' : $projecttask->_pic->user_firstname }}" disabled="true">
         </div>
     </div>
 </div>

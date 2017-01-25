@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class ProjectTask extends Model
 {
@@ -45,5 +46,21 @@ class ProjectTask extends Model
 	public function uploadfiles()
 	{
 		return $this->belongsToMany('App\UploadFile', 'project_task_upload_file');
+	}
+
+	public function _currentuser()
+	{
+		return $this->belongsTo('App\User', 'current_user');
+	}
+
+	public function _pic()
+	{
+		return $this->belongsTo('App\User', 'pic');	
+	}
+
+	public function _readydate()
+	{
+		//return Carbon::createFromFormat('Y-m-d', ($this->project_task_ready_date=='0000-00-00 00:00:00') ? '' : $this->project_task_ready_date)->format('d/m/Y');
+		return 'aa';
 	}
 }

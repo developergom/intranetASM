@@ -192,6 +192,8 @@ class ProjectController extends Controller
                                         ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                             })->count();
 
+        //dd(Project::all());
+
         return response()->json($data);
     }
 

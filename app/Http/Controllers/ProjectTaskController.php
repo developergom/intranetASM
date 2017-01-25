@@ -379,7 +379,9 @@ class ProjectTaskController extends Controller
                                 ->where('project_tasks.flow_no','=','98')
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('project_tasks.created_by', '=' , $request->user()->user_id)
-                                            ->orWhereIn('project_tasks.created_by', $subordinate);
+                                            ->orWhereIn('project_tasks.created_by', $subordinate)
+                                            ->orWhere('project_tasks.pic', '=', $request->user()->user_id)
+                                            ->orWhereIn('project_tasks.pic', $subordinate);
                                 })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('project_name','like','%' . $searchPhrase . '%')
@@ -397,7 +399,9 @@ class ProjectTaskController extends Controller
                                 ->where('project_tasks.flow_no','=','98')
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('project_tasks.created_by', '=' , $request->user()->user_id)
-                                            ->orWhereIn('project_tasks.created_by', $subordinate);
+                                            ->orWhereIn('project_tasks.created_by', $subordinate)
+                                            ->orWhere('project_tasks.pic', '=', $request->user()->user_id)
+                                            ->orWhereIn('project_tasks.pic', $subordinate);
                                 })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('project_name','like','%' . $searchPhrase . '%')
@@ -939,21 +943,21 @@ class ProjectTaskController extends Controller
 
         if($pics != '') {
             $pics = preg_split('[,]', $pics);
-            $projecttasks = ProjectTask::join('users', 'users.user_id', '=', 'project_tasks.pic')->whereIn('project_tasks.pic', $pics)->where('project_tasks.active', '1')->where('project_tasks.flow_no', '98')->get();            
+            $projecttasks = ProjectTask::join('users', 'users.user_id', '=', 'project_tasks.pic')->whereIn('project_tasks.pic', $pics)->where('project_tasks.active', '1')->get();            
         }else{
-            $projecttasks = ProjectTask::join('users', 'users.user_id', '=', 'project_tasks.pic')->where('project_tasks.active', '1')->where('project_tasks.flow_no', '98')->get();
+            $projecttasks = ProjectTask::join('users', 'users.user_id', '=', 'project_tasks.pic')->where('project_tasks.active', '1')->get();
         }
         
         
         foreach ($projecttasks as $key => $value) {
             $rows = array();
             $rows['id'] = $value->project_task_id;
-            $rows['name'] = $value->project_task_name . ' - PIC : ' . $value->user_firstname . ' ' . $value->user_lastname;
+            $rows['name'] = $value->project_task_name . ' - ' . $value->project->project_name . ' | PIC : ' . $value->user_firstname . ' ' . $value->user_lastname;
             $rows['startdate'] = $value->project_task_deadline;
             $rows['enddate'] = $value->project_task_deadline;
             $rows['starttime'] = '0:00';
             $rows['endtime'] = '';
-            $rows['color'] = '#FFB128';
+            $rows['color'] = ($value->flow_no == 98) ? '#0ba852' : '#f44242';
             $rows['url'] = url('/grid/projecttask/' . $value->project_task_id);
             array_push($data['monthly'], $rows);
         }

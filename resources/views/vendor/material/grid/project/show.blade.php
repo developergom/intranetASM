@@ -38,6 +38,14 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	            	<label for="project_tasks" class="col-sm-2 control-label">Tasks</label>
+	            	<div class="col-sm-10">
+	            		@foreach($project->projecttasks as $row)
+	            			<a href="{{ url('/grid/projecttask/' . $row->project_task_id) }}" target="_blank"><span class="badge">{{ $row->project_task_name . ' | PIC : ' . $row->_pic->user_firstname }}</span> {!! ($row->flow_no == 98) ? '<i class="zmdi zmdi-check zmdi-hc-fw" title="Finished"></i>' : '<i class="zmdi zmdi-refresh zmdi-hc-fw" title="On Process"></i>' !!}</a><br/>
+	            		@endforeach
+	            	</div>
+	            </div>
+	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                    <a href="{{ url('grid/project') }}" class="btn btn-danger btn-sm">Back</a>
 	                </div>
