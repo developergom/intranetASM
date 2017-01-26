@@ -365,5 +365,9 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('setting/apiList', 'SettingController@apiList');
         Route::post('setting/apiDelete', 'SettingController@apiDelete');
         Route::resource('setting', 'SettingController');
+
+        //User Log
+        Route::post('log/apiList', 'LogController@apiList');
+        Route::resource('log', 'LogController');
     });
 });

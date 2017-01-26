@@ -4,25 +4,17 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th>IP Address</th>
-					<th>Device</th>
-					<th>URL</th>
-					<th>OS</th>
-					<th>Browser</th>
-					<th>User</th>
-					<th>Time</th>
+					<th>NIK</th>
+					<th>Name</th>
+					<th>Total Request</th>
 				</tr>
 			</thead>
 			<tbody>
 			@foreach($data['logs'] as $row)
 				<tr>
-					<td>{{ $row->log_ip }}</td>
-					<td>{{ $row->log_device }}</td>
-					<td>{{ $row->log_url }}</td>
-					<td>{{ $row->log_os }}</td>
-					<td>{{ $row->log_browser }}</td>
-					<td>{{ $row->created_by }}</td>
-					<td>{{ $row->created_at }}</td>
+					<td>{{ $row->user_name }}</td>
+					<td>{{ $row->user_firstname . ' ' . $row->user_lastname }}</td>
+					<td>{{ $row->total }}</td>
 				</tr>
 			@endforeach
 			</tbody>

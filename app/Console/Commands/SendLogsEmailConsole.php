@@ -43,7 +43,7 @@ class SendLogsEmailConsole extends Command
         $data = array();
 
         $data['waktu'] = date('Y-m-d H:i:s');
-        $data['logs'] = DB::table('logs')->whereBetween('created_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->get();
+        $data['logs'] = DB::table('logs')->select(DB::raw('user_name,user_firstname,user_lastname,count(log_id) AS total'))->join('users', 'users.user_id', '=', 'logs.created_by')->whereBetween('logs.created_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->get();
 
         Mail::send('vendor.material.mail.logsemail', array('data'=>$data), function($message) {
             $message->to('soni@gramedia-majalah.com', 'Soni Rahayu')->subject('Intranet ASM Logs');
