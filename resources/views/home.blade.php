@@ -106,7 +106,7 @@
                                     <select name="project-task-select-pic[]" id="project-task-select-pic" class="selectpicker" data-live-search="true" multiple>
                                         <option value="{{ $project_task_current->user_id }}" selected>{{ $project_task_current->user_firstname . ' ' . $project_task_current->user_lastname }}</option>
                                         @foreach($project_task_subordinate as $row)
-                                            <option value="{{ $row->user_id }}">{{ $row->user_firstname . ' - ' . $row->user_lastname }}</option>
+                                            <option value="{{ $row->user_id }}">{{ $row->user_firstname . ' ' . $row->user_lastname }}</option>
                                         @endforeach
                                     </select>
                                 </div>
