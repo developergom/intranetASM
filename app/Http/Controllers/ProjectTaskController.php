@@ -936,23 +936,180 @@ class ProjectTaskController extends Controller
     }
 
 
-    public function apiLoadTaskDeadline(Request $request, $pics = '')
+    public function apiLoadTaskDeadline(Request $request, $pics, $authors, $types, $projects)
     {
         $data = array();
         $data['monthly'] = array();
 
-        if($pics != '') {
+        if(($pics != 'all') && ($authors != 'all') && ($projects != 'all') && ($types != 'all')) {
+            //default
             $pics = preg_split('[,]', $pics);
-            $projecttasks = ProjectTask::join('users', 'users.user_id', '=', 'project_tasks.pic')->whereIn('project_tasks.pic', $pics)->where('project_tasks.active', '1')->get();            
+            $authors = preg_split('[,]', $authors);
+            $types = preg_split('[,]', $types);
+            $projects = preg_split('[,]', $projects);
+            $projecttasks = ProjectTask::with('projecttasktype')
+                                        ->join('users', 'user_id', '=', 'project_tasks.pic')
+                                        ->where('project_tasks.active', '1')
+                                        ->whereIn('project_tasks.pic', $pics)
+                                        ->whereIn('project_tasks.created_by', $authors)
+                                        ->whereIn('project_tasks.project_task_type_id', $types)
+                                        ->whereIn('project_tasks.project_id', $projects)
+                                        ->get();
+        }elseif(($pics != 'all') && ($authors != 'all') && ($types != 'all')) {
+            //projects all
+            $pics = preg_split('[,]', $pics);
+            $authors = preg_split('[,]', $authors);
+            $types = preg_split('[,]', $types);
+            $projecttasks = ProjectTask::with('projecttasktype')
+                                        ->join('users', 'user_id', '=', 'project_tasks.pic')
+                                        ->where('project_tasks.active', '1')
+                                        ->whereIn('project_tasks.pic', $pics)
+                                        ->whereIn('project_tasks.created_by', $authors)
+                                        ->whereIn('project_tasks.project_task_type_id', $types)
+                                        ->get();
+        }elseif(($pics != 'all') && ($projects != 'all') && ($types != 'all')){
+            //author all
+            $pics = preg_split('[,]', $pics);
+            $projects = preg_split('[,]', $projects);
+            $types = preg_split('[,]', $types);
+            $projecttasks = ProjectTask::with('projecttasktype')
+                                        ->join('users', 'user_id', '=', 'project_tasks.pic')
+                                        ->where('project_tasks.active', '1')
+                                        ->whereIn('project_tasks.pic', $pics)
+                                        ->whereIn('project_tasks.project_id', $projects)
+                                        ->whereIn('project_tasks.project_task_type_id', $types)
+                                        ->get();
+        }elseif(($authors != 'all') && ($projects != 'all') && ($types != 'all')){
+            //pics all
+            $authors = preg_split('[,]', $authors);
+            $projects = preg_split('[,]', $projects);
+            $types = preg_split('[,]', $types);
+            $projecttasks = ProjectTask::with('projecttasktype')
+                                        ->join('users', 'user_id', '=', 'project_tasks.pic')
+                                        ->where('project_tasks.active', '1')
+                                        ->whereIn('project_tasks.created_by', $authors)
+                                        ->whereIn('project_tasks.project_id', $projects)
+                                        ->whereIn('project_tasks.project_task_type_id', $types)
+                                        ->get();
+        }elseif(($authors != 'all') && ($projects != 'all') && ($pics != 'all')){
+            //types all
+            $pics = preg_split('[,]', $pics);
+            $authors = preg_split('[,]', $authors);
+            $projects = preg_split('[,]', $projects);
+            $projecttasks = ProjectTask::with('projecttasktype')
+                                        ->join('users', 'user_id', '=', 'project_tasks.pic')
+                                        ->where('project_tasks.active', '1')
+                                        ->whereIn('project_tasks.created_by', $authors)
+                                        ->whereIn('project_tasks.project_id', $projects)
+                                        ->whereIn('project_tasks.pic', $pics)
+                                        ->get();
+        }elseif(($pics != 'all') && ($authors != 'all')){
+            //types, projects all
+            $pics = preg_split('[,]', $pics);
+            $authors = preg_split('[,]', $authors);
+            $projecttasks = ProjectTask::with('projecttasktype')
+                                        ->join('users', 'user_id', '=', 'project_tasks.pic')
+                                        ->where('project_tasks.active', '1')
+                                        ->whereIn('project_tasks.created_by', $authors)
+                                        ->whereIn('project_tasks.pic', $pics)
+                                        ->get();
+        }elseif(($pics != 'all') && ($types != 'all')){
+            //authors, projects all
+            $pics = preg_split('[,]', $pics);
+            $types = preg_split('[,]', $types);
+            $projecttasks = ProjectTask::with('projecttasktype')
+                                        ->join('users', 'user_id', '=', 'project_tasks.pic')
+                                        ->where('project_tasks.active', '1')
+                                        ->whereIn('project_tasks.pic', $pics)
+                                        ->whereIn('project_tasks.project_task_type_id', $types)
+                                        ->get();
+        }elseif(($pics != 'all') && ($projects != 'all')){
+            //authors, types all
+            $pics = preg_split('[,]', $pics);
+            $projects = preg_split('[,]', $projects);
+            $projecttasks = ProjectTask::with('projecttasktype')
+                                        ->join('users', 'user_id', '=', 'project_tasks.pic')
+                                        ->where('project_tasks.active', '1')
+                                        ->whereIn('project_tasks.pic', $pics)
+                                        ->whereIn('project_tasks.project_id', $projects)
+                                        ->get();
+        }elseif(($authors != 'all') && ($types != 'all')){
+            //pics, projects all
+            $authors = preg_split('[,]', $authors);
+            $types = preg_split('[,]', $types);
+            $projecttasks = ProjectTask::with('projecttasktype')
+                                        ->join('users', 'user_id', '=', 'project_tasks.pic')
+                                        ->where('project_tasks.active', '1')
+                                        ->whereIn('project_tasks.created_by', $authors)
+                                        ->whereIn('project_tasks.project_task_type_id', $types)
+                                        ->get();
+        }elseif(($authors != 'all') && ($projects != 'all')){
+            //pics, types all
+            $authors = preg_split('[,]', $authors);
+            $projects = preg_split('[,]', $projects);
+            $projecttasks = ProjectTask::with('projecttasktype')
+                                        ->join('users', 'user_id', '=', 'project_tasks.pic')
+                                        ->where('project_tasks.active', '1')
+                                        ->whereIn('project_tasks.created_by', $authors)
+                                        ->whereIn('project_tasks.project_id', $projects)
+                                        ->get();
+        }elseif(($types != 'all') && ($projects != 'all')){
+            //pics, author all
+            $projects = preg_split('[,]', $projects);
+            $types = preg_split('[,]', $types);
+            $projecttasks = ProjectTask::with('projecttasktype')
+                                        ->join('users', 'user_id', '=', 'project_tasks.pic')
+                                        ->where('project_tasks.active', '1')
+                                        ->whereIn('project_tasks.project_id', $projects)
+                                        ->whereIn('project_tasks.project_task_type_id', $types)
+                                        ->get();
+        }elseif(($pics != 'all')){
+            //author, project, types all
+            $pics = preg_split('[,]', $pics);
+            $projecttasks = ProjectTask::with('projecttasktype')
+                                        ->join('users', 'user_id', '=', 'project_tasks.pic')
+                                        ->where('project_tasks.active', '1')
+                                        ->whereIn('project_tasks.pic', $pics)
+                                        ->get();
+        }elseif(($authors != 'all')){
+            //types, pics, project all
+            $authors = preg_split('[,]', $authors);
+            $projecttasks = ProjectTask::with('projecttasktype')
+                                        ->join('users', 'user_id', '=', 'project_tasks.pic')
+                                        ->where('project_tasks.active', '1')
+                                        ->whereIn('project_tasks.created_by', $authors)
+                                        ->get();
+        }elseif(($projects != 'all')){
+            //types, pics, author all
+            $projects = preg_split('[,]', $projects);
+            $projecttasks = ProjectTask::with('projecttasktype')
+                                        ->join('users', 'user_id', '=', 'project_tasks.pic')
+                                        ->where('project_tasks.active', '1')
+                                        ->whereIn('project_tasks.project_id', $projects)
+                                        ->get();
+        }elseif(($types != 'all')){
+            //projects, pics, author all
+            $types = preg_split('[,]', $types);
+            $projecttasks = ProjectTask::with('projecttasktype')
+                                        ->join('users', 'user_id', '=', 'project_tasks.pic')
+                                        ->where('project_tasks.active', '1')
+                                        ->whereIn('project_tasks.project_task_type_id', $types)
+                                        ->get();
         }else{
-            $projecttasks = ProjectTask::join('users', 'users.user_id', '=', 'project_tasks.pic')->where('project_tasks.active', '1')->get();
+            //$projecttasks = ProjectTask::join('users', 'users.user_id', '=', 'project_tasks.pic')->where('project_tasks.active', '1')->get();
+            //project, pics, author all
+            $projecttasks = ProjectTask::with('projecttasktype')
+                                        ->join('users', 'user_id', '=', 'project_tasks.pic')
+                                        ->where('project_tasks.active', '1')
+                                        ->get();
+                                        
         }
         
         
         foreach ($projecttasks as $key => $value) {
             $rows = array();
             $rows['id'] = $value->project_task_id;
-            $rows['name'] = $value->project_task_name . ' - ' . $value->project->project_name . ' | PIC : ' . $value->user_firstname . ' ' . $value->user_lastname;
+            $rows['name'] = $value->project_task_name . ' ( ' . $value->projecttasktype->project_task_type_name . ' ) - ' . $value->project->project_name . ' | PIC : ' . $value->user_firstname . ' ' . $value->user_lastname;
             $rows['startdate'] = $value->project_task_deadline;
             $rows['enddate'] = $value->project_task_deadline;
             $rows['starttime'] = '0:00';

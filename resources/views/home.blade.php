@@ -115,6 +115,49 @@
                                 <a class="btn btn-primary waves-effect" id="btn-project-task-process">Process</a>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="project-task-select-author" class="col-sm-2 control-label">Author</label>
+                            <div class="col-sm-8">
+                                <div class="fg-line">
+                                    <select name="project-task-select-author[]" id="project-task-select-author" class="selectpicker" data-live-search="true" multiple>
+                                        <option value="{{ $project_task_current->user_id }}" selected>{{ $project_task_current->user_firstname . ' ' . $project_task_current->user_lastname }}</option>
+                                        @foreach($project_task_subordinate as $row)
+                                            <option value="{{ $row->user_id }}">{{ $row->user_firstname . ' ' . $row->user_lastname }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="project-task-select-types" class="col-sm-2 control-label">Type</label>
+                            <div class="col-sm-8">
+                                <div class="fg-line">
+                                    <select name="project-task-select-types[]" id="project-task-select-types" class="selectpicker" data-live-search="true" multiple>
+                                        @foreach($project_task_types as $row)
+                                            <option value="{{ $row->project_task_type_id }}">{{ $row->project_task_type_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="project-task-select-projects" class="col-sm-2 control-label">Project</label>
+                            <div class="col-sm-8">
+                                <div class="fg-line">
+                                    <select name="project-task-select-projects[]" id="project-task-select-projects" class="selectpicker" data-live-search="true" multiple>
+                                        @foreach($projects as $row)
+                                            <option value="{{ $row->project_id }}">{{ $row->project_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                            </div>
+                        </div>
                     </form>
                     <div class="monthly" id="project-task-calendar"></div>
                 </div>
@@ -187,18 +230,37 @@ $(document).ready(function(){
         'mode' : 'event',
         'stylePast' : true,
         'dataType' : 'json',
-        'jsonUrl' : base_url + 'grid/projecttask/api/loadTasks',
+        'jsonUrl' : base_url + 'grid/projecttask/api/loadTasks/all/all/all/all',
     });
 
     $('#btn-project-task-process').click(function() {
-        var projecttaskids = $('#project-task-select-pic').val();
+        var projecttaskpics = $('#project-task-select-pic').val();
+        var projecttaskauthors = $('#project-task-select-author').val();
+        var projecttasktypes = $('#project-task-select-types').val();
+        var projecttaskprojects = $('#project-task-select-projects').val();
+
+        if(projecttaskpics == null) {
+            projecttaskpics = 'all';
+        }
+
+        if(projecttaskauthors == null) {
+            projecttaskauthors = 'all';
+        }
+
+        if(projecttasktypes == null) {
+            projecttasktypes = 'all';
+        }
+
+        if(projecttaskprojects == null) {
+            projecttaskprojects = 'all';
+        }
 
         $("#project-task-calendar").empty();
         $('#project-task-calendar').monthly({
             'mode' : 'event',
             'stylePast' : true,
             'dataType' : 'json',
-            'jsonUrl' : base_url + 'grid/projecttask/api/loadTasks/' + projecttaskids,
+            'jsonUrl' : base_url + 'grid/projecttask/api/loadTasks/' + projecttaskpics + '/' + projecttaskauthors + '/' + projecttasktypes + '/' + projecttaskprojects,
         });
     });
     @endcan

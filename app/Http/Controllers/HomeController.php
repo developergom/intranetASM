@@ -9,6 +9,9 @@ use App\User;
 use App\ActionPlan;
 use App\EventPlan;
 use App\Creative;
+use App\Project;
+use App\ProjectTask;
+use App\ProjectTaskType;
 use DB;
 use Gate;
 use Mail;
@@ -59,8 +62,25 @@ class HomeController extends Controller
             $u = new UserLibrary;
             $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
 
-            $data['project_task_subordinate'] = User::whereIn('user_id',$subordinate)->get();
-            $data['project_task_current'] = User::find($request->user()->user_id);
+            $data['project_task_subordinate'] = User::whereIn('user_id',$subordinate)->orderBy('user_firstname')->get();
+            $data['project_task_current'] = User::with('groups')->find($request->user()->user_id);
+            $data['project_task_types'] = ProjectTaskType::where('active', '1')->orderBy('project_task_type_name')->get();
+            /*$data['project_tasks'] = ProjectTask::where('created_by', $request->user()->user_id)
+                                                ->orWhere('pic', $request->user()->user_id)
+                                                ->orWhere(function($query) use($subordinate) {
+                                                    $query->whereIn('created_by', $subordinate);
+                                                })
+                                                ->orWhere(function($query) use($subordinate) {
+                                                    $query->whereIn('pic', $subordinate);
+                                                })
+                                                ->where('active', '1')
+                                                ->get();*/
+            $data['projects'] = Project::where('active', '1')
+                                        ->where('created_by', $request->user()->user_id)
+                                        ->orWhere(function($query) use($subordinate) {
+                                                    $query->whereIn('created_by', $subordinate);
+                                                })
+                                        ->get();
         }
 
         return view('home', $data);
