@@ -54,6 +54,8 @@ class ProjectController extends Controller
     {
         $this->validate($request, [
             'project_name' => 'required',
+            'project_periode_start' => 'required|date_format:"d/m/Y"',
+            'project_periode_end' => 'required|date_format:"d/m/Y"',
             'project_desc' => 'required',
             'client_id' => 'required'
         ]);
@@ -62,6 +64,8 @@ class ProjectController extends Controller
 
         $obj->project_code = $this->generateCode();
         $obj->project_name = $request->input('project_name');
+        $obj->project_periode_start = Carbon::createFromFormat('d/m/Y', $request->input('project_periode_start'))->toDateString();
+        $obj->project_periode_end = Carbon::createFromFormat('d/m/Y', $request->input('project_periode_end'))->toDateString();
         $obj->project_desc = $request->input('project_desc');
         $obj->client_id = $request->input('client_id');
         $obj->active = '1';
@@ -87,6 +91,8 @@ class ProjectController extends Controller
         }
         $data = array();
         $data['project'] = Project::with('client')->find($id);
+        $data['project_start'] = Carbon::createFromFormat('Y-m-d', ($data['project']->project_periode_start==null) ? date('Y-m-d') : $data['project']->project_periode_start)->format('d/m/Y');
+        $data['project_end'] = Carbon::createFromFormat('Y-m-d', ($data['project']->project_periode_end==null) ? date('Y-m-d') : $data['project']->project_periode_end)->format('d/m/Y');
         
         return view('vendor.material.grid.project.show', $data);
     }
@@ -105,6 +111,8 @@ class ProjectController extends Controller
 
         $data = array();
         $data['project'] = Project::with('client')->find($id);
+        $data['project_start'] = Carbon::createFromFormat('Y-m-d', ($data['project']->project_periode_start==null) ? date('Y-m-d') : $data['project']->project_periode_start)->format('d/m/Y');
+        $data['project_end'] = Carbon::createFromFormat('Y-m-d', ($data['project']->project_periode_end==null) ? date('Y-m-d') : $data['project']->project_periode_end)->format('d/m/Y');
         
         return view('vendor.material.grid.project.edit', $data);
     }
@@ -120,6 +128,8 @@ class ProjectController extends Controller
     {
         $this->validate($request, [
             'project_name' => 'required',
+            'project_periode_start' => 'required|date_format:"d/m/Y"',
+            'project_periode_end' => 'required|date_format:"d/m/Y"',
             'project_desc' => 'required',
             'client_id' => 'required'
         ]);
@@ -127,6 +137,8 @@ class ProjectController extends Controller
         $obj = Project::find($id);
 
         $obj->project_name = $request->input('project_name');
+        $obj->project_periode_start = Carbon::createFromFormat('d/m/Y', $request->input('project_periode_start'))->toDateString();
+        $obj->project_periode_end = Carbon::createFromFormat('d/m/Y', $request->input('project_periode_end'))->toDateString();
         $obj->project_desc = $request->input('project_desc');
         $obj->client_id = $request->input('client_id');
         $obj->updated_by = $request->user()->user_id;

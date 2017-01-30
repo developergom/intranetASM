@@ -22,6 +22,22 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="project_periode_start" class="col-sm-2 control-label">Project Start</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+							<input type="text" class="form-control" name="project_periode_start" id="project_periode_start" placeholder="Project Start e.g 17/08/1945" required="true" maxlength="100" value="{{ $project_start }}" disabled="true">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="project_periode_end" class="col-sm-2 control-label">Project End</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+							<input type="text" class="form-control" name="project_periode_end" id="project_periode_end" placeholder="Project End e.g 17/08/1945" required="true" maxlength="100" value="{{ $project_end }}" disabled="true">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="client" class="col-sm-2 control-label">Client</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">

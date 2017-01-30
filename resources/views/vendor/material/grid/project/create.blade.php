@@ -3,6 +3,7 @@
 @section('vendorcss')
 <link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 <link href="{{ url('css/ajax-bootstrap-select.min.css') }}" rel="stylesheet">
+<link href="{{ url('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -20,6 +21,32 @@
 	                    @if ($errors->has('project_name'))
 			                <span class="help-block">
 			                    <strong>{{ $errors->first('project_name') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="project_periode_start" class="col-sm-2 control-label">Project Start</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm date-picker" name="project_periode_start" id="project_periode_start" placeholder="Project Start e.g 17/08/1945" required="true" maxlength="10" value="{{ old('project_periode_start') }}">
+	                    </div>
+	                    @if ($errors->has('project_periode_start'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('project_periode_start') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="project_periode_end" class="col-sm-2 control-label">Project End</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm date-picker" name="project_periode_end" id="project_periode_end" placeholder="Project End e.g 17/08/1945" required="true" maxlength="10" value="{{ old('project_periode_end') }}">
+	                    </div>
+	                    @if ($errors->has('project_periode_end'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('project_periode_end') }}</strong>
 			                </span>
 			            @endif
 	                </div>
@@ -60,6 +87,7 @@
 @section('vendorjs')
 <script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/ajax-bootstrap-select.min.js') }}"></script>
+<script src="{{ url('js/bootstrap-datetimepicker.min.js') }}"></script>
 @endsection
 
 @section('customjs')
