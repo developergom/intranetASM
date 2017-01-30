@@ -353,6 +353,10 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::resource('projecttask', 'ProjectTaskController');
         Route::get('projecttask/approve/{flow_no}/{id}', 'ProjectTaskController@approve');
         Route::post('projecttask/approve/{flow_no}/{id}', 'ProjectTaskController@postApprove');
+
+        //Report
+        Route::get('report', 'ReportGridController@index');
+        Route::post('report/api/generateReport', 'ReportGridController@apiGenerateReport');
     });
 
     Route::group(['prefix' => 'config'], function() {
