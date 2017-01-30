@@ -159,7 +159,7 @@
                             </div>
                         </div>
                     </form>
-                    <div class="monthly" id="project-task-calendar"></div>
+                    <div class="monthly monthly-project-task" id="project-task-calendar"></div>
                 </div>
             </div>
         </div>
@@ -257,7 +257,7 @@ $(document).ready(function(){
 
         newid= new Date().getTime();
 
-        $('#project-task-calendar').empty().replaceWith('<div class="monthly" id="cal' + newid + '"></div>');
+        $('.monthly-project-task').empty().replaceWith('<div class="monthly monthly-project-task" id="cal' + newid + '"></div>');
 
         $('#cal' + newid).monthly({
             'mode' : 'event',
