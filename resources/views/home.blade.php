@@ -255,8 +255,11 @@ $(document).ready(function(){
             projecttaskprojects = 'all';
         }
 
-        $("#project-task-calendar").empty();
-        $('#project-task-calendar').monthly({
+        newid= new Date().getTime();
+
+        $('#project-task-calendar').empty().replaceWith('<div class="monthly" id="cal' + newid + '"></div>');
+
+        $('#cal' + newid).monthly({
             'mode' : 'event',
             'stylePast' : true,
             'dataType' : 'json',
