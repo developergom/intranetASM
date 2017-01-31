@@ -55,7 +55,8 @@ class HomeController extends Controller
                                                             ->where('announcement_enddate', '>=', $today);
                                                 })->where('active', '=', '1')->get();
 
-        /*dd($data);*/
+        
+        //dd($data['logs']);
         $data['eventplan'] = EventPlan::where('active', '1')->where('flow_no', '98')->where(DB::raw('datediff("'.date('Y-m-d').'", event_plan_deadline)'), '>', 30)->get();
 
         if(Gate::allows('Project Task-Approval')) {
