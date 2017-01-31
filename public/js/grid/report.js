@@ -63,6 +63,9 @@ function generate_report() {
 					html += '<td>'  + value.project_task_deadline + '</td>';
 					html += '<td>'  + value.pic_name + '</td>';
 					html += '<td>'  + value.author_name + '</td>';
+					html += '<td>'  + value.created_at + '</td>';
+					html += '<td>'  + value.project_task_ready_date + '</td>';
+					html += '<td>'  + value.project_task_delivery_date + '</td>';
 					html += '</tr>';
 				});
 

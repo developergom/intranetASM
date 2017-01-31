@@ -64,6 +64,9 @@
 							                    <th>Deadline</th>
 							                    <th>PIC</th>
 							                    <th>Author</th>
+							                    <th>Created Date</th>
+							                    <th>Ready Date</th>
+							                    <th>Delivery Date</th>
 							                </tr>
 							            </thead>
 							            <tbody>

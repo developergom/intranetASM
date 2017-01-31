@@ -44,7 +44,9 @@ class ReportGridController extends Controller
 				project_tasks.project_task_deadline,
 				CONCAT(userpic.user_firstname, ' ', userpic.user_lastname) AS pic_name,
 				CONCAT(userauthor.user_firstname, ' ', userauthor.user_lastname) AS author_name,
-				project_tasks.created_at
+                project_tasks.created_at,
+                project_tasks.project_task_ready_date,
+				project_tasks.project_task_delivery_date
 			FROM 
 				project_tasks
 			INNER JOIN projects ON projects.project_id = project_tasks.project_id
