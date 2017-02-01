@@ -6,12 +6,12 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Project Task<small>Approve Project Task</small></h2></div>
+        <div class="card-header"><h2>Project<small>Approve Project</small></h2></div>
         <div class="card-body card-padding">
-        	<form class="form-horizontal" role="form" method="POST" action="{{ url('grid/projecttask/approve/' . $projecttask->flow_no . '/' . $projecttask->project_task_id) }}">
+        	<form class="form-horizontal" role="form" method="POST" action="{{ url($url) }}">
         		{{ csrf_field() }}
-        		@include('vendor.material.grid.projecttask.view')
-        		@include('vendor.material.grid.projecttask.history')
+        		@include('vendor.material.grid.project.view')
+        		@include('vendor.material.grid.project.history')
 	            <div class="form-group">
 	                <label for="approval" class="col-sm-2 control-label">Approval</label>
 	                <div class="col-sm-10">
@@ -30,21 +30,6 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
-	            	<label for="pic" class="col-sm-2 control-label">PIC</label>
-	            	<div class="col-sm-10">
-	            		<select name="pic" id="pic" class="selectpicker" data-live-search="true" required="true">
-        					<option value=""></option>
-        					@foreach($subordinate as $row)
-        						{!! $selected = '' !!}
-                            	@if(old('pic')==$row->user_id)
-                                	{!! $selected = 'selected' !!}
-                            	@endif
-        						<option value="{{ $row->user_id }}" {{ $selected }}>{{ $row->user_firstname . ' ' . $row->user_lastname }}</option>
-        					@endforeach
-        				</select>
-	            	</div>
-	            </div>
-	            <div class="form-group">
 	                <label for="comment" class="col-sm-2 control-label">Comment</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
@@ -55,7 +40,7 @@
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                	<button type="submit" class="btn btn-primary btn-sm">Submit</button>
-	                    <a href="{{ url('grid/projecttask') }}" class="btn btn-danger btn-sm">Back</a>
+	                    <a href="{{ url('grid/project') }}" class="btn btn-danger btn-sm">Back</a>
 	                </div>
 	            </div>
 	        </form>

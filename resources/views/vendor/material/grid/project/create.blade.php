@@ -74,6 +74,20 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	            	<label for="pic" class="col-sm-2 control-label">PIC</label>
+	            	<div class="col-sm-10">
+	            		<select name="pic" id="pic" class="selectpicker" data-live-search="true" required="true">
+        					@foreach($pics as $row)
+        						{!! $selected = '' !!}
+                            	@if(old('pic')==$row->user_id)
+                                	{!! $selected = 'selected' !!}
+                            	@endif
+        						<option value="{{ $row->user_id }}" {{ $selected }}>{{ $row->user_firstname . ' ' . $row->user_lastname }}</option>
+        					@endforeach
+        				</select>
+	            	</div>
+	            </div>
+	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
 	                    <a href="{{ url('grid/project') }}" class="btn btn-danger btn-sm">Back</a>

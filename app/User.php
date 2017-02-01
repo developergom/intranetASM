@@ -82,6 +82,16 @@ class User extends Authenticatable
         return $this->hasMany('App\ProjectTaskType', 'user_id');
     }
 
+    public function gridprojectcurrentuser()
+    {
+        return $this->hasMany('App\Project', 'current_user');
+    }
+
+    public function gridprojectpic()
+    {
+        return $this->hasMany('App\Project', 'pic');
+    }
+
     public function gridprojecttaskcurrentuser()
     {
         return $this->hasMany('App\ProjectTask', 'current_user');

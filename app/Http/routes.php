@@ -341,10 +341,12 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
 
     Route::group(['prefix' => 'grid'], function() {
         //Project
-        Route::post('project/apiList', 'ProjectController@apiList');
+        Route::post('project/apiList/{listtype}', 'ProjectController@apiList');
         Route::post('project/apiDelete', 'ProjectController@apiDelete');
         Route::post('project/apiSearch', 'ProjectController@apiSearch');
         Route::resource('project', 'ProjectController');
+        Route::get('project/approve/{flow_no}/{id}', 'ProjectController@approve');
+        Route::post('project/approve/{flow_no}/{id}', 'ProjectController@postApprove');
 
         //Project Task
         Route::post('projecttask/apiList/{listtype}', 'ProjectTaskController@apiList');

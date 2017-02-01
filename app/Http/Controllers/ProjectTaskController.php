@@ -302,7 +302,16 @@ class ProjectTaskController extends Controller
         $data['searchPhrase'] = $searchPhrase;
 
         if($listtype == 'onprocess') {
-            $data['rows'] = ProjectTask::join('projects', 'projects.project_id', '=', 'project_tasks.project_id')
+            $data['rows'] = ProjectTask::select(
+                                            'project_tasks.project_task_id',
+                                            'project_tasks.project_task_name',
+                                            'project_task_types.project_task_type_name',
+                                            'projects.project_name',
+                                            'project_tasks.project_task_deadline',
+                                            'project_tasks.flow_no',
+                                            'users.user_firstname'
+                                        )
+                                ->join('projects', 'projects.project_id', '=', 'project_tasks.project_id')
                                 ->join('project_task_types', 'project_task_types.project_task_type_id', '=', 'project_tasks.project_task_type_id')
                                 ->join('users','users.user_id', '=', 'project_tasks.current_user')
                                 ->where('project_tasks.flow_no','<>','98')
@@ -322,7 +331,16 @@ class ProjectTaskController extends Controller
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = ProjectTask::join('projects', 'projects.project_id', '=', 'project_tasks.project_id')
+            $data['total'] = ProjectTask::select(
+                                            'project_tasks.project_task_id',
+                                            'project_tasks.project_task_name',
+                                            'project_task_types.project_task_type_name',
+                                            'projects.project_name',
+                                            'project_tasks.project_task_deadline',
+                                            'project_tasks.flow_no',
+                                            'users.user_firstname'
+                                        )
+                                ->join('projects', 'projects.project_id', '=', 'project_tasks.project_id')
                                 ->join('project_task_types', 'project_task_types.project_task_type_id', '=', 'project_tasks.project_task_type_id')
                                 ->join('users','users.user_id', '=', 'project_tasks.current_user')
                                 ->where('project_tasks.flow_no','<>','98')
@@ -341,7 +359,16 @@ class ProjectTaskController extends Controller
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })->count();    
         }elseif($listtype == 'needchecking') {
-            $data['rows'] = ProjectTask::join('projects', 'projects.project_id', '=', 'project_tasks.project_id')
+            $data['rows'] = ProjectTask::select(
+                                            'project_tasks.project_task_id',
+                                            'project_tasks.project_task_name',
+                                            'project_task_types.project_task_type_name',
+                                            'projects.project_name',
+                                            'project_tasks.project_task_deadline',
+                                            'project_tasks.flow_no',
+                                            'users.user_firstname'
+                                        )
+                                ->join('projects', 'projects.project_id', '=', 'project_tasks.project_id')
                                 ->join('project_task_types', 'project_task_types.project_task_type_id', '=', 'project_tasks.project_task_type_id')
                                 ->join('users','users.user_id', '=', 'project_tasks.created_by')
                                 ->where('project_tasks.active','1')
@@ -357,7 +384,16 @@ class ProjectTaskController extends Controller
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = ProjectTask::join('projects', 'projects.project_id', '=', 'project_tasks.project_id')
+            $data['total'] = ProjectTask::select(
+                                            'project_tasks.project_task_id',
+                                            'project_tasks.project_task_name',
+                                            'project_task_types.project_task_type_name',
+                                            'projects.project_name',
+                                            'project_tasks.project_task_deadline',
+                                            'project_tasks.flow_no',
+                                            'users.user_firstname'
+                                        )
+                                ->join('projects', 'projects.project_id', '=', 'project_tasks.project_id')
                                 ->join('project_task_types', 'project_task_types.project_task_type_id', '=', 'project_tasks.project_task_type_id')
                                 ->join('users','users.user_id', '=', 'project_tasks.created_by')
                                 ->where('project_tasks.active','1')
@@ -372,7 +408,16 @@ class ProjectTaskController extends Controller
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })->count();
         }elseif($listtype == 'finished') {
-            $data['rows'] = ProjectTask::join('projects', 'projects.project_id', '=', 'project_tasks.project_id')
+            $data['rows'] = ProjectTask::select(
+                                            'project_tasks.project_task_id',
+                                            'project_tasks.project_task_name',
+                                            'project_task_types.project_task_type_name',
+                                            'projects.project_name',
+                                            'project_tasks.project_task_deadline',
+                                            'project_tasks.flow_no',
+                                            'users.user_firstname'
+                                        )
+                                ->join('projects', 'projects.project_id', '=', 'project_tasks.project_id')
                                 ->join('project_task_types', 'project_task_types.project_task_type_id', '=', 'project_tasks.project_task_type_id')
                                 ->join('users','users.user_id', '=', 'project_tasks.created_by')
                                 ->where('project_tasks.active','1')
@@ -392,7 +437,16 @@ class ProjectTaskController extends Controller
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = ProjectTask::join('projects', 'projects.project_id', '=', 'project_tasks.project_id')
+            $data['total'] = ProjectTask::select(
+                                            'project_tasks.project_task_id',
+                                            'project_tasks.project_task_name',
+                                            'project_task_types.project_task_type_name',
+                                            'projects.project_name',
+                                            'project_tasks.project_task_deadline',
+                                            'project_tasks.flow_no',
+                                            'users.user_firstname'
+                                        )
+                                ->join('projects', 'projects.project_id', '=', 'project_tasks.project_id')
                                 ->join('project_task_types', 'project_task_types.project_task_type_id', '=', 'project_tasks.project_task_type_id')
                                 ->join('users','users.user_id', '=', 'project_tasks.created_by')
                                 ->where('project_tasks.active','1')
@@ -411,7 +465,16 @@ class ProjectTaskController extends Controller
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })->count();
         }elseif($listtype == 'canceled') {
-            $data['rows'] = ProjectTask::join('projects', 'projects.project_id', '=', 'project_tasks.project_id')
+            $data['rows'] = ProjectTask::select(
+                                            'project_tasks.project_task_id',
+                                            'project_tasks.project_task_name',
+                                            'project_task_types.project_task_type_name',
+                                            'projects.project_name',
+                                            'project_tasks.project_task_deadline',
+                                            'project_tasks.flow_no',
+                                            'users.user_firstname'
+                                        )
+                                ->join('projects', 'projects.project_id', '=', 'project_tasks.project_id')
                                 ->join('project_task_types', 'project_task_types.project_task_type_id', '=', 'project_tasks.project_task_type_id')
                                 ->join('users','users.user_id', '=', 'project_tasks.created_by')
                                 ->where('project_tasks.active','0')
@@ -428,7 +491,16 @@ class ProjectTaskController extends Controller
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = ProjectTask::join('projects', 'projects.project_id', '=', 'project_tasks.project_id')
+            $data['total'] = ProjectTask::select(
+                                            'project_tasks.project_task_id',
+                                            'project_tasks.project_task_name',
+                                            'project_task_types.project_task_type_name',
+                                            'projects.project_name',
+                                            'project_tasks.project_task_deadline',
+                                            'project_tasks.flow_no',
+                                            'users.user_firstname'
+                                        )
+                                ->join('projects', 'projects.project_id', '=', 'project_tasks.project_id')
                                 ->join('project_task_types', 'project_task_types.project_task_type_id', '=', 'project_tasks.project_task_type_id')
                                 ->join('users','users.user_id', '=', 'project_tasks.created_by')
                                 ->where('project_tasks.active','0')
@@ -458,13 +530,15 @@ class ProjectTaskController extends Controller
         }elseif($flow_no == 2) {
             return $this->approveFlowNo2($request, $id);
         }elseif($flow_no == 3) {
-            return $this->approveFlowNo3($request, $id);
-        }elseif($flow_no == 4) {
+            //return $this->approveFlowNo3($request, $id);
             return $this->approveFlowNo4($request, $id);
+        }elseif($flow_no == 4) {
+            //return $this->approveFlowNo4($request, $id);
+            return $this->approveFlowNo5($request, $id);
         }elseif($flow_no == 5) {
             return $this->approveFlowNo5($request, $id);
         }elseif($flow_no == 6) {
-            return $this->approveFlowNo5($request, $id);
+            //return $this->approveFlowNo5($request, $id);
         }
     }
 
@@ -475,13 +549,16 @@ class ProjectTaskController extends Controller
         }elseif($flow_no == 2) {
             $this->postApproveFlowNo2($request, $id);
         }elseif($flow_no == 3) {
-            $this->postApproveFlowNo3($request, $id);
-        }elseif($flow_no == 4) {
+            //$this->postApproveFlowNo3($request, $id);
             $this->postApproveFlowNo4($request, $id);
-        }elseif($flow_no == 5) {
+        }elseif($flow_no == 4) {
+            //$this->postApproveFlowNo4($request, $id);
             $this->postApproveFlowNo5($request, $id);
-        }elseif($flow_no == 6) {
+        }elseif($flow_no == 5) {
+            //$this->postApproveFlowNo5($request, $id);
             $this->postApproveFlowNo6($request, $id);
+        }elseif($flow_no == 6) {
+            //$this->postApproveFlowNo6($request, $id);
         }
 
         return redirect('grid/projecttask');
@@ -908,12 +985,14 @@ class ProjectTaskController extends Controller
             //reject
             $projecttask = ProjectTask::with('projecttasktype')->find($id);
 
-            $flow = new FlowLibrary;
-            $prevFlow = $flow->getPreviousFlow($this->flow_group_id, $projecttask->flow_no, $request->user()->user_id, $projecttask->pic, $projecttask->created_by, $projecttask->projecttasktype->user_id);
+            //$flow = new FlowLibrary;
+            //$prevFlow = $flow->getPreviousFlow($this->flow_group_id, $projecttask->flow_no, $request->user()->user_id, $projecttask->pic, $projecttask->created_by, $projecttask->projecttasktype->user_id);
 
-            $projecttask->flow_no = $prevFlow['flow_no'];
+            //$projecttask->flow_no = $prevFlow['flow_no'];
+            $projecttask->flow_no = 4;
             $projecttask->revision_no = $projecttask->revision_no + 1;
-            $projecttask->current_user = $prevFlow['current_user'];
+            //$projecttask->current_user = $prevFlow['current_user'];
+            $projecttask->current_user = $projecttask->projecttasktype->user_id;
             $projecttask->updated_by = $request->user()->user_id;
             $projecttask->save();
 
@@ -928,7 +1007,8 @@ class ProjectTaskController extends Controller
 
             $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $id);
             $this->notif->remove($request->user()->user_id, 'projecttaskreject', $id);
-            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'projecttaskreject', 'Project Task "' . $projecttask->project_task_name . '" rejected.', $id);
+            //$this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'projecttaskreject', 'Project Task "' . $projecttask->project_task_name . '" rejected.', $id);
+            $this->notif->generate($request->user()->user_id, $projecttask->projecttasktype->user_id, 'projecttaskreject', 'Project Task "' . $projecttask->project_task_name . '" rejected.', $id);
 
             $request->session()->flash('status', 'Data has been saved!');
         }
