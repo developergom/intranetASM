@@ -55,4 +55,9 @@ class UploadFile extends Model
 	{
 		return $this->belongsToMany('App\ProjectTask', 'project_task_upload_file');
 	}
+
+	public function gridproposals()
+	{
+		return $this->belongsToMany('App\GridProposal', 'grid_proposal_upload_file');
+	}
 }

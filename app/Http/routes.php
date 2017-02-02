@@ -356,6 +356,13 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('projecttask/approve/{flow_no}/{id}', 'ProjectTaskController@approve');
         Route::post('projecttask/approve/{flow_no}/{id}', 'ProjectTaskController@postApprove');
 
+        //Proposal
+        Route::post('proposal/apiList/{listtype}', 'GridProposalController@apiList');
+        Route::post('proposal/apiDelete', 'GridProposalController@apiDelete');
+        Route::resource('proposal', 'GridProposalController');
+        Route::get('proposal/approve/{flow_no}/{id}', 'GridProposalController@approve');
+        Route::post('proposal/approve/{flow_no}/{id}', 'GridProposalController@postApprove');
+
         //Report
         Route::get('report', 'ReportGridController@index');
         Route::post('report/api/generateReport', 'ReportGridController@apiGenerateReport');

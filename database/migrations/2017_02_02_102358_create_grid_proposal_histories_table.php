@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectTable extends Migration
+class CreateGridProposalHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,12 @@ class CreateProjectTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('projects')) {
-            Schema::create('projects', function (Blueprint $table) {
-                $table->increments('project_id');
-                $table->string('project_code');
-                $table->string('project_name');
-                $table->text('project_desc');
-                $table->integer('client_id');
-                $table->integer('current_user');
+        if (!Schema::hasTable('grid_proposal_histories')) {
+            Schema::create('grid_proposal_histories', function (Blueprint $table) {
+                $table->increments('grid_proposal_history_id');
+                $table->integer('grid_proposal_id');
+                $table->integer('approval_type_id');
+                $table->string('grid_proposal_history_text');
                 $table->enum('active', ['0', '1'])->default('1');
                 $table->integer('created_by');
                 $table->integer('updated_by');
@@ -35,6 +33,6 @@ class CreateProjectTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('grid_proposal_histories');
     }
 }
