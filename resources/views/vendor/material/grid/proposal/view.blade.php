@@ -63,7 +63,7 @@
         				<h4>{{ $uploadedfile->upload_file_name . ' Revision (' . $uploadedfile->upload_file_revision . ') ' }}</h4>
         				<p>{{ $uploadedfile->upload_file_desc }}</p>
         				<div class="m-b-5">
-        					@can('Project Task-Download')
+        					@can('Grid Proposal-Download')
         					<a class="btn btn-sm btn-primary waves-effect" href="{{ url('download/file/' . $uploadedfile->upload_file_id) }}" role="button">Download File</a>
         					@endcan
         				</div>

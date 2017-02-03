@@ -142,7 +142,10 @@ class GridProposalController extends Controller
 
         $his->save();
 
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'gridproposalapproval', 'Please check GRID Proposal "' . $obj->grid_proposal_name . '"', $obj->grid_proposal_id);
+        $nofifdata = array();
+        $nofifdata['subject'] = 'Proposal: ' . $obj->grid_proposal_name;
+        $nofifdata['url'] = 'grid/proposal/approve/' . $obj->flow_no . '/' . $obj->grid_proposal_id;
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'gridproposalapproval', 'Please check GRID Proposal "' . $obj->grid_proposal_name . '"', $obj->grid_proposal_id, true, $nofifdata);
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -256,8 +259,11 @@ class GridProposalController extends Controller
 
         $his->save();
 
+        $nofifdata = array();
+        $nofifdata['subject'] = 'Proposal: ' . $obj->grid_proposal_name;
+        $nofifdata['url'] = 'grid/proposal/approve/' . $obj->flow_no . '/' . $obj->grid_proposal_id;
         $this->notif->remove($request->user()->user_id, 'gridproposalreject', $obj->project_task_id);
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'gridproposalapproval', 'Please check GRID Proposal "' . $obj->grid_proposal_name . '"', $obj->grid_proposal_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'gridproposalapproval', 'Please check GRID Proposal "' . $obj->grid_proposal_name . '"', $obj->grid_proposal_id, true, $nofifdata);
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -625,9 +631,12 @@ class GridProposalController extends Controller
 
         $his->save();
 
+        $nofifdata = array();
+        $nofifdata['subject'] = 'Proposal: ' . $proposal->grid_proposal_name;
+        $nofifdata['url'] = 'grid/proposal/approve/' . $proposal->flow_no . '/' . $proposal->grid_proposal_id;
         $this->notif->remove($request->user()->user_id, 'gridproposalapproval', $id);
         $this->notif->remove($request->user()->user_id, 'gridproposalreject', $id);
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'gridproposalapproval', 'Proposal "' . $proposal->grid_proposal_name . '" need approval.', $id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'gridproposalapproval', 'Proposal "' . $proposal->grid_proposal_name . '" need approval.', $id, true, $nofifdata);
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -720,9 +729,12 @@ class GridProposalController extends Controller
 
         $his->save();
 
+        $nofifdata = array();
+        $nofifdata['subject'] = 'Proposal: ' . $proposal->grid_proposal_name;
+        $nofifdata['url'] = 'grid/proposal/approve/' . $proposal->flow_no . '/' . $proposal->grid_proposal_id;
         $this->notif->remove($request->user()->user_id, 'gridproposalapproval', $id);
         $this->notif->remove($request->user()->user_id, 'gridproposalreject', $id);
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'gridproposalapproval', 'Proposal "' . $proposal->grid_proposal_name . '" need approval.', $id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'gridproposalapproval', 'Proposal "' . $proposal->grid_proposal_name . '" need approval.', $id, true, $nofifdata);
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -782,9 +794,12 @@ class GridProposalController extends Controller
 
             $his->save();
 
+            $nofifdata = array();
+            $nofifdata['subject'] = 'Proposal: ' . $proposal->grid_proposal_name;
+            $nofifdata['url'] = 'grid/proposal/approve/' . $proposal->flow_no . '/' . $proposal->grid_proposal_id;
             $this->notif->remove($request->user()->user_id, 'gridproposalapproval', $id);
             $this->notif->remove($request->user()->user_id, 'gridproposalreject', $id);
-            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'gridproposalapproval', 'Proposal "' . $proposal->grid_proposal_name . '" need approval.', $id);
+            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'gridproposalapproval', 'Proposal "' . $proposal->grid_proposal_name . '" need approval.', $id, true, $nofifdata);
 
             $request->session()->flash('status', 'Data has been saved!');
         }else{
@@ -809,9 +824,12 @@ class GridProposalController extends Controller
 
             $his->save();
 
+            $nofifdata = array();
+            $nofifdata['subject'] = 'Proposal: ' . $proposal->grid_proposal_name;
+            $nofifdata['url'] = 'grid/proposal/approve/' . $proposal->flow_no . '/' . $proposal->grid_proposal_id;
             $this->notif->remove($request->user()->user_id, 'gridproposalapproval', $id);
             $this->notif->remove($request->user()->user_id, 'gridproposalreject', $id);
-            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'gridproposalreject', 'Proposal "' . $proposal->grid_proposal_name . '" rejected.', $id);
+            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'gridproposalreject', 'Proposal "' . $proposal->grid_proposal_name . '" rejected.', $id, true, $nofifdata);
 
             $request->session()->flash('status', 'Data has been saved!');
         }
@@ -879,9 +897,12 @@ class GridProposalController extends Controller
 
             $his->save();
 
+            $nofifdata = array();
+            $nofifdata['subject'] = 'Proposal: ' . $proposal->grid_proposal_name;
+            $nofifdata['url'] = 'grid/proposal/approve/' . $proposal->flow_no . '/' . $proposal->grid_proposal_id;
             $this->notif->remove($request->user()->user_id, 'gridproposalapproval', $id);
             $this->notif->remove($request->user()->user_id, 'gridproposalreject', $id);
-            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'gridproposalreject', 'Proposal "' . $proposal->grid_proposal_name . '" rejected.', $id);
+            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'gridproposalreject', 'Proposal "' . $proposal->grid_proposal_name . '" rejected.', $id, true, $nofifdata);
 
             $request->session()->flash('status', 'Data has been saved!');
         }

@@ -41,6 +41,17 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+        //return view('vendor.material.mail.notification');
+        /*$data = array();
+
+        $data['waktu'] = date('Y-m-d H:i:s');
+        $data['logs'] = DB::table('users')->select(DB::raw('user_name,user_firstname,user_lastname,count(log_id) AS total'))->join('logs', 'users.user_id', '=', 'logs.created_by')->whereBetween('logs.created_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->groupBy('users.user_name')->orderBy('users.user_name')->get();
+        Mail::send('vendor.material.mail.notification', array('data'=>$data), function($message) {
+            $message->to('soniibrol2011@gmail.com', 'Soni Rahayu')->subject('Notification');
+        });*/
+
+        //dd('end');
+
         $data = array();
 
         $data['waktu'] = date('Y-m-d H:i:s');

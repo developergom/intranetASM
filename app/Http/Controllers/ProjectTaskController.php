@@ -146,7 +146,10 @@ class ProjectTaskController extends Controller
 
         $his->save();
 
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Please check Project Task "' . $obj->project_task_name . '"', $obj->project_task_id);
+        $notifdata = array();
+        $notifdata['subject'] = 'Project Task: ' . $obj->project_task_name;
+        $notifdata['url'] = 'grid/projecttask/approve/' . $obj->flow_no . '/' . $obj->project_task_id;
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Please check Project Task "' . $obj->project_task_name . '"', $obj->project_task_id, true, $notifdata);
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -267,8 +270,11 @@ class ProjectTaskController extends Controller
 
         $his->save();
 
+        $notifdata = array();
+        $notifdata['subject'] = 'Project Task: ' . $obj->project_task_name;
+        $notifdata['url'] = 'grid/projecttask/approve/' . $obj->flow_no . '/' . $obj->project_task_id;
         $this->notif->remove($request->user()->user_id, 'projecttaskreject', $obj->project_task_id);
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Please check Project Task "' . $obj->project_task_name . '"', $obj->project_task_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Please check Project Task "' . $obj->project_task_name . '"', $obj->project_task_id, true, $notifdata);
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -624,9 +630,12 @@ class ProjectTaskController extends Controller
 
             $his->save();
 
+            $notifdata = array();
+            $notifdata['subject'] = 'Project Task: ' . $projecttask->project_task_name;
+            $notifdata['url'] = 'grid/projecttask/approve/' . $projecttask->flow_no . '/' . $projecttask->project_task_id;
             $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $id);
             $this->notif->remove($request->user()->user_id, 'projecttaskreject', $id);
-            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Project Task "' . $projecttask->project_task_name . '" need approval.', $id);
+            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Project Task "' . $projecttask->project_task_name . '" need approval.', $id, true, $notifdata);
 
             $request->session()->flash('status', 'Data has been saved!');
 
@@ -652,9 +661,12 @@ class ProjectTaskController extends Controller
 
             $his->save();
 
+            $notifdata = array();
+            $notifdata['subject'] = 'Project Task: ' . $projecttask->project_task_name;
+            $notifdata['url'] = 'grid/projecttask/approve/' . $projecttask->flow_no . '/' . $projecttask->project_task_id;
             $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $id);
             $this->notif->remove($request->user()->user_id, 'projecttaskreject', $id);
-            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'projecttaskreject', 'Project Task "' . $projecttask->project_task_name . '" rejected.', $id);
+            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'projecttaskreject', 'Project Task "' . $projecttask->project_task_name . '" rejected.', $id, true, $notifdata);
 
             $request->session()->flash('status', 'Data has been saved!');
         }
@@ -715,9 +727,12 @@ class ProjectTaskController extends Controller
 
             $his->save();
 
+            $notifdata = array();
+            $notifdata['subject'] = 'Project Task: ' . $projecttask->project_task_name;
+            $notifdata['url'] = 'grid/projecttask/approve/' . $projecttask->flow_no . '/' . $projecttask->project_task_id;
             $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $id);
             $this->notif->remove($request->user()->user_id, 'projecttaskreject', $id);
-            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Project Task "' . $projecttask->project_task_name . '" need approval.', $id);
+            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Project Task "' . $projecttask->project_task_name . '" need approval.', $id, true, $notifdata);
 
             $request->session()->flash('status', 'Data has been saved!');
 
@@ -744,9 +759,12 @@ class ProjectTaskController extends Controller
 
             $his->save();
 
+            $notifdata = array();
+            $notifdata['subject'] = 'Project Task: ' . $projecttask->project_task_name;
+            $notifdata['url'] = 'grid/projecttask/approve/' . $projecttask->flow_no . '/' . $projecttask->project_task_id;
             $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $id);
             $this->notif->remove($request->user()->user_id, 'projecttaskreject', $id);
-            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'projecttaskreject', 'Project Task "' . $projecttask->project_task_name . '" rejected.', $id);
+            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'projecttaskreject', 'Project Task "' . $projecttask->project_task_name . '" rejected.', $id, true, $notifdata);
 
             $request->session()->flash('status', 'Data has been saved!');
         }
@@ -842,9 +860,12 @@ class ProjectTaskController extends Controller
 
         $his->save();
 
+        $notifdata = array();
+        $notifdata['subject'] = 'Project Task: ' . $projecttask->project_task_name;
+        $notifdata['url'] = 'grid/projecttask/approve/' . $projecttask->flow_no . '/' . $projecttask->project_task_id;
         $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $id);
         $this->notif->remove($request->user()->user_id, 'projecttaskreject', $id);
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Project Task "' . $projecttask->project_task_name . '" need approval.', $id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Project Task "' . $projecttask->project_task_name . '" need approval.', $id, true, $notifdata);
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -905,9 +926,12 @@ class ProjectTaskController extends Controller
 
             $his->save();
 
+            $notifdata = array();
+            $notifdata['subject'] = 'Project Task: ' . $projecttask->project_task_name;
+            $notifdata['url'] = 'grid/projecttask/approve/' . $projecttask->flow_no . '/' . $projecttask->project_task_id;
             $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $id);
             $this->notif->remove($request->user()->user_id, 'projecttaskreject', $id);
-            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Project Task "' . $projecttask->project_task_name . '" need approval.', $id);
+            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projecttaskapproval', 'Project Task "' . $projecttask->project_task_name . '" need approval.', $id, true, $notifdata);
 
             $request->session()->flash('status', 'Data has been saved!');
 
@@ -933,9 +957,12 @@ class ProjectTaskController extends Controller
 
             $his->save();
 
+            $notifdata = array();
+            $notifdata['subject'] = 'Project Task: ' . $projecttask->project_task_name;
+            $notifdata['url'] = 'grid/projecttask/approve/' . $projecttask->flow_no . '/' . $projecttask->project_task_id;
             $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $id);
             $this->notif->remove($request->user()->user_id, 'projecttaskreject', $id);
-            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'projecttaskreject', 'Project Task "' . $projecttask->project_task_name . '" rejected.', $id);
+            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'projecttaskreject', 'Project Task "' . $projecttask->project_task_name . '" rejected.', $id, true, $notifdata);
 
             $request->session()->flash('status', 'Data has been saved!');
         }
@@ -1005,10 +1032,13 @@ class ProjectTaskController extends Controller
 
             $his->save();
 
+            $notifdata = array();
+            $notifdata['subject'] = 'Project Task: ' . $projecttask->project_task_name;
+            $notifdata['url'] = 'grid/projecttask/approve/' . $projecttask->flow_no . '/' . $projecttask->project_task_id;
             $this->notif->remove($request->user()->user_id, 'projecttaskapproval', $id);
             $this->notif->remove($request->user()->user_id, 'projecttaskreject', $id);
             //$this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'projecttaskreject', 'Project Task "' . $projecttask->project_task_name . '" rejected.', $id);
-            $this->notif->generate($request->user()->user_id, $projecttask->projecttasktype->user_id, 'projecttaskreject', 'Project Task "' . $projecttask->project_task_name . '" rejected.', $id);
+            $this->notif->generate($request->user()->user_id, $projecttask->projecttasktype->user_id, 'projecttaskreject', 'Project Task "' . $projecttask->project_task_name . '" rejected.', $id, true, $notifdata);
 
             $request->session()->flash('status', 'Data has been saved!');
         }

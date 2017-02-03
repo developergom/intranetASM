@@ -110,7 +110,10 @@ class ProjectController extends Controller
 
         $his->save();
 
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projectapproval', 'Please check Project "' . $obj->project_ame . '"', $obj->project_id);
+        $notifdata = array();
+        $notifdata['subject'] = 'Project: ' . $obj->project_name;
+        $notifdata['url'] = 'grid/project/approve/' . $obj->flow_no . '/' . $obj->project_id;
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projectapproval', 'Please check Project "' . $obj->project_ame . '"', $obj->project_id, true, $notifdata);
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -202,9 +205,12 @@ class ProjectController extends Controller
 
         $his->save();
 
+        $notifdata = array();
+        $notifdata['subject'] = 'Project: ' . $obj->project_name;
+        $notifdata['url'] = 'grid/project/approve/' . $obj->flow_no . '/' . $obj->project_id;
         $this->notif->remove($request->user()->user_id, 'projectapproval', $id);
         $this->notif->remove($request->user()->user_id, 'projectreject', $id);
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projectapproval', 'Please check Project "' . $obj->project_name . '"', $obj->project_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projectapproval', 'Please check Project "' . $obj->project_name . '"', $obj->project_id, true, $notifdata);
 
         $request->session()->flash('status', 'Data has been updated!');
 
@@ -523,9 +529,12 @@ class ProjectController extends Controller
 
         $his->save();
 
+        $notifdata = array();
+        $notifdata['subject'] = 'Project: ' . $project->project_name;
+        $notifdata['url'] = 'grid/project/approve/' . $project->flow_no . '/' . $project->project_id;
         $this->notif->remove($request->user()->user_id, 'projectapproval', $id);
         $this->notif->remove($request->user()->user_id, 'projectreject', $id);
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projectapproval', 'Project "' . $project->project_name . '" need approval.', $id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'projectapproval', 'Project "' . $project->project_name . '" need approval.', $id, true, $notifdata);
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -542,6 +551,8 @@ class ProjectController extends Controller
         $data['project'] = Project::with('client', 'projecthistories', 'projecthistories.approvaltype')->find($id);
         $data['project_start'] = Carbon::createFromFormat('Y-m-d', ($data['project']->project_periode_start==null) ? date('Y-m-d') : $data['project']->project_periode_start)->format('d/m/Y');
         $data['project_end'] = Carbon::createFromFormat('Y-m-d', ($data['project']->project_periode_end==null) ? date('Y-m-d') : $data['project']->project_periode_end)->format('d/m/Y');
+
+        $data['url'] = 'grid/project/approve/' . $data['project']->flow_no . '/' . $id;
 
         return view('vendor.material.grid.project.approve', $data);
     }
@@ -607,9 +618,12 @@ class ProjectController extends Controller
 
             $his->save();
 
+            $notifdata = array();
+            $notifdata['subject'] = 'Project: ' . $project->project_name;
+            $notifdata['url'] = 'grid/project/approve/' . $project->flow_no . '/' . $project->project_id;
             $this->notif->remove($request->user()->user_id, 'projectapproval', $id);
             $this->notif->remove($request->user()->user_id, 'projectreject', $id);
-            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'projectreject', 'Project "' . $project->project_name . '" rejected.', $id);
+            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'projectreject', 'Project "' . $project->project_name . '" rejected.', $id, true, $notifdata);
 
             $request->session()->flash('status', 'Data has been saved!');
         }
