@@ -363,9 +363,13 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('proposal/approve/{flow_no}/{id}', 'GridProposalController@approve');
         Route::post('proposal/approve/{flow_no}/{id}', 'GridProposalController@postApprove');
 
-        //Report
+        //Project Report
         Route::get('report', 'ReportGridController@index');
         Route::post('report/api/generateReport', 'ReportGridController@apiGenerateReport');
+
+        //Proposal Report
+        Route::get('report-proposal', 'ReportGridController@proposal');
+        Route::post('report-proposal/api/generateReport', 'ReportGridController@apiGenerateReportProposal');
     });
 
     Route::group(['prefix' => 'config'], function() {

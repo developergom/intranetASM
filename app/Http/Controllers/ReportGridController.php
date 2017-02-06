@@ -21,7 +21,7 @@ use App\Ibrol\Libraries\UserLibrary;
 class ReportGridController extends Controller
 {
     public function index() {
-    	if(Gate::denies('Report GRID-Read')) {
+    	if(Gate::denies('Project Report (GRID)-Read')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -30,6 +30,16 @@ class ReportGridController extends Controller
     	$data['project_task_types'] = ProjectTaskType::where('active', '1')->orderBy('project_task_type_name')->get();
 
     	return view('vendor.material.grid.report.index', $data);
+    }
+
+    public function proposal() {
+        if(Gate::denies('Proposal Report (GRID)-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        return view('vendor.material.grid.report.proposal', $data);
     }
 
     public function apiGenerateReport(Request $request) {
@@ -78,5 +88,46 @@ class ReportGridController extends Controller
     	$data['result'] = $result;
 
     	return response()->json($data);
+    }
+
+    public function apiGenerateReportProposal(Request $request) {
+        $period_start = $request->input('period_start');
+
+        $q = "SELECT 
+                grid_proposals.grid_proposal_id,
+                grid_proposals.grid_proposal_name,
+                grid_proposals.grid_proposal_deadline,
+                CONCAT(userpic1.user_firstname, ' ', userpic1.user_lastname) AS pic_1_name,
+                CONCAT(userpic2.user_firstname, ' ', userpic2.user_lastname) AS pic_2_name,
+                CONCAT(userauthor.user_firstname, ' ', userauthor.user_lastname) AS author_name,
+                grid_proposals.created_at,
+                grid_proposals.grid_proposal_ready_date,
+                grid_proposals.grid_proposal_delivery_date
+            FROM 
+                grid_proposals
+            INNER JOIN users userpic1 ON userpic1.user_id= grid_proposals.pic_1
+            INNER JOIN users userpic2 ON userpic2.user_id= grid_proposals.pic_2
+            INNER JOIN users userauthor ON userauthor.user_id= grid_proposals.created_by
+            WHERE
+                grid_proposals.active = '1'";
+
+        if($period_start != "") {
+            $period_start = Carbon::createFromFormat('d/m/Y', $request->input('period_start'))->toDateString();
+            $period_end = Carbon::createFromFormat('d/m/Y', $request->input('period_end'))->toDateString();
+
+            $q .= " AND grid_proposals.grid_proposal_deadline BETWEEN '" . $period_start . "' AND '" . $period_end . "'";
+        }
+
+        $q .= ' ORDER BY grid_proposal_name ASC';
+
+        //dd($q);
+
+        $result = DB::select($q);
+
+        $data = array();
+
+        $data['result'] = $result;
+
+        return response()->json($data);
     }
 }

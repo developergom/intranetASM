@@ -7,7 +7,7 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Project Report (GRID)<small>Generate project report</small></h2></div>
+        <div class="card-header"><h2>Proposal Report (GRID)<small>Generate proposal report</small></h2></div>
         <div class="card-body card-padding">
         	<div class="row">
         		<div class="col-md-3">
@@ -18,14 +18,6 @@
 			            <div class="tab-content">
 				            <div role="tabpanel" class="tab-pane active" id="filtersection">
 				            	<form class="form" role="form" action="javascript:void(0)">
-				            		<div class="form-group">
-						                <label for="project_task_type_id">Task Type</label>
-						                <select name="project_task_type_id" id="project_task_type_id" class="form-control input-sm selectpicker" data-live-search="true" multiple>
-			                                @foreach ($project_task_types as $key => $value)
-											    <option value="{{ $value->project_task_type_id }}">{{ $value->project_task_type_name }}</option>
-											@endforeach
-			                            </select>
-						            </div>
 						            <div class="form-group">
 						                <label for="periode_start">Period Start (Deadline)</label>
 					                    <div class="fg-line">
@@ -58,11 +50,10 @@
 							        <table id="grid-data-result" class="table table-hover">
 							            <thead>
 							                <tr>
-							                    <th>Project</th>
-							                    <th>Task Type</th>
-							                    <th>Task Name</th>
+							                    <th>Proposal Name</th>
 							                    <th>Deadline</th>
-							                    <th>PIC</th>
+							                    <th>PIC 1</th>
+							                    <th>PIC 2</th>
 							                    <th>Author</th>
 							                    <th>Created Date</th>
 							                    <th>Ready Date</th>
@@ -94,5 +85,5 @@
 @endsection
 
 @section('customjs')
-<script src="{{ url('js/grid/report.js') }}"></script>
+<script src="{{ url('js/grid/report-proposal.js') }}"></script>
 @endsection
