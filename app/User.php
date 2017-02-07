@@ -116,4 +116,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\GridProposal', 'pic_2');
     }
+
+    public function gridproposalcreatedby()
+    {
+        return $this->hasMany('App\GridProposal', 'created_by');
+    }
 }

@@ -370,6 +370,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         //Proposal Report
         Route::get('report-proposal', 'ReportGridController@proposal');
         Route::post('report-proposal/api/generateReport', 'ReportGridController@apiGenerateReportProposal');
+        Route::get('report-proposal/api/getTotalProposalPerMonth', 'ReportGridController@apiGetTotalProposalPerMonth');
     });
 
     Route::group(['prefix' => 'config'], function() {

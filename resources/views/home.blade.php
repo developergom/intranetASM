@@ -165,16 +165,197 @@
         </div>
     </div>
     @endcan
+
+    @can('Grid Proposal-Read')
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header"><h4>GRID Proposal on {{ $grid_proposal_year }}</h4></div>
+                <div class="card-body card-padding">
+                    <form class="form-horizontal" role="form">
+                        <!-- <div class="form-group">
+                            <label for="grid-proposal-select-author" class="col-sm-2 control-label">Author</label>
+                            <div class="col-sm-8">
+                                <div class="fg-line">
+                                    <select name="grid-proposal-select-author[]" id="grid-proposal-select-author" class="selectpicker" data-live-search="true" multiple>
+                                        <option value="{{ $grid_proposal_current->user_id }}" selected>{{ $grid_proposal_current->user_firstname . ' ' . $grid_proposal_current->user_lastname }}</option>
+                                        @foreach($grid_proposal_subordinate as $row)
+                                            <option value="{{ $row->user_id }}">{{ $row->user_firstname . ' ' . $row->user_lastname }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                            </div>
+                        </div> -->
+                    </form>
+                    <div id="bar-chart" class="flot-chart"></div>
+                    <div class="chart flc-bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endcan
 @endsection
 
 @section('vendorjs')
 <script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/jquery.marquee.min.js') }}"></script>
+<script src="{{ url('js/jquery.sparkline.min.js') }}"></script>
 <script src="{{ url('js/monthly.js') }}"></script>
 @endsection
 
 @section('customjs')
 <script type="text/javascript">
+@can('Grid Proposal-Read')
+var barData = [];
+var dataTotal = [];
+var monthName = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+var color = [
+                '#F44336', 
+                '#03A9F4', 
+                '#8BC34A', 
+                '#FFEB3B', 
+                '#009688', 
+                '#f89E17', 
+                '#fFDBD6', 
+                '#584DC3', 
+                '#FC7CB2', 
+                '#ffff99',
+                '#ff9966',
+                '#ff6666',
+                '#990033',
+                '#99ccff',
+                '#666699',
+                '#0077b3',
+                '#0033b3'
+            ];
+
+function loadTotalProposalsData() {
+    $.ajax({
+        url: base_url + 'grid/report-proposal/api/getTotalProposalPerMonth',
+        type: 'GET',
+        dataType: 'json',
+        error: function(data) {
+            console.log(data);
+        },
+        success: function(data) {
+            $.each(data, function(key, value){
+                var total = new Array();
+                $.each(value.total, function(k, v){
+                    x = new Array();
+                    x.push(k);
+                    x.push(v.total);
+
+                    total.push(x);
+                });
+
+                barData.push({
+                    data : total,
+                    label: " " + value.user_firstname + " " + value.user_lastname + " ",
+                    bars : {
+                            show : false,
+                            barWidth : 0.05,
+                            order : key,
+                            lineWidth: 1,
+                            fillColor: color[key],
+                            position: 'center'
+                    }
+                });
+
+            });
+        }
+    });
+}
+
+loadTotalProposalsData();
+
+$(document).ajaxSuccess(function(){
+    console.log(barData);
+
+    /* Let's create the bar chart */
+    if ($('#bar-chart')[0]) {
+        $.plot($("#bar-chart"), barData, {
+            grid : {
+                    borderWidth: 1,
+                    borderColor: '#eee',
+                    show : true,
+                    hoverable : true,
+                    clickable : true
+            },
+            
+            yaxis: {
+                tickColor: '#eee',
+                tickDecimals: 0,
+                font :{
+                    lineHeight: 13,
+                    style: "normal",
+                    color: "#9f9f9f",
+                },
+                shadowSize: 0
+            },
+            
+            xaxis: {
+                tickColor: '#fff',
+                tickDecimals: 0,
+                font :{
+                    lineHeight: 13,
+                    style: "normal",
+                    color: "#9f9f9f"
+                },
+                shadowSize: 0,
+                axisLabel: 'Month'
+            },
+    
+            legend:{
+                container: '.flc-bar',
+                backgroundOpacity: 0.5,
+                noColumns: 0,
+                backgroundColor: "white",
+                lineWidth: 0
+            },
+
+            colors : [
+                '#F44336', 
+                '#03A9F4', 
+                '#8BC34A', 
+                '#FFEB3B', 
+                '#009688', 
+                '#f89E17', 
+                '#fFDBD6', 
+                '#584DC3', 
+                '#FC7CB2', 
+                '#ffff99',
+                '#ff9966',
+                '#ff6666',
+                '#990033',
+                '#99ccff',
+                '#666699',
+                '#0077b3'
+            ]
+        });
+    }
+
+    /* Tooltips for Flot Charts */
+    
+    if ($(".flot-chart")[0]) {
+        $(".flot-chart").bind("plothover", function (event, pos, item) {
+            if (item) {
+                var x = item.datapoint[0].toFixed(2),
+                    y = item.datapoint[1].toFixed(0),
+                    m = item.dataIndex;
+                $(".flot-tooltip").html(item.series.label + " at " + monthName[m] + " : " + y + " proposal(s)").css({top: item.pageY+5, left: item.pageX+5}).show();
+            }
+            else {
+                $(".flot-tooltip").hide();
+            }
+        });
+        
+        $("<div class='flot-tooltip' class='chart-tooltip'></div>").appendTo("body");
+    }    
+});
+@endcan
+
 $(document).ready(function(){
     $('#text').marquee({
         duration: 60000,

@@ -130,4 +130,121 @@ class ReportGridController extends Controller
 
         return response()->json($data);
     }
+
+    public function apiGetTotalProposalPerMonth(Request $request) {
+        if(Gate::denies('Grid Proposal-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $u = new UserLibrary;
+        $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+        $user_on_proposal = DB::select("SELECT created_by from grid_proposals group by created_by");
+        $up = array();
+        foreach ($user_on_proposal as $uop) {
+            array_push($up, $uop->created_by);
+        }
+        $users = User::whereIn('user_id', $subordinate)->whereIn('user_id', $up)->get();
+
+        $tgl = $this->generateStartEndDatePerYear(date('Y'));
+        $total = array();
+        $i = 0;
+        foreach($users as $user) {
+            $total[$i]['user_firstname'] = $user->user_firstname;
+            $total[$i]['user_lastname'] = $user->user_lastname;
+            $total[$i]['total'] = array();
+
+            foreach ($tgl as $key => $value) {
+                $start_date = $value['start_date'];
+                $end_date = $value['end_date'];
+
+                $q = DB::select("SELECT 
+                                    count(grid_proposal_id) AS total
+                                from 
+                                    grid_proposals 
+                                INNER JOIN users ON users.user_id = grid_proposals.created_by
+                                WHERE 
+                                    (
+                                        grid_proposal_ready_date BETWEEN '" . $start_date . "' AND '" . $end_date . "'
+                                    ) 
+                                    AND grid_proposals.created_by = '" . $user->user_id . "'
+                                    AND grid_proposals.flow_no = '98'
+                                    AND grid_proposals.active = '1'");
+                $total[$i]['total'][$key]['month_name'] = $value['month_name'];
+                $total[$i]['total'][$key]['total'] = $q[0]->total;
+            }
+
+            $i++;
+        }
+
+        //untuk proposal (yg login)
+        $total[$i]['user_firstname'] = $request->user()->user_firstname;
+        $total[$i]['user_lastname'] = $request->user()->user_lastname;
+        $total[$i]['total'] = array();
+        foreach ($tgl as $key => $value) {
+            $start_date = $value['start_date'];
+            $end_date = $value['end_date'];
+
+            $q = DB::select("SELECT 
+                                count(grid_proposal_id) AS total
+                                from 
+                                    grid_proposals 
+                            INNER JOIN users ON users.user_id = grid_proposals.created_by
+                                WHERE 
+                                    (
+                                        grid_proposal_ready_date BETWEEN '" . $start_date . "' AND '" . $end_date . "'
+                                    ) 
+                                    AND grid_proposals.created_by = '" . $request->user()->user_id . "'
+                                    AND grid_proposals.flow_no = '98'
+                                    AND grid_proposals.active = '1'");
+            $total[$i]['total'][$key]['month_name'] = $value['month_name'];
+            $total[$i]['total'][$key]['total'] = $q[0]->total;
+        }
+
+        $i = $i+1;
+
+        //untuk total proposal
+        $total[$i]['user_firstname'] = 'Total';
+        $total[$i]['user_lastname'] = 'Proposal';
+        $total[$i]['total'] = array();
+        foreach ($tgl as $key => $value) {
+            $start_date = $value['start_date'];
+            $end_date = $value['end_date'];
+
+            $q = DB::select("SELECT 
+                                count(grid_proposal_id) AS total
+                                from 
+                                    grid_proposals 
+                            INNER JOIN users ON users.user_id = grid_proposals.created_by
+                                WHERE 
+                                    (
+                                        grid_proposal_ready_date BETWEEN '" . $start_date . "' AND '" . $end_date . "'
+                                    )
+                                    AND grid_proposals.flow_no = '98'
+                                    AND grid_proposals.active = '1'");
+            $total[$i]['total'][$key]['month_name'] = $value['month_name'];
+            $total[$i]['total'][$key]['total'] = $q[0]->total;
+        }
+
+        $data = $total;
+
+        return response()->json($data);
+    }
+
+    private function generateStartEndDatePerYear($year) {
+        $tgl = array();
+        for($i = 1; $i <= 12; $i++) {
+            $start_date = $year . '-' . $i . '-01';
+            $tanggal = Carbon::createFromFormat('Y-m-d', $start_date);
+            $bulan = $tanggal->format('m');
+            $start_date = $tanggal->toDateString();
+            $end_date = $year . '-' . $bulan . '-' . $tanggal->daysInMonth;
+            $tgl[$i]['start_date'] = $start_date;
+            $tgl[$i]['end_date'] = $end_date;
+            $tgl[$i]['month_name'] = $tanggal->format('F');
+        }
+
+        return $tgl;
+    }
 }

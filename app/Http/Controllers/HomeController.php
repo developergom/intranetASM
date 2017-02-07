@@ -95,6 +95,20 @@ class HomeController extends Controller
                                         ->get();
         }
 
+        if(Gate::allows('Grid Proposal-Read')) {
+            $u = new UserLibrary;
+            $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+            $user_on_proposal = DB::select("SELECT created_by from grid_proposals group by created_by");
+            $up = array();
+            foreach ($user_on_proposal as $uop) {
+                array_push($up, $uop->created_by);
+            }
+
+            $data['grid_proposal_subordinate'] = User::whereIn('user_id',$subordinate)->whereIn('user_id', $up)->orderBy('user_firstname')->get();
+            $data['grid_proposal_current'] = User::with('groups')->find($request->user()->user_id);
+            $data['grid_proposal_year'] = date('Y');
+        }
+
         return view('home', $data);
     }
 

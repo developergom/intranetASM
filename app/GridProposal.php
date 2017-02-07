@@ -51,4 +51,9 @@ class GridProposal extends Model
 	{
 		return $this->belongsTo('App\User', 'pic_2');	
 	}
+
+	public function _created_by()
+	{
+		return $this->belongsTo('App\User', 'created_by');
+	}
 }
