@@ -22,7 +22,7 @@
 	<div class="block-header">
         <h2>Dashboard</h2>
         
-        <ul class="actions">
+        <!-- <ul class="actions">
             <li>
                 <a href="#">
                     <i class="zmdi zmdi-trending-up"></i>
@@ -50,7 +50,7 @@
                     </li>
                 </ul>
             </li>
-        </ul>
+        </ul> -->
     </div>
     <!-- <div class="card">
         <div class="card-header">Dashboard</div>

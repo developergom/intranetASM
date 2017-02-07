@@ -59,7 +59,7 @@
                                 <i class="tm-icon zmdi zmdi-email"></i>
                                 <i class="tmn-counts">0</i>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-lg pull-right">
+                            <!-- <div class="dropdown-menu dropdown-menu-lg pull-right">
                                 <div class="listview">
                                     <div class="lv-header">
                                         Messages
@@ -79,7 +79,7 @@
                                     </div>
                                     <a class="lv-footer" href="#">View All</a>
                                 </div>
-                            </div>
+                            </div> -->
                         </li>
                         <li class="dropdown">
                             <a data-toggle="dropdown" href="#">
@@ -100,7 +100,7 @@
                                         </ul>
                                     </div>
                                     <div class="lv-body" id="notification_lists">
-                                        <a class="lv-item" href="#">
+                                        <!-- <a class="lv-item" href="#">
                                             <div class="media">
                                                 <div class="pull-left">
                                                     <img class="lv-img-sm" src="#" alt="">
@@ -110,10 +110,10 @@
                                                     <small class="lv-small">Proin laoreet commodo eros id faucibus. Donec ligula quam, imperdiet vel ante placerat</small>
                                                 </div>
                                             </div>
-                                        </a>
+                                        </a> -->
                                     </div>
 
-                                    <a class="lv-footer" href="#">View Previous</a>
+                                    <!-- <a class="lv-footer" href="#">View Previous</a> -->
                                 </div>
 
                             </div>
