@@ -7,7 +7,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>Intranet ASM Apps</title>
+        <title>{!! Cache::get('setting_headtitle') !!}</title>
 
         <!-- Vendor CSS -->
         <link href="{{ url('css/fullcalendar.min.css') }}" rel="stylesheet">
@@ -372,13 +372,13 @@
         <footer id="footer">
             Copyright &copy; 2016 Gramedia Majalah IT
             
-            <ul class="f-menu">
+            <!-- <ul class="f-menu">
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Dashboard</a></li>
                 <li><a href="#">Reports</a></li>
                 <li><a href="#">Support</a></li>
                 <li><a href="#">Contact</a></li>
-            </ul>
+            </ul> -->
         </footer>
 
         <!-- Page Loader -->
