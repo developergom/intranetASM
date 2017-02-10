@@ -13,7 +13,7 @@
         	<form class="form-horizontal" role="form" method="POST" action="{{ url('grid/project') }}">
         		{{ csrf_field() }}
         		<div class="form-group">
-	                <label for="project_name" class="col-sm-2 control-label">Name</label>
+	                <label for="project_name" class="col-sm-2 control-label">Project Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 							<input type="text" class="form-control" name="project_name" id="project_name" placeholder="Project Name" required="true" maxlength="100" value="{{ old('project_name') }}">

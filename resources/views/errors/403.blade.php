@@ -6,7 +6,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Material Admin</title>
+        <title>{!! Cache::get('setting_headtitle') !!}</title>
         
         <!-- Vendor CSS -->
         <link href="{{ url('css/animate.min.css') }}" rel="stylesheet">

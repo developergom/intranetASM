@@ -1,5 +1,5 @@
 <div class="form-group">
-	<label for="project_task_type_id" class="col-sm-2 control-label">Type</label>
+	<label for="project_task_type_id" class="col-sm-2 control-label">Task Type</label>
 	<div class="col-sm-10">
 		<div class="fg-line">
 			<input type="text" class="form-control" disabled="true" value="{{ $projecttask->projecttasktype->project_task_type_name }}">
@@ -7,7 +7,7 @@
 	</div>
 </div>
 <div class="form-group">
-    <label for="project_task_name" class="col-sm-2 control-label">Name</label>
+    <label for="project_task_name" class="col-sm-2 control-label">Task Name</label>
     <div class="col-sm-10">
         <div class="fg-line">
             <input type="text" class="form-control input-sm" name="project_task_name" id="project_task_name" placeholder="Project Task Name" required="true" maxlength="100" value="{{ $projecttask->project_task_name }}" disabled="true">
@@ -15,7 +15,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label for="project_task_deadline" class="col-sm-2 control-label">Deadline</label>
+    <label for="project_task_deadline" class="col-sm-2 control-label">Task Deadline</label>
     <div class="col-sm-10">
         <div class="fg-line">
             <input type="text" class="form-control input-sm" name="project_task_deadline" id="project_task_deadline" placeholder="Deadline" required="true" maxlength="10" value="{{ $deadline }}" disabled="true">
@@ -31,7 +31,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label for="project_id" class="col-sm-2 control-label">Project</label>
+    <label for="project_id" class="col-sm-2 control-label">Project Name</label>
     <div class="col-sm-10">
         <div class="fg-line">
             <a href="{{ url('/grid/project/' . $projecttask->project_id) }}" target="_blank">{{ $projecttask->project->project_name . ' - ' . $projecttask->project->client->client_name }}</a>

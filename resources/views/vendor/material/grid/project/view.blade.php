@@ -1,5 +1,5 @@
 <div class="form-group">
-    <label for="project_code" class="col-sm-2 control-label">Code</label>
+    <label for="project_code" class="col-sm-2 control-label">Project Code</label>
     <div class="col-sm-10">
         <div class="fg-line">
 			<input type="text" class="form-control" name="project_code" id="project_code" placeholder="Project Code" maxlength="20" value="{{ $project->project_code }}" disabled="true">
@@ -7,7 +7,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label for="project_name" class="col-sm-2 control-label">Name</label>
+    <label for="project_name" class="col-sm-2 control-label">Project Name</label>
     <div class="col-sm-10">
         <div class="fg-line">
 			<input type="text" class="form-control" name="project_name" id="project_name" placeholder="Project Name" required="true" maxlength="100" value="{{ $project->project_name }}" disabled="true">

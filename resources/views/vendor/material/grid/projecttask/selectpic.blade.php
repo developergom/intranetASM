@@ -21,11 +21,11 @@
 	                            <i class="input-helper"></i>  
 	                            Yes
 	                        </label>
-	                        <label class="radio radio-inline m-r-20">
+	                        <!-- <label class="radio radio-inline m-r-20">
 	                            <input name="approval" value="0" type="radio" required>
 	                            <i class="input-helper"></i>  
 	                            No
-	                        </label>
+	                        </label> -->
 	                    </div>
 	                </div>
 	            </div>

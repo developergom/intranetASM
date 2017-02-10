@@ -17,7 +17,7 @@
         		{{ csrf_field() }}
         		<input type="hidden" name="_method" value="PUT">
         		<div class="form-group">
-        			<label for="project_task_type_id" class="col-sm-2 control-label">Type</label>
+        			<label for="project_task_type_id" class="col-sm-2 control-label">Task Type</label>
         			<div class="col-sm-10">
         				<div class="fg-line">
 	        				<select name="project_task_type_id" id="project_task_type_id" class="selectpicker" data-live-search="true" required="true">
@@ -39,7 +39,7 @@
 		            @endif
         		</div>
 	            <div class="form-group">
-	                <label for="project_task_name" class="col-sm-2 control-label">Name</label>
+	                <label for="project_task_name" class="col-sm-2 control-label">Task Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <input type="text" class="form-control input-sm" name="project_task_name" id="project_task_name" placeholder="Project Task Name" required="true" maxlength="100" value="{{ $projecttask->project_task_name }}">
@@ -52,7 +52,7 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="project_task_deadline" class="col-sm-2 control-label">Deadline</label>
+	                <label for="project_task_deadline" class="col-sm-2 control-label">Task Deadline</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <input type="text" class="form-control input-sm date-picker" name="project_task_deadline" id="project_task_deadline" placeholder="Deadline" required="true" maxlength="10" value="{{ $deadline }}">
@@ -78,7 +78,7 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="project_id" class="col-sm-2 control-label">Project</label>
+	                <label for="project_id" class="col-sm-2 control-label">Project Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <select name="project_id" id="project_id" class="selectpicker with-ajax" data-live-search="true">
