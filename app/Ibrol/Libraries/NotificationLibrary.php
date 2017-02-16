@@ -32,7 +32,8 @@ class NotificationLibrary{
 			$obj['url'] = (array_key_exists('url', $data)) ? $data['url'] : 'http://';
 
 			Mail::send('vendor.material.mail.notification', array('item'=>$obj), function($message) use($obj){
-	            $message->to($obj['to'], $obj['to_fullname'])->subject('[* * NOTIFICATION * *] ' . $obj['subject']);
+	            //$message->to($obj['to'], $obj['to_fullname'])->subject('[* * NOTIFICATION * *] ' . $obj['subject']);
+	            $message->to('soni@gramedia-majalah.com', $obj['to_fullname'])->subject('[* * NOTIFICATION * *] ' . $obj['subject']);
 	        });
 		}
 	}
