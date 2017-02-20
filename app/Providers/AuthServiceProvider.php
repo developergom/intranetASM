@@ -44,7 +44,7 @@ class AuthServiceProvider extends ServiceProvider
     public function getMenus()
     {
         if(!Cache::has('allMenu')) {
-            Cache::add('allMenu', Menu::where('active', '1')->get(), 360);
+            Cache::add('allMenu', Menu::with('module','module.actions')->where('active', '1')->get(), 1440);
         }
         return Cache::get('allMenu');
     }

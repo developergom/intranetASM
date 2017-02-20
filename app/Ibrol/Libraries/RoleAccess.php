@@ -13,22 +13,22 @@ class RoleAccess{
         if(!Cache::has('roles_modules')) {
             $tmp = DB::table('roles_modules')->get();
 
-            $data = array();
+            /*$data = array();
 
             foreach ($tmp as $key => $value) {
                 $data[$key]['role_id'] = $value->role_id;
                 $data[$key]['module_id'] = $value->module_id;
                 $data[$key]['action_id'] = $value->action_id;
                 $data[$key]['access'] = $value->access;
-            }
+            }*/
 
             $collection = collect($tmp);
 
-            Cache::add('roles_modules', $collection, 60);
+            Cache::add('roles_modules', $collection, 1440);
         }
 
+        $roles_modules = Cache::get('roles_modules');
     	foreach($roles as $role) {
-            $roles_modules = Cache::get('roles_modules');
             if($roles_modules->where('role_id', $role->role_id)->where('module_id', $module_id)->where('action_id', $action_id)->count() > 0) {
                 $access = true;
             }
