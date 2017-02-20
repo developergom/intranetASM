@@ -104,4 +104,9 @@ class AuthController extends Controller
             return redirect()->intended('home');
         }
     }*/
+
+    public function authenticate()
+    {
+        dd('masuk');
+    }
 }

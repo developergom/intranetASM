@@ -36,6 +36,7 @@ class AuthServiceProvider extends ServiceProvider
             foreach($value->module->actions as $action) {
                 $gate->define($value->menu_name . '-' . $action->action_name, function($user) use ($value, $action) {
                     return RoleAccess::hasAccess(Auth::user()->roles, $value->module_id, $action->action_id);
+                    //return true;
                 });
             }
         }
