@@ -48,5 +48,7 @@ class AuthServiceProvider extends ServiceProvider
             Cache::add('allMenu', Menu::with('module','module.actions')->where('active', '1')->get(), 1440);
         }
         return Cache::get('allMenu');
+
+        //return Menu::with('module','module.actions')->where('active', '1')->get();
     }
 }

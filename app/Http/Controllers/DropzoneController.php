@@ -18,7 +18,7 @@ class DropzoneController extends Controller
 
     	$rules = array(
     		/*'file' => 'image|max:10000'*/
-    		'file' => 'max:10000'
+    		'file' => 'max:200000'
     	);
 
     	$validation = Validator::make($input, $rules);

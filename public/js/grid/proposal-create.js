@@ -9,7 +9,7 @@ $(document).ready(function(){
 		},
 		addRemoveLinks: true,
 		clickable: true,
-		maxFilesize: 10,
+		maxFilesize: 200,
 		accept: function(file, done) {
 			done();
 		},
