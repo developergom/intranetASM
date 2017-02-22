@@ -92,6 +92,7 @@ class HomeController extends Controller
                                         ->orWhere(function($query) use($subordinate) {
                                                     $query->whereIn('created_by', $subordinate);
                                                 })
+                                        ->orWhere('pic', $request->user()->user_id)
                                         ->orWhere(function($query) use($subordinate) {
                                                     $query->whereIn('pic', $subordinate);
                                                 })
