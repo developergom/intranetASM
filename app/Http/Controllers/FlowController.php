@@ -312,7 +312,7 @@ class FlowController extends Controller
         }elseif($method == 'UPDATE'){
             if($direction == 'TOLOWER')
             {
-                $flows = Flow::where('active','1')->where('flow_group_id', $flow_group_id)->where('flow_no', '>=', $order)->where('flow_no', '<=', $old_order)->get();
+                $flows = Flow::where('active','1')->where('flow_group_id', $flow_group_id)->where('flow_no', '>', $order)->where('flow_no', '<=', $old_order)->get();
 
                 foreach($flows as $flow)
                 {

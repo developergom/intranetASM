@@ -107,6 +107,11 @@ class User extends Authenticatable
         return $this->hasMany('App\GridProposal', 'current_user');
     }
 
+    public function gridproposalapproval1()
+    {
+        return $this->hasMany('App\GridProposal', 'approval_1');
+    }
+
     public function gridproposalpic1()
     {
         return $this->hasMany('App\GridProposal', 'pic_1');

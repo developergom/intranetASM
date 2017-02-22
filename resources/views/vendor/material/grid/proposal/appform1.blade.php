@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>GRID Proposal<small>PIC Form</small></h2></div>
+        <div class="card-header"><h2>GRID Proposal<small>Approval Form</small></h2></div>
         <div class="card-body card-padding">
             <form class="form-horizontal" role="form" method="POST" action="{{ url($url) }}">
                 {{ csrf_field() }}
@@ -27,17 +27,8 @@
                         </span>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="skip_production" class="col-sm-2 control-label">Skip Production?</label>
-                    <div class="col-sm-10">
-                        <select name="skip_production" id="skip_production" class="selectpicker" required="true">
-                            <option value="1">Yes</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-                </div>
                 <div class="form-group" id="pic_container">
-                    <label for="pic" class="col-sm-2 control-label">Select PIC Production</label>
+                    <label for="pic" class="col-sm-2 control-label">Select Creative Specialist</label>
                     <div class="col-sm-10">
                         <select name="pic" id="pic" class="selectpicker" data-live-search="true">
                             <option value=""></option>
@@ -77,5 +68,4 @@
 
 @section('customjs')
 <script src="{{ url('js/grid/proposal-create.js') }}"></script>
-<script src="{{ url('js/grid/proposal-picform1.js') }}"></script>
 @endsection

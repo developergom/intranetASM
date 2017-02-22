@@ -16,6 +16,7 @@ class GridProposal extends Model
 				'grid_proposal_no',
 				'grid_proposal_ready_date',
 				'grid_proposal_delivery_date',
+				'approval_1',
 				'pic_1',
 				'pic_2',
 				'flow_no',
@@ -40,6 +41,11 @@ class GridProposal extends Model
 	public function _currentuser()
 	{
 		return $this->belongsTo('App\User', 'current_user');
+	}
+
+	public function _approval_1()
+	{
+		return $this->belongsTo('App\User', 'approval_1');	
 	}
 
 	public function _pic_1()

@@ -31,6 +31,14 @@
     </div>
 </div>
 <div class="form-group">
+    <label for="approval_1" class="col-sm-2 control-label">Lead Generation PIC</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <input type="text" class="form-control input-sm" name="approval_1" id="approval_1" placeholder="Lead Generation PIC" required="true" maxlength="100" value="{{ ($proposal->approval_1 == 0) ? '-' : $proposal->_approval_1->user_firstname }}" disabled="true">
+        </div>
+    </div>
+</div>
+<div class="form-group">
     <label for="puc" class="col-sm-2 control-label">PIC 1</label>
     <div class="col-sm-10">
         <div class="fg-line">
