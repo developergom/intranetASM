@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+use File;
 use Gate;
 use Carbon\Carbon;
 use App\Http\Requests;
 use App\Client;
 use App\Project;
 use App\ProjectHistory;
+use App\UploadFile;
 use App\User;
 
 use App\Ibrol\Libraries\FlowLibrary;
@@ -101,6 +103,44 @@ class ProjectController extends Controller
 
         $obj->save();
 
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_revision = 0;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => 0 ];
+            }
+        }
+
+        if(!empty($fileArray)) {
+            Project::find($obj->project_id)->uploadfiles()->sync($fileArray);    
+        }
+
         $his = new ProjectHistory;
         $his->project_id = $obj->project_id;
         $his->approval_type_id = 1;
@@ -132,7 +172,7 @@ class ProjectController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $data = array();
-        $data['project'] = Project::with('client')->find($id);
+        $data['project'] = Project::with('client','uploadfiles')->find($id);
         $data['project_start'] = Carbon::createFromFormat('Y-m-d', ($data['project']->project_periode_start==null) ? date('Y-m-d') : $data['project']->project_periode_start)->format('d/m/Y');
         $data['project_end'] = Carbon::createFromFormat('Y-m-d', ($data['project']->project_periode_end==null) ? date('Y-m-d') : $data['project']->project_periode_end)->format('d/m/Y');
         
@@ -195,6 +235,44 @@ class ProjectController extends Controller
         $obj->updated_by = $request->user()->user_id;
 
         $obj->save();
+
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_revision = $obj->revision_no;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => $obj->revision_no ];
+            }
+        }
+
+        if(!empty($fileArray)) {
+            Project::find($obj->project_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
+        }
 
         $his = new ProjectHistory;
         $his->project_id = $obj->project_id;

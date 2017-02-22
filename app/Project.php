@@ -43,6 +43,11 @@ class Project extends Model
 		return $this->hasMany('App\ProjectTask', 'project_id');
 	}
 
+	public function uploadfiles()
+	{
+		return $this->belongsToMany('App\UploadFile', 'project_upload_file');
+	}
+
 	public function _currentuser()
 	{
 		return $this->belongsTo('App\User', 'current_user');
