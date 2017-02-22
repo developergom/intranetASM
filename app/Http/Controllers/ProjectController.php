@@ -58,8 +58,8 @@ class ProjectController extends Controller
 
         $data = array();
 
-        $data['pics'] = User::where('active', '1')->whereHas('groups', function($query) {
-                            $query->where('group_name', '=', 'GRID - Traffic Control');
+        $data['pics'] = User::where('active', '1')->whereHas('roles', function($query) {
+                            $query->where('role_name', '=', 'GRID Traffic Control');
                         })->get();
 
         return view('vendor.material.grid.project.create', $data);
