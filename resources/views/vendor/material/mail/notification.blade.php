@@ -111,7 +111,7 @@
 
                             <p>
                                 Regards,<br/>
-                                <b>Intranet ASM</b>
+                                <b>{!! Cache::get('setting_app_name') !!}</b>
                             </p>
 
                             <hr/>

@@ -104,12 +104,19 @@ class ProjectTaskController extends Controller
 
         $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
         $files = File::files($tmpPath);
+
+        //creating path
+        $path = 'uploads/files/grid_project_tasks/' . date('Y') . '/' . date('m');
+        if(!File::exists($path)) {
+            File::makeDirectory($path, 0777, true);
+        }
+
         foreach($files as $key => $value) {
             $oldfile = pathinfo($value);
-            $newfile = 'uploads/files/' . $oldfile['basename'];
+            $newfile = $path . '/' . $oldfile['basename'];
             if(File::exists($newfile)) {
                 $rand = rand(1, 100);
-                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+                $newfile = $path . '/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
             }
 
             if(File::move($value, $newfile)) {
@@ -228,12 +235,19 @@ class ProjectTaskController extends Controller
 
         $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
         $files = File::files($tmpPath);
+
+        //creating path
+        $path = 'uploads/files/grid_project_tasks/' . date('Y') . '/' . date('m');
+        if(!File::exists($path)) {
+            File::makeDirectory($path, 0777, true);
+        }
+
         foreach($files as $key => $value) {
             $oldfile = pathinfo($value);
-            $newfile = 'uploads/files/' . $oldfile['basename'];
+            $newfile = $path . '/' . $oldfile['basename'];
             if(File::exists($newfile)) {
                 $rand = rand(1, 100);
-                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+                $newfile = $path . '/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
             }
 
             if(File::move($value, $newfile)) {
@@ -818,12 +832,19 @@ class ProjectTaskController extends Controller
 
         $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
         $files = File::files($tmpPath);
+
+        //creating path
+        $path = 'uploads/files/grid_project_tasks/' . date('Y') . '/' . date('m');
+        if(!File::exists($path)) {
+            File::makeDirectory($path, 0777, true);
+        }
+
         foreach($files as $key => $value) {
             $oldfile = pathinfo($value);
-            $newfile = 'uploads/files/' . $oldfile['basename'];
+            $newfile = $path . '/' . $oldfile['basename'];
             if(File::exists($newfile)) {
                 $rand = rand(1, 100);
-                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+                $newfile = $path . '/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
             }
 
             if(File::move($value, $newfile)) {
