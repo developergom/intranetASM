@@ -108,7 +108,7 @@ class ReportGridController extends Controller
                 grid_proposals
             LEFT JOIN users userapp1 ON userapp1.user_id= grid_proposals.approval_1
             INNER JOIN users userpic1 ON userpic1.user_id= grid_proposals.pic_1
-            INNER JOIN users userpic2 ON userpic2.user_id= grid_proposals.pic_2
+            LEFT JOIN users userpic2 ON userpic2.user_id= grid_proposals.pic_2
             INNER JOIN users userauthor ON userauthor.user_id= grid_proposals.created_by
             WHERE
                 grid_proposals.active = '1'";
