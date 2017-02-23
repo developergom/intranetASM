@@ -56,6 +56,7 @@ function generate_report() {
 					html += '<tr>';
 					html += '<td>'  + value.grid_proposal_name + '</td>';
 					html += '<td>'  + value.grid_proposal_deadline + '</td>';
+					html += '<td>'  + value.approval_1_name + '</td>';
 					html += '<td>'  + value.pic_1_name + '</td>';
 					html += '<td>'  + value.pic_2_name + '</td>';
 					html += '<td>'  + value.author_name + '</td>';

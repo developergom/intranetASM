@@ -52,6 +52,7 @@
 							                <tr>
 							                    <th>Proposal Name</th>
 							                    <th>Deadline</th>
+							                    <th>Approval Lead Generation</th>
 							                    <th>PIC 1</th>
 							                    <th>PIC 2</th>
 							                    <th>Author</th>

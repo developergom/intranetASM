@@ -97,6 +97,7 @@ class ReportGridController extends Controller
                 grid_proposals.grid_proposal_id,
                 grid_proposals.grid_proposal_name,
                 grid_proposals.grid_proposal_deadline,
+                CONCAT(userapp1.user_firstname, ' ', userapp1.user_lastname) AS approval_1_name,
                 CONCAT(userpic1.user_firstname, ' ', userpic1.user_lastname) AS pic_1_name,
                 CONCAT(userpic2.user_firstname, ' ', userpic2.user_lastname) AS pic_2_name,
                 CONCAT(userauthor.user_firstname, ' ', userauthor.user_lastname) AS author_name,
@@ -105,6 +106,7 @@ class ReportGridController extends Controller
                 grid_proposals.grid_proposal_delivery_date
             FROM 
                 grid_proposals
+            LEFT JOIN users userapp1 ON userapp1.user_id= grid_proposals.approval_1
             INNER JOIN users userpic1 ON userpic1.user_id= grid_proposals.pic_1
             INNER JOIN users userpic2 ON userpic2.user_id= grid_proposals.pic_2
             INNER JOIN users userauthor ON userauthor.user_id= grid_proposals.created_by
