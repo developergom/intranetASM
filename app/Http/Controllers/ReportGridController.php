@@ -158,8 +158,8 @@ class ReportGridController extends Controller
             $total[$i]['total'] = array();
 
             foreach ($tgl as $key => $value) {
-                $start_date = $value['start_date'];
-                $end_date = $value['end_date'];
+                $start_date = $value['start_date'] . ' 00:00:00';
+                $end_date = $value['end_date'] . ' 23:59:59';
 
                 $q = DB::select("SELECT 
                                     count(grid_proposal_id) AS total
@@ -185,8 +185,8 @@ class ReportGridController extends Controller
         $total[$i]['user_lastname'] = $request->user()->user_lastname;
         $total[$i]['total'] = array();
         foreach ($tgl as $key => $value) {
-            $start_date = $value['start_date'];
-            $end_date = $value['end_date'];
+            $start_date = $value['start_date'] . ' 00:00:00';
+            $end_date = $value['end_date'] . ' 23:59:59';
 
             $q = DB::select("SELECT 
                                 count(grid_proposal_id) AS total
@@ -211,8 +211,8 @@ class ReportGridController extends Controller
         $total[$i]['user_lastname'] = 'Proposal';
         $total[$i]['total'] = array();
         foreach ($tgl as $key => $value) {
-            $start_date = $value['start_date'];
-            $end_date = $value['end_date'];
+            $start_date = $value['start_date'] . ' 00:00:00';
+            $end_date = $value['end_date'] . ' 23:59:59';
 
             $q = DB::select("SELECT 
                                 count(grid_proposal_id) AS total

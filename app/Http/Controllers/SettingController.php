@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+use Cache;
 use Gate;
 use App\Http\Requests;
 use App\Setting;
@@ -202,6 +203,21 @@ class SettingController extends Controller
 
         if($obj->save())
         {
+            return response()->json(100); //success
+        }else{
+            return response()->json(200); //failed
+        }
+    }
+
+    public function apiClearCache(Request $request)
+    {
+        if(Gate::denies('Application Settings-Update')) {
+            return response()->json(200);
+        }
+
+        if($request->input('clear_cache')=='1')
+        {
+            Cache::flush();
             return response()->json(100); //success
         }else{
             return response()->json(200); //failed

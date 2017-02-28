@@ -383,6 +383,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('setting/apiList', 'SettingController@apiList');
         Route::post('setting/apiDelete', 'SettingController@apiDelete');
         Route::resource('setting', 'SettingController');
+        Route::post('setting/clearCache', 'SettingController@apiClearCache');
 
         //User Log
         Route::post('log/apiList', 'LogController@apiList');
