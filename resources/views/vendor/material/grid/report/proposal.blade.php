@@ -34,6 +34,9 @@
 						            	<button id="btn_generate_report" class="btn btn-primary waves-effect">Generate</button>
 						            	<button id="btn_clear_report" class="btn btn-danger waves-effect">Clear</button>
 						            </div>
+						            <div class="form-group">
+						            	<button id="btn_export_report" class="btn btn-success waves-effect">Export</button>
+						            </div>
 				            	</form>
 				            </div>
 				        </div>
@@ -53,12 +56,16 @@
 							                    <th>Proposal Name</th>
 							                    <th>Deadline</th>
 							                    <th>Approval Lead Generation</th>
-							                    <th>PIC 1</th>
-							                    <th>PIC 2</th>
-							                    <th>Author</th>
+							                    <th>PIC 1 (Creative)</th>
+							                    <th>PIC 2 (Production)</th>
+							                    <th>Proposal Author</th>
 							                    <th>Created Date</th>
 							                    <th>Ready Date</th>
 							                    <th>Delivery Date</th>
+							                    <th>History Time</th>
+							                    <th>History Author</th>
+							                    <th>History Action</th>
+							                    <th>History Text</th>
 							                </tr>
 							            </thead>
 							            <tbody>
@@ -67,7 +74,7 @@
 							    </div>
 							    <div class="row">
 							    	<div class="col-md-12"><br/>
-							    		<button id="btn_export_report" class="btn btn-success waves-effect">Export</button>
+							    		
 							    	</div>
 							    </div>
 				            </div>

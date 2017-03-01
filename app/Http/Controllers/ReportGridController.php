@@ -47,24 +47,31 @@ class ReportGridController extends Controller
     	$period_start = $request->input('period_start');
 
     	$q = "SELECT 
-				project_tasks.project_task_id,
-				project_tasks.project_task_name,
-				project_task_types.project_task_type_name,
-				projects.project_name,
-				project_tasks.project_task_deadline,
-				CONCAT(userpic.user_firstname, ' ', userpic.user_lastname) AS pic_name,
-				CONCAT(userauthor.user_firstname, ' ', userauthor.user_lastname) AS author_name,
-                project_tasks.created_at,
-                project_tasks.project_task_ready_date,
-				project_tasks.project_task_delivery_date
-			FROM 
-				project_tasks
-			INNER JOIN projects ON projects.project_id = project_tasks.project_id
-			INNER JOIN project_task_types ON project_task_types.project_task_type_id = project_tasks.project_task_type_id
-			INNER JOIN users userpic ON userpic.user_id= project_tasks.pic
-			INNER JOIN users userauthor ON userauthor.user_id= project_tasks.created_by
-			WHERE
-				project_tasks.active = '1'";
+                    project_tasks.project_task_id,
+                    project_tasks.project_task_name,
+                    project_task_types.project_task_type_name,
+                    projects.project_name,
+                    project_tasks.project_task_deadline,
+                    CONCAT(userpic.user_firstname, ' ', userpic.user_lastname) AS pic_name,
+                    CONCAT(userauthor.user_firstname, ' ', userauthor.user_lastname) AS author_name,
+                    project_tasks.created_at,
+                    project_tasks.project_task_ready_date,
+                    project_tasks.project_task_delivery_date,
+                    project_task_histories.project_task_history_text,
+                    project_task_histories.created_at AS history_date,
+                    CONCAT(userhistory.user_firstname, ' ', userhistory.user_lastname) AS history_author_name,
+                    approval_types.approval_type_name
+                FROM 
+                    project_tasks
+                INNER JOIN projects ON projects.project_id = project_tasks.project_id
+                INNER JOIN project_task_types ON project_task_types.project_task_type_id = project_tasks.project_task_type_id
+                INNER JOIN project_task_histories ON project_task_histories.project_task_id = project_tasks.project_task_id
+                INNER JOIN users userpic ON userpic.user_id= project_tasks.pic
+                INNER JOIN users userauthor ON userauthor.user_id= project_tasks.created_by
+                INNER JOIN users userhistory ON userhistory.user_id= project_task_histories.created_by
+                INNER JOIN approval_types ON approval_types.approval_type_id = project_task_histories.approval_type_id
+                WHERE
+                    project_tasks.active = '1'";
 
 		if($project_task_type_ids != "") {
     		$q .= " AND project_tasks.project_task_type_id IN (" . implode(', ', array_map(null, $project_task_type_ids)) . ")";
@@ -77,7 +84,7 @@ class ReportGridController extends Controller
     		$q .= " AND project_tasks.project_task_deadline BETWEEN '" . $period_start . "' AND '" . $period_end . "'";
     	}
 
-    	$q .= ' ORDER BY project_name ASC';
+    	$q .= ' ORDER BY project_name, project_task_histories.created_at ASC';
 
     	//dd($q);
 
@@ -103,13 +110,20 @@ class ReportGridController extends Controller
                 CONCAT(userauthor.user_firstname, ' ', userauthor.user_lastname) AS author_name,
                 grid_proposals.created_at,
                 grid_proposals.grid_proposal_ready_date,
-                grid_proposals.grid_proposal_delivery_date
+                grid_proposals.grid_proposal_delivery_date,
+                grid_proposal_histories.grid_proposal_history_text,
+                grid_proposal_histories.created_at AS history_date,
+                CONCAT(userhistory.user_firstname, ' ', userhistory.user_lastname) AS history_author_name,
+                approval_types.approval_type_name
             FROM 
                 grid_proposals
+            INNER JOIN grid_proposal_histories ON grid_proposal_histories.grid_proposal_id = grid_proposals.grid_proposal_id
             LEFT JOIN users userapp1 ON userapp1.user_id= grid_proposals.approval_1
             LEFT JOIN users userpic1 ON userpic1.user_id= grid_proposals.pic_1
             LEFT JOIN users userpic2 ON userpic2.user_id= grid_proposals.pic_2
             INNER JOIN users userauthor ON userauthor.user_id= grid_proposals.created_by
+            INNER JOIN users userhistory ON userhistory.user_id= grid_proposal_histories.created_by
+            INNER JOIN approval_types ON approval_types.approval_type_id = grid_proposal_histories.approval_type_id
             WHERE
                 grid_proposals.active = '1'";
 
@@ -120,7 +134,7 @@ class ReportGridController extends Controller
             $q .= " AND grid_proposals.grid_proposal_deadline BETWEEN '" . $period_start . "' AND '" . $period_end . "'";
         }
 
-        $q .= ' ORDER BY grid_proposal_name ASC';
+        $q .= ' ORDER BY grid_proposal_name, grid_proposal_histories.created_at ASC';
 
         //dd($q);
 

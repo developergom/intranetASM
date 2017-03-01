@@ -42,6 +42,9 @@
 						            	<button id="btn_generate_report" class="btn btn-primary waves-effect">Generate</button>
 						            	<button id="btn_clear_report" class="btn btn-danger waves-effect">Clear</button>
 						            </div>
+						            <div class="form-group">
+						            	<button id="btn_export_report" class="btn btn-success waves-effect">Export Result</button>
+						            </div>
 				            	</form>
 				            </div>
 				        </div>
@@ -63,20 +66,19 @@
 							                    <th>Task Name</th>
 							                    <th>Deadline</th>
 							                    <th>PIC</th>
-							                    <th>Author</th>
+							                    <th>Task Author</th>
 							                    <th>Created Date</th>
 							                    <th>Ready Date</th>
 							                    <th>Delivery Date</th>
+							                    <th>History Time</th>
+							                    <th>History Author</th>
+							                    <th>History Action</th>
+							                    <th>History Text</th>
 							                </tr>
 							            </thead>
 							            <tbody>
 							            </tbody>
 							        </table>
-							    </div>
-							    <div class="row">
-							    	<div class="col-md-12"><br/>
-							    		<button id="btn_export_report" class="btn btn-success waves-effect">Export</button>
-							    	</div>
 							    </div>
 				            </div>
 				        </div>

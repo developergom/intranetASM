@@ -66,6 +66,10 @@ function generate_report() {
 					html += '<td>'  + value.created_at + '</td>';
 					html += '<td>'  + value.project_task_ready_date + '</td>';
 					html += '<td>'  + value.project_task_delivery_date + '</td>';
+					html += '<td>'  + value.history_date + '</td>';
+					html += '<td>'  + value.history_author_name + '</td>';
+					html += '<td>'  + value.approval_type_name + '</td>';
+					html += '<td>'  + value.project_task_history_text + '</td>';
 					html += '</tr>';
 				});
 
