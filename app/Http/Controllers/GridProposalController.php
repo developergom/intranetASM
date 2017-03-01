@@ -1136,4 +1136,41 @@ class GridProposalController extends Controller
             $request->session()->flash('status', 'Data has been saved!');
         }
     }
+
+
+    public function apiLoadProposalDeadline(Request $request, $authors)
+    {
+        $data = array();
+        $data['monthly'] = array();
+
+        if(($authors != 'all')){
+            $authors = preg_split('[,]', $authors);
+            $gridproposals = GridProposal::join('users', 'user_id', '=', 'grid_proposals.created_by')
+                                        ->where('grid_proposals.active', '1')
+                                        ->whereIn('grid_proposals.created_by', $authors)
+                                        ->get();
+        }else{
+            //authors all
+            $gridproposals = GridProposal::join('users', 'user_id', '=', 'grid_proposals.created_by')
+                                        ->where('grid_proposals.active', '1')
+                                        ->get();
+                                        
+        }
+        
+        
+        foreach ($gridproposals as $key => $value) {
+            $rows = array();
+            $rows['id'] = $value->grid_proposal_id;
+            $rows['name'] = $value->grid_proposal_name . ' | Author : ' . $value->user_firstname . ' ' . $value->user_lastname;
+            $rows['startdate'] = $value->grid_proposal_deadline;
+            $rows['enddate'] = $value->grid_proposal_deadline;
+            $rows['starttime'] = '0:00';
+            $rows['endtime'] = '';
+            $rows['color'] = ($value->flow_no == 98) ? '#0ba852' : '#f44242';
+            $rows['url'] = url('/grid/proposal/' . $value->grid_proposal_id);
+            array_push($data['monthly'], $rows);
+        }
+
+        return response()->json($data);
+    }
 }

@@ -359,6 +359,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         //Proposal
         Route::post('proposal/apiList/{listtype}', 'GridProposalController@apiList');
         Route::post('proposal/apiDelete', 'GridProposalController@apiDelete');
+        Route::get('proposal/api/loadProposalDeadline/{authors}', 'GridProposalController@apiLoadProposalDeadline');
         Route::resource('proposal', 'GridProposalController');
         Route::get('proposal/approve/{flow_no}/{id}', 'GridProposalController@approve');
         Route::post('proposal/approve/{flow_no}/{id}', 'GridProposalController@postApprove');

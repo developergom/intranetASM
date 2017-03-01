@@ -195,6 +195,35 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header"><h4>GRID Proposal</h4></div>
+                <div class="card-body card-padding">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="grid-proposal-select-author" class="col-sm-2 control-label">Author</label>
+                            <div class="col-sm-8">
+                                <div class="fg-line">
+                                    <select name="grid-proposal-select-author[]" id="grid-proposal-select-author" class="selectpicker" data-live-search="true" multiple>
+                                        <option value="{{ $project_task_current->user_id }}" selected>{{ $project_task_current->user_firstname . ' ' . $project_task_current->user_lastname }}</option>
+                                        @foreach($project_task_subordinate as $row)
+                                            <option value="{{ $row->user_id }}">{{ $row->user_firstname . ' ' . $row->user_lastname }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <a class="btn btn-primary waves-effect" id="btn-grid-proposal-process">Process</a>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="monthly monthly-grid-proposal" id="grid-proposal-calendar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     @endcan
 @endsection
 
@@ -445,6 +474,35 @@ $(document).ready(function(){
             'stylePast' : true,
             'dataType' : 'json',
             'jsonUrl' : base_url + 'grid/projecttask/api/loadTasks/' + projecttaskpics + '/' + projecttaskauthors + '/' + projecttasktypes + '/' + projecttaskprojects,
+        });
+    });
+    @endcan
+
+
+    @can('Grid Proposal-Read')
+    $('#grid-proposal-calendar').monthly({
+        'mode' : 'event',
+        'stylePast' : true,
+        'dataType' : 'json',
+        'jsonUrl' : base_url + 'grid/proposal/api/loadProposalDeadline/all',
+    });
+
+    $('#btn-grid-proposal-process').click(function() {
+        var gridproposalauthors = $('#grid-proposal-select-author').val();
+
+        if(gridproposalauthors == null) {
+            gridproposalauthors = 'all';
+        }
+
+        newid= new Date().getTime();
+
+        $('.monthly-grid-proposal').empty().replaceWith('<div class="monthly monthly-grid-proposal" id="gpcal' + newid + '"></div>');
+
+        $('#gpcal' + newid).monthly({
+            'mode' : 'event',
+            'stylePast' : true,
+            'dataType' : 'json',
+            'jsonUrl' : base_url + 'grid/proposal/api/loadProposalDeadline/' + gridproposalauthors,
         });
     });
     @endcan
