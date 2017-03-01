@@ -207,8 +207,8 @@
                             <div class="col-sm-8">
                                 <div class="fg-line">
                                     <select name="grid-proposal-select-author[]" id="grid-proposal-select-author" class="selectpicker" data-live-search="true" multiple>
-                                        <option value="{{ $project_task_current->user_id }}" selected>{{ $project_task_current->user_firstname . ' ' . $project_task_current->user_lastname }}</option>
-                                        @foreach($project_task_subordinate as $row)
+                                        <option value="{{ $grid_proposal_current->user_id }}" selected>{{ $grid_proposal_current->user_firstname . ' ' . $grid_proposal_current->user_lastname }}</option>
+                                        @foreach($grid_proposal_subordinate as $row)
                                             <option value="{{ $row->user_id }}">{{ $row->user_firstname . ' ' . $row->user_lastname }}</option>
                                         @endforeach
                                     </select>
