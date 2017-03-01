@@ -480,15 +480,16 @@ $(document).ready(function(){
 
 
     @can('Grid Proposal-Read')
+    var gridproposalauthors = $('#grid-proposal-select-author').val();
     $('#grid-proposal-calendar').monthly({
         'mode' : 'event',
         'stylePast' : true,
         'dataType' : 'json',
-        'jsonUrl' : base_url + 'grid/proposal/api/loadProposalDeadline/all',
+        'jsonUrl' : base_url + 'grid/proposal/api/loadProposalDeadline/' + gridproposalauthors,
     });
 
     $('#btn-grid-proposal-process').click(function() {
-        var gridproposalauthors = $('#grid-proposal-select-author').val();
+        gridproposalauthors = $('#grid-proposal-select-author').val();
 
         if(gridproposalauthors == null) {
             gridproposalauthors = 'all';
