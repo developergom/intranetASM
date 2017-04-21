@@ -1,6 +1,6 @@
 <div style="width:100%;background-color:'#cccccc';margin-left:auto;margin-right:auto;">
 	<div style="width:75%;background-color:'#ffffff';padding:'15px';text-align:'center';">
-		<h1>Access log intranet ASM</h1><br/>
+		<h1>Access log iGOM</h1><br/>
 		<table class="table">
 			<thead>
 				<tr>
