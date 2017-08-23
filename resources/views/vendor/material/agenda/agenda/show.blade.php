@@ -14,7 +14,7 @@
 	                <label for="agenda_date" class="col-sm-2 control-label">Date</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-                            <input type="text" class="form-control date-picker" name="agenda_date" id="agenda_date" placeholder="Agenda Date" required="true" maxlength="10" value="{{ $agenda_date }}" disabled="true">
+                            <input type="text" class="form-control date-picker" name="agenda_date" id="agenda_date" placeholder="Agenda Date" required="true" maxlength="10" value="{{ $agenda_date }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -22,18 +22,18 @@
         			<label for="agenda_type_id" class="col-sm-2 control-label">Type</label>
         			<div class="col-sm-10">
         				<div class="fg-line">
-        					<input type="text" name="agenda_type_id" class="form-control" placeholder="Agenda Type" value="{{ $agenda->agendatype->agenda_type_name }}" disabled="true">
+        					<input type="text" name="agenda_type_id" class="form-control" placeholder="Agenda Type" value="{{ $agenda->agendatype->agenda_type_name }}" readonly="true">
         				</div>
         			</div>
-        		</div>
+        		</div><!-- 
         		<div class="form-group">
 	                <label for="agenda_destination" class="col-sm-2 control-label">Destination</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="agenda_destination" id="agenda_destination" placeholder="Destination" required="true" maxlength="100" value="{{ $agenda->agenda_destination }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="agenda_destination" id="agenda_destination" placeholder="Destination" required="true" maxlength="100" value="{{ $agenda->agenda_destination }}" readonly="true">
 	                    </div>
 	                </div>
-	            </div>
+	            </div> -->
 	            <div class="form-group">
 	                <label for="client" class="col-sm-2 control-label">Client</label>
 	                <div class="col-sm-10">
@@ -53,7 +53,7 @@
 							@endforeach
 	                    </div>
 	                </div>
-	            </div>
+	            </div><!-- 
 	            <div class="form-group">
 	                <label for="inventory_planner_id" class="col-sm-2 control-label">Inventory Planner</label>
 	                <div class="col-sm-10">
@@ -63,7 +63,7 @@
                         	@endforeach
 	                    </div>
 	                </div>
-	            </div>
+	            </div> -->
 	            <div class="form-group">
 	                <label for="proposal_id" class="col-sm-2 control-label">Proposal</label>
 	                <div class="col-sm-10">
@@ -78,7 +78,58 @@
 	                <label for="agenda_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="agenda_desc" id="agenda_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $agenda->agenda_desc }}</textarea>
+	                        <textarea name="agenda_desc" id="agenda_desc" class="form-control input-sm" placeholder="Description" readonly="true">{{ $agenda->agenda_desc }}</textarea>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="agenda_is_report" class="col-sm-2 control-label">Status</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <span class="badge">{{ ($agenda->agenda_is_report=='1') ? 'REPORTED' : 'UNREPORTED' }}</span>
+	                    </div>
+	                </div>
+	            </div>
+	            @if($agenda->agenda_is_report=='1')
+	            <div class="form-group">
+	                <label for="agenda_meeting_time" class="col-sm-2 control-label">Meeting Time</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+                            <input type="text" class="form-control" name="agenda_meeting_time" id="agenda_meeting_time" placeholder="Meeting Time" required="true" value="{{ $agenda_meeting_time }}" readonly="true">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="agenda_report_time" class="col-sm-2 control-label">Report Time</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+                            <input type="text" class="form-control" name="agenda_report_time" id="agenda_report_time" placeholder="Report Time" required="true" value="{{ $agenda_report_time }}" readonly="true">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="agenda_report_desc" class="col-sm-2 control-label">Report Description</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <textarea name="agenda_report_desc" id="agenda_report_desc" class="form-control input-sm" placeholder="Report Description" readonly="true">{{ $agenda->agenda_report_desc }}</textarea>
+	                    </div>
+	                </div>
+	            </div>
+	            @endif
+	            <hr/>
+	            <div class="form-group">
+	                <label for="created_at" class="col-sm-2 control-label">Created At</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+                            <input type="text" class="form-control" name="created_at" id="created_at" placeholder="Created At" required="true" value="{{ $created_at }}" readonly="true">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="created_by" class="col-sm-2 control-label">Created By</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+                            <input type="text" class="form-control" name="created_by" id="created_by" placeholder="Created By" required="true" value="{{ $agenda->created_by->user_firstname . ' ' . $agenda->created_by->user_lastname }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>

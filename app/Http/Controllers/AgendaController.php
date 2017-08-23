@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 use Gate;
+use Auth;
 use Carbon\Carbon;
 use App\Http\Requests;
 use App\Agenda;
@@ -58,7 +59,7 @@ class AgendaController extends Controller
         $this->validate($request, [
             'agenda_date' => 'required|date_format:"d/m/Y"',
             'agenda_type_id' => 'required',
-            'agenda_destination' => 'required|max:100'
+            //'agenda_destination' => 'required|max:100'
         ]);
 
         /*dd($request->input());*/
@@ -68,7 +69,8 @@ class AgendaController extends Controller
         $obj->agenda_date = Carbon::createFromFormat('d/m/Y', $request->input('agenda_date'))->toDateString();
         $obj->agenda_type_id = $request->input('agenda_type_id');
         $obj->agenda_parent = 0;
-        $obj->agenda_destination = $request->input('agenda_destination');
+        //$obj->agenda_destination = $request->input('agenda_destination');
+        $obj->agenda_destination = '';
         $obj->agenda_desc = $request->input('agenda_desc');
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
@@ -83,9 +85,9 @@ class AgendaController extends Controller
             Agenda::find($obj->agenda_id)->clientcontacts()->sync($request->input('client_contact_id'));
         }
 
-        if(!empty($request->input('inventory_planner_id'))) {
+        /*if(!empty($request->input('inventory_planner_id'))) {
             Agenda::find($obj->agenda_id)->inventories()->sync($request->input('inventory_planner_id'));
-        }
+        }*/
 
         if(!empty($request->input('proposal_id'))) {
             Agenda::find($obj->agenda_id)->proposals()->sync($request->input('proposal_id'));
@@ -120,10 +122,18 @@ class AgendaController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $data = array();
-        //$data['agendatypes'] = AgendaType::where('active', '1')->get();
+        
         $data['agenda'] = Agenda::with('agendatype','clients','clientcontacts','clientcontacts.client')->find($id);
         $agenda_date = Carbon::createFromFormat('Y-m-d', ($data['agenda']->agenda_date==null) ? date('Y-m-d') : $data['agenda']->agenda_date);
+        $agenda_meeting_time = Carbon::createFromFormat('Y-m-d H:i:s', ($data['agenda']->agenda_meeting_time==null) ? date('Y-m-d H:i:s') : $data['agenda']->agenda_meeting_time);
+        $agenda_report_time = Carbon::createFromFormat('Y-m-d H:i:s', ($data['agenda']->agenda_report_time==null) ? date('Y-m-d H:i:s') : $data['agenda']->agenda_report_time);
         $data['agenda_date'] = $agenda_date->format('d/m/Y');
+        $data['agenda_meeting_time'] = $agenda_meeting_time->format('d/m/Y H:i:s');
+        $data['agenda_report_time'] = $agenda_report_time->format('d/m/Y H:i:s');
+
+        $created_at = Carbon::createFromFormat('Y-m-d H:i:s', ($data['agenda']->created_at==null) ? date('Y-m-d H:i:s') : $data['agenda']->created_at);        
+        $data['created_at'] = $created_at->format('d/m/Y H:i:s');
+
         return view('vendor.material.agenda.agenda.show', $data);
     }
 
@@ -159,7 +169,7 @@ class AgendaController extends Controller
         $this->validate($request, [
             'agenda_date' => 'required|date_format:"d/m/Y"',
             'agenda_type_id' => 'required',
-            'agenda_destination' => 'required|max:100'
+            //'agenda_destination' => 'required|max:100'
         ]);
 
         /*dd($request->input());*/
@@ -168,7 +178,7 @@ class AgendaController extends Controller
 
         $obj->agenda_date = Carbon::createFromFormat('d/m/Y', $request->input('agenda_date'))->toDateString();
         $obj->agenda_type_id = $request->input('agenda_type_id');
-        $obj->agenda_destination = $request->input('agenda_destination');
+        //$obj->agenda_destination = $request->input('agenda_destination');
         $obj->agenda_desc = $request->input('agenda_desc');
         $obj->updated_by = $request->user()->user_id;
 
@@ -198,9 +208,9 @@ class AgendaController extends Controller
             Agenda::find($obj->agenda_id)->clientcontacts()->sync($request->input('client_contact_id'));
         }
 
-        if(!empty($request->input('inventory_planner_id'))) {
+        /*if(!empty($request->input('inventory_planner_id'))) {
             Agenda::find($obj->agenda_id)->inventories()->sync($request->input('inventory_planner_id'));
-        }
+        }*/
 
         if(!empty($request->input('proposal_id'))) {
             Agenda::find($obj->agenda_id)->proposals()->sync($request->input('proposal_id'));
@@ -227,13 +237,15 @@ class AgendaController extends Controller
         $u = new UserLibrary;
         $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
 
+        $is_report = $request->input('is_report');
+
         $current = $request->input('current') or 1;
         $rowCount = $request->input('rowCount') or 10;
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
         $searchPhrase = $request->input('searchPhrase') or '';
         
-        $sort_column = 'agenda_type_id';
-        $sort_type = 'asc';
+        $sort_column = 'created_at';
+        $sort_type = 'desc';
 
         if(is_array($request->input('sort'))) {
             foreach($request->input('sort') as $key => $value)
@@ -250,6 +262,7 @@ class AgendaController extends Controller
         $data['rows'] = Agenda::join('agenda_types', 'agenda_types.agenda_type_id', '=', 'agendas.agenda_type_id')
                             ->join('users', 'users.user_id', '=', 'agendas.created_by')
                             ->where('agendas.active','1')
+                            ->where('agendas.agenda_is_report',$is_report)
                             ->where(function($query) use($request, $subordinate){
                                     $query->where('agendas.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('agendas.created_by', $subordinate);
@@ -257,7 +270,7 @@ class AgendaController extends Controller
                             ->where(function($query) use($searchPhrase) {
                                 $query->orWhere('agenda_date','like','%' . $searchPhrase . '%')
                                         ->orWhere('agenda_type_name','like','%' . $searchPhrase . '%')
-                                        ->orWhere('agenda_destination','like','%' . $searchPhrase . '%')
+                                        //->orWhere('agenda_destination','like','%' . $searchPhrase . '%')
                                         ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                             })
                             ->skip($skip)->take($rowCount)
@@ -265,6 +278,7 @@ class AgendaController extends Controller
         $data['total'] = Agenda::join('agenda_types', 'agenda_types.agenda_type_id', '=', 'agendas.agenda_type_id')
                                 ->join('users', 'users.user_id', '=', 'agendas.created_by')
                                 ->where('agendas.active','1')
+                                ->where('agendas.agenda_is_report',$is_report)
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('agendas.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('agendas.created_by', $subordinate);
@@ -272,7 +286,7 @@ class AgendaController extends Controller
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('agenda_date','like','%' . $searchPhrase . '%')
                                         ->orWhere('agenda_type_name','like','%' . $searchPhrase . '%')
-                                        ->orWhere('agenda_destination','like','%' . $searchPhrase . '%')
+                                        //->orWhere('agenda_destination','like','%' . $searchPhrase . '%')
                                         ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })->count();
 
@@ -299,5 +313,28 @@ class AgendaController extends Controller
         }else{
             return response()->json(200); //failed
         }
+    }
+
+    public function apiTest(Request $request){
+        $data = array(
+                    array(
+                        'name' => 'Soni',
+                        'address' => 'Bandung'
+                    ),
+                    array(
+                        'name' => 'Roni',
+                        'address' => 'Bandung'
+                    ),
+                    array(
+                        'name' => 'Toni',
+                        'address' => 'Bandung'
+                    ),
+                    array(
+                        'name' => 'Doni',
+                        'address' => 'Bandung'
+                    )
+                );
+
+        return response()->json($data);
     }
 }

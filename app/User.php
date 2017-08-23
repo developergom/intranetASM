@@ -27,7 +27,8 @@ class User extends Authenticatable
         'user_status',
         'active',
         'created_by',
-        'updated_by'
+        'updated_by',
+        'api_token'
     ];
 
     /**
@@ -36,7 +37,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'api_token'
     ];
 
     protected $primaryKey = 'user_id';

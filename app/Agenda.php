@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Agenda extends Model
 {
@@ -10,7 +11,15 @@ class Agenda extends Model
 	protected $primaryKey = 'agenda_id';
 
 	protected $fillable = [
-				'agenda_type_id', 'agenda_parent', 'agenda_date', 'agenda_destination', 'agenda_desc'
+				'agenda_type_id', 
+				'agenda_parent', 
+				'agenda_date', 
+				'agenda_destination', 
+				'agenda_desc',
+				'agenda_is_report',
+				'agenda_meeting_time',
+				'agenda_report_time',
+				'agenda_report_desc'
 	];
 
 	protected $hidden = [
@@ -45,5 +54,11 @@ class Agenda extends Model
 	public function proposals()
 	{
 		return $this->belongsToMany('App\Proposal', 'agendas_proposals');
+	}
+
+	public function getCreatedByAttribute($value)
+	{
+		$user = User::find($value); 
+		return $user;
 	}
 }

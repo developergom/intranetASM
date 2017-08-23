@@ -33,6 +33,9 @@ Route::post('/api/readNotification', 'NotificationController@readNotification');
 
 Route::auth();
 
+Route::post('/apiTest', 'AgendaController@apiTest')->middleware(['auth:api']);
+
+
 Route::get('/home', 'HomeController@index')->middleware(['auth','menu']);
 
 //User
