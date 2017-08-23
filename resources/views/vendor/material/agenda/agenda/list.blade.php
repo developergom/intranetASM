@@ -20,22 +20,22 @@
                     <table id="grid-data-unreported" class="table table-hover">
                         <thead>
                             <tr>
-                                <th data-column-id="agenda_date" data-converter="datetime" data-order="asc">Date</th>
-                                <th data-column-id="agenda_type_name" data-order="asc">Type</th>
-                                <th data-column-id="agenda_is_report" data-formatter="agenda-status">Status</th>
+                                <th data-column-id="agenda_date" data-converter="datetime" data-order="asc"><center>Date</center></th>
+                                <th data-column-id="agenda_type_name" data-order="asc"><center>Type</center></th>
+                                <th data-column-id="agenda_is_report" data-formatter="agenda-status"><center>Status</center></th>
                                 <!-- <th data-column-id="agenda_destination" data-order="asc">Destination</th> -->
-                                <th data-column-id="user_firstname" data-order="asc">Author</th>
+                                <th data-column-id="user_firstname" data-order="asc"><center>Author</center></th>
                                 @can('Agenda Plan-Update')
                                     @can('Agenda Plan-Delete')
-                                        <th data-column-id="link" data-formatter="link-rud" data-sortable="false">Action</th>
+                                        <th data-column-id="link" data-formatter="link-rud" data-sortable="false"><center>Action</center></th>
                                     @else
-                                        <th data-column-id="link" data-formatter="link-ru" data-sortable="false">Action</th>
+                                        <th data-column-id="link" data-formatter="link-ru" data-sortable="false"><center>Action</center></th>
                                     @endcan
                                 @else
                                     @can('Agenda Plan-Delete')
-                                        <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
+                                        <th data-column-id="link" data-formatter="link-rd" data-sortable="false"><center>Action</center></th>
                                     @else
-                                        <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
+                                        <th data-column-id="link" data-formatter="link-r" data-sortable="false"><center>Action</center></th>
                                     @endcan
                                 @endcan
                             </tr>
@@ -50,12 +50,12 @@
                     <table id="grid-data-reported" class="table table-hover">
                         <thead>
                             <tr>
-                                <th data-column-id="agenda_date" data-converter="datetime" data-order="asc">Date</th>
-                                <th data-column-id="agenda_type_name" data-order="asc">Type</th>
-                                <th data-column-id="agenda_is_report" data-formatter="agenda-status">Status</th>
+                                <th data-column-id="agenda_date" data-converter="datetime" data-order="asc"><center>Date</center></th>
+                                <th data-column-id="agenda_type_name" data-order="asc"><center>Type</center></th>
+                                <th data-column-id="agenda_is_report" data-formatter="agenda-status"><center>Status</center></th>
                                 <!-- <th data-column-id="agenda_destination" data-order="asc">Destination</th> -->
-                                <th data-column-id="user_firstname" data-order="asc">Author</th>
-                                <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
+                                <th data-column-id="user_firstname" data-order="asc"><center>Author</center></th>
+                                <th data-column-id="link" data-formatter="link-r" data-sortable="false"><center>Action</center></th>
                             </tr>
                         </thead>
                         <tbody>

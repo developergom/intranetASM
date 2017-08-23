@@ -7,10 +7,12 @@ use Illuminate\Http\Response;
 
 use Gate;
 use Auth;
+use File;
 use Carbon\Carbon;
 use App\Http\Requests;
 use App\Agenda;
 use App\AgendaType;
+use App\UploadFile;
 
 use App\Ibrol\Libraries\NotificationLibrary;
 use App\Ibrol\Libraries\UserLibrary;
@@ -313,6 +315,86 @@ class AgendaController extends Controller
         }else{
             return response()->json(200); //failed
         }
+    }
+
+    public function doReport($id)
+    {
+        if(Gate::denies('Agenda Plan-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+        $data = array();
+        
+        $data['agenda'] = Agenda::with('agendatype','clients','clientcontacts','clientcontacts.client')->find($id);
+        $agenda_date = Carbon::createFromFormat('Y-m-d', ($data['agenda']->agenda_date==null) ? date('Y-m-d') : $data['agenda']->agenda_date);
+        $agenda_meeting_time = Carbon::createFromFormat('Y-m-d H:i:s', ($data['agenda']->agenda_meeting_time==null) ? date('Y-m-d H:i:s') : $data['agenda']->agenda_meeting_time);
+        $agenda_report_time = Carbon::createFromFormat('Y-m-d H:i:s', ($data['agenda']->agenda_report_time==null) ? date('Y-m-d H:i:s') : $data['agenda']->agenda_report_time);
+        $data['agenda_date'] = $agenda_date->format('d/m/Y');
+        $data['agenda_meeting_time'] = $agenda_meeting_time->format('d/m/Y H:i:s');
+        $data['agenda_report_time'] = $agenda_report_time->format('d/m/Y H:i:s');
+
+        $created_at = Carbon::createFromFormat('Y-m-d H:i:s', ($data['agenda']->created_at==null) ? date('Y-m-d H:i:s') : $data['agenda']->created_at);        
+        $data['created_at'] = $created_at->format('d/m/Y H:i:s');
+
+        return view('vendor.material.agenda.agenda.do_report', $data);
+    }
+
+    public function postDoReport(Request $request, $id)
+    {
+        $this->validate($request, [
+            'agenda_meeting_time' => 'required|date_format:"d/m/Y"',
+            'agenda_report_desc' => 'required'
+        ]);
+
+        $obj = Agenda::find($id);
+
+        $obj->agenda_is_report = '1';
+        $obj->agenda_meeting_time = Carbon::createFromFormat('d/m/Y', $request->input('agenda_meeting_time'))->toDateString();
+        $obj->agenda_report_time = Carbon::now()->toDateString();
+        $obj->agenda_report_desc = $request->input('agenda_report_desc');
+        $obj->updated_by = $request->user()->user_id;
+
+        $obj->save();
+
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_revision = 0;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+            }
+        }
+
+        if(!empty($fileArray)) {
+            Agenda::find($obj->agenda_id)->uploadfiles()->sync($fileArray);    
+        }
+
+        $request->session()->flash('status', 'Data has been updated!');
+
+        return redirect('agenda/plan');
     }
 
     public function apiTest(Request $request){

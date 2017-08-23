@@ -283,6 +283,8 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         //Agenda Plan
         Route::post('plan/apiList', 'AgendaController@apiList');
         Route::post('plan/apiDelete', 'AgendaController@apiDelete');
+        Route::get('plan/do_report/{id}', 'AgendaController@doReport');
+        Route::post('plan/do_report/{id}', 'AgendaController@postDoReport');
         Route::resource('plan', 'AgendaController');
     });
 

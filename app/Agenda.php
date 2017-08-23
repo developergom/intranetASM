@@ -56,6 +56,11 @@ class Agenda extends Model
 		return $this->belongsToMany('App\Proposal', 'agendas_proposals');
 	}
 
+	public function uploadfiles()
+	{
+		return $this->belongsToMany('App\UploadFile', 'agenda_upload_file');
+	}
+
 	public function getCreatedByAttribute($value)
 	{
 		$user = User::find($value); 

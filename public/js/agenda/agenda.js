@@ -15,6 +15,7 @@ $("#grid-data-unreported").bootgrid({
         {
             if(uid==row.user_id) {
                 return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                        +'<a title="Report Plan" href="' + base_url + 'agenda/plan/do_report/' + row.agenda_id + '" class="btn btn-icon command-assignment waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-assignment"></span></a>&nbsp;&nbsp;'
                         +'<a title="Edit Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
                         +'<a title="Delete Agenda Plan" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-delete"></span></a>';
             }else{
@@ -25,6 +26,7 @@ $("#grid-data-unreported").bootgrid({
         {
             if(uid==row.user_id) {
                 return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                        +'<a title="Report Plan" href="' + base_url + 'agenda/plan/do_report/' + row.agenda_id + '" class="btn btn-icon command-assignment waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-assignment"></span></a>&nbsp;&nbsp;'
                         +'<a title="Edit Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-edit"></span></a>';
             }else{
                 return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
@@ -34,6 +36,7 @@ $("#grid-data-unreported").bootgrid({
         {
             if(uid==row.user_id) {
                 return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                        +'<a title="Report Plan" href="' + base_url + 'agenda/plan/do_report/' + row.agenda_id + '" class="btn btn-icon command-assignment waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-assignment"></span></a>&nbsp;&nbsp;'
                         +'<a title="Delete Agenda Plan" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-delete"></span></a>';
             }else{
                 return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';                
@@ -41,7 +44,8 @@ $("#grid-data-unreported").bootgrid({
         },
         "link-r": function(column, row)
         {
-            return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
+            return '<a title="View Agenda Plan" href="' + base_url + 'agenda/plan/' + row.agenda_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Report Plan" href="' + base_url + 'agenda/plan/do_report/' + row.agenda_id + '" class="btn btn-icon command-assignment waves-effect waves-circle" type="button" data-row-id="' + row.agenda_id + '"><span class="zmdi zmdi-assignment"></span></a>&nbsp;&nbsp;';
         },
         "agenda-status" : function(column, row)
         {

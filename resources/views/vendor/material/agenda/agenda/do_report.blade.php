@@ -3,13 +3,16 @@
 @section('vendorcss')
 <link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 <link href="{{ url('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+<link href="{{ url('css/basic.min.css') }}" rel="stylesheet">
+<link href="{{ url('css/dropzone.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Agenda Plan<small>View Agenda Plan</small></h2></div>
+        <div class="card-header"><h2>Agenda Plan<small>Do Report Plan</small></h2></div>
         <div class="card-body card-padding">
-        	<form class="form-horizontal" role="form">
+        	<form class="form-horizontal" role="form" method="POST" action="{{ url('agenda/plan/do_report/' . $agenda->agenda_id) }}">
+        		{{ csrf_field() }}
         		<div class="form-group">
 	                <label for="agenda_date" class="col-sm-2 control-label">Date</label>
 	                <div class="col-sm-10">
@@ -90,57 +93,6 @@
 	                    </div>
 	                </div>
 	            </div>
-	            @if($agenda->agenda_is_report=='1')
-	            <div class="form-group">
-	                <label for="agenda_meeting_time" class="col-sm-2 control-label">Meeting Time</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-                            <input type="text" class="form-control" name="agenda_meeting_time" id="agenda_meeting_time" placeholder="Meeting Time" required="true" value="{{ $agenda_meeting_time }}" readonly="true">
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="agenda_report_time" class="col-sm-2 control-label">Report Time</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-                            <input type="text" class="form-control" name="agenda_report_time" id="agenda_report_time" placeholder="Report Time" required="true" value="{{ $agenda_report_time }}" readonly="true">
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="agenda_report_desc" class="col-sm-2 control-label">Report Description</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <textarea name="agenda_report_desc" id="agenda_report_desc" class="form-control input-sm" placeholder="Report Description" readonly="true">{{ $agenda->agenda_report_desc }}</textarea>
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="form-group">
-				    <label for="upload_file" class="col-sm-2 control-label">Upload File(s)</label>
-				    <div class="col-sm-10">
-				        <div class="fg-line">
-				            @foreach ($agenda->uploadfiles as $uploadedfile)
-				        	<div class="col-sm-6 col-md-3">
-				        		<div class="thumbnail">
-				        			@if($uploadedfile->upload_file_type=='jpg' || $uploadedfile->upload_file_type=='png' || $uploadedfile->upload_file_type=='gif' || $uploadedfile->upload_file_type=='jpeg')
-				        			<img src="{{ url($uploadedfile->upload_file_path . '/' . $uploadedfile->upload_file_name) }}" alt="{{ $uploadedfile->upload_file_name }}">
-				        			@else
-				        			<img src="{{ url('img/filetypes/' . $uploadedfile->upload_file_type . '.png') }}" alt="">
-				        			@endif
-				        			<div class="caption">
-				        				<h4>{{ $uploadedfile->upload_file_name }}</h4>
-				        				<p>{{ $uploadedfile->upload_file_desc }}</p>
-				        				<div class="m-b-5">
-				        					<a class="btn btn-sm btn-primary waves-effect" href="{{ url('download/file/' . $uploadedfile->upload_file_id) }}" role="button">Download File</a>
-				        				</div>
-				        			</div>
-				        		</div>
-				        	</div>
-				        	@endforeach
-				        </div>
-				    </div>
-				</div>
-	            @endif
 	            <hr/>
 	            <div class="form-group">
 	                <label for="created_at" class="col-sm-2 control-label">Created At</label>
@@ -158,8 +110,47 @@
 	                    </div>
 	                </div>
 	            </div>
+	            <hr/>
+	            <div class="form-group">
+	                <label for="agenda_meeting_time" class="col-sm-2 control-label">Meeting Time</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+                            <input type="text" class="form-control date-picker" name="agenda_meeting_time" id="agenda_meeting_time" placeholder="Meeting Time" required="true" value="">
+	                    </div>
+	                </div>
+	            </div><!-- 
+	            <div class="form-group">
+	                <label for="agenda_report_time" class="col-sm-2 control-label">Report Time</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+                            <input type="text" class="form-control date-picker" name="agenda_report_time" id="agenda_report_time" placeholder="Report Time" required="true" value="">
+	                    </div>
+	                </div>
+	            </div> -->
+	            <div class="form-group">
+	                <label for="agenda_report_desc" class="col-sm-2 control-label">Report Description</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <textarea name="agenda_report_desc" id="agenda_report_desc" class="form-control input-sm" placeholder="Report Description"></textarea>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="upload_file" class="col-sm-2 control-label">Upload File(s)</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <div class="dropzone" id="uploadFileArea">
+	                        	
+	                        </div>
+	                    </div>
+	                    <span class="help-block">
+		                    <strong>Max filesize: 10 MB. Allowed File(s): .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .rar, .zip</strong>
+		                </span>
+	                </div>
+	            </div>
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
+	                	<button type="submit" class="btn btn-primary btn-sm">Submit</button>
 	                    <a href="{{ url('agenda/plan') }}" class="btn btn-danger btn-sm">Back</a>
 	                </div>
 	            </div>
@@ -172,4 +163,9 @@
 <script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/bootstrap-datetimepicker.min.js') }}"></script>
 <script src="{{ url('js/typeahead.bundle.min.js') }}"></script>
+<script src="{{ url('js/dropzone.min.js') }}"></script>
+@endsection
+
+@section('customjs')
+<script src="{{ url('js/agenda/agenda-doreport.js') }}"></script>
 @endsection
