@@ -130,6 +130,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('flow/apiList', 'FlowController@apiList');
         Route::post('flow/apiDelete', 'FlowController@apiDelete');
         Route::post('flow/apiCountFlow', 'FlowController@apiCountFlow');
+        Route::post('flow/apiGetFlow', 'FlowController@apiGetFlow');
         Route::resource('flow', 'FlowController');
 
         //Flow Group
