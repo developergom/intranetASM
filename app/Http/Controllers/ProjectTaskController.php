@@ -15,6 +15,7 @@ use App\ProjectTaskHistory;
 use App\ProjectTaskType;
 use App\UploadFile;
 use App\User;
+use App\Role;
 
 use App\Ibrol\Libraries\FlowLibrary;
 use App\Ibrol\Libraries\NotificationLibrary;
@@ -40,11 +41,44 @@ class ProjectTaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if(Gate::denies('Project Task-Read')) {
             abort(403, 'Unauthorized action.');
         }
+
+        /*$flow = new FlowLibrary;
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id, '', 1, 1, 1000);
+
+        dd($nextFlow);*/
+
+        /*$nextUser = '121';
+
+        if(User::where('active','1')->where('user_id', $nextUser)->count() < 1){
+            //return superior of $nextUser;
+            $s_s = User::find($nextUser);
+            $s_group_id = $s_s->groups[0]->group_id;
+            $s_role_id = $s_s->roles[0]->role_id;
+            $s_roles = Role::find($s_role_id);
+            $level_id = $s_roles->role_level_id;
+            $superior = User::with('roles')->whereHas('groups', function($query) use($s_group_id) {
+                                $query->where('groups.group_id','=',$s_group_id);
+                            })->whereHas('roles', function($query) use($level_id) {
+                                $query->where('roles.role_level_id', '>', $level_id);
+                            })->where('users.active','=','1')->get();
+
+
+            $least = 100; //karena level hanya sampai 7
+            foreach ($superior as $key => $value) {
+                //dd($value);
+                if($value->roles[0]->role_level_id < $least){
+                    $nextUser = $value->user_id;
+                    $least = $value->roles[0]->role_level_id;
+                }
+            }
+        }
+
+        dd($nextUser);*/
 
         $data = array();
 

@@ -6,6 +6,7 @@ use App\Flow;
 use App\FlowGroup;
 use App\Module;
 use App\User;
+use App\Role;
 
 use Route;
 
@@ -19,25 +20,104 @@ class FlowLibrary{
 		return $tmp;
 	}
 
-	public function getNextFlow($flow_group_id, $flow_no, $user_id, $pic = '', $author = '', $manual_user = '')
+	public function getNextFlow($flow_group_id, $flow_no, $user_id, $pic = '', $author = '', $manual_user = '', $condition_value = 0)
 	{
 		$nextFlow = array();
+		$nextFlow['flow_no'] = '';
+		$nextFlow['url'] = '';
+		$nextFlow['current_user'] = $user_id;
+		$nextFlow['counter'] = 0;
 
-		//counting flow
-		if(Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $flow_no  + 1)->where('active', '1')->count() > 0)
-		{
-			$flow = Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $flow_no  + 1)->where('active', '1')->first();
-			$nextUser = $this->getNextUser($flow->flow_by, $flow->role_id, $user_id, $pic, $author, $manual_user);
-			//dd($flow);
+		while ($nextFlow['current_user']==$user_id) {
+			//checking flow if it's using optional condition
+			$currFlow = Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $flow_no + 1)->first();
+			//dd($currFlow);
+			$fn = $flow_no + 1;
+			if($currFlow->flow_using_optional=='1') {
+				//check optional condition
+				switch ($currFlow->flow_condition) {
+					case 'EQUAL':
+						if($condition_value == $currFlow->flow_condition_value) {
+							$fn = $currFlow->flow_next_optional;
+						}else{
+							$fn = $flow_no + 1;
+						}
+						break;
+					
+					case 'NOT_EQUAL':
+						# code...
+						if($condition_value <> $currFlow->flow_condition_value) {
+							$fn = $currFlow->flow_next_optional;
+						}else{
+							$fn = $flow_no + 1;
+						}
+						break;
 
-			$nextFlow['flow_no'] = $flow->flow_no;
-			$nextFlow['current_user'] = $nextUser;
-		}else{
-			$nextFlow['flow_no'] = 98;
-			$nextFlow['current_user'] = $author;
+					case 'GREATER':
+						# code...
+						if($condition_value > $currFlow->flow_condition_value) {
+							$fn = $currFlow->flow_next_optional;
+						}else{
+							$fn = $flow_no + 1;
+						}
+						break;
+
+					case 'GREATER_EQUAL':
+						# code...
+						if($condition_value >= $currFlow->flow_condition_value) {
+							$fn = $currFlow->flow_next_optional;
+						}else{
+							$fn = $flow_no + 1;
+						}
+						break;
+
+					case 'LESS':
+						# code...
+						if($condition_value < $currFlow->flow_condition_value) {
+							$fn = $currFlow->flow_next_optional;
+						}else{
+							$fn = $flow_no + 1;
+						}
+						//dd('sini');
+						break;
+
+					case 'LESS_EQUAL':
+						# code...
+						if($condition_value <= $currFlow->flow_condition_value) {
+							$fn = $currFlow->flow_next_optional;
+						}else{
+							$fn = $flow_no + 1;
+						}
+						break;
+
+					default:
+						# code...
+						$fn = $flow_no + 1;
+						break;
+				}
+			}
+
+			//counting flow
+			if(Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $fn)->where('active', '1')->count() > 0)
+			{
+				$flow = Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $fn)->where('active', '1')->first();
+				//dd($flow);
+				$nextUser = $this->getNextUser($flow->flow_by, $flow->role_id, $user_id, $pic, $author, $manual_user);
+				//dd($nextUser);
+
+				$nextFlow['flow_no'] = $flow->flow_no;
+				$nextFlow['url'] = $flow->flow_url;
+				$nextFlow['current_user'] = $nextUser;
+			}else{
+				$nextFlow['flow_no'] = 98;
+				$nextFlow['url'] = $flow->flow_url;
+				$nextFlow['current_user'] = $author;
+			}
+
+			$flow_no += 1;
+			$nextFlow['counter'] += 1;
 		}
-
-
+		
 		return $nextFlow;
 	}
 
@@ -79,6 +159,29 @@ class FlowLibrary{
 		}elseif($flow_by == 'MANUAL')
 		{
 			$nextUser = $manual_user;
+		}
+
+		if(User::where('active','1')->where('user_id', $nextUser)->count() < 1){
+			//return superior of $nextUser;
+			$s_u = User::find($nextUser);
+			$s_group_id = $s_u->groups[0]->group_id;
+			$s_role_id = $s_u->roles[0]->role_id;
+			$s_roles = Role::find($s_role_id);
+			$level_id = $s_roles->role_level_id;
+			$superior = User::with('roles')->whereHas('groups', function($query) use($s_group_id) {
+                                $query->where('groups.group_id','=',$s_group_id);
+                            })->whereHas('roles', function($query) use($level_id) {
+                                $query->where('roles.role_level_id', '>', $level_id);
+                            })->where('users.active','=','1')->get();
+
+
+            $least = 100; //karena level hanya sampai 7
+            foreach ($superior as $key => $value) {
+                if($value->roles[0]->role_level_id < $least){
+                    $nextUser = $value->user_id;
+                    $least = $value->roles[0]->role_level_id;
+                }
+            }
 		}
 
 		return $nextUser;
