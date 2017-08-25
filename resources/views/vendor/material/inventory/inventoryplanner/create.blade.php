@@ -48,7 +48,7 @@
 			                </span>
 			            @endif
 	                </div>
-	            </div>
+	            </div><!-- 
 	            <div class="form-group">
 	                <label for="inventory_planner_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
@@ -61,7 +61,7 @@
 			                </span>
 			            @endif
 	                </div>
-	            </div>
+	            </div> -->
 	            <div class="form-group">
 	                <label for="implementation_id" class="col-sm-2 control-label">Implementation</label>
 	                <div class="col-sm-10">

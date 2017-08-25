@@ -98,7 +98,7 @@ class InventoryPlannerController extends Controller
         $this->validate($request, [
         	'inventory_type_id' => 'required',
             'inventory_planner_title' => 'required|max:100',
-            'inventory_planner_desc' => 'required',
+            //'inventory_planner_desc' => 'required',
             'inventory_planner_year' => 'required|max:4',
             'inventory_planner_deadline' => 'required|date_format:"d/m/Y"',
             'action_plan_pages' => 'numeric',
@@ -115,7 +115,7 @@ class InventoryPlannerController extends Controller
         $obj = new InventoryPlanner;
         $obj->inventory_type_id = $request->input('inventory_type_id');
         $obj->inventory_planner_title = $request->input('inventory_planner_title');
-        $obj->inventory_planner_desc = $request->input('inventory_planner_desc');
+        //$obj->inventory_planner_desc = $request->input('inventory_planner_desc');
         $obj->inventory_planner_deadline = Carbon::createFromFormat('d/m/Y', $request->input('inventory_planner_deadline'))->toDateString();
         $obj->inventory_planner_year = $request->input('inventory_planner_year');
         $obj->flow_no = $nextFlow['flow_no'];
@@ -183,7 +183,7 @@ class InventoryPlannerController extends Controller
         $his = new InventoryPlannerHistory;
         $his->inventory_planner_id = $obj->inventory_planner_id;
         $his->approval_type_id = 1;
-        $his->inventory_planner_history_text = $request->input('inventory_planner_desc');
+        //$his->inventory_planner_history_text = $request->input('inventory_planner_desc');
         $his->active = '1';
         $his->created_by = $request->user()->user_id;
 
@@ -570,7 +570,7 @@ class InventoryPlannerController extends Controller
         $this->validate($request, [
             'inventory_type_id' => 'required',
             'inventory_planner_title' => 'required|max:100',
-            'inventory_planner_desc' => 'required',
+            //'inventory_planner_desc' => 'required',
             'inventory_planner_year' => 'required|max:4',
             'inventory_planner_deadline' => 'required|date_format:"d/m/Y"',
             'action_plan_pages' => 'numeric',
@@ -587,7 +587,7 @@ class InventoryPlannerController extends Controller
         $obj = InventoryPlanner::find($id);
         $obj->inventory_type_id = $request->input('inventory_type_id');
         $obj->inventory_planner_title = $request->input('inventory_planner_title');
-        $obj->inventory_planner_desc = $request->input('inventory_planner_desc');
+        //$obj->inventory_planner_desc = $request->input('inventory_planner_desc');
         $obj->inventory_planner_deadline = Carbon::createFromFormat('d/m/Y', $request->input('inventory_planner_deadline'))->toDateString();
         $obj->inventory_planner_year = $request->input('inventory_planner_year');
         $obj->flow_no = $nextFlow['flow_no'];
@@ -654,7 +654,7 @@ class InventoryPlannerController extends Controller
         $his = new InventoryPlannerHistory;
         $his->inventory_planner_id = $obj->inventory_planner_id;
         $his->approval_type_id = 1;
-        $his->inventory_planner_history_text = $request->input('inventory_planner_desc');
+        //$his->inventory_planner_history_text = $request->input('inventory_planner_desc');
         $his->active = '1';
         $his->created_by = $request->user()->user_id;
 
