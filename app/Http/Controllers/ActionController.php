@@ -19,7 +19,6 @@ class ActionController extends Controller
      */
     public function index()
     {
-        //
         if(Gate::denies('Action Controls Management-Read')) {
             abort(403, 'Unauthorized action.');
         }
