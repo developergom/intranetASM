@@ -7,6 +7,14 @@
 	</div>
 </div>
 <div class="form-group">
+    <label for="inventory_category_id" class="col-sm-2 control-label">Category</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <input class="form-control input-sm" placeholder="Category" readonly="true" value="{{ $inventoryplanner->inventorycategory->inventory_category_name }}">
+        </div>
+    </div>
+</div>
+<div class="form-group">
     <label for="inventory_planner_title" class="col-sm-2 control-label">Title</label>
     <div class="col-sm-10">
         <div class="fg-line">
@@ -49,6 +57,14 @@
     </div>
 </div>
 <div class="form-group">
+    <label for="inventory_planner_participants" class="col-sm-2 control-label">Participants</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <input class="form-control input-sm" placeholder="Participants" readonly="true" value="{{ $inventoryplanner->inventory_planner_participants }}">
+        </div>
+    </div>
+</div>
+<div class="form-group">
     <label for="media_id" class="col-sm-2 control-label">Media</label>
     <div class="col-sm-10">
         <div class="fg-line">
@@ -57,7 +73,7 @@
             @endforeach
         </div>
     </div>
-</div>
+</div><!-- 
 <div class="form-group">
     <label for="action_plan_id" class="col-sm-2 control-label">Action Plan</label>
     <div class="col-sm-10">
@@ -77,7 +93,7 @@
             @endforeach
         </div>
     </div>
-</div>
+</div> -->
 <div class="form-group">
     <label for="upload_file" class="col-sm-2 control-label">Upload File(s)</label>
     <div class="col-sm-10">

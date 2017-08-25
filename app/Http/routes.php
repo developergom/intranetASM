@@ -80,6 +80,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('advertiserate/apiDelete', 'AdvertiseRateController@apiDelete');
         Route::resource('advertiserate', 'AdvertiseRateController');
 
+        //Advertise Rate Type
+        Route::post('advertiseratetype/apiList', 'AdvertiseRateTypeController@apiList');
+        Route::post('advertiseratetype/apiDelete', 'AdvertiseRateTypeController@apiDelete');
+        Route::resource('advertiseratetype', 'AdvertiseRateTypeController');
+
         //Advertise Size
         Route::post('advertisesize/apiList', 'AdvertiseSizeController@apiList');
         Route::post('advertisesize/apiDelete', 'AdvertiseSizeController@apiDelete');
@@ -396,6 +401,10 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('setting/apiDelete', 'SettingController@apiDelete');
         Route::resource('setting', 'SettingController');
         Route::post('setting/clearCache', 'SettingController@apiClearCache');
+
+        //Cache Management
+        Route::get('cache-management', 'CacheManagementController@index');
+        Route::post('cache-management/apiClearAll', 'CacheManagementController@apiClearAll');
 
         //User Log
         Route::post('log/apiList', 'LogController@apiList');

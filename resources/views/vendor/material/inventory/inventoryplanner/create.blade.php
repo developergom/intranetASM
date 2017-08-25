@@ -36,6 +36,28 @@
 		                </span>
 		            @endif
         		</div>
+        		<div class="form-group">
+        			<label for="inventory_category_id" class="col-sm-2 control-label">Category</label>
+        			<div class="col-sm-10">
+        				<div class="fg-line">
+	        				<select name="inventory_category_id" id="inventory_category_id" class="selectpicker" data-live-search="true" required="true">
+	        					<option value=""></option>
+	        					@foreach($inventory_categories as $row)
+	        						{!! $selected = '' !!}
+                                	@if(old('inventory_category_id')==$row->inventory_category_id)
+	                                	{!! $selected = 'selected' !!}
+                                	@endif
+	        						<option value="{{ $row->inventory_category_id }}" {{ $selected }}>{{ $row->inventory_category_name }}</option>
+	        					@endforeach
+	        				</select>
+	        			</div>
+        			</div>
+        			@if ($errors->has('inventory_category_id'))
+		                <span class="help-block">
+		                    <strong>{{ $errors->first('inventory_category_id') }}</strong>
+		                </span>
+		            @endif
+        		</div>
 	            <div class="form-group">
 	                <label for="inventory_planner_title" class="col-sm-2 control-label">Title</label>
 	                <div class="col-sm-10">
@@ -114,6 +136,19 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="inventory_planner_participants" class="col-sm-2 control-label">Participants</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="inventory_planner_participants" id="inventory_planner_participants" placeholder="Please input only numeric character" required="true" maxlength="12" value="{{ old('inventory_planner_participants') }}">
+	                    </div>
+	                    @if ($errors->has('inventory_planner_participants'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('inventory_planner_participants') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="media_id" class="col-sm-2 control-label">Media</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
@@ -138,7 +173,7 @@
 			            @endif
 	                </div>
 	            </div>
-	            <div class="form-group">
+	            <!-- <div class="form-group">
 	                <label for="action_plan_id" class="col-sm-2 control-label">Action Plan</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
@@ -165,7 +200,7 @@
 			                </span>
 			            @endif
 	                </div>
-	            </div>
+	            </div> -->
 	            <div class="form-group">
 	                <label for="upload_file" class="col-sm-2 control-label">Upload File(s)</label>
 	                <div class="col-sm-10">

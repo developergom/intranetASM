@@ -15,6 +15,7 @@ use App\AdvertisePosition;
 use App\AdvertiseRate;
 use App\AdvertiseSize;
 use App\EventPlan;
+use App\InventoryCategory;
 use App\InventoryPlanner;
 use App\InventoryType;
 use App\InventoryPlannerHistory;
@@ -62,8 +63,6 @@ class InventoryPlannerController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        //dd($this->flows);
-
         $data = array();
 
         return view('vendor.material.inventory.inventoryplanner.list', $data);
@@ -78,12 +77,13 @@ class InventoryPlannerController extends Controller
         $data = array();
 
         $data['inventory_types'] = InventoryType::where('active', '1')->orderBy('inventory_type_name')->get();
+        $data['inventory_categories'] = InventoryCategory::where('active', '1')->orderBy('inventory_category_name')->get();
         $data['implementations'] = Implementation::where('active', '1')->orderBy('implementation_month')->get();
         $data['medias'] = Media::whereHas('users', function($query) use($request){
 	                                $query->where('users_medias.user_id', '=', $request->user()->user_id);
 	                            })->where('medias.active', '1')->orderBy('media_name')->get();
-        $data['action_plans'] = ActionPlan::where('active', '1')->orderBy('action_plan_title')->get();
-        $data['event_plans'] = EventPlan::where('active', '1')->orderBy('event_plan_name')->get();
+        /*$data['action_plans'] = ActionPlan::where('active', '1')->orderBy('action_plan_title')->get();
+        $data['event_plans'] = EventPlan::where('active', '1')->orderBy('event_plan_name')->get();*/
 
         $data['advertise_sizes'] = AdvertiseSize::where('active', '1')->orderBy('advertise_size_name')->get();
         $data['advertise_positions'] = AdvertisePosition::where('active', '1')->orderBy('advertise_position_name')->get();
@@ -96,17 +96,19 @@ class InventoryPlannerController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-        	'inventory_type_id' => 'required',
+            'inventory_type_id' => 'required',
+        	'inventory_category_id' => 'required',
             'inventory_planner_title' => 'required|max:100',
             //'inventory_planner_desc' => 'required',
             'inventory_planner_year' => 'required|max:4',
+            'inventory_planner_participants' => 'required|numeric|max:1000000000',
             'inventory_planner_deadline' => 'required|date_format:"d/m/Y"',
             'action_plan_pages' => 'numeric',
             'action_plan_views' => 'numeric',
             'implementation_id[]' => 'array',
             'media_id[]' => 'array',
-            'action_plan_id[]' => 'array',
-            'event_plan_id[]' => 'array',
+            /*'action_plan_id[]' => 'array',
+            'event_plan_id[]' => 'array',*/
         ]);
 
         $flow = new FlowLibrary;
@@ -114,10 +116,12 @@ class InventoryPlannerController extends Controller
 
         $obj = new InventoryPlanner;
         $obj->inventory_type_id = $request->input('inventory_type_id');
+        $obj->inventory_category_id = $request->input('inventory_category_id');
         $obj->inventory_planner_title = $request->input('inventory_planner_title');
         //$obj->inventory_planner_desc = $request->input('inventory_planner_desc');
         $obj->inventory_planner_deadline = Carbon::createFromFormat('d/m/Y', $request->input('inventory_planner_deadline'))->toDateString();
         $obj->inventory_planner_year = $request->input('inventory_planner_year');
+        $obj->inventory_planner_participants = $request->input('inventory_planner_participants');
         $obj->flow_no = $nextFlow['flow_no'];
         $obj->current_user = $nextFlow['current_user'];
         $obj->revision_no = 0;
@@ -172,13 +176,13 @@ class InventoryPlannerController extends Controller
             InventoryPlanner::find($obj->inventory_planner_id)->medias()->sync($request->input('media_id'));
         }
         
-        if(!empty($request->input('action_plan_id'))) {
+        /*if(!empty($request->input('action_plan_id'))) {
             InventoryPlanner::find($obj->inventory_planner_id)->actionplans()->sync($request->input('action_plan_id'));
         }
 
         if(!empty($request->input('event_plan_id'))) {
             InventoryPlanner::find($obj->inventory_planner_id)->eventplans()->sync($request->input('event_plan_id'));
-        }
+        }*/
 
         $his = new InventoryPlannerHistory;
         $his->inventory_planner_id = $obj->inventory_planner_id;
@@ -327,7 +331,8 @@ class InventoryPlannerController extends Controller
         $data = array();
 
         $data['inventoryplanner'] = InventoryPlanner::with(
-        												'inventorytype', 
+                                                        'inventorytype', 
+        												'inventorycategory', 
         												'implementations',
         												'medias',
         												'actionplans',
@@ -395,7 +400,9 @@ class InventoryPlannerController extends Controller
 
         $data = array();
 
-        $data['inventory'] = InventoryPlanner::with('implementations',
+        $data['inventory'] = InventoryPlanner::with('inventorytype', 
+                                                    'inventorycategory',
+                                                    'implementations',
                                                     'medias', 
                                                     'actionplans', 
                                                     'eventplans', 
@@ -426,12 +433,13 @@ class InventoryPlannerController extends Controller
         $data['inventory_deadline'] = $inventory_deadline->format('d/m/Y');
 
         $data['inventory_types'] = InventoryType::where('active', '1')->orderBy('inventory_type_name')->get();
+        $data['inventory_categories'] = InventoryCategory::where('active', '1')->orderBy('inventory_category_name')->get();
         $data['implementations'] = Implementation::where('active', '1')->orderBy('implementation_month')->get();
         $data['medias'] = Media::whereHas('users', function($query) use($request){
                                     $query->where('users_medias.user_id', '=', $request->user()->user_id);
                                 })->where('medias.active', '1')->orderBy('media_name')->get();
-        $data['action_plans'] = ActionPlan::where('active', '1')->orderBy('action_plan_title')->get();
-        $data['event_plans'] = EventPlan::where('active', '1')->orderBy('event_plan_name')->get();
+        /*$data['action_plans'] = ActionPlan::where('active', '1')->orderBy('action_plan_title')->get();
+        $data['event_plans'] = EventPlan::where('active', '1')->orderBy('event_plan_name')->get();*/
 
         $data['advertise_sizes'] = AdvertiseSize::where('active', '1')->orderBy('advertise_size_name')->get();
         $data['advertise_positions'] = AdvertisePosition::where('active', '1')->orderBy('advertise_position_name')->get();
@@ -569,9 +577,11 @@ class InventoryPlannerController extends Controller
     {
         $this->validate($request, [
             'inventory_type_id' => 'required',
+            'inventory_category_id' => 'required',
             'inventory_planner_title' => 'required|max:100',
             //'inventory_planner_desc' => 'required',
             'inventory_planner_year' => 'required|max:4',
+            'inventory_planner_participants' => 'required|numeric|max:1000000000',
             'inventory_planner_deadline' => 'required|date_format:"d/m/Y"',
             'action_plan_pages' => 'numeric',
             'action_plan_views' => 'numeric',
@@ -586,10 +596,12 @@ class InventoryPlannerController extends Controller
 
         $obj = InventoryPlanner::find($id);
         $obj->inventory_type_id = $request->input('inventory_type_id');
+        $obj->inventory_category_id = $request->input('inventory_category_id');
         $obj->inventory_planner_title = $request->input('inventory_planner_title');
         //$obj->inventory_planner_desc = $request->input('inventory_planner_desc');
         $obj->inventory_planner_deadline = Carbon::createFromFormat('d/m/Y', $request->input('inventory_planner_deadline'))->toDateString();
         $obj->inventory_planner_year = $request->input('inventory_planner_year');
+        $obj->inventory_planner_participants = $request->input('inventory_planner_participants');
         $obj->flow_no = $nextFlow['flow_no'];
         $obj->current_user = $nextFlow['current_user'];
         $obj->updated_by = $request->user()->user_id;
@@ -643,13 +655,13 @@ class InventoryPlannerController extends Controller
             InventoryPlanner::find($obj->inventory_planner_id)->medias()->sync($request->input('media_id'));
         }
         
-        if(!empty($request->input('action_plan_id'))) {
+        /*if(!empty($request->input('action_plan_id'))) {
             InventoryPlanner::find($obj->inventory_planner_id)->actionplans()->sync($request->input('action_plan_id'));
         }
 
         if(!empty($request->input('event_plan_id'))) {
             InventoryPlanner::find($obj->inventory_planner_id)->eventplans()->sync($request->input('event_plan_id'));
-        }
+        }*/
 
         $his = new InventoryPlannerHistory;
         $his->inventory_planner_id = $obj->inventory_planner_id;
@@ -824,7 +836,8 @@ class InventoryPlannerController extends Controller
         $data = array();
 
         $data['inventoryplanner'] = InventoryPlanner::with(
-        												'inventorytype', 
+                                                        'inventorytype', 
+        												'inventorycategory', 
         												'implementations',
         												'medias',
         												'actionplans',
@@ -895,7 +908,7 @@ class InventoryPlannerController extends Controller
             $inventoryplanner = InventoryPlanner::find($id);
 
             $flow = new FlowLibrary;
-            $nextFlow = $flow->getNextFlow($this->flow_group_id, $inventoryplanner->flow_no, $request->user()->user_id, '', $inventoryplanner->created_by);
+            $nextFlow = $flow->getNextFlow($this->flow_group_id, $inventoryplanner->flow_no, $request->user()->user_id, '', $inventoryplanner->created_by->user_id);
 
             $inventoryplanner->flow_no = $nextFlow['flow_no'];
             $inventoryplanner->current_user = $nextFlow['current_user'];
@@ -921,7 +934,7 @@ class InventoryPlannerController extends Controller
             $inventoryplanner = InventoryPlanner::find($id);
 
             $flow = new FlowLibrary;
-            $prevFlow = $flow->getPreviousFlow($this->flow_group_id, $inventoryplanner->flow_no, $request->user()->user_id, '', $inventoryplanner->created_by);
+            $prevFlow = $flow->getPreviousFlow($this->flow_group_id, $inventoryplanner->flow_no, $request->user()->user_id, '', $inventoryplanner->created_by->user_id);
 
             $inventoryplanner->flow_no = $prevFlow['flow_no'];
             $inventoryplanner->revision_no = $inventoryplanner->revision_no + 1;
@@ -975,6 +988,7 @@ class InventoryPlannerController extends Controller
         if($listtype == 'onprocess') {
             $data['rows'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
+                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventories_planner.inventory_category_id')
                                 ->join('inventory_planner_implementation', 'inventory_planner_implementation.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.current_user')
@@ -987,6 +1001,7 @@ class InventoryPlannerController extends Controller
                                 })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('inventory_category_name', 'like', '%' . $searchPhrase . '%')
                                             ->orWhere('implementation_month_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_year','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_title','like','%' . $searchPhrase . '%')
@@ -996,6 +1011,7 @@ class InventoryPlannerController extends Controller
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
+                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventories_planner.inventory_category_id')
                                 ->join('inventory_planner_implementation', 'inventory_planner_implementation.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.current_user')
@@ -1008,6 +1024,7 @@ class InventoryPlannerController extends Controller
                                 })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('inventory_category_name', 'like', '%' . $searchPhrase . '%')
                                             ->orWhere('implementation_month_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_year','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_title','like','%' . $searchPhrase . '%')
@@ -1016,6 +1033,7 @@ class InventoryPlannerController extends Controller
         }elseif($listtype == 'needchecking') {
             $data['rows'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
+                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventories_planner.inventory_category_id')
                                 ->join('inventory_planner_implementation', 'inventory_planner_implementation.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.created_by')
@@ -1025,6 +1043,7 @@ class InventoryPlannerController extends Controller
                                 ->where('inventories_planner.current_user', '=' , $request->user()->user_id)
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('inventory_category_name', 'like', '%' . $searchPhrase . '%')
                                             ->orWhere('implementation_month_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_year','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_title','like','%' . $searchPhrase . '%')
@@ -1034,6 +1053,7 @@ class InventoryPlannerController extends Controller
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
+                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventories_planner.inventory_category_id')
                                 ->join('inventory_planner_implementation', 'inventory_planner_implementation.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.created_by')
@@ -1043,6 +1063,7 @@ class InventoryPlannerController extends Controller
                                 ->where('inventories_planner.current_user', '=' , $request->user()->user_id)
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('inventory_category_name', 'like', '%' . $searchPhrase . '%')
                                             ->orWhere('implementation_month_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_year','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_title','like','%' . $searchPhrase . '%')
@@ -1051,6 +1072,7 @@ class InventoryPlannerController extends Controller
         }elseif($listtype == 'finished') {
             $data['rows'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
+                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventories_planner.inventory_category_id')
                                 ->join('inventory_planner_implementation', 'inventory_planner_implementation.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.created_by')
@@ -1062,6 +1084,7 @@ class InventoryPlannerController extends Controller
                                 })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('inventory_category_name', 'like', '%' . $searchPhrase . '%')
                                             ->orWhere('implementation_month_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_year','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_title','like','%' . $searchPhrase . '%')
@@ -1071,6 +1094,7 @@ class InventoryPlannerController extends Controller
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
+                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventories_planner.inventory_category_id')
                                 ->join('inventory_planner_implementation', 'inventory_planner_implementation.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.created_by')
@@ -1082,6 +1106,7 @@ class InventoryPlannerController extends Controller
                                 })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('inventory_category_name', 'like', '%' . $searchPhrase . '%')
                                             ->orWhere('implementation_month_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_year','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_title','like','%' . $searchPhrase . '%')
@@ -1090,6 +1115,7 @@ class InventoryPlannerController extends Controller
         }elseif($listtype == 'canceled') {
             $data['rows'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
+                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventories_planner.inventory_category_id')
                                 ->join('inventory_planner_implementation', 'inventory_planner_implementation.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.created_by')
@@ -1100,6 +1126,7 @@ class InventoryPlannerController extends Controller
                                 })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('inventory_category_name', 'like', '%' . $searchPhrase . '%')
                                             ->orWhere('implementation_month_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_year','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_title','like','%' . $searchPhrase . '%')
@@ -1109,6 +1136,7 @@ class InventoryPlannerController extends Controller
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
+                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventories_planner.inventory_category_id')
                                 ->join('inventory_planner_implementation', 'inventory_planner_implementation.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.created_by')
@@ -1119,6 +1147,7 @@ class InventoryPlannerController extends Controller
                                 })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('inventory_category_name', 'like', '%' . $searchPhrase . '%')
                                             ->orWhere('implementation_month_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_year','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_title','like','%' . $searchPhrase . '%')

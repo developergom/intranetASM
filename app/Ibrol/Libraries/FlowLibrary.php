@@ -32,6 +32,10 @@ class FlowLibrary{
 			//checking flow if it's using optional condition
 			$currFlow = Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $flow_no + 1)->first();
 			//dd($currFlow);
+			if(is_null($currFlow)){
+				$currFlow = Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $flow_no)->first();
+			}
+			//dd($currFlow);
 			$fn = $flow_no + 1;
 			if($currFlow->flow_using_optional=='1') {
 				//check optional condition
@@ -110,7 +114,7 @@ class FlowLibrary{
 				$nextFlow['current_user'] = $nextUser;
 			}else{
 				$nextFlow['flow_no'] = 98;
-				$nextFlow['url'] = $flow->flow_url;
+				$nextFlow['url'] = '';
 				$nextFlow['current_user'] = $author;
 			}
 
