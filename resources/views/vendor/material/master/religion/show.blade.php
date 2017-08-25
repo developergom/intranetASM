@@ -9,7 +9,7 @@
 	                <label for="religion_name" class="col-sm-2 control-label">Religion Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="religion_name" id="religion_name" placeholder="Religion Name" required="true" maxlength="100" value="{{ $religion->religion_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="religion_name" id="religion_name" placeholder="Religion Name" required="true" maxlength="100" value="{{ $religion->religion_name }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>

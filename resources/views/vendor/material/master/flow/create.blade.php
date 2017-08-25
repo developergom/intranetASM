@@ -2,6 +2,7 @@
 
 @section('vendorcss')
 <link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
+<link href="{{ url('css/flow-display.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -10,6 +11,11 @@
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form" method="POST" action="{{ url('master/flow') }}">
         		{{ csrf_field() }}
+        		<div class="form-group">
+        			<div class="col-sm-12" id="viz-container">
+
+        			</div>
+        		</div>
         		<div class="form-group">
 	                <label for="flow_group_id" class="col-sm-2 control-label">Flow Group</label>
 	                <div class="col-sm-10">
@@ -154,6 +160,59 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	            	<label for="flow_using_optional" class="col-sm-2 control-label">Using Optional Flow?</label>
+	            	<div class="col-sm-10">
+	            		<div class="fg-line">
+	            			<select name="flow_using_optional" id="flow_using_optional" class="selectpicker" required="true">
+	            				<option value="0">No</option>
+	            				<option value="1">Yes</option>
+	            			</select>
+	            		</div>
+	            		@if ($errors->has('flow_using_optional'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('flow_using_optional') }}</strong>
+			                </span>
+			            @endif
+	            	</div>
+	            </div>
+	            <div class="form-group next-optional-container">
+	            	<label for="flow_next_optional" class="col-sm-2 control-label">Flow Next Optional</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="flow_next_optional" id="flow_next_optional" placeholder="Flow Next Optional" maxlength="3" value="{{ old('flow_next_optional') }}">
+	                    </div>
+	                    @if ($errors->has('flow_next_optional'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('flow_next_optional') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group next-optional-container">
+	            	<label for="flow_condition" class="col-sm-2 control-label">Flow Next Condition</label>
+	            	<div class="col-sm-10">
+	            		<div class="fg-line">
+	            			<select name="flow_condition" id="flow_condition" class="selectpicker">
+	            				<option value="">CHOOSE ONE</option>
+	            				<option value="EQUAL">=</option>
+	            				<option value="NOT_EQUAL"><></option>
+	            				<option value="GREATER">></option>
+	            				<option value="GREATER_EQUAL">>=</option>
+	            				<option value="LESS"><</option>
+	            				<option value="LESS_EQUAL"><=</option>
+	            			</select>
+	            		</div>
+	            	</div>
+	            </div>
+	            <div class="form-group next-optional-container">
+	            	<label for="flow_condition_value" class="col-sm-2 control-label">Flow Next Condition Value</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="flow_condition_value" id="flow_condition_value" placeholder="Flow Next Condition Value (input only number)" maxlength="10" value="{{ old('flow_condition_value') }}">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
 	                    <a href="{{ url('master/flow') }}" class="btn btn-danger btn-sm">Back</a>
@@ -171,4 +230,5 @@
 
 @section('customjs')
 <script src="{{ url('js/master/flow-create.js') }}"></script>
+<script src="{{ url('js/master/flow-display.js') }}"></script>
 @endsection

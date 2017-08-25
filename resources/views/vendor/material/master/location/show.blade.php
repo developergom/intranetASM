@@ -9,7 +9,7 @@
 	                <label for="location_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="location_name" id="location_name" placeholder="Location Name" required="true" maxlength="100" value="{{ $location->location_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="location_name" id="location_name" placeholder="Location Name" required="true" maxlength="100" value="{{ $location->location_name }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -33,7 +33,7 @@
 	                <label for="location_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="location_desc" id="location_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $location->location_desc }}</textarea>
+	                        {!! $location->location_desc !!}
 	                    </div>
 	                </div>
 	            </div>

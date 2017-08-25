@@ -19,7 +19,6 @@ class ActionController extends Controller
      */
     public function index()
     {
-        //
         if(Gate::denies('Action Controls Management-Read')) {
             abort(403, 'Unauthorized action.');
         }
@@ -48,7 +47,6 @@ class ActionController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $this->validate($request, [
             'action_name' => 'required|max:100',
             'action_alias' => 'required|max:50',

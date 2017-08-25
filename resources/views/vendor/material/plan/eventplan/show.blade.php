@@ -15,7 +15,7 @@
         			<label for="event_type_id" class="col-sm-2 control-label">Type</label>
         			<div class="col-sm-10">
         				<div class="fg-line">
-	        				<input type="text" class="form-control input-sm" name="event_plan_type" id="event_plan_type" placeholder="Program Plan Type" disabled="true" maxlength="100" value="{{ $eventplan->eventtype->event_type_name }}">
+	        				<input type="text" class="form-control input-sm" name="event_plan_type" id="event_plan_type" placeholder="Program Plan Type" readonly="true" maxlength="100" value="{{ $eventplan->eventtype->event_type_name }}">
 	        			</div>
         			</div>
         		</div>
@@ -23,7 +23,7 @@
 	                <label for="event_plan_name" class="col-sm-2 control-label">Program Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_plan_name" id="event_plan_name" placeholder="Program Plan Name" disabled="true" maxlength="100" value="{{ $eventplan->event_plan_name }}">
+	                        <input type="text" class="form-control input-sm" name="event_plan_name" id="event_plan_name" placeholder="Program Plan Name" readonly="true" maxlength="100" value="{{ $eventplan->event_plan_name }}">
 	                    </div>
 	                </div>
 	            </div>
@@ -31,7 +31,7 @@
 	                <label for="event_plan_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="event_plan_desc" id="event_plan_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $eventplan->event_plan_desc }}</textarea>
+	                        {!! $eventplan->event_plan_desc !!}
 	                    </div>
 	                </div>
 	            </div>
@@ -39,7 +39,7 @@
 	                <label for="event_plan_viewer" class="col-sm-2 control-label">Estimated Viewer/Guest (number only)</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="event_plan_viewer" id="event_plan_viewer" placeholder="Estimated Viewer/Guest" required="true" maxlength="15" disabled="true" value="{{ $eventplan->event_plan_viewer }}">
+	                        <input type="text" class="form-control input-sm" name="event_plan_viewer" id="event_plan_viewer" placeholder="Estimated Viewer/Guest" required="true" maxlength="15" readonly="true" value="{{ $eventplan->event_plan_viewer }}">
 	                    </div>
 	                </div>
 	            </div>
@@ -47,7 +47,7 @@
 	                <label for="location_id" class="col-sm-2 control-label">Location</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="location_id" id="location_id" placeholder="Location" required="true" maxlength="100" disabled="true" value="{{ $eventplan->location->location_name . ' - ' . $eventplan->location->location_city }}">
+	                        <input type="text" class="form-control input-sm" name="location_id" id="location_id" placeholder="Location" required="true" maxlength="100" readonly="true" value="{{ $eventplan->location->location_name . ' - ' . $eventplan->location->location_city }}">
 	                    </div>
 	                </div>
 	            </div>
@@ -77,7 +77,7 @@
 	                <label for="event_plan_deadline" class="col-sm-2 control-label">Deadline</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="event_plan_deadline" id="event_plan_deadline" placeholder="e.g 17/08/1945" disabled="true" maxlength="10" value="{{ $event_plan_deadline }}" autocomplete="off" data-mask="00/00/0000">
+	                        <input type="text" class="form-control input-sm input-mask" name="event_plan_deadline" id="event_plan_deadline" placeholder="e.g 17/08/1945" readonly="true" maxlength="10" value="{{ $event_plan_deadline }}" autocomplete="off" data-mask="00/00/0000">
 	                    </div>
 	                </div>
 	            </div>
@@ -128,7 +128,7 @@
 	                <label for="created_by" class="col-sm-2 control-label">Created By</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" placeholder="Created By" disabled="true" maxlength="100" value="{{ $eventplan->created_by->user_firstname . ' ' . $eventplan->created_by->user_lastname }}">
+	                        <input type="text" class="form-control input-sm" placeholder="Created By" readonly="true" maxlength="100" value="{{ $eventplan->created_by->user_firstname . ' ' . $eventplan->created_by->user_lastname }}">
 	                    </div>
 	                </div>
 	            </div>
@@ -149,7 +149,7 @@
                                 </div>
                                 <div class="tv-body">
 									<p>
-										{{ $value->event_plan_history_text }}
+										{!! $value->event_plan_history_text !!}
 									</p>
 									<div class="clearfix"></div>
 									<ul class="tvb-stats">

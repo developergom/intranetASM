@@ -62,7 +62,8 @@ class FlowController extends Controller
             'flow_no' => 'required',
             'flow_prev' => 'required',
             'flow_by' => 'required',
-            'role_id' => 'required'
+            'role_id' => 'required',
+            'flow_using_optional' => 'required'
         ]);
 
         //reorder flow
@@ -77,6 +78,10 @@ class FlowController extends Controller
         $obj->flow_next = $request->input('flow_no') + 1;
         $obj->flow_by = $request->input('flow_by');
         $obj->role_id = $request->input('role_id');
+        $obj->flow_using_optional = $request->input('flow_using_optional');
+        $obj->flow_next_optional = $request->input('flow_next_optional');
+        $obj->flow_condition = $request->input('flow_condition');
+        $obj->flow_condition_value = $request->input('flow_condition_value');
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
 
@@ -148,7 +153,8 @@ class FlowController extends Controller
             'flow_no' => 'required',
             'flow_prev' => 'required',
             'flow_by' => 'required',
-            'role_id' => 'required'
+            'role_id' => 'required',
+            'flow_using_optional' => 'required'
         ]);
 
         $obj = Flow::find($id);
@@ -173,6 +179,10 @@ class FlowController extends Controller
         $obj->flow_next = $request->input('flow_no') + 1;
         $obj->flow_by = $request->input('flow_by');
         $obj->role_id = $request->input('role_id');
+        $obj->flow_using_optional = $request->input('flow_using_optional');
+        $obj->flow_next_optional = $request->input('flow_next_optional');
+        $obj->flow_condition = $request->input('flow_condition');
+        $obj->flow_condition_value = $request->input('flow_condition_value');
         $obj->updated_by = $request->user()->user_id;
 
         $obj->save();
@@ -277,6 +287,14 @@ class FlowController extends Controller
         $result = array();
 
         $result['count'] = Flow::where('active', '1')->where('flow_group_id', $request->input('flow_group_id'))->count();
+
+        return response()->json($result);
+    }
+
+    public function apiGetFlow(Request $request)
+    {
+        $result = array();
+        $result['data'] = Flow::where('active', '1')->where('flow_group_id', $request->input('flow_group_id'))->orderBy('flow_no')->get();
 
         return response()->json($result);
     }

@@ -24,7 +24,7 @@
 	                <label for="announcement_detail" class="col-sm-2 control-label">Detail</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="announcement_detail" id="announcement_detail" class="form-control input-sm" required placeholder="Detail">{{ $announcement->announcement_detail }}</textarea>
+	                        <input type="text" name="announcement_detail" id="announcement_detail" class="form-control input-sm" required placeholder="Detail" value="{{ $announcement->announcement_detail }}">
 	                    </div>
 	                    @if ($errors->has('announcement_detail'))
 			                <span class="help-block">

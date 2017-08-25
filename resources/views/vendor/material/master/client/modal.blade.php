@@ -234,7 +234,7 @@
                         <label for="edit_client_name" class="col-sm-2 control-label">Client</label>
                         <div class="col-sm-10">
                             <div class="fg-line">
-                                <input type="text" class="form-control input-sm" id="view_client_name" placeholder="Client Name" required="true" maxlength="100" value="{{ old('client_name') }}" disabled="true">
+                                <input type="text" class="form-control input-sm" id="view_client_name" placeholder="Client Name" required="true" maxlength="100" value="{{ old('client_name') }}" readonly="true">
                             </div>
                         </div>
                     </div>
@@ -242,7 +242,7 @@
                         <label for="edit_client_contact_name" class="col-sm-2 control-label">Name</label>
                         <div class="col-sm-10">
                             <div class="fg-line">
-                                <input type="text" class="form-control input-sm" id="view_client_contact_name" placeholder="Contact Name" required="true" maxlength="100" value="{{ old('client_contact_name') }}" disabled="true">
+                                <input type="text" class="form-control input-sm" id="view_client_contact_name" placeholder="Contact Name" required="true" maxlength="100" value="{{ old('client_contact_name') }}" readonly="true">
                             </div>
                             <small class="help-block"></small>
                         </div>
@@ -251,7 +251,7 @@
                         <label for="edit_client_contact_gender" class="col-sm-2 control-label">Gender</label>
                         <div class="col-sm-10">
                             <div class="fg-line">
-                                <input type="text" class="form-control input-sm" id="view_client_contact_gender" placeholder="Gender" required="true" maxlength="100" value="{{ old('client_contact_gender') }}" disabled="true">                                
+                                <input type="text" class="form-control input-sm" id="view_client_contact_gender" placeholder="Gender" required="true" maxlength="100" value="{{ old('client_contact_gender') }}" readonly="true">                                
                             </div>
                             <small class="help-block"></small>
                         </div>
@@ -260,7 +260,7 @@
                         <label for="edit_client_contact_birthdate" class="col-sm-2 control-label">Birth Date</label>
                         <div class="col-sm-10">
                             <div class="fg-line">
-                                <input type="text" class="form-control input-sm input-mask" name="view_client_contact_birthdate" id="view_client_contact_birthdate" placeholder="e.g 17/08/1945" required="true" maxlength="10" value="{{ old('client_contact_birthdate') }}" autocomplete="off" data-mask="00/00/0000" disabled="true">
+                                <input type="text" class="form-control input-sm input-mask" name="view_client_contact_birthdate" id="view_client_contact_birthdate" placeholder="e.g 17/08/1945" required="true" maxlength="10" value="{{ old('client_contact_birthdate') }}" autocomplete="off" data-mask="00/00/0000" readonly="true">
                             </div>
                             <small class="help-block"></small>
                         </div>
@@ -269,7 +269,7 @@
                         <label for="edit_religion_id" class="col-sm-2 control-label">Religion</label>
                         <div class="col-sm-10">
                             <div class="fg-line">
-                                <input type="text" class="form-control input-sm" id="view_religion_id" placeholder="Religion" required="true" maxlength="100" value="{{ old('religion_id') }}" disabled="true">
+                                <input type="text" class="form-control input-sm" id="view_religion_id" placeholder="Religion" required="true" maxlength="100" value="{{ old('religion_id') }}" readonly="true">
                             </div>
                             <small class="help-block"></small>
                         </div>
@@ -278,7 +278,7 @@
                         <label for="edit_client_contact_position" class="col-sm-2 control-label">Position</label>
                         <div class="col-sm-10">
                             <div class="fg-line">
-                                <input type="text" class="form-control input-sm" id="view_client_contact_position" placeholder="Position" required="true" maxlength="100" value="{{ old('client_contact_position') }}" disabled="true">
+                                <input type="text" class="form-control input-sm" id="view_client_contact_position" placeholder="Position" required="true" maxlength="100" value="{{ old('client_contact_position') }}" readonly="true">
                             </div>
                             <small class="help-block"></small>
                         </div>
@@ -287,7 +287,7 @@
                         <label for="edit_client_contact_email" class="col-sm-2 control-label">Email</label>
                         <div class="col-sm-10">
                             <div class="fg-line">
-                                <input type="text" class="form-control input-sm" id="view_client_contact_email" placeholder="Email" required="true" maxlength="100" value="{{ old('client_contact_email') }}" disabled="true">
+                                <input type="text" class="form-control input-sm" id="view_client_contact_email" placeholder="Email" required="true" maxlength="100" value="{{ old('client_contact_email') }}" readonly="true">
                             </div>
                             <small class="help-block"></small>
                         </div>
@@ -296,7 +296,7 @@
                         <label for="edit_client_contact_phone" class="col-sm-2 control-label">Phone</label>
                         <div class="col-sm-10">
                             <div class="fg-line">
-                                <input type="text" class="form-control input-sm" id="view_client_contact_phone" placeholder="Phone" maxlength="15" value="{{ old('client_contact_phone') }}" disabled="true">
+                                <input type="text" class="form-control input-sm" id="view_client_contact_phone" placeholder="Phone" maxlength="15" value="{{ old('client_contact_phone') }}" readonly="true">
                             </div>
                             <small class="help-block"></small>
                         </div>

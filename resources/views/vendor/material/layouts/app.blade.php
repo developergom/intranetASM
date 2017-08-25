@@ -455,6 +455,7 @@
         <script src="{{ url('js/sweet-alert.min.js') }}"></script>
         <script src="{{ url('js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
         <script src="{{ url('js/jquery.bootgrid.min.js') }}"></script>
+        <script src="{{ url('js/tinymce/tinymce.min.js') }}"></script>
         @yield('vendorjs')
         
         <!-- Placeholder for IE9 -->
@@ -479,6 +480,7 @@
         @endif
 
         <script src="{{ url('js/app/notification.js') }}"></script>
+        <script src="{{ url('js/app/global.js') }}"></script>
 
         @yield('customjs')
     </body>

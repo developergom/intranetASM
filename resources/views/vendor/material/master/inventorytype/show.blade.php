@@ -9,7 +9,7 @@
 	                <label for="inventory_type_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="inventory_type_name" id="inventory_type_name" placeholder="Inventory Type Name" required="true" maxlength="100" value="{{ $inventorytype->inventory_type_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="inventory_type_name" id="inventory_type_name" placeholder="Inventory Type Name" required="true" maxlength="100" value="{{ $inventorytype->inventory_type_name }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -17,7 +17,7 @@
 	                <label for="inventory_type_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="inventory_type_desc" id="inventory_type_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $inventorytype->inventory_type_desc }}</textarea>
+	                        {!! $inventorytype->inventory_type_desc !!}
 	                    </div>
 	                </div>
 	            </div>

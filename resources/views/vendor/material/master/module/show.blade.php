@@ -13,7 +13,7 @@
 	                <label for="module_url" class="col-sm-2 control-label">Module URL</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="module_url" id="module_url" placeholder="Module URL" required="true" maxlength="100" value="{{ $module->module_url }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="module_url" id="module_url" placeholder="Module URL" required="true" maxlength="100" value="{{ $module->module_url }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -21,7 +21,7 @@
 	                <label for="module_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="module_desc" id="module_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $module->module_desc }}</textarea>
+	                        {!! $module->module_desc !!}
 	                    </div>
 	                </div>
 	            </div>

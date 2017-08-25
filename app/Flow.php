@@ -10,7 +10,20 @@ class Flow extends Model
 	protected $primaryKey = 'flow_id';
 
 	protected $fillable = [
-				'flow_group_id','flow_name', 'flow_url', 'flow_no', 'flow_prev', 'flow_next', 'role_id', 'flow_by', 'flow_parallel', 'flow_condition', 'flow_condition_value', 'active'
+				'flow_group_id',
+				'flow_name', 
+				'flow_url', 
+				'flow_no', 
+				'flow_prev', 
+				'flow_next', 
+				'flow_next_optional', 
+				'role_id', 
+				'flow_by', 
+				'flow_parallel', 
+				'flow_using_optional', 
+				'flow_condition', 
+				'flow_condition_value', 
+				'active'
 	];
 
 	protected $hidden = [

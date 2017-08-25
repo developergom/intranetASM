@@ -9,32 +9,61 @@
         @endcan
     </div>
 
-    <div class="table-responsive">
-        <table id="grid-data" class="table table-hover">
-            <thead>
-                <tr>
-                    <th data-column-id="agenda_date" data-converter="datetime" data-order="asc">Date</th>
-                    <th data-column-id="agenda_type_name" data-order="asc">Type</th>
-                    <th data-column-id="agenda_destination" data-order="asc">Destination</th>
-                    <th data-column-id="user_firstname" data-order="asc">Author</th>
-                    @can('Agenda Plan-Update')
-                        @can('Agenda Plan-Delete')
-                            <th data-column-id="link" data-formatter="link-rud" data-sortable="false">Action</th>
-                        @else
-                            <th data-column-id="link" data-formatter="link-ru" data-sortable="false">Action</th>
-                        @endcan
-                    @else
-                        @can('Agenda Plan-Delete')
-                            <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
-                        @else
-                            <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
-                        @endcan
-                    @endcan
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+    <div role="tabpanel">
+        <ul class="tab-nav" role="tablist">
+            <li class="active"><a href="#unreported" aria-controls="unreported" role="tab" data-toggle="tab">Unreported</a></li>
+            <li><a href="#reported" aria-controls="reported" role="tab" data-toggle="tab">Reported</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="unreported">
+                <div class="table-responsive">
+                    <table id="grid-data-unreported" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th data-column-id="agenda_date" data-converter="datetime" data-order="asc"><center>Date</center></th>
+                                <th data-column-id="agenda_type_name" data-order="asc"><center>Type</center></th>
+                                <th data-column-id="agenda_is_report" data-formatter="agenda-status"><center>Status</center></th>
+                                <!-- <th data-column-id="agenda_destination" data-order="asc">Destination</th> -->
+                                <th data-column-id="user_firstname" data-order="asc"><center>Author</center></th>
+                                @can('Agenda Plan-Update')
+                                    @can('Agenda Plan-Delete')
+                                        <th data-column-id="link" data-formatter="link-rud" data-sortable="false"><center>Action</center></th>
+                                    @else
+                                        <th data-column-id="link" data-formatter="link-ru" data-sortable="false"><center>Action</center></th>
+                                    @endcan
+                                @else
+                                    @can('Agenda Plan-Delete')
+                                        <th data-column-id="link" data-formatter="link-rd" data-sortable="false"><center>Action</center></th>
+                                    @else
+                                        <th data-column-id="link" data-formatter="link-r" data-sortable="false"><center>Action</center></th>
+                                    @endcan
+                                @endcan
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="reported">
+                <div class="table-responsive">
+                    <table id="grid-data-reported" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th data-column-id="agenda_date" data-converter="datetime" data-order="asc"><center>Date</center></th>
+                                <th data-column-id="agenda_type_name" data-order="asc"><center>Type</center></th>
+                                <th data-column-id="agenda_is_report" data-formatter="agenda-status"><center>Status</center></th>
+                                <!-- <th data-column-id="agenda_destination" data-order="asc">Destination</th> -->
+                                <th data-column-id="user_firstname" data-order="asc"><center>Author</center></th>
+                                <th data-column-id="link" data-formatter="link-r" data-sortable="false"><center>Action</center></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>    
 @endsection

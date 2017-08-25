@@ -31,6 +31,7 @@
                             <thead>
                                 <tr>
                                     <th data-column-id="media_name" data-order="asc">Media</th>
+                                    <th data-column-id="inventory_category_name" data-order="asc">Category</th>
                                     <th data-column-id="implementation_month_name" data-order="asc">Implementation</th>
                                     <th data-column-id="inventory_planner_year" data-order="asc">Year</th>
                                     <th data-column-id="inventory_planner_title" data-order="asc">Title</th>
@@ -61,6 +62,7 @@
                             <thead>
                                 <tr>
                                     <th data-column-id="media_name" data-order="asc">Media</th>
+                                    <th data-column-id="inventory_category_name" data-order="asc">Category</th>
                                     <th data-column-id="implementation_month_name" data-order="asc">Implementation</th>
                                     <th data-column-id="inventory_planner_year" data-order="asc">Year</th>
                                     <th data-column-id="inventory_planner_title" data-order="asc">Title</th>
@@ -85,6 +87,7 @@
                             <thead>
                                 <tr>
                                     <th data-column-id="media_name" data-order="asc">Media</th>
+                                    <th data-column-id="inventory_category_name" data-order="asc">Category</th>
                                     <th data-column-id="implementation_month_name" data-order="asc">Implementation</th>
                                     <th data-column-id="inventory_planner_year" data-order="asc">Year</th>
                                     <th data-column-id="inventory_planner_title" data-order="asc">Title</th>
@@ -105,6 +108,7 @@
                             <thead>
                                 <tr>
                                     <th data-column-id="media_name" data-order="asc">Media</th>
+                                    <th data-column-id="inventory_category_name" data-order="asc">Category</th>
                                     <th data-column-id="implementation_month_name" data-order="asc">Implementation</th>
                                     <th data-column-id="inventory_planner_year" data-order="asc">Year</th>
                                     <th data-column-id="inventory_planner_title" data-order="asc">Title</th>

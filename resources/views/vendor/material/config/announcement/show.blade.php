@@ -9,7 +9,7 @@
 	                <label for="announcement_title" class="col-sm-2 control-label">Title</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="announcement_title" id="announcement_title" placeholder="Announcement Title" required="true" maxlength="255" value="{{ $announcement->announcement_title }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="announcement_title" id="announcement_title" placeholder="Announcement Title" required="true" maxlength="255" value="{{ $announcement->announcement_title }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -17,7 +17,7 @@
 	                <label for="announcement_detail" class="col-sm-2 control-label">Detail</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="announcement_detail" id="announcement_detail" class="form-control input-sm" required placeholder="Detail" disabled="true">{{ $announcement->announcement_detail }}</textarea>
+	                        <input type="text" name="announcement_detail" id="announcement_detail" class="form-control input-sm" required placeholder="Detail" readonly="true" value="{{ $announcement->announcement_detail }}">
 	                    </div>
 	                </div>
 	            </div>
@@ -25,7 +25,7 @@
 	                <label for="announcement_startdate" class="col-sm-2 control-label">Start Date</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="announcement_startdate" id="announcement_startdate" placeholder="Start Date e.g dd/mm/yyyy" required="true" maxlength="10" value="{{ $announcement_startdate }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="announcement_startdate" id="announcement_startdate" placeholder="Start Date e.g dd/mm/yyyy" required="true" maxlength="10" value="{{ $announcement_startdate }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -33,7 +33,7 @@
 	                <label for="announcement_enddate" class="col-sm-2 control-label">End Date</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="announcement_enddate" id="announcement_enddate" placeholder="End Date e.g dd/mm/yyyy" required="true" maxlength="10" value="{{ $announcement_enddate }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="announcement_enddate" id="announcement_enddate" placeholder="End Date e.g dd/mm/yyyy" required="true" maxlength="10" value="{{ $announcement_enddate }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>

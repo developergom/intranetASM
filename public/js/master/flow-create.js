@@ -1,4 +1,22 @@
 $(document).ready(function(){
+	if($('#flow_group_id').val()!='') {
+		generateFlowViz($('#flow_group_id').val(), $('#flow_no').val());
+	}
+
+	if($('#flow_using_optional').val()=='1') {
+		$('.next-optional-container').show();
+	}else{
+		$('.next-optional-container').hide();
+	}
+
+	$('#flow_using_optional').change(function(){
+		if($(this).val()=='1') {
+			$('.next-optional-container').show();
+		}else{
+			$('.next-optional-container').hide();
+		}
+	});
+
 	$('#flow_group_id').change(function(){
 		var flow_group_id = $(this).val();
 		
@@ -30,5 +48,8 @@ $(document).ready(function(){
 				$('#flow_no, #flow_prev').selectpicker('refresh');
 			}
 		});
+
+		generateFlowViz(flow_group_id);
 	});
+
 });

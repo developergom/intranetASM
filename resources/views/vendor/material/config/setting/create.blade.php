@@ -36,7 +36,7 @@
 	                <label for="setting_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="setting_desc" id="setting_desc" class="form-control input-sm" required placeholder="Description">{{ old('setting_desc') }}</textarea>
+	                        <input type="text" name="setting_desc" id="setting_desc" class="form-control input-sm" required placeholder="Description" value="{{ old('setting_desc') }}">
 	                    </div>
 	                    @if ($errors->has('setting_desc'))
 			                <span class="help-block">
@@ -49,7 +49,7 @@
 	                <label for="setting_value" class="col-sm-2 control-label">Value</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="setting_value" id="setting_value" class="form-control input-sm" required placeholder="Value">{{ old('setting_value') }}</textarea>
+	                        <input type="text" name="setting_value" id="setting_value" class="form-control input-sm" required placeholder="Value" value="{{ old('setting_value') }}">
 	                    </div>
 	                    @if ($errors->has('setting_value'))
 			                <span class="help-block">

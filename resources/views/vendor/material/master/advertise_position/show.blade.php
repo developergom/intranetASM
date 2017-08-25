@@ -9,7 +9,7 @@
 	                <label for="advertise_position_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="advertise_position_name" id="advertise_position_name" placeholder="Advertise Position Name" required="true" maxlength="100" value="{{ $advertiseposition->advertise_position_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="advertise_position_name" id="advertise_position_name" placeholder="Advertise Position Name" required="true" maxlength="100" value="{{ $advertiseposition->advertise_position_name }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -17,7 +17,7 @@
 	                <label for="advertise_position_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="advertise_position_desc" id="advertise_position_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $advertiseposition->advertise_position_desc }}</textarea>
+	                        {!! $advertiseposition->advertise_position_desc !!}
 	                    </div>
 	                </div>
 	            </div>

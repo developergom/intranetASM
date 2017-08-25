@@ -2,7 +2,7 @@
     <label for="grid_proposal_name" class="col-sm-2 control-label">Name</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input type="text" class="form-control input-sm" name="grid_proposal_name" id="grid_proposal_name" placeholder="Project Task Name" required="true" maxlength="100" value="{{ $proposal->grid_proposal_name }}" disabled="true">
+            <input type="text" class="form-control input-sm" name="grid_proposal_name" id="grid_proposal_name" placeholder="Project Task Name" required="true" maxlength="100" value="{{ $proposal->grid_proposal_name }}" readonly="true">
         </div>
     </div>
 </div>
@@ -10,7 +10,7 @@
     <label for="grid_proposal_deadline" class="col-sm-2 control-label">Deadline</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input type="text" class="form-control input-sm" name="grid_proposal_deadline" id="grid_proposal_deadline" placeholder="Deadline" required="true" maxlength="10" value="{{ $deadline }}" disabled="true">
+            <input type="text" class="form-control input-sm" name="grid_proposal_deadline" id="grid_proposal_deadline" placeholder="Deadline" required="true" maxlength="10" value="{{ $deadline }}" readonly="true">
         </div>
     </div>
 </div>
@@ -18,7 +18,7 @@
     <label for="grid_proposal_desc" class="col-sm-2 control-label">Description</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <textarea name="grid_proposal_desc" id="grid_proposal_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ old('grid_proposal_desc') }}</textarea>
+            {!! $proposal->grid_proposal_desc !!}
         </div>
     </div>
 </div>
@@ -26,7 +26,7 @@
     <label for="current_user" class="col-sm-2 control-label">Current User</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input type="text" class="form-control input-sm" name="current_user" id="current_user" placeholder="Current User" required="true" maxlength="100" value="{{ $proposal->_currentuser->user_firstname }}" disabled="true">
+            <input type="text" class="form-control input-sm" name="current_user" id="current_user" placeholder="Current User" required="true" maxlength="100" value="{{ $proposal->_currentuser->user_firstname }}" readonly="true">
         </div>
     </div>
 </div>
@@ -34,7 +34,7 @@
     <label for="approval_1" class="col-sm-2 control-label">Lead Generation PIC</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input type="text" class="form-control input-sm" name="approval_1" id="approval_1" placeholder="Lead Generation PIC" required="true" maxlength="100" value="{{ ($proposal->approval_1 == 0) ? '-' : $proposal->_approval_1->user_firstname }}" disabled="true">
+            <input type="text" class="form-control input-sm" name="approval_1" id="approval_1" placeholder="Lead Generation PIC" required="true" maxlength="100" value="{{ ($proposal->approval_1 == 0) ? '-' : $proposal->_approval_1->user_firstname }}" readonly="true">
         </div>
     </div>
 </div>
@@ -42,7 +42,7 @@
     <label for="puc" class="col-sm-2 control-label">PIC 1</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input type="text" class="form-control input-sm" name="pic1" id="pic1" placeholder="PIC 1" required="true" maxlength="100" value="{{ ($proposal->pic_1 == 0) ? '-' : $proposal->_pic_1->user_firstname }}" disabled="true">
+            <input type="text" class="form-control input-sm" name="pic1" id="pic1" placeholder="PIC 1" required="true" maxlength="100" value="{{ ($proposal->pic_1 == 0) ? '-' : $proposal->_pic_1->user_firstname }}" readonly="true">
         </div>
     </div>
 </div>
@@ -51,7 +51,7 @@
     <label for="puc" class="col-sm-2 control-label">PIC 2</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input type="text" class="form-control input-sm" name="pic2" id="pic2" placeholder="PIC 2" required="true" maxlength="100" value="{{ ($proposal->pic_2 == 0) ? '-' : $proposal->_pic_2->user_firstname }}" disabled="true">
+            <input type="text" class="form-control input-sm" name="pic2" id="pic2" placeholder="PIC 2" required="true" maxlength="100" value="{{ ($proposal->pic_2 == 0) ? '-' : $proposal->_pic_2->user_firstname }}" readonly="true">
         </div>
     </div>
 </div>

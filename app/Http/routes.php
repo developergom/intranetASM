@@ -33,6 +33,9 @@ Route::post('/api/readNotification', 'NotificationController@readNotification');
 
 Route::auth();
 
+Route::post('/apiTest', 'AgendaController@apiTest')->middleware(['auth:api']);
+
+
 Route::get('/home', 'HomeController@index')->middleware(['auth','menu']);
 
 //User
@@ -76,6 +79,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('advertiserate/apiList', 'AdvertiseRateController@apiList');
         Route::post('advertiserate/apiDelete', 'AdvertiseRateController@apiDelete');
         Route::resource('advertiserate', 'AdvertiseRateController');
+
+        //Advertise Rate Type
+        Route::post('advertiseratetype/apiList', 'AdvertiseRateTypeController@apiList');
+        Route::post('advertiseratetype/apiDelete', 'AdvertiseRateTypeController@apiDelete');
+        Route::resource('advertiseratetype', 'AdvertiseRateTypeController');
 
         //Advertise Size
         Route::post('advertisesize/apiList', 'AdvertiseSizeController@apiList');
@@ -127,6 +135,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('flow/apiList', 'FlowController@apiList');
         Route::post('flow/apiDelete', 'FlowController@apiDelete');
         Route::post('flow/apiCountFlow', 'FlowController@apiCountFlow');
+        Route::post('flow/apiGetFlow', 'FlowController@apiGetFlow');
         Route::resource('flow', 'FlowController');
 
         //Flow Group
@@ -148,6 +157,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('industry/apiList', 'IndustryController@apiList');
         Route::post('industry/apiDelete', 'IndustryController@apiDelete');
         Route::resource('industry', 'IndustryController');
+
+        //Inventory Category
+        Route::post('inventorycategory/apiList', 'InventoryCategoryController@apiList');
+        Route::post('inventorycategory/apiDelete', 'InventoryCategoryController@apiDelete');
+        Route::resource('inventorycategory', 'InventoryCategoryController');
 
         //Inventory Type
         Route::post('inventorytype/apiList', 'InventoryTypeController@apiList');
@@ -280,6 +294,8 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         //Agenda Plan
         Route::post('plan/apiList', 'AgendaController@apiList');
         Route::post('plan/apiDelete', 'AgendaController@apiDelete');
+        Route::get('plan/do_report/{id}', 'AgendaController@doReport');
+        Route::post('plan/do_report/{id}', 'AgendaController@postDoReport');
         Route::resource('plan', 'AgendaController');
     });
 
@@ -385,6 +401,10 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('setting/apiDelete', 'SettingController@apiDelete');
         Route::resource('setting', 'SettingController');
         Route::post('setting/clearCache', 'SettingController@apiClearCache');
+
+        //Cache Management
+        Route::get('cache-management', 'CacheManagementController@index');
+        Route::post('cache-management/apiClearAll', 'CacheManagementController@apiClearAll');
 
         //User Log
         Route::post('log/apiList', 'LogController@apiList');

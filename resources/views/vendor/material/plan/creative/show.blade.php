@@ -15,7 +15,7 @@
         			<label for="creative_format_id" class="col-sm-2 control-label">Format</label>
         			<div class="col-sm-10">
         				<div class="fg-line">
-	        				<input type="text" class="form-control input-sm" name="creative_format_id" id="creative_format_id" placeholder="Creative Format" required="true" maxlength="100" value="{{ $creative->creativeformat->creative_format_name }}" disabled="true">
+	        				<input type="text" class="form-control input-sm" name="creative_format_id" id="creative_format_id" placeholder="Creative Format" required="true" maxlength="100" value="{{ $creative->creativeformat->creative_format_name }}" readonly="true">
 	        			</div>
         			</div>
         		</div>
@@ -23,7 +23,7 @@
 	                <label for="creative_name" class="col-sm-2 control-label">Creative Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="creative_name" id="creative_name" placeholder="Creative Plan Name" required="true" maxlength="100" value="{{ $creative->creative_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="creative_name" id="creative_name" placeholder="Creative Plan Name" required="true" maxlength="100" value="{{ $creative->creative_name }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -31,7 +31,7 @@
         			<label for="media_category_id" class="col-sm-2 control-label">Category</label>
         			<div class="col-sm-10">
         				<div class="fg-line">
-	        				<input type="text" class="form-control input-sm" name="media_category_id" id="media_category_id" placeholder="Category" required="true" maxlength="100" value="{{ $creative->mediacategory->media_category_name }}" disabled="true">
+	        				<input type="text" class="form-control input-sm" name="media_category_id" id="media_category_id" placeholder="Category" required="true" maxlength="100" value="{{ $creative->mediacategory->media_category_name }}" readonly="true">
 	        			</div>
         			</div>
         		</div>
@@ -39,7 +39,7 @@
 	                <label for="creative_width" class="col-sm-2 control-label">Width</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="creative_width" id="creative_width" placeholder="Width" required="true" maxlength="10" value="{{ $creative->creative_width .' '. $creative->unit->unit_code }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="creative_width" id="creative_width" placeholder="Width" required="true" maxlength="10" value="{{ $creative->creative_width .' '. $creative->unit->unit_code }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -47,7 +47,7 @@
 	                <label for="creative_height" class="col-sm-2 control-label">Height</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="creative_height" id="creative_height" placeholder="Height" required="true" maxlength="10" value="{{ $creative->creative_height .' '. $creative->unit->unit_code }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="creative_height" id="creative_height" placeholder="Height" required="true" maxlength="10" value="{{ $creative->creative_height .' '. $creative->unit->unit_code }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -55,7 +55,7 @@
 	                <label for="creative_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="creative_desc" id="creative_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $creative->creative_desc }}</textarea>
+	                        {!! $creative->creative_desc !!}
 	                    </div>
 	                </div>
 	            </div>
@@ -106,7 +106,7 @@
 	                <label for="created_by" class="col-sm-2 control-label">Created By</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" placeholder="Created By" disabled="true" maxlength="100" value="{{ $creative->created_by->user_firstname . ' ' . $creative->created_by->user_lastname }}">
+	                        <input type="text" class="form-control input-sm" placeholder="Created By" readonly="true" maxlength="100" value="{{ $creative->created_by->user_firstname . ' ' . $creative->created_by->user_lastname }}">
 	                    </div>
 	                </div>
 	            </div>
@@ -127,7 +127,7 @@
                                 </div>
                                 <div class="tv-body">
 									<p>
-										{{ $value->creative_history_text }}
+										{!! $value->creative_history_text !!}
 									</p>
 									<div class="clearfix"></div>
 									<ul class="tvb-stats">

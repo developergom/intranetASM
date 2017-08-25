@@ -11,8 +11,10 @@ class InventoryPlanner extends Model
 
 	protected $fillable = [
 				'inventory_type_id', 
+				'inventory_category_id', 
 				'inventory_planner_title',
 				'inventory_planner_deadline',
+				'inventory_planner_participants',
 				'inventory_planner_desc',
 				'flow_no',
 				'revision_no',
@@ -36,6 +38,11 @@ class InventoryPlanner extends Model
 	public function inventorytype()
 	{
 		return $this->belongsTo('App\InventoryType', 'inventory_type_id');
+	}
+
+	public function inventorycategory()
+	{
+		return $this->belongsTo('App\InventoryCategory', 'inventory_category_id');
 	}
 
 	public function medias() 

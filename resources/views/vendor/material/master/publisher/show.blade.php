@@ -9,7 +9,7 @@
 	                <label for="publisher_code" class="col-sm-2 control-label">Code</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="publisher_code" id="publisher_code" placeholder="Publisher Code" required="true" maxlength="5" value="{{ $publisher->publisher_code }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="publisher_code" id="publisher_code" placeholder="Publisher Code" required="true" maxlength="5" value="{{ $publisher->publisher_code }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -17,7 +17,7 @@
 	                <label for="publisher_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="publisher_name" id="publisher_name" placeholder="Publisher Name" required="true" maxlength="100" value="{{ $publisher->publisher_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="publisher_name" id="publisher_name" placeholder="Publisher Name" required="true" maxlength="100" value="{{ $publisher->publisher_name }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -25,7 +25,7 @@
 	                <label for="publisher_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="publisher_desc" id="publisher_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $publisher->publisher_desc }}</textarea>
+	                        {!! $publisher->publisher_desc !!}
 	                    </div>
 	                </div>
 	            </div>

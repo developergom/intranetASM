@@ -47,7 +47,7 @@
                             </select>
         				</div>
         			</div>
-        		</div>
+        		</div><!-- 
         		<div class="form-group">
 	                <label for="agenda_destination" class="col-sm-2 control-label">Destination</label>
 	                <div class="col-sm-10">
@@ -60,7 +60,7 @@
 			                </span>
 			            @endif
 	                </div>
-	            </div>
+	            </div> -->
 	            <div class="form-group">
 	                <label for="client" class="col-sm-2 control-label">Client</label>
 	                <div class="col-sm-10">
@@ -84,7 +84,7 @@
                             </select>
 	                    </div>
 	                </div>
-	            </div>
+	            </div><!-- 
 	            <div class="form-group">
 	                <label for="inventory_planner_id" class="col-sm-2 control-label">Inventory Planner</label>
 	                <div class="col-sm-10">
@@ -96,7 +96,7 @@
                             </select>
 	                    </div>
 	                </div>
-	            </div>
+	            </div> -->
 	            <div class="form-group">
 	                <label for="proposal_id" class="col-sm-2 control-label">Proposal</label>
 	                <div class="col-sm-10">

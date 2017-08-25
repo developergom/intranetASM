@@ -28,7 +28,7 @@
 	                <label for="comment" class="col-sm-2 control-label">Comment</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="comment" id="comment" class="form-control input-sm" placeholder="Comment" required="true">{{ old('comment') }}</textarea>
+	                        <textarea name="comment" id="comment" class="form-control input-sm" placeholder="Comment">{{ old('comment') }}</textarea>
 	                    </div>
 	                </div>
 	            </div>

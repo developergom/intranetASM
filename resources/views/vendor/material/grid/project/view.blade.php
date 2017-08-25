@@ -2,7 +2,7 @@
     <label for="project_code" class="col-sm-2 control-label">Project Code</label>
     <div class="col-sm-10">
         <div class="fg-line">
-			<input type="text" class="form-control" name="project_code" id="project_code" placeholder="Project Code" maxlength="20" value="{{ $project->project_code }}" disabled="true">
+			<input type="text" class="form-control" name="project_code" id="project_code" placeholder="Project Code" maxlength="20" value="{{ $project->project_code }}" readonly="true">
         </div>
     </div>
 </div>
@@ -10,7 +10,7 @@
     <label for="project_name" class="col-sm-2 control-label">Project Name</label>
     <div class="col-sm-10">
         <div class="fg-line">
-			<input type="text" class="form-control" name="project_name" id="project_name" placeholder="Project Name" required="true" maxlength="100" value="{{ $project->project_name }}" disabled="true">
+			<input type="text" class="form-control" name="project_name" id="project_name" placeholder="Project Name" required="true" maxlength="100" value="{{ $project->project_name }}" readonly="true">
         </div>
     </div>
 </div>
@@ -18,7 +18,7 @@
     <label for="project_periode_start" class="col-sm-2 control-label">Project Start</label>
     <div class="col-sm-10">
         <div class="fg-line">
-			<input type="text" class="form-control" name="project_periode_start" id="project_periode_start" placeholder="Project Start e.g 17/08/1945" required="true" maxlength="100" value="{{ $project_start }}" disabled="true">
+			<input type="text" class="form-control" name="project_periode_start" id="project_periode_start" placeholder="Project Start e.g 17/08/1945" required="true" maxlength="100" value="{{ $project_start }}" readonly="true">
         </div>
     </div>
 </div>
@@ -26,7 +26,7 @@
     <label for="project_periode_end" class="col-sm-2 control-label">Project End</label>
     <div class="col-sm-10">
         <div class="fg-line">
-			<input type="text" class="form-control" name="project_periode_end" id="project_periode_end" placeholder="Project End e.g 17/08/1945" required="true" maxlength="100" value="{{ $project_end }}" disabled="true">
+			<input type="text" class="form-control" name="project_periode_end" id="project_periode_end" placeholder="Project End e.g 17/08/1945" required="true" maxlength="100" value="{{ $project_end }}" readonly="true">
         </div>
     </div>
 </div>
@@ -34,7 +34,7 @@
     <label for="client" class="col-sm-2 control-label">Client</label>
     <div class="col-sm-10">
         <div class="fg-line">
-           	<input class="form-control" value="{{ $project->client->client_name }}" placeholder="Client" disabled="true">
+           	<input class="form-control" value="{{ $project->client->client_name }}" placeholder="Client" readonly="true">
         </div>
     </div>
 </div>
@@ -42,7 +42,7 @@
     <label for="project_desc" class="col-sm-2 control-label">Description</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <textarea name="project_desc" id="project_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $project->project_desc }}</textarea>
+            {!! $project->project_desc !!}
         </div>
     </div>
 </div>

@@ -13,7 +13,7 @@
 	                <label for="menu_name" class="col-sm-2 control-label">Menu Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="menu_name" id="menu_name" placeholder="Menu Name" required="true" maxlength="100" value="{{ $menu->menu_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="menu_name" id="menu_name" placeholder="Menu Name" required="true" maxlength="100" value="{{ $menu->menu_name }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -21,7 +21,7 @@
 	                <label for="module_id" class="col-sm-2 control-label">URL</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                    	<input type="text" class="form-control input-sm" placeholder="Module URL" required="true" maxlength="100" value="{{ $menu->module->module_url }}" disabled="true">
+	                    	<input type="text" class="form-control input-sm" placeholder="Module URL" required="true" maxlength="100" value="{{ $menu->module->module_url }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -37,7 +37,7 @@
 	                <label for="menu_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="menu_desc" id="menu_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $menu->menu_desc }}</textarea>
+	                        {!! $menu->menu_desc !!}
 	                    </div>
 	                </div>
 	            </div>

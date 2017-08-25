@@ -25,7 +25,7 @@
 	                <label for="unit_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="unit_desc" id="unit_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $unit->unit_desc }}</textarea>
+	                        {!! $unit->unit_desc !!}
 	                    </div>
 	                </div>
 	            </div>

@@ -15,7 +15,7 @@
                 </div>
                 <div class="tv-body">
 					<p>
-						{{ $value->grid_proposal_history_text }}
+						{!! $value->grid_proposal_history_text !!}
 					</p>
 					<div class="clearfix"></div>
 					<ul class="tvb-stats">

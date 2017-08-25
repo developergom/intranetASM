@@ -160,6 +160,7 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
         hisorange\BrowserDetect\Provider\BrowserDetectService::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 

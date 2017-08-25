@@ -15,7 +15,7 @@
 	                <label for="action_plan_title" class="col-sm-2 control-label">Title</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="action_plan_title" id="action_plan_title" placeholder="Action Plan Title" disabled="true" maxlength="100" value="{{ $actionplan->action_plan_title }}">
+	                        <input type="text" class="form-control input-sm" name="action_plan_title" id="action_plan_title" placeholder="Action Plan Title" readonly="true" maxlength="100" value="{{ $actionplan->action_plan_title }}">
 	                    </div>
 	                </div>
 	            </div>
@@ -23,7 +23,7 @@
 	                <label for="action_plan_desc" class="col-sm-2 control-label">Theme Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="action_plan_desc" id="action_plan_desc" class="form-control input-sm" placeholder="Theme Description" disabled="true">{{ $actionplan->action_plan_desc }}</textarea>
+	                        {!! $actionplan->action_plan_desc !!}
 	                    </div>
 	                </div>
 	            </div>
@@ -31,7 +31,7 @@
 	                <label for="action_plan_rubric_desc" class="col-sm-2 control-label">Rubric Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="action_plan_rubric_desc" id="action_plan_rubric_desc" class="form-control input-sm" placeholder="Rubric Description" disabled="true">{{ $actionplan->action_plan_rubric_desc }}</textarea>
+	                        {!! $actionplan->action_plan_rubric_desc !!}
 	                    </div>
 	                </div>
 	            </div>
@@ -82,7 +82,7 @@
 	                <label for="action_plan_pages" class="col-sm-2 control-label">Total Pages</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="action_plan_pages" id="action_plan_pages" placeholder="Total Pages" required="true" maxlength="20" value="{{ $actionplan->action_plan_pages }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="action_plan_pages" id="action_plan_pages" placeholder="Total Pages" required="true" maxlength="20" value="{{ $actionplan->action_plan_pages }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -92,7 +92,7 @@
 	                <label for="action_plan_startdate" class="col-sm-2 control-label">Start Date</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="action_plan_startdate" id="action_plan_startdate" placeholder="e.g 17/08/1945" disabled="true" maxlength="10" value="{{ $startdate }}" autocomplete="off" data-mask="00/00/0000">
+	                        <input type="text" class="form-control input-sm input-mask" name="action_plan_startdate" id="action_plan_startdate" placeholder="e.g 17/08/1945" readonly="true" maxlength="10" value="{{ $startdate }}" autocomplete="off" data-mask="00/00/0000">
 	                    </div>
 	                </div>
 	            </div>
@@ -100,7 +100,7 @@
 	                <label for="action_plan_views" class="col-sm-2 control-label">Total Views</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="action_plan_views" id="action_plan_views" placeholder="Total Views" required="true" maxlength="20" value="{{ $actionplan->action_plan_views }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="action_plan_views" id="action_plan_views" placeholder="Total Views" required="true" maxlength="20" value="{{ $actionplan->action_plan_views }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -139,7 +139,7 @@
 	                <label for="created_by" class="col-sm-2 control-label">Created By</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" placeholder="Created By" disabled="true" maxlength="100" value="{{ $actionplan->created_by->user_firstname . ' ' . $actionplan->created_by->user_lastname }}">
+	                        <input type="text" class="form-control input-sm" placeholder="Created By" readonly="true" maxlength="100" value="{{ $actionplan->created_by->user_firstname . ' ' . $actionplan->created_by->user_lastname }}">
 	                    </div>
 	                </div>
 	            </div>
@@ -147,7 +147,7 @@
 	                <label for="created_at" class="col-sm-2 control-label">Created Time</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" placeholder="Created Time" disabled="true" maxlength="100" value="{{ $actionplan->created_at }}">
+	                        <input type="text" class="form-control input-sm" placeholder="Created Time" readonly="true" maxlength="100" value="{{ $actionplan->created_at }}">
 	                    </div>
 	                </div>
 	            </div>
@@ -155,7 +155,7 @@
 	                <label for="updated_by" class="col-sm-2 control-label">Updated By</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" placeholder="Updated By" disabled="true" maxlength="100" value="">
+	                        <input type="text" class="form-control input-sm" placeholder="Updated By" readonly="true" maxlength="100" value="">
 	                    </div>
 	                </div>
 	            </div>
@@ -163,7 +163,7 @@
 	                <label for="updated_time" class="col-sm-2 control-label">Updated Time</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" placeholder="Updated Time" disabled="true" maxlength="100" value="{{ $actionplan->updated_at }}">
+	                        <input type="text" class="form-control input-sm" placeholder="Updated Time" readonly="true" maxlength="100" value="{{ $actionplan->updated_at }}">
 	                    </div>
 	                </div>
 	            </div> -->
@@ -184,7 +184,7 @@
                                 </div>
                                 <div class="tv-body">
 									<p>
-										{{ $value->action_plan_history_text }}
+										{!! $value->action_plan_history_text !!}
 									</p>
 									<div class="clearfix"></div>
 									<ul class="tvb-stats">

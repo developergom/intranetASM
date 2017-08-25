@@ -2,26 +2,34 @@
 	<label for="inventory_type_id" class="col-sm-2 control-label">Type</label>
 	<div class="col-sm-10">
 		<div class="fg-line">
-			<input class="form-control input-sm" placeholder="Type" disabled="true" value="{{ $inventoryplanner->inventorytype->inventory_type_name }}">
+			<input class="form-control input-sm" placeholder="Type" readonly="true" value="{{ $inventoryplanner->inventorytype->inventory_type_name }}">
 		</div>
 	</div>
+</div>
+<div class="form-group">
+    <label for="inventory_category_id" class="col-sm-2 control-label">Category</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <input class="form-control input-sm" placeholder="Category" readonly="true" value="{{ $inventoryplanner->inventorycategory->inventory_category_name }}">
+        </div>
+    </div>
 </div>
 <div class="form-group">
     <label for="inventory_planner_title" class="col-sm-2 control-label">Title</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input class="form-control input-sm" placeholder="Title" disabled="true" value="{{ $inventoryplanner->inventory_planner_title }}">
+            <input class="form-control input-sm" placeholder="Title" readonly="true" value="{{ $inventoryplanner->inventory_planner_title }}">
         </div>
     </div>
-</div>
+</div><!-- 
 <div class="form-group">
     <label for="inventory_planner_desc" class="col-sm-2 control-label">Description</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <textarea class="form-control input-sm" placeholder="Description" disabled="true">{{ $inventoryplanner->inventory_planner_desc }}</textarea>
+            {!! $inventoryplanner->inventory_planner_desc !!}
         </div>
     </div>
-</div>
+</div> -->
 <div class="form-group">
     <label for="implementation_id" class="col-sm-2 control-label">Implementation</label>
     <div class="col-sm-10">
@@ -36,7 +44,7 @@
     <label for="inventory_planner_year" class="col-sm-2 control-label">Year</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input class="form-control input-sm" placeholder="Year" disabled="true" value="{{ $inventoryplanner->inventory_planner_year }}">
+            <input class="form-control input-sm" placeholder="Year" readonly="true" value="{{ $inventoryplanner->inventory_planner_year }}">
         </div>
     </div>
 </div>
@@ -44,7 +52,15 @@
     <label for="inventory_planner_deadline" class="col-sm-2 control-label">Deadline</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input class="form-control input-sm" placeholder="Deadline" disabled="true" value="{{ Carbon\Carbon::createFromFormat('Y-m-d', $inventoryplanner->inventory_planner_deadline)->format('d/m/Y') }}">
+            <input class="form-control input-sm" placeholder="Deadline" readonly="true" value="{{ Carbon\Carbon::createFromFormat('Y-m-d', $inventoryplanner->inventory_planner_deadline)->format('d/m/Y') }}">
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="inventory_planner_participants" class="col-sm-2 control-label">Participants</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <input class="form-control input-sm" placeholder="Participants" readonly="true" value="{{ $inventoryplanner->inventory_planner_participants }}">
         </div>
     </div>
 </div>
@@ -57,7 +73,7 @@
             @endforeach
         </div>
     </div>
-</div>
+</div><!-- 
 <div class="form-group">
     <label for="action_plan_id" class="col-sm-2 control-label">Action Plan</label>
     <div class="col-sm-10">
@@ -77,7 +93,7 @@
             @endforeach
         </div>
     </div>
-</div>
+</div> -->
 <div class="form-group">
     <label for="upload_file" class="col-sm-2 control-label">Upload File(s)</label>
     <div class="col-sm-10">
@@ -147,7 +163,7 @@
                             		<td>{{ number_format($row->inventory_planner_print_price_total_gross_rate) }}</td>
                             		<td>{{ number_format($row->inventory_planner_print_price_discount) }}</td>
                             		<td>{{ number_format($row->inventory_planner_print_price_nett_rate) }}</td>
-                            		<td>{{ $row->inventory_planner_print_price_remarks }}</td>
+                            		<td>{!! $row->inventory_planner_print_price_remarks !!}</td>
                             	</tr>
                             @endforeach
                             </tbody>
@@ -191,7 +207,7 @@
                             		<td>{{ number_format($row->inventory_planner_digital_price_total_gross_rate) }}</td>
                             		<td>{{ number_format($row->inventory_planner_digital_price_discount) }}</td>
                             		<td>{{ number_format($row->inventory_planner_digital_price_nett_rate) }}</td>
-                            		<td>{{ $row->inventory_planner_digital_price_remarks }}</td>
+                            		<td>{!! $row->inventory_planner_digital_price_remarks !!}</td>
                             	</tr>
                             @endforeach
                             </tbody>
@@ -221,7 +237,7 @@
                             		<td>{{ number_format($row->inventory_planner_event_price_total_gross_rate) }}</td>
                             		<td>{{ number_format($row->inventory_planner_event_price_discount) }}</td>
                             		<td>{{ number_format($row->inventory_planner_event_price_nett_rate) }}</td>
-                            		<td>{{ $row->inventory_planner_event_price_remarks }}</td>
+                            		<td>{!! $row->inventory_planner_event_price_remarks !!}</td>
                             	</tr>
                             @endforeach
                             </tbody>
@@ -259,7 +275,7 @@
                             		<td>{{ number_format($row->inventory_planner_creative_price_total_gross_rate) }}</td>
                             		<td>{{ number_format($row->inventory_planner_creative_price_discount) }}</td>
                             		<td>{{ number_format($row->inventory_planner_creative_price_nett_rate) }}</td>
-                            		<td>{{ $row->inventory_planner_creative_price_remarks }}</td>
+                            		<td>{!! $row->inventory_planner_creative_price_remarks !!}</td>
                             	</tr>
                             @endforeach
                             </tbody>
@@ -289,7 +305,7 @@
                             		<td>{{ number_format($row->inventory_planner_other_price_total_gross_rate) }}</td>
                             		<td>{{ number_format($row->inventory_planner_other_price_discount) }}</td>
                             		<td>{{ number_format($row->inventory_planner_other_price_nett_rate) }}</td>
-                            		<td>{{ $row->inventory_planner_event_other_remarks }}</td>
+                            		<td>{!! $row->inventory_planner_event_other_remarks !!}</td>
                             	</tr>
                             @endforeach
                             </tbody>
@@ -304,7 +320,7 @@
     <label for="total_value" class="col-sm-2 control-label">Total Value</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input type="text" class="form-control input-sm" name="total_value" id="total_value" placeholder="Total Value" maxlength="20" value="{{ number_format($total_value) }}" disabled="true">
+            <input type="text" class="form-control input-sm" name="total_value" id="total_value" placeholder="Total Value" maxlength="20" value="{{ number_format($total_value) }}" readonly="true">
         </div>
     </div>
 </div>
@@ -312,7 +328,7 @@
     <label for="total_nett" class="col-sm-2 control-label">Total Nett</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input type="text" class="form-control input-sm" name="total_nett" id="total_nett" placeholder="Total Nett" maxlength="20" value="{{ number_format($total_nett) }}" disabled="true">
+            <input type="text" class="form-control input-sm" name="total_nett" id="total_nett" placeholder="Total Nett" maxlength="20" value="{{ number_format($total_nett) }}" readonly="true">
         </div>
     </div>
 </div>
@@ -320,7 +336,7 @@
     <label for="saving_value" class="col-sm-2 control-label">Saving Value</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input type="text" class="form-control input-sm" name="saving_value" id="saving_value" placeholder="Saving Value" maxlength="20" value="{{ number_format($saving_value) }}" disabled="true">
+            <input type="text" class="form-control input-sm" name="saving_value" id="saving_value" placeholder="Saving Value" maxlength="20" value="{{ number_format($saving_value) }}" readonly="true">
         </div>
     </div>
 </div>
@@ -328,7 +344,7 @@
     <label for="created_by" class="col-sm-2 control-label">Created By</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input type="text" class="form-control input-sm" placeholder="Created By" disabled="true" maxlength="100" value="{{ $inventoryplanner->created_by->user_firstname . ' ' . $inventoryplanner->created_by->user_lastname }}">
+            <input type="text" class="form-control input-sm" placeholder="Created By" readonly="true" maxlength="100" value="{{ $inventoryplanner->created_by->user_firstname . ' ' . $inventoryplanner->created_by->user_lastname }}">
         </div>
     </div>
 </div>
@@ -349,7 +365,7 @@
                 </div>
                 <div class="tv-body">
 					<p>
-						{{ $value->inventory_planner_history_text }}
+						{!! $value->inventory_planner_history_text !!}
 					</p>
 					<div class="clearfix"></div>
 					<ul class="tvb-stats">
