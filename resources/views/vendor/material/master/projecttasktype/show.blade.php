@@ -25,7 +25,7 @@
 	                <label for="project_task_type_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="project_task_type_desc" id="project_task_type_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $projecttasktype->project_task_type_desc }}</textarea>
+	                        {!! $projecttasktype->project_task_type_desc !!}
 	                    </div>
 	                </div>
 	            </div>

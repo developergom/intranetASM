@@ -15,7 +15,7 @@
                 </div>
                 <div class="tv-body">
 					<p>
-						{{ $value->project_history_text }}
+						{!! $value->project_history_text !!}
 					</p>
 					<div class="clearfix"></div>
 					<ul class="tvb-stats">

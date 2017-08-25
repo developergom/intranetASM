@@ -9,7 +9,7 @@
 	                <label for="creative_format_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="creative_format_name" id="creative_format_name" placeholder="Action Type Name" required="true" maxlength="100" value="{{ $creativeformat->creative_format_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="creative_format_name" id="creative_format_name" placeholder="Action Type Name" required="true" maxlength="100" value="{{ $creativeformat->creative_format_name }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -17,7 +17,7 @@
 	                <label for="creative_format_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="creative_format_desc" id="creative_format_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $creativeformat->creative_format_desc }}</textarea>
+	                        {!! $creativeformat->creative_format_desc !!}
 	                    </div>
 	                </div>
 	            </div>

@@ -9,7 +9,7 @@
 	                <label for="paper_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="paper_name" id="paper_name" placeholder="Paper Name" required="true" maxlength="100" value="{{ $paper->paper_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="paper_name" id="paper_name" placeholder="Paper Name" required="true" maxlength="100" value="{{ $paper->paper_name }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -17,7 +17,7 @@
 	                <label for="unit_id" class="col-sm-2 control-label">Unit</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="unit_id" id="unit_id" placeholder="Unit" value="{{ $paper->unit->unit_name . ' (' . $paper->unit->unit_code . ')' }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="unit_id" id="unit_id" placeholder="Unit" value="{{ $paper->unit->unit_name . ' (' . $paper->unit->unit_code . ')' }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -25,7 +25,7 @@
 	                <label for="paper_width" class="col-sm-2 control-label">Width</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="paper_width" id="paper_width" placeholder="Paper Width" required="true" maxlength="10" value="{{ $paper->paper_width }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="paper_width" id="paper_width" placeholder="Paper Width" required="true" maxlength="10" value="{{ $paper->paper_width }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -33,7 +33,7 @@
 	                <label for="paper_length" class="col-sm-2 control-label">Length</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="paper_length" id="paper_length" placeholder="Paper Length" required="true" maxlength="10" value="{{ $paper->paper_length }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="paper_length" id="paper_length" placeholder="Paper Length" required="true" maxlength="10" value="{{ $paper->paper_length }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -41,7 +41,7 @@
 	                <label for="paper_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="paper_desc" id="paper_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $paper->paper_desc }}</textarea>
+	                        {!! $paper->paper_desc !!}
 	                    </div>
 	                </div>
 	            </div>

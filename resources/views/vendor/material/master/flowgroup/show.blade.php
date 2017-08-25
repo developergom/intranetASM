@@ -14,7 +14,7 @@
 	                <label for="flow_group_name" class="col-sm-2 control-label">Flow Group Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input data-id="{{ $flowgroup->flow_group_id }}" type="text" class="form-control input-sm" name="flow_group_name" id="flow_group_name" placeholder="flow_group Name" required="true" maxlength="100" value="{{ $flowgroup->flow_group_name }}" disabled="true">
+	                        <input data-id="{{ $flowgroup->flow_group_id }}" type="text" class="form-control input-sm" name="flow_group_name" id="flow_group_name" placeholder="flow_group Name" required="true" maxlength="100" value="{{ $flowgroup->flow_group_name }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -22,7 +22,7 @@
 	                <label for="module_id" class="col-sm-2 control-label">URL</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                    	<input type="text" class="form-control input-sm" placeholder="Module URL" required="true" maxlength="100" value="{{ $flowgroup->module->module_url }}" disabled="true">
+	                    	<input type="text" class="form-control input-sm" placeholder="Module URL" required="true" maxlength="100" value="{{ $flowgroup->module->module_url }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -30,7 +30,7 @@
 	                <label for="flow_group_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="flow_group_desc" id="flow_group_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $flowgroup->flow_group_desc }}</textarea>
+	                        {!! $flowgroup->flow_group_desc !!}
 	                    </div>
 	                </div>
 	            </div>

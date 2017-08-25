@@ -78,7 +78,7 @@ class PriceTypeController extends Controller
         }
 
         $data = array();
-        $data['proposaltype'] = PriceType::where('active','1')->find($id);
+        $data['pricetype'] = PriceType::where('active','1')->find($id);
         return view('vendor.material.master.pricetype.show', $data);
     }
 
@@ -95,7 +95,7 @@ class PriceTypeController extends Controller
         }
 
         $data = array();
-        $data['proposaltype'] = PriceType::where('active','1')->find($id);
+        $data['pricetype'] = PriceType::where('active','1')->find($id);
         return view('vendor.material.master.pricetype.edit', $data);
     }
 

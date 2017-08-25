@@ -2,7 +2,7 @@
 	<label for="project_task_type_id" class="col-sm-2 control-label">Task Type</label>
 	<div class="col-sm-10">
 		<div class="fg-line">
-			<input type="text" class="form-control" disabled="true" value="{{ $projecttask->projecttasktype->project_task_type_name }}">
+			<input type="text" class="form-control" readonly="true" value="{{ $projecttask->projecttasktype->project_task_type_name }}">
 		</div>
 	</div>
 </div>
@@ -10,7 +10,7 @@
     <label for="project_task_name" class="col-sm-2 control-label">Task Name</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input type="text" class="form-control input-sm" name="project_task_name" id="project_task_name" placeholder="Project Task Name" required="true" maxlength="100" value="{{ $projecttask->project_task_name }}" disabled="true">
+            <input type="text" class="form-control input-sm" name="project_task_name" id="project_task_name" placeholder="Project Task Name" required="true" maxlength="100" value="{{ $projecttask->project_task_name }}" readonly="true">
         </div>
     </div>
 </div>
@@ -18,7 +18,7 @@
     <label for="project_task_deadline" class="col-sm-2 control-label">Task Deadline</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input type="text" class="form-control input-sm" name="project_task_deadline" id="project_task_deadline" placeholder="Deadline" required="true" maxlength="10" value="{{ $deadline }}" disabled="true">
+            <input type="text" class="form-control input-sm" name="project_task_deadline" id="project_task_deadline" placeholder="Deadline" required="true" maxlength="10" value="{{ $deadline }}" readonly="true">
         </div>
     </div>
 </div>
@@ -26,7 +26,7 @@
     <label for="project_task_desc" class="col-sm-2 control-label">Description</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <textarea name="project_task_desc" id="project_task_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ old('project_task_desc') }}</textarea>
+            {!! old('project_task_desc') !!}
         </div>
     </div>
 </div>
@@ -42,7 +42,7 @@
     <label for="current_user" class="col-sm-2 control-label">Current User</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input type="text" class="form-control input-sm" name="current_user" id="current_user" placeholder="Current User" required="true" maxlength="100" value="{{ $projecttask->_currentuser->user_firstname }}" disabled="true">
+            <input type="text" class="form-control input-sm" name="current_user" id="current_user" placeholder="Current User" required="true" maxlength="100" value="{{ $projecttask->_currentuser->user_firstname }}" readonly="true">
         </div>
     </div>
 </div>
@@ -50,7 +50,7 @@
     <label for="puc" class="col-sm-2 control-label">PIC</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input type="text" class="form-control input-sm" name="pic" id="pic" placeholder="PIC" required="true" maxlength="100" value="{{ ($projecttask->pic == 0) ? '-' : $projecttask->_pic->user_firstname }}" disabled="true">
+            <input type="text" class="form-control input-sm" name="pic" id="pic" placeholder="PIC" required="true" maxlength="100" value="{{ ($projecttask->pic == 0) ? '-' : $projecttask->_pic->user_firstname }}" readonly="true">
         </div>
     </div>
 </div>

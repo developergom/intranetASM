@@ -77,9 +77,7 @@
 	            <div class="form-group">
 	                <label for="agenda_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <textarea name="agenda_desc" id="agenda_desc" class="form-control input-sm" placeholder="Description" readonly="true">{{ $agenda->agenda_desc }}</textarea>
-	                    </div>
+	                    {!! $agenda->agenda_desc !!}
 	                </div>
 	            </div>
 	            <div class="form-group">
@@ -110,9 +108,7 @@
 	            <div class="form-group">
 	                <label for="agenda_report_desc" class="col-sm-2 control-label">Report Description</label>
 	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <textarea name="agenda_report_desc" id="agenda_report_desc" class="form-control input-sm" placeholder="Report Description" readonly="true">{{ $agenda->agenda_report_desc }}</textarea>
-	                    </div>
+	                    {!! $agenda->agenda_report_desc !!}
 	                </div>
 	            </div>
 	            <div class="form-group">

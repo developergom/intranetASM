@@ -14,7 +14,7 @@
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                    	<input type="hidden" name="_client_id" value="{{ $client->client_id }}">
-	                    	<input name="client_type_id" id="client_type_id" class="form-control input-sm" placeholder="Client Type" value="{{ $client->clienttype->client_type_name }}" disabled="true"> 
+	                    	<input name="client_type_id" id="client_type_id" class="form-control input-sm" placeholder="Client Type" value="{{ $client->clienttype->client_type_name }}" readonly="true"> 
 	                    </div> 
 	                </div>
 	            </div>
@@ -22,7 +22,7 @@
 	                <label for="client_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="_client_name" id="_client_name" placeholder="Client Name" required="true" maxlength="255" value="{{ $client->client_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="_client_name" id="_client_name" placeholder="Client Name" required="true" maxlength="255" value="{{ $client->client_name }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -30,7 +30,7 @@
 	                <label for="client_formal_name" class="col-sm-2 control-label">Formal Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="client_formal_name" id="client_formal_name" placeholder="Client Formal Name" required="true" maxlength="255" value="{{ $client->client_formal_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="client_formal_name" id="client_formal_name" placeholder="Client Formal Name" required="true" maxlength="255" value="{{ $client->client_formal_name }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -38,7 +38,7 @@
 	                <label for="client_mail_address" class="col-sm-2 control-label">Mail Address</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="client_mail_address" id="client_mail_address" class="form-control input-sm" placeholder="Mail Address" disabled="true">{{ $client->client_mail_address }}</textarea>
+	                        {!! $client->client_mail_address !!}
 	                    </div>
 	                </div>
 	            </div>
@@ -46,7 +46,7 @@
 	                <label for="client_mail_postcode" class="col-sm-2 control-label">Mail Post Code</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="client_mail_postcode" id="client_mail_postcode" placeholder="Post Code" required="true" maxlength="10" value="{{ $client->client_mail_postcode }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="client_mail_postcode" id="client_mail_postcode" placeholder="Post Code" required="true" maxlength="10" value="{{ $client->client_mail_postcode }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -54,7 +54,7 @@
 	                <label for="client_npwp" class="col-sm-2 control-label">N P W P</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="client_npwp" id="client_npwp" placeholder="N P W P" required="true" maxlength="25" value="{{ $client->client_npwp }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="client_npwp" id="client_npwp" placeholder="N P W P" required="true" maxlength="25" value="{{ $client->client_npwp }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -62,7 +62,7 @@
 	                <label for="client_npwp_address" class="col-sm-2 control-label">NPWP Address</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="client_npwp_address" id="client_npwp_address" class="form-control input-sm" placeholder="N P W P Address" disabled="true">{{ $client->client_npwp_address }}</textarea>
+	                        {!! $client->client_npwp_address !!}
 	                    </div>
 	                </div>
 	            </div>
@@ -70,7 +70,7 @@
 	                <label for="client_npwp_postcode" class="col-sm-2 control-label">NPWP Post Code</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="client_npwp_postcode" id="client_npwp_postcode" placeholder="Post Code" required="true" maxlength="10" value="{{ $client->client_npwp_postcode }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="client_npwp_postcode" id="client_npwp_postcode" placeholder="Post Code" required="true" maxlength="10" value="{{ $client->client_npwp_postcode }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -78,7 +78,7 @@
 	                <label for="client_invoice_address" class="col-sm-2 control-label">Invoice Address</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="client_invoice_address" id="client_invoice_address" class="form-control input-sm" placeholder="Invoice Address" disabled="true">{{ $client->client_invoice_address }}</textarea>
+	                        {!! $client->client_invoice_address !!}
 	                    </div>
 	                </div>
 	            </div>
@@ -86,7 +86,7 @@
 	                <label for="client_invoice_postcode" class="col-sm-2 control-label">Invoice Post Code</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="client_invoice_postcode" id="client_invoice_postcode" placeholder="Post Code" required="true" maxlength="10" value="{{ $client->client_invoice_postcode }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="client_invoice_postcode" id="client_invoice_postcode" placeholder="Post Code" required="true" maxlength="10" value="{{ $client->client_invoice_postcode }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -94,7 +94,7 @@
 	                <label for="client_phone" class="col-sm-2 control-label">Phone No</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="client_phone" id="client_phone" placeholder="Phone No" required="true" maxlength="15" value="{{ $client->client_phone }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="client_phone" id="client_phone" placeholder="Phone No" required="true" maxlength="15" value="{{ $client->client_phone }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -102,7 +102,7 @@
 	                <label for="client_fax" class="col-sm-2 control-label">Fax No</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="client_fax" id="client_fax" placeholder="Fax No" maxlength="15" value="{{ $client->client_fax }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="client_fax" id="client_fax" placeholder="Fax No" maxlength="15" value="{{ $client->client_fax }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -110,7 +110,7 @@
 	                <label for="client_email" class="col-sm-2 control-label">Email</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="client_email" id="client_email" placeholder="Email" required="true" maxlength="255" value="{{ $client->client_email }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="client_email" id="client_email" placeholder="Email" required="true" maxlength="255" value="{{ $client->client_email }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>

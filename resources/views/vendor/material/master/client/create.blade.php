@@ -99,7 +99,7 @@
 	            </div>
 	            <div class="form-group">
 	                <label for="client_npwp_address" class="col-sm-2 control-label">NPWP Address</label>
-	                <div class="col-sm-8">
+	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <textarea name="client_npwp_address" id="client_npwp_address" class="form-control input-sm" placeholder="N P W P Address">{{ old('client_npwp_address') }}</textarea>
 	                    </div>
@@ -109,13 +109,10 @@
 			                </span>
 			            @endif
 	                </div>
-	                <div class="col-sm-1">
-	                	<a href="javascript:void(0)" class="btn btn-info" id="copy_address">Copy Address</a>
-	                </div>
 	            </div>
 	            <div class="form-group">
 	                <label for="client_npwp_postcode" class="col-sm-2 control-label">NPWP Post Code</label>
-	                <div class="col-sm-8">
+	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <input type="text" class="form-control input-sm" name="client_npwp_postcode" id="client_npwp_postcode" placeholder="Post Code" required="true" maxlength="10" value="{{ old('client_npwp_postcode') }}">
 	                    </div>
@@ -128,7 +125,7 @@
 	            </div>
 	            <div class="form-group">
 	                <label for="client_invoice_address" class="col-sm-2 control-label">Invoice Address</label>
-	                <div class="col-sm-8">
+	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <textarea name="client_invoice_address" id="client_invoice_address" class="form-control input-sm" placeholder="Invoice Address">{{ old('client_invoice_address') }}</textarea>
 	                    </div>
@@ -141,7 +138,7 @@
 	            </div>
 	            <div class="form-group">
 	                <label for="client_invoice_postcode" class="col-sm-2 control-label">Invoice Post Code</label>
-	                <div class="col-sm-8">
+	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <input type="text" class="form-control input-sm" name="client_invoice_postcode" id="client_invoice_postcode" placeholder="Post Code" required="true" maxlength="10" value="{{ old('client_invoice_postcode') }}">
 	                    </div>

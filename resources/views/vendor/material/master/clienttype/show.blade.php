@@ -9,7 +9,7 @@
 	                <label for="client_type_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="client_type_name" id="client_type_name" placeholder="Client Type Name" required="true" maxlength="100" value="{{ $clienttype->client_type_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="client_type_name" id="client_type_name" placeholder="Client Type Name" required="true" maxlength="100" value="{{ $clienttype->client_type_name }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -17,7 +17,7 @@
 	                <label for="client_type_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="client_type_desc" id="client_type_desc" class="form-control input-sm" placeholder="Description" disabled="true">{{ $clienttype->client_type_desc }}</textarea>
+	                        {!! $clienttype->client_type_desc !!}
 	                    </div>
 	                </div>
 	            </div>

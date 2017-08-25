@@ -9,7 +9,7 @@
 	                <label for="industry_id" class="col-sm-2 control-label">Industry</label>
 	                <div class="col-sm-7">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="industry_id" id="industry_id" placeholder="Industry" required="true" value="{{ $subindustry->industry->industry_code . ' - ' . $subindustry->industry->industry_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="industry_id" id="industry_id" placeholder="Industry" required="true" value="{{ $subindustry->industry->industry_code . ' - ' . $subindustry->industry->industry_name }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -17,7 +17,7 @@
 	                <label for="subindustry_code" class="col-sm-2 control-label">Code</label>
 	                <div class="col-sm-7">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="subindustry_code" id="subindustry_code" placeholder="Sub Industry Code" required="true" maxlength="10" value="{{ $subindustry->subindustry_code }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="subindustry_code" id="subindustry_code" placeholder="Sub Industry Code" required="true" maxlength="10" value="{{ $subindustry->subindustry_code }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -25,7 +25,7 @@
 	                <label for="subindustry_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="subindustry_name" id="subindustry_name" placeholder="Sub Industry Name" required="true" maxlength="100" value="{{ $subindustry->subindustry_name }}" disabled="true">
+	                        <input type="text" class="form-control input-sm" name="subindustry_name" id="subindustry_name" placeholder="Sub Industry Name" required="true" maxlength="100" value="{{ $subindustry->subindustry_name }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -33,7 +33,7 @@
 	                <label for="subindustry_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea class="form-control input-sm" placeholder="Description" disabled="true">{{ $subindustry->subindustry_desc }}</textarea>
+	                        {!! $subindustry->subindustry_desc !!}
 	                    </div>
 	                </div>
 	            </div>
