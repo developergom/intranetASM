@@ -3,7 +3,6 @@ $("#grid-data").bootgrid({
     ajax: true,
     post: function ()
     {
-        /* To accumulate custom parameter with the request object */
         return {
             '_token': $('meta[name="csrf-token"]').attr('content')
         };
