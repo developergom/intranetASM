@@ -252,6 +252,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('role/apiEdit', 'RoleController@apiEdit');
         Route::resource('role', 'RoleController');
 
+        //Spot Type
+        Route::post('spottype/apiList', 'SpotTypeController@apiList');
+        Route::post('spottype/apiDelete', 'SpotTypeController@apiDelete');
+        Route::resource('spottype', 'SpotTypeController');
+
         //Sub Industry
         Route::post('subindustry/apiList', 'SubIndustryController@apiList');
         Route::post('subindustry/apiDelete', 'SubIndustryController@apiDelete');
