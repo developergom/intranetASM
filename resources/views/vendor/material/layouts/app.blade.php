@@ -9,6 +9,8 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{!! Cache::get('setting_headtitle') !!}</title>
 
+        <link rel="icon" type="image/ico" href="{{ url('img/favicon.png')}}" />
+
         <!-- Vendor CSS -->
         <link href="{{ url('css/fullcalendar.min.css') }}" rel="stylesheet">
         <link href="{{ url('css/animate.min.css') }}" rel="stylesheet">
