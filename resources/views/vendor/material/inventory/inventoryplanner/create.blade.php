@@ -40,8 +40,8 @@
         			<label for="inventory_category_id" class="col-sm-2 control-label">Category</label>
         			<div class="col-sm-10">
         				<div class="fg-line">
-	        				<select name="inventory_category_id" id="inventory_category_id" class="selectpicker" data-live-search="true" required="true">
-	        					<option value=""></option>
+	        				<select name="inventory_category_id[]" id="inventory_category_id" class="selectpicker" multiple data-live-search="true" required="true">
+	        					<!-- <option value=""></option> -->
 	        					@foreach($inventory_categories as $row)
 	        						{!! $selected = '' !!}
                                 	@if(old('inventory_category_id')==$row->inventory_category_id)
@@ -70,20 +70,7 @@
 			                </span>
 			            @endif
 	                </div>
-	            </div><!-- 
-	            <div class="form-group">
-	                <label for="inventory_planner_desc" class="col-sm-2 control-label">Description</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <textarea name="inventory_planner_desc" id="inventory_planner_desc" class="form-control input-sm" placeholder="Description">{{ old('inventory_planner_desc') }}</textarea>
-	                    </div>
-	                    @if ($errors->has('inventory_planner_desc'))
-			                <span class="help-block">
-			                    <strong>{{ $errors->first('inventory_planner_desc') }}</strong>
-			                </span>
-			            @endif
-	                </div>
-	            </div> -->
+	            </div>
 	            <div class="form-group">
 	                <label for="implementation_id" class="col-sm-2 control-label">Implementation</label>
 	                <div class="col-sm-10">
@@ -134,7 +121,7 @@
 			                </span>
 			            @endif
 	                </div>
-	            </div>
+	            </div><!-- 
 	            <div class="form-group">
 	                <label for="inventory_planner_participants" class="col-sm-2 control-label">Participants</label>
 	                <div class="col-sm-10">
@@ -147,7 +134,7 @@
 			                </span>
 			            @endif
 	                </div>
-	            </div>
+	            </div> -->
 	            <div class="form-group">
 	                <label for="media_id" class="col-sm-2 control-label">Media</label>
 	                <div class="col-sm-10">
@@ -200,7 +187,20 @@
 			                </span>
 			            @endif
 	                </div>
-	            </div> -->
+	            </div> -->	            
+	            <div class="form-group">
+	                <label for="inventory_planner_desc" class="col-sm-2 control-label">Description</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <textarea name="inventory_planner_desc" id="inventory_planner_desc" class="form-control input-sm" placeholder="Description">{{ old('inventory_planner_desc') }}</textarea>
+	                    </div>
+	                    @if ($errors->has('inventory_planner_desc'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('inventory_planner_desc') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
 	            <div class="form-group">
 	                <label for="upload_file" class="col-sm-2 control-label">Upload File(s)</label>
 	                <div class="col-sm-10">
@@ -214,7 +214,7 @@
 		                </span>
 	                </div>
 	            </div>
-	            <div class="form-group">
+	            <!-- <div class="form-group">
 	            	<div class="col-sm-12">
 	            		<a href="javascript:void(0)" class="btn btn-primary btn-sm waves-effect command-add-inventory-planner-price">Add Package</a>
 	            	</div>
@@ -372,7 +372,7 @@
 	                        <input type="text" class="form-control input-sm" name="saving_value" id="saving_value" placeholder="Saving Value" maxlength="20" value="" disabled="true">
 	                    </div>
 	                </div>
-	            </div>
+	            </div> -->
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>

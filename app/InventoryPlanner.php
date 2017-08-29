@@ -10,8 +10,8 @@ class InventoryPlanner extends Model
 	protected $primaryKey = 'inventory_planner_id';
 
 	protected $fillable = [
-				'inventory_type_id', 
-				'inventory_category_id', 
+				'inventory_type_id', /*
+				'inventory_category_id', */
 				'inventory_planner_title',
 				'inventory_planner_deadline',
 				'inventory_planner_participants',
@@ -40,9 +40,9 @@ class InventoryPlanner extends Model
 		return $this->belongsTo('App\InventoryType', 'inventory_type_id');
 	}
 
-	public function inventorycategory()
+	public function inventorycategories()
 	{
-		return $this->belongsTo('App\InventoryCategory', 'inventory_category_id');
+		return $this->belongsToMany('App\InventoryCategory', 'inventory_category_inventory_planner');
 	}
 
 	public function medias() 

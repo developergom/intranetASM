@@ -130,5 +130,8 @@
 @endsection
 
 @section('customjs')
+<script type="text/javascript">
+var uid = '{{ Request::user()->user_id }}';
+</script>
 <script src="{{ url('js/inventory/inventoryplanner.js') }}"></script>
 @endsection

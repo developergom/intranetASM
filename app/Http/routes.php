@@ -335,6 +335,8 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('inventoryplanner/api/deleteOtherPrices', 'InventoryPlannerController@apiDeleteOtherPrices');
         Route::get('inventoryplanner/api/loadOtherPrices', 'InventoryPlannerController@apiLoadOtherPrices');
         Route::post('inventoryplanner/apiSearch', 'InventoryPlannerController@apiSearch');
+        Route::get('inventoryplanner/renew/{id}', 'InventoryPlannerController@renew');
+        Route::post('inventoryplanner/renew/{id}', 'InventoryPlannerController@postRenew');
     });
 
     Route::group(['prefix' => 'workorder'], function() {

@@ -19,6 +19,6 @@ class InventoryCategory extends Model
 
 	public function inventoriesplanner()
 	{
-		return $this->hasMany('App\InventoryPlanner', 'inventory_category_id');
+		return $this->belongsToMany('App\InventoryPlanner', 'inventory_category_inventory_planner');
 	}
 }

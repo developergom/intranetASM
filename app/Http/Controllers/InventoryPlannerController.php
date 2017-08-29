@@ -97,11 +97,11 @@ class InventoryPlannerController extends Controller
     {
         $this->validate($request, [
             'inventory_type_id' => 'required',
-        	'inventory_category_id' => 'required',
+        	'inventory_category_id[]' => 'array',
             'inventory_planner_title' => 'required|max:100',
-            //'inventory_planner_desc' => 'required',
+            'inventory_planner_desc' => 'required',
             'inventory_planner_year' => 'required|max:4',
-            'inventory_planner_participants' => 'required|numeric|max:1000000000',
+            //'inventory_planner_participants' => 'required|numeric|max:1000000000',
             'inventory_planner_deadline' => 'required|date_format:"d/m/Y"',
             'action_plan_pages' => 'numeric',
             'action_plan_views' => 'numeric',
@@ -116,12 +116,12 @@ class InventoryPlannerController extends Controller
 
         $obj = new InventoryPlanner;
         $obj->inventory_type_id = $request->input('inventory_type_id');
-        $obj->inventory_category_id = $request->input('inventory_category_id');
+        //$obj->inventory_category_id = $request->input('inventory_category_id');
         $obj->inventory_planner_title = $request->input('inventory_planner_title');
-        //$obj->inventory_planner_desc = $request->input('inventory_planner_desc');
+        $obj->inventory_planner_desc = $request->input('inventory_planner_desc');
         $obj->inventory_planner_deadline = Carbon::createFromFormat('d/m/Y', $request->input('inventory_planner_deadline'))->toDateString();
         $obj->inventory_planner_year = $request->input('inventory_planner_year');
-        $obj->inventory_planner_participants = $request->input('inventory_planner_participants');
+        //$obj->inventory_planner_participants = $request->input('inventory_planner_participants');
         $obj->flow_no = $nextFlow['flow_no'];
         $obj->current_user = $nextFlow['current_user'];
         $obj->revision_no = 0;
@@ -168,6 +168,10 @@ class InventoryPlannerController extends Controller
             InventoryPlanner::find($obj->inventory_planner_id)->uploadfiles()->sync($fileArray);    
         }
 
+        if(!empty($request->input('inventory_category_id'))) {
+            InventoryPlanner::find($obj->inventory_planner_id)->inventorycategories()->sync($request->input('inventory_category_id'));
+        }
+
         if(!empty($request->input('implementation_id'))) {
             InventoryPlanner::find($obj->inventory_planner_id)->implementations()->sync($request->input('implementation_id'));
         }
@@ -187,21 +191,21 @@ class InventoryPlannerController extends Controller
         $his = new InventoryPlannerHistory;
         $his->inventory_planner_id = $obj->inventory_planner_id;
         $his->approval_type_id = 1;
-        //$his->inventory_planner_history_text = $request->input('inventory_planner_desc');
+        $his->inventory_planner_history_text = $request->input('inventory_planner_desc');
         $his->active = '1';
         $his->created_by = $request->user()->user_id;
 
         $his->save();
 
         //store print price items
-        if($request->session()->has('inventory_print_prices_' . $request->user()->user_id)) {
+        /*if($request->session()->has('inventory_print_prices_' . $request->user()->user_id)) {
     		$prices = $request->session()->get('inventory_print_prices_' . $request->user()->user_id);
     		foreach($prices as $price) {
     			$ippp = new InventoryPlannerPrintPrice;
     			$ippp->inventory_planner_id = $obj->inventory_planner_id;
     			$ippp->price_type_id = $price['price_type_id'];
     			$ippp->media_id = $price['media_id'];
-    			/*$ippp->media_edition_id = $price->media_edition_id;*/
+    			//$ippp->media_edition_id = $price->media_edition_id;
     			$ippp->advertise_rate_id = $price['advertise_rate_id'];
     			$ippp->inventory_planner_print_price_remarks = $price['inventory_planner_print_price_remarks'];
     			$ippp->inventory_planner_print_price_gross_rate = $price['inventory_planner_print_price_gross_rate'];
@@ -216,10 +220,10 @@ class InventoryPlannerController extends Controller
     		}
 
     		$request->session()->forget('inventory_print_prices_' . $request->user()->user_id);
-    	}
+    	}*/
 
     	//store digital price items
-    	if($request->session()->has('inventory_digital_prices_' . $request->user()->user_id)) {
+    	/*if($request->session()->has('inventory_digital_prices_' . $request->user()->user_id)) {
     		$prices = $request->session()->get('inventory_digital_prices_' . $request->user()->user_id);
     		foreach($prices as $price) {
     			$ipdp = new InventoryPlannerDigitalPrice;
@@ -243,10 +247,10 @@ class InventoryPlannerController extends Controller
     		}
 
     		$request->session()->forget('inventory_digital_prices_' . $request->user()->user_id);
-    	}
+    	}*/
 
     	//store event price items
-    	if($request->session()->has('inventory_event_prices_' . $request->user()->user_id)) {
+    	/*if($request->session()->has('inventory_event_prices_' . $request->user()->user_id)) {
     		$prices = $request->session()->get('inventory_event_prices_' . $request->user()->user_id);
     		foreach($prices as $price) {
     			$ipdp = new InventoryPlannerEventPrice;
@@ -266,10 +270,10 @@ class InventoryPlannerController extends Controller
     		}
 
     		$request->session()->forget('inventory_event_prices_' . $request->user()->user_id);
-    	}
+    	}*/
 
     	//store creative price items
-        if($request->session()->has('inventory_creative_prices_' . $request->user()->user_id)) {
+        /*if($request->session()->has('inventory_creative_prices_' . $request->user()->user_id)) {
     		$prices = $request->session()->get('inventory_creative_prices_' . $request->user()->user_id);
     		foreach($prices as $price) {
     			$ippp = new InventoryPlannerCreativePrice;
@@ -290,10 +294,10 @@ class InventoryPlannerController extends Controller
     		}
 
     		$request->session()->forget('inventory_creative_prices_' . $request->user()->user_id);
-    	}
+    	}*/
 
     	//store other price items
-    	if($request->session()->has('inventory_other_prices_' . $request->user()->user_id)) {
+    	/*if($request->session()->has('inventory_other_prices_' . $request->user()->user_id)) {
     		$prices = $request->session()->get('inventory_other_prices_' . $request->user()->user_id);
     		foreach($prices as $price) {
     			$ipdp = new InventoryPlannerOtherPrice;
@@ -313,7 +317,7 @@ class InventoryPlannerController extends Controller
     		}
 
     		$request->session()->forget('inventory_other_prices_' . $request->user()->user_id);
-    	}
+    	}*/
 
         $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'inventoryplannerapproval', 'Please check Inventory Planner "' . $obj->inventory_planner_title . '"', $obj->inventory_planner_id);
 
@@ -332,12 +336,12 @@ class InventoryPlannerController extends Controller
 
         $data['inventoryplanner'] = InventoryPlanner::with(
                                                         'inventorytype', 
-        												'inventorycategory', 
+        												'inventorycategories', 
         												'implementations',
         												'medias',
         												'actionplans',
         												'eventplans',
-        												'uploadfiles',
+        												'uploadfiles'/*,
         												'inventoryplannerprintprices',
         												'inventoryplannerprintprices.pricetype',
         												'inventoryplannerprintprices.media',
@@ -363,10 +367,10 @@ class InventoryPlannerController extends Controller
         												'inventoryplannercreativeprices.advertiserate.advertiseposition',
         												'inventoryplannerotherprices',
         												'inventoryplannerotherprices.pricetype',
-        												'inventoryplannerotherprices.media'
+        												'inventoryplannerotherprices.media'*/
         												)->find($id);
 
-		$grossprint = $data['inventoryplanner']->inventoryplannerprintprices->sum('inventory_planner_print_price_total_gross_rate');
+		/*$grossprint = $data['inventoryplanner']->inventoryplannerprintprices->sum('inventory_planner_print_price_total_gross_rate');
 		$grossdigital = $data['inventoryplanner']->inventoryplannerdigitalprices->sum('inventory_planner_digital_price_total_gross_rate');
 		$grossevent = $data['inventoryplanner']->inventoryplannereventprices->sum('inventory_planner_event_price_total_gross_rate');
 		$grosscreative = $data['inventoryplanner']->inventoryplannercreativeprices->sum('inventory_planner_creative_price_total_gross_rate');
@@ -380,7 +384,7 @@ class InventoryPlannerController extends Controller
 
 		$data['total_value'] = $grossprint + $grossdigital + $grossevent + $grosscreative + $grossother;
 		$data['total_nett'] = $nettprint + $nettdigital + $nettevent + $nettcreative + $nettother;
-		$data['saving_value'] = $data['total_value'] - $data['total_nett'];
+		$data['saving_value'] = $data['total_value'] - $data['total_nett'];*/
 
         return view('vendor.material.inventory.inventoryplanner.show', $data);
     }
@@ -392,20 +396,20 @@ class InventoryPlannerController extends Controller
         }
 
         //deleting session
-        $request->session()->forget('inventory_print_prices_' . $request->user()->user_id);
+        /*$request->session()->forget('inventory_print_prices_' . $request->user()->user_id);
         $request->session()->forget('inventory_digital_prices_' . $request->user()->user_id);
         $request->session()->forget('inventory_creative_prices_' . $request->user()->user_id);
         $request->session()->forget('inventory_event_prices_' . $request->user()->user_id);
-        $request->session()->forget('inventory_other_prices_' . $request->user()->user_id);
+        $request->session()->forget('inventory_other_prices_' . $request->user()->user_id);*/
 
         $data = array();
 
         $data['inventory'] = InventoryPlanner::with('inventorytype', 
-                                                    'inventorycategory',
+                                                    'inventorycategories',
                                                     'implementations',
                                                     'medias', 
                                                     'actionplans', 
-                                                    'eventplans', 
+                                                    'eventplans'/*, 
                                                     'inventoryplannerprintprices', 
                                                     'inventoryplannerprintprices.media',
                                                     'inventoryplannerprintprices.advertiserate',
@@ -427,7 +431,7 @@ class InventoryPlannerController extends Controller
                                                     'inventoryplannercreativeprices.advertiserate.advertisesize',
                                                     'inventoryplannercreativeprices.advertiserate.advertiseposition',
                                                     'inventoryplannerotherprices',
-                                                    'inventoryplannerotherprices.media'
+                                                    'inventoryplannerotherprices.media'*/
                                                 )->find($id);
         $inventory_deadline = Carbon::createFromFormat('Y-m-d', ($data['inventory']->inventory_deadline==null) ? date('Y-m-d') : $data['inventory']->inventory_deadline);
         $data['inventory_deadline'] = $inventory_deadline->format('d/m/Y');
@@ -447,128 +451,128 @@ class InventoryPlannerController extends Controller
         $data['price_types'] = PriceType::where('active', '1')->orderBy('price_type_name')->get();
 
         //storing to session
-        $inventory_print_prices = array();
-        foreach($data['inventory']->inventoryplannerprintprices as $row) {
-            $price = array();
-            $price['price_type_id'] = 1;
-            $price['media_id'] = $row->media_id;
-            $price['media_name'] = $row->media->media_name;
-            $price['advertise_position_id'] = $row->advertiserate->advertise_position_id;
-            $price['advertise_position_name'] = $row->advertiserate->advertiseposition->advertise_position_name;
-            $price['advertise_size_id'] = $row->advertiserate->advertise_size_id;
-            $price['advertise_size_name'] = $row->advertiserate->advertisesize->advertise_size_name;
-            $price['paper_id'] = $row->advertiserate->paper_id;
-            $price['paper_name'] = $row->advertiserate->paper->paper_name;
-            $price['advertise_rate_id'] = $row->advertise_rate_id;
-            $price['advertise_rate_name'] = number_format($row->advertiserate->advertise_rate_normal);
-            $price['inventory_planner_print_price_gross_rate'] = $row->inventory_planner_print_price_gross_rate;
-            $price['inventory_planner_print_price_surcharge'] = $row->inventory_planner_print_price_surcharge;
-            $price['inventory_planner_print_price_total_gross_rate'] = $row->inventory_planner_print_price_total_gross_rate;
-            $price['inventory_planner_print_price_discount'] = $row->inventory_planner_print_price_discount;
-            $price['inventory_planner_print_price_nett_rate'] = $row->inventory_planner_print_price_nett_rate;
-            $price['inventory_planner_print_price_remarks'] = $row->inventory_planner_print_price_remarks;
+        // $inventory_print_prices = array();
+        // foreach($data['inventory']->inventoryplannerprintprices as $row) {
+        //     $price = array();
+        //     $price['price_type_id'] = 1;
+        //     $price['media_id'] = $row->media_id;
+        //     $price['media_name'] = $row->media->media_name;
+        //     $price['advertise_position_id'] = $row->advertiserate->advertise_position_id;
+        //     $price['advertise_position_name'] = $row->advertiserate->advertiseposition->advertise_position_name;
+        //     $price['advertise_size_id'] = $row->advertiserate->advertise_size_id;
+        //     $price['advertise_size_name'] = $row->advertiserate->advertisesize->advertise_size_name;
+        //     $price['paper_id'] = $row->advertiserate->paper_id;
+        //     $price['paper_name'] = $row->advertiserate->paper->paper_name;
+        //     $price['advertise_rate_id'] = $row->advertise_rate_id;
+        //     $price['advertise_rate_name'] = number_format($row->advertiserate->advertise_rate_normal);
+        //     $price['inventory_planner_print_price_gross_rate'] = $row->inventory_planner_print_price_gross_rate;
+        //     $price['inventory_planner_print_price_surcharge'] = $row->inventory_planner_print_price_surcharge;
+        //     $price['inventory_planner_print_price_total_gross_rate'] = $row->inventory_planner_print_price_total_gross_rate;
+        //     $price['inventory_planner_print_price_discount'] = $row->inventory_planner_print_price_discount;
+        //     $price['inventory_planner_print_price_nett_rate'] = $row->inventory_planner_print_price_nett_rate;
+        //     $price['inventory_planner_print_price_remarks'] = $row->inventory_planner_print_price_remarks;
 
-            $inventory_print_prices[] = $price;
+        //     $inventory_print_prices[] = $price;
 
-            $request->session()->put('inventory_print_prices_' . $request->user()->user_id, $inventory_print_prices);
-        }
+        //     $request->session()->put('inventory_print_prices_' . $request->user()->user_id, $inventory_print_prices);
+        // }
 
-        $inventory_digital_prices = array();
-        foreach($data['inventory']->inventoryplannerdigitalprices as $row) {
-            $price = array();
+        // $inventory_digital_prices = array();
+        // foreach($data['inventory']->inventoryplannerdigitalprices as $row) {
+        //     $price = array();
 
-            $price['price_type_id'] = 2;
-            $price['media_id'] = $row->media_id;
-            $price['media_name'] = $row->media->media_name;
-            $price['advertise_position_id'] = $row->advertiserate->advertise_position_id;
-            $price['advertise_position_name'] = $row->advertiserate->advertiseposition->advertise_position_name;
-            $price['advertise_size_id'] = $row->advertiserate->advertise_size_id;
-            $price['advertise_size_name'] = $row->advertiserate->advertisesize->advertise_size_name;
-            $price['paper_id'] = $row->advertiserate->paper_id;
-            $price['paper_name'] = $row->advertiserate->paper->paper_name;
-            $price['advertise_rate_id'] = $row->advertise_rate_id;
-            $price['advertise_rate_name'] = number_format($row->advertiserate->advertise_rate_normal);
-            $digitalstartdate = Carbon::createFromFormat('Y-m-d', ($row->inventory_planner_digital_price_startdate==null) ? date('Y-m-d') : $row->inventory_planner_digital_price_startdate);
-            $digitalenddate = Carbon::createFromFormat('Y-m-d', ($row->inventory_planner_digital_price_enddate==null) ? date('Y-m-d') : $row->inventory_planner_digital_price_enddate);
-            $digitaldeadline = Carbon::createFromFormat('Y-m-d', ($row->inventory_planner_digital_price_deadline==null) ? date('Y-m-d') : $row->inventory_planner_digital_price_deadline);
-            $price['inventory_planner_digital_price_startdate'] = $digitalstartdate->format('d/m/Y');
-            $price['inventory_planner_digital_price_enddate'] = $digitalenddate->format('d/m/Y');
-            $price['inventory_planner_digital_price_deadline'] = $digitaldeadline->format('d/m/Y');
-            $price['inventory_planner_digital_price_gross_rate'] = $row->inventory_planner_digital_price_gross_rate;
-            $price['inventory_planner_digital_price_surcharge'] = $row->inventory_planner_digital_price_surcharge;
-            $price['inventory_planner_digital_price_total_gross_rate'] = $row->inventory_planner_digital_price_total_gross_rate;
-            $price['inventory_planner_digital_price_discount'] = $row->inventory_planner_digital_price_discount;
-            $price['inventory_planner_digital_price_nett_rate'] = $row->inventory_planner_digital_price_nett_rate;
-            $price['inventory_planner_digital_price_remarks'] = $row->inventory_planner_digital_price_remarks;
+        //     $price['price_type_id'] = 2;
+        //     $price['media_id'] = $row->media_id;
+        //     $price['media_name'] = $row->media->media_name;
+        //     $price['advertise_position_id'] = $row->advertiserate->advertise_position_id;
+        //     $price['advertise_position_name'] = $row->advertiserate->advertiseposition->advertise_position_name;
+        //     $price['advertise_size_id'] = $row->advertiserate->advertise_size_id;
+        //     $price['advertise_size_name'] = $row->advertiserate->advertisesize->advertise_size_name;
+        //     $price['paper_id'] = $row->advertiserate->paper_id;
+        //     $price['paper_name'] = $row->advertiserate->paper->paper_name;
+        //     $price['advertise_rate_id'] = $row->advertise_rate_id;
+        //     $price['advertise_rate_name'] = number_format($row->advertiserate->advertise_rate_normal);
+        //     $digitalstartdate = Carbon::createFromFormat('Y-m-d', ($row->inventory_planner_digital_price_startdate==null) ? date('Y-m-d') : $row->inventory_planner_digital_price_startdate);
+        //     $digitalenddate = Carbon::createFromFormat('Y-m-d', ($row->inventory_planner_digital_price_enddate==null) ? date('Y-m-d') : $row->inventory_planner_digital_price_enddate);
+        //     $digitaldeadline = Carbon::createFromFormat('Y-m-d', ($row->inventory_planner_digital_price_deadline==null) ? date('Y-m-d') : $row->inventory_planner_digital_price_deadline);
+        //     $price['inventory_planner_digital_price_startdate'] = $digitalstartdate->format('d/m/Y');
+        //     $price['inventory_planner_digital_price_enddate'] = $digitalenddate->format('d/m/Y');
+        //     $price['inventory_planner_digital_price_deadline'] = $digitaldeadline->format('d/m/Y');
+        //     $price['inventory_planner_digital_price_gross_rate'] = $row->inventory_planner_digital_price_gross_rate;
+        //     $price['inventory_planner_digital_price_surcharge'] = $row->inventory_planner_digital_price_surcharge;
+        //     $price['inventory_planner_digital_price_total_gross_rate'] = $row->inventory_planner_digital_price_total_gross_rate;
+        //     $price['inventory_planner_digital_price_discount'] = $row->inventory_planner_digital_price_discount;
+        //     $price['inventory_planner_digital_price_nett_rate'] = $row->inventory_planner_digital_price_nett_rate;
+        //     $price['inventory_planner_digital_price_remarks'] = $row->inventory_planner_digital_price_remarks;
 
-            $inventory_digital_prices[] = $price;
+        //     $inventory_digital_prices[] = $price;
 
-            $request->session()->put('inventory_digital_prices_' . $request->user()->user_id, $inventory_digital_prices);
-        }
+        //     $request->session()->put('inventory_digital_prices_' . $request->user()->user_id, $inventory_digital_prices);
+        // }
 
-        $inventory_event_prices = array();
-        foreach($data['inventory']->inventoryplannereventprices as $row) {
-            $price = array();
+        // $inventory_event_prices = array();
+        // foreach($data['inventory']->inventoryplannereventprices as $row) {
+        //     $price = array();
 
-            $price['price_type_id'] = 3;
-            $price['media_id'] = $row->media_id;
-            $price['media_name'] = $row->media->media_name;
-            $price['inventory_planner_event_price_gross_rate'] = $row->inventory_planner_event_price_gross_rate;
-            $price['inventory_planner_event_price_surcharge'] = $row->inventory_planner_event_price_surcharge;
-            $price['inventory_planner_event_price_total_gross_rate'] = $row->inventory_planner_event_price_total_gross_rate;
-            $price['inventory_planner_event_price_discount'] = $row->inventory_planner_event_price_discount;
-            $price['inventory_planner_event_price_nett_rate'] = $row->inventory_planner_event_price_nett_rate;
-            $price['inventory_planner_event_price_remarks'] = $row->inventory_planner_event_price_remarks;
+        //     $price['price_type_id'] = 3;
+        //     $price['media_id'] = $row->media_id;
+        //     $price['media_name'] = $row->media->media_name;
+        //     $price['inventory_planner_event_price_gross_rate'] = $row->inventory_planner_event_price_gross_rate;
+        //     $price['inventory_planner_event_price_surcharge'] = $row->inventory_planner_event_price_surcharge;
+        //     $price['inventory_planner_event_price_total_gross_rate'] = $row->inventory_planner_event_price_total_gross_rate;
+        //     $price['inventory_planner_event_price_discount'] = $row->inventory_planner_event_price_discount;
+        //     $price['inventory_planner_event_price_nett_rate'] = $row->inventory_planner_event_price_nett_rate;
+        //     $price['inventory_planner_event_price_remarks'] = $row->inventory_planner_event_price_remarks;
 
-            $inventory_event_prices[] = $price;
+        //     $inventory_event_prices[] = $price;
 
-            $request->session()->put('inventory_event_prices_' . $request->user()->user_id, $inventory_event_prices);
-        }
+        //     $request->session()->put('inventory_event_prices_' . $request->user()->user_id, $inventory_event_prices);
+        // }
 
-        $inventory_creative_prices = array();
-        foreach($data['inventory']->inventoryplannercreativeprices as $row) {
-            $price = array();
-            $price['price_type_id'] = 4;
-            $price['media_id'] = $row->media_id;
-            $price['media_name'] = $row->media->media_name;
-            $price['advertise_position_id'] = $row->advertiserate->advertise_position_id;
-            $price['advertise_position_name'] = $row->advertiserate->advertiseposition->advertise_position_name;
-            $price['advertise_size_id'] = $row->advertiserate->advertise_size_id;
-            $price['advertise_size_name'] = $row->advertiserate->advertisesize->advertise_size_name;
-            $price['paper_id'] = $row->advertiserate->paper_id;
-            $price['paper_name'] = $row->advertiserate->paper->paper_name;
-            $price['advertise_rate_id'] = $row->advertise_rate_id;
-            $price['advertise_rate_name'] = number_format($row->advertiserate->advertise_rate_normal);
-            $price['inventory_planner_creative_price_gross_rate'] = $row->inventory_planner_creative_price_gross_rate;
-            $price['inventory_planner_creative_price_surcharge'] = $row->inventory_planner_creative_price_surcharge;
-            $price['inventory_planner_creative_price_total_gross_rate'] = $row->inventory_planner_creative_price_total_gross_rate;
-            $price['inventory_planner_creative_price_discount'] = $row->inventory_planner_creative_price_discount;
-            $price['inventory_planner_creative_price_nett_rate'] = $row->inventory_planner_creative_price_nett_rate;
-            $price['inventory_planner_creative_price_remarks'] = $row->inventory_planner_creative_price_remarks;
+        // $inventory_creative_prices = array();
+        // foreach($data['inventory']->inventoryplannercreativeprices as $row) {
+        //     $price = array();
+        //     $price['price_type_id'] = 4;
+        //     $price['media_id'] = $row->media_id;
+        //     $price['media_name'] = $row->media->media_name;
+        //     $price['advertise_position_id'] = $row->advertiserate->advertise_position_id;
+        //     $price['advertise_position_name'] = $row->advertiserate->advertiseposition->advertise_position_name;
+        //     $price['advertise_size_id'] = $row->advertiserate->advertise_size_id;
+        //     $price['advertise_size_name'] = $row->advertiserate->advertisesize->advertise_size_name;
+        //     $price['paper_id'] = $row->advertiserate->paper_id;
+        //     $price['paper_name'] = $row->advertiserate->paper->paper_name;
+        //     $price['advertise_rate_id'] = $row->advertise_rate_id;
+        //     $price['advertise_rate_name'] = number_format($row->advertiserate->advertise_rate_normal);
+        //     $price['inventory_planner_creative_price_gross_rate'] = $row->inventory_planner_creative_price_gross_rate;
+        //     $price['inventory_planner_creative_price_surcharge'] = $row->inventory_planner_creative_price_surcharge;
+        //     $price['inventory_planner_creative_price_total_gross_rate'] = $row->inventory_planner_creative_price_total_gross_rate;
+        //     $price['inventory_planner_creative_price_discount'] = $row->inventory_planner_creative_price_discount;
+        //     $price['inventory_planner_creative_price_nett_rate'] = $row->inventory_planner_creative_price_nett_rate;
+        //     $price['inventory_planner_creative_price_remarks'] = $row->inventory_planner_creative_price_remarks;
 
-            $inventory_creative_prices[] = $price;
+        //     $inventory_creative_prices[] = $price;
 
-            $request->session()->put('inventory_creative_prices_' . $request->user()->user_id, $inventory_creative_prices);
-        }
+        //     $request->session()->put('inventory_creative_prices_' . $request->user()->user_id, $inventory_creative_prices);
+        // }
 
-        $inventory_other_prices = array();
-        foreach($data['inventory']->inventoryplannerotherprices as $row) {
-            $price = array();
+        // $inventory_other_prices = array();
+        // foreach($data['inventory']->inventoryplannerotherprices as $row) {
+        //     $price = array();
 
-            $price['price_type_id'] = 5;
-            $price['media_id'] = $row->media_id;
-            $price['media_name'] = $row->media->media_name;
-            $price['inventory_planner_other_price_gross_rate'] = $row->inventory_planner_other_price_gross_rate;
-            $price['inventory_planner_other_price_surcharge'] = $row->inventory_planner_other_price_surcharge;
-            $price['inventory_planner_other_price_total_gross_rate'] = $row->inventory_planner_other_price_total_gross_rate;
-            $price['inventory_planner_other_price_discount'] = $row->inventory_planner_other_price_discount;
-            $price['inventory_planner_other_price_nett_rate'] = $row->inventory_planner_other_price_nett_rate;
-            $price['inventory_planner_other_price_remarks'] = $row->inventory_planner_other_price_remarks;
+        //     $price['price_type_id'] = 5;
+        //     $price['media_id'] = $row->media_id;
+        //     $price['media_name'] = $row->media->media_name;
+        //     $price['inventory_planner_other_price_gross_rate'] = $row->inventory_planner_other_price_gross_rate;
+        //     $price['inventory_planner_other_price_surcharge'] = $row->inventory_planner_other_price_surcharge;
+        //     $price['inventory_planner_other_price_total_gross_rate'] = $row->inventory_planner_other_price_total_gross_rate;
+        //     $price['inventory_planner_other_price_discount'] = $row->inventory_planner_other_price_discount;
+        //     $price['inventory_planner_other_price_nett_rate'] = $row->inventory_planner_other_price_nett_rate;
+        //     $price['inventory_planner_other_price_remarks'] = $row->inventory_planner_other_price_remarks;
 
-            $inventory_other_prices[] = $price;
+        //     $inventory_other_prices[] = $price;
 
-            $request->session()->put('inventory_other_prices_' . $request->user()->user_id, $inventory_other_prices);
-        }
+        //     $request->session()->put('inventory_other_prices_' . $request->user()->user_id, $inventory_other_prices);
+        // }
 
         return view('vendor.material.inventory.inventoryplanner.edit', $data);
     }
@@ -577,18 +581,18 @@ class InventoryPlannerController extends Controller
     {
         $this->validate($request, [
             'inventory_type_id' => 'required',
-            'inventory_category_id' => 'required',
+            'inventory_category_id[]' => 'array',
             'inventory_planner_title' => 'required|max:100',
-            //'inventory_planner_desc' => 'required',
+            'inventory_planner_desc' => 'required',
             'inventory_planner_year' => 'required|max:4',
-            'inventory_planner_participants' => 'required|numeric|max:1000000000',
+            //'inventory_planner_participants' => 'required|numeric|max:1000000000',
             'inventory_planner_deadline' => 'required|date_format:"d/m/Y"',
-            'action_plan_pages' => 'numeric',
-            'action_plan_views' => 'numeric',
+            /*'action_plan_pages' => 'numeric',
+            'action_plan_views' => 'numeric',*/
             'implementation_id[]' => 'array',
             'media_id[]' => 'array',
-            'action_plan_id[]' => 'array',
-            'event_plan_id[]' => 'array',
+            /*'action_plan_id[]' => 'array',
+            'event_plan_id[]' => 'array',*/
         ]);
 
         $flow = new FlowLibrary;
@@ -596,12 +600,12 @@ class InventoryPlannerController extends Controller
 
         $obj = InventoryPlanner::find($id);
         $obj->inventory_type_id = $request->input('inventory_type_id');
-        $obj->inventory_category_id = $request->input('inventory_category_id');
+        //$obj->inventory_category_id = $request->input('inventory_category_id');
         $obj->inventory_planner_title = $request->input('inventory_planner_title');
-        //$obj->inventory_planner_desc = $request->input('inventory_planner_desc');
+        $obj->inventory_planner_desc = $request->input('inventory_planner_desc');
         $obj->inventory_planner_deadline = Carbon::createFromFormat('d/m/Y', $request->input('inventory_planner_deadline'))->toDateString();
         $obj->inventory_planner_year = $request->input('inventory_planner_year');
-        $obj->inventory_planner_participants = $request->input('inventory_planner_participants');
+        //$obj->inventory_planner_participants = $request->input('inventory_planner_participants');
         $obj->flow_no = $nextFlow['flow_no'];
         $obj->current_user = $nextFlow['current_user'];
         $obj->updated_by = $request->user()->user_id;
@@ -647,6 +651,10 @@ class InventoryPlannerController extends Controller
             InventoryPlanner::find($obj->inventory_planner_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
         }
 
+        if(!empty($request->input('inventory_category_id'))) {
+            InventoryPlanner::find($obj->inventory_planner_id)->inventorycategories()->sync($request->input('inventory_category_id'));
+        }
+
         if(!empty($request->input('implementation_id'))) {
             InventoryPlanner::find($obj->inventory_planner_id)->implementations()->sync($request->input('implementation_id'));
         }
@@ -673,7 +681,7 @@ class InventoryPlannerController extends Controller
         $his->save();
 
         //remove & store print price items
-        InventoryPlannerPrintPrice::where('inventory_planner_id', $obj->inventory_planner_id)->delete();
+        /*InventoryPlannerPrintPrice::where('inventory_planner_id', $obj->inventory_planner_id)->delete();
         if($request->session()->has('inventory_print_prices_' . $request->user()->user_id)) {
             $prices = $request->session()->get('inventory_print_prices_' . $request->user()->user_id);
             foreach($prices as $price) {
@@ -681,7 +689,7 @@ class InventoryPlannerController extends Controller
                 $ippp->inventory_planner_id = $obj->inventory_planner_id;
                 $ippp->price_type_id = $price['price_type_id'];
                 $ippp->media_id = $price['media_id'];
-                /*$ippp->media_edition_id = $price->media_edition_id;*/
+                $ippp->media_edition_id = $price->media_edition_id;
                 $ippp->advertise_rate_id = $price['advertise_rate_id'];
                 $ippp->inventory_planner_print_price_remarks = $price['inventory_planner_print_price_remarks'];
                 $ippp->inventory_planner_print_price_gross_rate = $price['inventory_planner_print_price_gross_rate'];
@@ -696,10 +704,10 @@ class InventoryPlannerController extends Controller
             }
 
             $request->session()->forget('inventory_print_prices_' . $request->user()->user_id);
-        }
+        }*/
 
         //remove & store digital price items
-        InventoryPlannerDigitalPrice::where('inventory_planner_id', $obj->inventory_planner_id)->delete();
+        /*InventoryPlannerDigitalPrice::where('inventory_planner_id', $obj->inventory_planner_id)->delete();
         if($request->session()->has('inventory_digital_prices_' . $request->user()->user_id)) {
             $prices = $request->session()->get('inventory_digital_prices_' . $request->user()->user_id);
             foreach($prices as $price) {
@@ -724,10 +732,10 @@ class InventoryPlannerController extends Controller
             }
 
             $request->session()->forget('inventory_digital_prices_' . $request->user()->user_id);
-        }
+        }*/
 
         //remove & store event price items
-        InventoryPlannerEventPrice::where('inventory_planner_id', $obj->inventory_planner_id)->delete();
+        /*InventoryPlannerEventPrice::where('inventory_planner_id', $obj->inventory_planner_id)->delete();
         if($request->session()->has('inventory_event_prices_' . $request->user()->user_id)) {
             $prices = $request->session()->get('inventory_event_prices_' . $request->user()->user_id);
             foreach($prices as $price) {
@@ -748,10 +756,10 @@ class InventoryPlannerController extends Controller
             }
 
             $request->session()->forget('inventory_event_prices_' . $request->user()->user_id);
-        }
+        }*/
 
         //remove & store creative price items
-        InventoryPlannerCreativePrice::where('inventory_planner_id', $obj->inventory_planner_id)->delete();
+        /*InventoryPlannerCreativePrice::where('inventory_planner_id', $obj->inventory_planner_id)->delete();
         if($request->session()->has('inventory_creative_prices_' . $request->user()->user_id)) {
             $prices = $request->session()->get('inventory_creative_prices_' . $request->user()->user_id);
             foreach($prices as $price) {
@@ -773,10 +781,10 @@ class InventoryPlannerController extends Controller
             }
 
             $request->session()->forget('inventory_creative_prices_' . $request->user()->user_id);
-        }
+        }*/
 
         //remove & store other price items
-        InventoryPlannerOtherPrice::where('inventory_planner_id', $obj->inventory_planner_id)->delete();
+        /*InventoryPlannerOtherPrice::where('inventory_planner_id', $obj->inventory_planner_id)->delete();
         if($request->session()->has('inventory_other_prices_' . $request->user()->user_id)) {
             $prices = $request->session()->get('inventory_other_prices_' . $request->user()->user_id);
             foreach($prices as $price) {
@@ -797,7 +805,7 @@ class InventoryPlannerController extends Controller
             }
 
             $request->session()->forget('inventory_other_prices_' . $request->user()->user_id);
-        }
+        }*/
 
         $this->notif->remove($request->user()->user_id, 'inventoryplannerreject', $obj->inventory_planner_id);
         $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'inventoryplannerapproval', 'Please check Inventory Planner "' . $obj->inventory_planner_title . '"', $obj->inventory_planner_id);
@@ -837,12 +845,12 @@ class InventoryPlannerController extends Controller
 
         $data['inventoryplanner'] = InventoryPlanner::with(
                                                         'inventorytype', 
-        												'inventorycategory', 
+        												'inventorycategories', 
         												'implementations',
         												'medias',
         												'actionplans',
         												'eventplans',
-        												'uploadfiles',
+        												'uploadfiles'/*,
         												'inventoryplannerprintprices',
         												'inventoryplannerprintprices.pricetype',
         												'inventoryplannerprintprices.media',
@@ -869,10 +877,10 @@ class InventoryPlannerController extends Controller
         												'inventoryplannerotherprices',
         												'inventoryplannerotherprices.pricetype',
         												'inventoryplannerotherprices.media',
-        												'inventoryplannerhistories'
+        												'inventoryplannerhistories'*/
         												)->find($id);
 
-		$grossprint = $data['inventoryplanner']->inventoryplannerprintprices->sum('inventory_planner_print_price_total_gross_rate');
+		/*$grossprint = $data['inventoryplanner']->inventoryplannerprintprices->sum('inventory_planner_print_price_total_gross_rate');
 		$grossdigital = $data['inventoryplanner']->inventoryplannerdigitalprices->sum('inventory_planner_digital_price_total_gross_rate');
 		$grossevent = $data['inventoryplanner']->inventoryplannereventprices->sum('inventory_planner_event_price_total_gross_rate');
 		$grosscreative = $data['inventoryplanner']->inventoryplannercreativeprices->sum('inventory_planner_creative_price_total_gross_rate');
@@ -886,7 +894,7 @@ class InventoryPlannerController extends Controller
 
 		$data['total_value'] = $grossprint + $grossdigital + $grossevent + $grosscreative + $grossother;
 		$data['total_nett'] = $nettprint + $nettdigital + $nettevent + $nettcreative + $nettother;
-		$data['saving_value'] = $data['total_value'] - $data['total_nett'];
+		$data['saving_value'] = $data['total_value'] - $data['total_nett'];*/
 
         return view('vendor.material.inventory.inventoryplanner.approve', $data);
     }
@@ -988,7 +996,8 @@ class InventoryPlannerController extends Controller
         if($listtype == 'onprocess') {
             $data['rows'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
-                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventories_planner.inventory_category_id')
+                                ->join('inventory_category_inventory_planner', 'inventory_category_inventory_planner.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
+                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventory_category_inventory_planner.inventory_category_id')
                                 ->join('inventory_planner_implementation', 'inventory_planner_implementation.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.current_user')
@@ -1011,7 +1020,8 @@ class InventoryPlannerController extends Controller
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
-                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventories_planner.inventory_category_id')
+                                ->join('inventory_category_inventory_planner', 'inventory_category_inventory_planner.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
+                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventory_category_inventory_planner.inventory_category_id')
                                 ->join('inventory_planner_implementation', 'inventory_planner_implementation.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.current_user')
@@ -1033,7 +1043,8 @@ class InventoryPlannerController extends Controller
         }elseif($listtype == 'needchecking') {
             $data['rows'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
-                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventories_planner.inventory_category_id')
+                                ->join('inventory_category_inventory_planner', 'inventory_category_inventory_planner.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
+                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventory_category_inventory_planner.inventory_category_id')
                                 ->join('inventory_planner_implementation', 'inventory_planner_implementation.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.created_by')
@@ -1053,7 +1064,8 @@ class InventoryPlannerController extends Controller
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
-                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventories_planner.inventory_category_id')
+                                ->join('inventory_category_inventory_planner', 'inventory_category_inventory_planner.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
+                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventory_category_inventory_planner.inventory_category_id')
                                 ->join('inventory_planner_implementation', 'inventory_planner_implementation.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.created_by')
@@ -1072,7 +1084,8 @@ class InventoryPlannerController extends Controller
         }elseif($listtype == 'finished') {
             $data['rows'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
-                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventories_planner.inventory_category_id')
+                                ->join('inventory_category_inventory_planner', 'inventory_category_inventory_planner.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
+                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventory_category_inventory_planner.inventory_category_id')
                                 ->join('inventory_planner_implementation', 'inventory_planner_implementation.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.created_by')
@@ -1094,7 +1107,8 @@ class InventoryPlannerController extends Controller
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
-                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventories_planner.inventory_category_id')
+                                ->join('inventory_category_inventory_planner', 'inventory_category_inventory_planner.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
+                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventory_category_inventory_planner.inventory_category_id')
                                 ->join('inventory_planner_implementation', 'inventory_planner_implementation.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.created_by')
@@ -1115,7 +1129,8 @@ class InventoryPlannerController extends Controller
         }elseif($listtype == 'canceled') {
             $data['rows'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
-                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventories_planner.inventory_category_id')
+                                ->join('inventory_category_inventory_planner', 'inventory_category_inventory_planner.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
+                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventory_category_inventory_planner.inventory_category_id')
                                 ->join('inventory_planner_implementation', 'inventory_planner_implementation.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.created_by')
@@ -1136,7 +1151,8 @@ class InventoryPlannerController extends Controller
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
-                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventories_planner.inventory_category_id')
+                                ->join('inventory_category_inventory_planner', 'inventory_category_inventory_planner.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
+                                ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventory_category_inventory_planner.inventory_category_id')
                                 ->join('inventory_planner_implementation', 'inventory_planner_implementation.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.created_by')
@@ -1709,5 +1725,126 @@ class InventoryPlannerController extends Controller
         $result = InventoryPlanner::where('inventory_planner_title','like','%' . $inventory_planner_title . '%')->where('active', '1')->take(5)->orderBy('inventory_planner_title')->get();
 
         return response()->json($result, 200);
+    }
+
+    public function renew(Request $request, $id)
+    {
+        if(Gate::denies('Inventory Planner-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['inventory'] = InventoryPlanner::with('inventorytype', 
+                                                    'inventorycategories',
+                                                    'implementations',
+                                                    'medias'
+                                                )->find($id);
+        $inventory_deadline = Carbon::createFromFormat('Y-m-d', ($data['inventory']->inventory_deadline==null) ? date('Y-m-d') : $data['inventory']->inventory_deadline);
+        $data['inventory_deadline'] = $inventory_deadline->format('d/m/Y');
+
+        $data['inventory_types'] = InventoryType::where('active', '1')->orderBy('inventory_type_name')->get();
+        $data['inventory_categories'] = InventoryCategory::where('active', '1')->orderBy('inventory_category_name')->get();
+        $data['implementations'] = Implementation::where('active', '1')->orderBy('implementation_month')->get();
+        $data['medias'] = Media::whereHas('users', function($query) use($request){
+                                    $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                                })->where('medias.active', '1')->orderBy('media_name')->get();
+
+        return view('vendor.material.inventory.inventoryplanner.renew', $data);
+    }
+
+    public function postRenew(Request $request, $id)
+    {
+        $this->validate($request, [
+            'inventory_type_id' => 'required',
+            'inventory_category_id[]' => 'array',
+            'inventory_planner_title' => 'required|max:100',
+            'inventory_planner_desc' => 'required',
+            'inventory_planner_year' => 'required|max:4',
+            //'inventory_planner_participants' => 'required|numeric|max:1000000000',
+            'inventory_planner_deadline' => 'required|date_format:"d/m/Y"',
+            /*'action_plan_pages' => 'numeric',
+            'action_plan_views' => 'numeric',*/
+            'implementation_id[]' => 'array',
+            'media_id[]' => 'array',
+            /*'action_plan_id[]' => 'array',
+            'event_plan_id[]' => 'array',*/
+        ]);
+
+
+        $obj = InventoryPlanner::find($id);
+        $obj->inventory_type_id = $request->input('inventory_type_id');
+        //$obj->inventory_category_id = $request->input('inventory_category_id');
+        $obj->inventory_planner_title = $request->input('inventory_planner_title');
+        $obj->inventory_planner_desc = $request->input('inventory_planner_desc');
+        $obj->inventory_planner_deadline = Carbon::createFromFormat('d/m/Y', $request->input('inventory_planner_deadline'))->toDateString();
+        $obj->inventory_planner_year = $request->input('inventory_planner_year');
+        $obj->revision_no = $obj->revision_no + 1;
+        $obj->updated_by = $request->user()->user_id;
+
+        $obj->save();
+
+
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_revision = $obj->revision_no;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => $obj->revision_no ];
+            }
+        }
+
+        if(!empty($fileArray)) {
+            InventoryPlanner::find($obj->inventory_planner_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
+        }
+
+        if(!empty($request->input('inventory_category_id'))) {
+            InventoryPlanner::find($obj->inventory_planner_id)->inventorycategories()->sync($request->input('inventory_category_id'));
+        }
+
+        if(!empty($request->input('implementation_id'))) {
+            InventoryPlanner::find($obj->inventory_planner_id)->implementations()->sync($request->input('implementation_id'));
+        }
+
+        if(!empty($request->input('media_id'))) {
+            InventoryPlanner::find($obj->inventory_planner_id)->medias()->sync($request->input('media_id'));
+        }
+
+        $his = new InventoryPlannerHistory;
+        $his->inventory_planner_id = $obj->inventory_planner_id;
+        $his->approval_type_id = 1;
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        $request->session()->flash('status', 'Data has been updated!');
+
+        return redirect('inventory/inventoryplanner');
     }
 }
