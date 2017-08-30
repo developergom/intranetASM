@@ -10,7 +10,7 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Proposal<small>Create New Proposal</small></h2></div>
+        <div class="card-header"><h2>Proposal<small>Create New Brief</small></h2></div>
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form" method="POST" action="{{ url('workorder/proposal') }}">
         		{{ csrf_field() }}
@@ -83,19 +83,6 @@
 	                    @if ($errors->has('proposal_deadline'))
 			                <span class="help-block">
 			                    <strong>{{ $errors->first('proposal_deadline') }}</strong>
-			                </span>
-			            @endif
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <label for="proposal_desc" class="col-sm-2 control-label">Description</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <textarea name="proposal_desc" id="proposal_desc" class="form-control input-sm" placeholder="Description">{{ old('proposal_desc') }}</textarea>
-	                    </div>
-	                    @if ($errors->has('proposal_desc'))
-			                <span class="help-block">
-			                    <strong>{{ $errors->first('proposal_desc') }}</strong>
 			                </span>
 			            @endif
 	                </div>
@@ -184,6 +171,19 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="proposal_desc" class="col-sm-2 control-label">Description</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <textarea name="proposal_desc" id="proposal_desc" class="form-control input-sm" placeholder="Description">{{ old('proposal_desc') }}</textarea>
+	                    </div>
+	                    @if ($errors->has('proposal_desc'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('proposal_desc') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="upload_file" class="col-sm-2 control-label">Upload File(s)</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
@@ -196,7 +196,7 @@
 		                </span>
 	                </div>
 	            </div>
-	            <div class="form-group">
+	            <!-- <div class="form-group">
 	            	<div class="col-sm-12">
 	            		<a href="javascript:void(0)" class="btn btn-primary btn-sm waves-effect command-add-proposal-price">Add Package</a>
 	            	</div>
@@ -354,7 +354,7 @@
 	                        <input type="text" class="form-control input-sm" name="saving_value" id="saving_value" placeholder="Saving Value" maxlength="20" value="" disabled="true">
 	                    </div>
 	                </div>
-	            </div>
+	            </div> -->
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>

@@ -23,15 +23,7 @@
             <input class="form-control input-sm" placeholder="Title" readonly="true" value="{{ $inventoryplanner->inventory_planner_title }}">
         </div>
     </div>
-</div><!-- 
-<div class="form-group">
-    <label for="inventory_planner_desc" class="col-sm-2 control-label">Description</label>
-    <div class="col-sm-10">
-        <div class="fg-line">
-            {!! $inventoryplanner->inventory_planner_desc !!}
-        </div>
-    </div>
-</div> -->
+</div>
 <div class="form-group">
     <label for="implementation_id" class="col-sm-2 control-label">Implementation</label>
     <div class="col-sm-10">
@@ -96,6 +88,14 @@
         </div>
     </div>
 </div> -->
+<div class="form-group">
+    <label for="inventory_planner_desc" class="col-sm-2 control-label">Description</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            {!! $inventoryplanner->inventory_planner_desc !!}
+        </div>
+    </div>
+</div>
 <div class="form-group">
     <label for="upload_file" class="col-sm-2 control-label">Upload File(s)</label>
     <div class="col-sm-10">
