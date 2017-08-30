@@ -1091,10 +1091,10 @@ class InventoryPlannerController extends Controller
                                 ->join('users','users.user_id', '=', 'inventories_planner.created_by')
                                 ->where('inventories_planner.active','1')
                                 ->where('inventories_planner.flow_no','=','98')
-                                ->where(function($query) use($request, $subordinate){
+                                /*->where(function($query) use($request, $subordinate){
                                     $query->where('inventories_planner.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('inventories_planner.created_by', $subordinate);
-                                })
+                                })*/
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_category_name', 'like', '%' . $searchPhrase . '%')
@@ -1114,10 +1114,10 @@ class InventoryPlannerController extends Controller
                                 ->join('users','users.user_id', '=', 'inventories_planner.created_by')
                                 ->where('inventories_planner.active','1')
                                 ->where('inventories_planner.flow_no','=','98')
-                                ->where(function($query) use($request, $subordinate){
+                                /*->where(function($query) use($request, $subordinate){
                                     $query->where('inventories_planner.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('inventories_planner.created_by', $subordinate);
-                                })
+                                })*/
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_category_name', 'like', '%' . $searchPhrase . '%')

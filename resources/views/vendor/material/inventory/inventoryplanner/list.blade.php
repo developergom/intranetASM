@@ -12,20 +12,25 @@
     <div class="card-body card-padding">
         <div role="tabpanel">
             <ul class="tab-nav" role="tablist">
+                <?php $active_tab = 0; ?>
+                <?php $active_tab_body = 0; ?>
                 @can('Inventory Planner-Approval')
-                <li class="active"><a href="#needchecking" aria-controls="needchecking" role="tab" data-toggle="tab">Need Checking</a></li>
+                <li class="{!! ($active_tab==0) ? 'active' : '' !!}"><a href="#needchecking" aria-controls="needchecking" role="tab" data-toggle="tab">Need Checking</a></li>
                 <li><a href="#onprocess" aria-controls="onprocess" role="tab" data-toggle="tab">On Process</a></li>
+                    <?php $active_tab = 1; ?>
                 @endcan
                 @can('Inventory Planner-Read')
-                <li><a href="#finished" aria-controls="finished" role="tab" data-toggle="tab">Finished</a></li>
+                <li class="{!! ($active_tab==0) ? 'active' : '' !!}"><a href="#finished" aria-controls="finished" role="tab" data-toggle="tab">Finished</a></li>
+                    <?php $active_tab = 1; ?>
                 @endcan
                 @can('Inventory Planner-Create')
-                <li><a href="#canceled" aria-controls="canceled" role="tab" data-toggle="tab">Canceled</a></li>
+                <li class="{!! ($active_tab==0) ? 'active' : '' !!}"><a href="#canceled" aria-controls="canceled" role="tab" data-toggle="tab">Canceled</a></li>
+                    <?php $active_tab = 1; ?>
                 @endcan
             </ul>
             <div class="tab-content">
                 @can('Inventory Planner-Approval')
-                <div role="tabpanel" class="tab-pane active" id="needchecking">
+                <div role="tabpanel" class="tab-pane {!! ($active_tab_body==0) ? 'active' : '' !!}" id="needchecking">
                    <div class="table-responsive">
                         <table id="grid-data-needchecking" class="table table-hover">
                             <thead>
@@ -79,9 +84,10 @@
                         </table>
                     </div>
                 </div>
+                    <?php $active_tab_body = 1; ?>
                 @endcan
                 @can('Inventory Planner-Read')
-                <div role="tabpanel" class="tab-pane" id="finished">
+                <div role="tabpanel" class="tab-pane {!! ($active_tab_body==0) ? 'active' : '' !!}" id="finished">
                     <div class="table-responsive">
                         <table id="grid-data-finished" class="table table-hover">
                             <thead>
@@ -100,9 +106,10 @@
                         </table>
                     </div>
                 </div>
+                    <?php $active_tab_body = 1; ?>
                 @endcan
                 @can('Inventory Planner-Create')
-                <div role="tabpanel" class="tab-pane" id="canceled">
+                <div role="tabpanel" class="tab-pane {!! ($active_tab_body==0) ? 'active' : '' !!}" id="canceled">
                     <div class="table-responsive">
                         <table id="grid-data-canceled" class="table table-hover">
                             <thead>
@@ -121,6 +128,7 @@
                         </table>
                     </div>
                 </div>
+                    <?php $active_tab_body = 1; ?>
                 @endcan
             </div>
         </div>
