@@ -165,7 +165,7 @@ class FlowLibrary{
 			$nextUser = $manual_user;
 		}
 
-		if(User::where('active','1')->where('user_id', $nextUser)->count() < 1){
+		if(User::where('active','0')->where('user_id', $nextUser)->count() > 0){
 			//return superior of $nextUser;
 			$s_u = User::find($nextUser);
 			$s_group_id = $s_u->groups[0]->group_id;
@@ -203,5 +203,13 @@ class FlowLibrary{
 		$prevFlow['current_user'] = $prevUser;
 
 		return $prevFlow;
+	}
+
+	public function getCurrentUrl($flow_group_id, $flow_no)
+	{
+
+		$flow = Flow::where('active','1')->where('flow_group_id',$flow_group_id)->where('flow_no',$flow_no)->first();
+
+		return $flow->flow_url;
 	}
 }

@@ -26,7 +26,7 @@
 </div>
 <div class="form-group">
     <label for="proposal_deadline" class="col-sm-2 control-label">Deadline</label>
-    <div class="col-sm-10">
+    <div class="col-sm-3">
         <div class="fg-line">
             <input type="text" class="form-control input-sm" name="proposal_deadline" id="proposal_deadline" placeholder="Deadline" required="true" maxlength="100" value="{{ $proposal->proposal_deadline }}" readonly="true">
         </div>
@@ -113,6 +113,23 @@
         </div>
     </div>
 </div>
+<hr/>
+<div class="form-group">
+	<label for="revision_no" class="col-sm-2 control-label">Revision</label>
+	<div class="col-sm-10">
+		<div class="fg-line">
+			<input type="text" class="form-control input-sm" id="revision_no" readonly="true" value="{{ $proposal->revision_no }}">
+		</div>
+	</div>
+</div>
+<div class="form-group">
+    <label for="current_user" class="col-sm-2 control-label">Current User</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <input type="text" class="form-control input-sm" placeholder=Current User" readonly="true" maxlength="100" value="{{ $proposal->_currentuser->user_firstname . ' ' . $proposal->_currentuser->user_lastname }}">
+        </div>
+    </div>
+</div>
 <div class="form-group">
     <label for="created_by" class="col-sm-2 control-label">Created By</label>
     <div class="col-sm-10">
@@ -124,7 +141,8 @@
 <div class="form-group">
     <label for="history" class="col-sm-2 control-label">History</label>
     <div class="col-sm-10">
-        <div class="timeline">
+    	<button class="btn btn-primary waves-effect collapsed" type="button" data-toggle="collapse" data-target="#collapseHistory" aria-expanded="false" aria-controls="collapseHistory">Show/Hide History</button>
+        <div class="timeline collapse" id="collapseHistory">
         @foreach($proposal->proposalhistories as $key => $value)
         	<div class="t-view" data-tv-type="text">
                 <div class="tv-header media">

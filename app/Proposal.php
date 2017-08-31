@@ -133,4 +133,9 @@ class Proposal extends Model
 		$user = User::find($value); 
 		return $user;
 	}
+
+	public function _currentuser()
+	{
+		return $this->belongsTo('App\User', 'current_user');
+	}
 }

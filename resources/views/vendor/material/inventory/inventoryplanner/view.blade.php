@@ -136,7 +136,8 @@
 <div class="form-group">
     <label for="history" class="col-sm-2 control-label">History</label>
     <div class="col-sm-10">
-        <div class="timeline">
+        <button class="btn btn-primary waves-effect collapsed" type="button" data-toggle="collapse" data-target="#collapseHistory" aria-expanded="false" aria-controls="collapseHistory">Show/Hide History</button>
+        <div class="timeline collapse" id="collapseHistory">
         @foreach($inventoryplanner->inventoryplannerhistories as $key => $value)
         	<div class="t-view" data-tv-type="text">
                 <div class="tv-header media">

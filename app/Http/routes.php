@@ -343,8 +343,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('proposal/apiList/{listtype}', 'ProposalController@apiList');
         Route::post('proposal/apiDelete', 'ProposalController@apiDelete');
         Route::resource('proposal', 'ProposalController');
-        Route::get('proposal/approve/{flow_no}/{id}', 'ProposalController@approve');
-        Route::post('proposal/approve/{flow_no}/{id}', 'ProposalController@postApprove');
+        Route::get('proposal/action/{flow_no}/{id}', 'ProposalController@action');
+        Route::post('proposal/action/{flow_no}/{id}', 'ProposalController@postAction');
+        Route::get('proposal/approval/{flow_no}/{id}', 'ProposalController@approve');
+        Route::post('proposal/approval/{flow_no}/{id}', 'ProposalController@postApprove');
+
         Route::post('proposal/api/getMedias', 'ProposalController@apiGetMedias');
         Route::post('proposal/api/generateDeadline', 'ProposalController@apiGenerateDeadline');
         Route::post('proposal/api/getRates', 'ProposalController@apiGetRates');

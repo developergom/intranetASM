@@ -2,11 +2,11 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Inventory Planner<small>Approve Inventory Planner</small></h2></div>
+        <div class="card-header"><h2>Proposal<small>Approve Proposal</small></h2></div>
         <div class="card-body card-padding">
-        	<form class="form-horizontal" role="form" method="POST" action="{{ url('inventory/inventoryplanner/approve/' . $inventoryplanner->flow_no . '/' . $inventoryplanner->inventory_planner_id) }}">
+        	<form class="form-horizontal" role="form" method="POST" action="">
         		{{ csrf_field() }}
-        		@include('vendor.material.inventory.inventoryplanner.view')
+        		@include('vendor.material.workorder.proposal.view')
 	            <div class="form-group">
 	                <label for="approval" class="col-sm-2 control-label">Approval</label>
 	                <div class="col-sm-10">
@@ -35,7 +35,7 @@
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                	<button type="submit" class="btn btn-primary btn-sm">Submit</button>
-	                    <a href="{{ url('inventory/inventoryplanner') }}" class="btn btn-danger btn-sm">Back</a>
+	                    <a href="{{ url('workorder/proposal') }}" class="btn btn-danger btn-sm">Back</a>
 	                </div>
 	            </div>
 	        </form>

@@ -127,4 +127,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\GridProposal', 'created_by');
     }
+
+    public function proposalcurrentuser()
+    {
+        return $this->hasMany('App\Proposal', 'current_user');
+    }
 }

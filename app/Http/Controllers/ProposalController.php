@@ -215,6 +215,132 @@ class ProposalController extends Controller
         return view('vendor.material.workorder.proposal.show', $data);
     }
 
+    public function edit(Request $request, $id)
+    {
+        if(Gate::denies('Proposal-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['proposal_types'] = ProposalType::select('proposal_type_id','proposal_type_name', 'proposal_type_duration')->where('active', '1')->orderBy('proposal_type_name')->get();
+        $data['industries'] = Industry::select('industry_id','industry_name')->where('active', '1')->orderBy('industry_name')->get();
+        $data['medias'] = Media::select('media_id','media_name')->whereHas('users', function($query) use($request){
+                                    $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                                })->where('medias.active', '1')->orderBy('media_name')->get();
+
+        $data['proposal'] = Proposal::with(
+                                        'proposaltype', 
+                                        'industries', 
+                                        'client_contacts',
+                                        'client',
+                                        'brand',
+                                        'medias',
+                                        'uploadfiles'
+                                        )->find($id);
+
+        return view('vendor.material.workorder.proposal.edit', $data);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'proposal_type_id' => 'required',
+            'proposal_name' => 'required|max:200',
+            'industry_id[]' => 'array',
+            'proposal_deadline' => 'required',
+            'proposal_budget' => 'required|numeric',
+            'client_id' => 'required',
+            'client_contact_id[]' => 'array',
+            'brand_id' => 'required',
+            'media_id' => 'array',
+            'proposal_desc' => 'required'
+        ]);
+
+        $flow = new FlowLibrary;
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
+
+        $obj = Proposal::find($id);
+        $obj->proposal_type_id = $request->input('proposal_type_id');
+        $obj->proposal_name = $request->input('proposal_name');
+        $obj->proposal_deadline = $request->input('proposal_deadline');
+        $obj->proposal_desc = $request->input('proposal_desc');
+        $obj->proposal_budget = $request->input('proposal_budget');
+        $obj->client_id = $request->input('client_id');
+        $obj->brand_id = $request->input('brand_id');
+        $obj->flow_no = $nextFlow['flow_no'];
+        $obj->current_user = $nextFlow['current_user'];
+        $obj->updated_by = $request->user()->user_id;
+
+        $obj->save();
+
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_revision = $obj->revision_no;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => $obj->revision_no ];
+            }
+        }
+
+        if(!empty($fileArray)) {
+            Proposal::find($obj->proposal_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
+        }
+
+        if(!empty($request->input('industry_id'))) {
+            Proposal::find($obj->proposal_id)->industries()->sync($request->input('industry_id'));
+        }
+
+        if(!empty($request->input('client_contact_id'))) {
+            Proposal::find($obj->proposal_id)->client_contacts()->sync($request->input('client_contact_id'));
+        }
+
+        if(!empty($request->input('media_id'))) {
+            Proposal::find($obj->proposal_id)->medias()->sync($request->input('media_id'));
+        }
+
+        $his = new ProposalHistory;
+        $his->proposal_id = $obj->proposal_id;
+        $his->approval_type_id = 1;
+        $his->proposal_history_text = $request->input('proposal_desc');
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        $this->notif->remove($request->user()->user_id, 'proposalreject', $proposal->proposal_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'proposalapproval', 'Please check Order Proposal "' . $obj->proposal_name . '"', $obj->proposal_id);
+
+        $request->session()->flash('status', 'Data has been saved!');
+
+        return redirect('workorder/proposal');
+    }
+
     public function apiList($listtype, Request $request)
     {
         $u = new UserLibrary;
@@ -350,6 +476,107 @@ class ProposalController extends Controller
         
 
         return response()->json($data);
+    }
+
+    public function action(Request $request, $flow_no, $id)
+    {
+        if(Gate::denies('Proposal-Approval')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $flow = new FlowLibrary;
+        $url = $flow->getCurrentUrl($this->flow_group_id, $flow_no);
+
+        //dd($url);
+
+        return redirect($url . $flow_no . '/' . $id);
+    }
+
+    public function postAction(Request $request, $flow_no, $id)
+    {
+        return redirect('workorder/proposal');
+    }
+
+    public function approve(Request $request, $flow_no, $id)
+    {
+        $data['proposal'] = Proposal::with(
+                                        'proposaltype', 
+                                        'industries', 
+                                        'client_contacts',
+                                        'client',
+                                        'brand',
+                                        'medias',
+                                        'uploadfiles'
+                                        )->find($id);
+
+        return view('vendor.material.workorder.proposal.approve', $data);
+    }
+
+    public function postApprove(Request $request, $flow_no, $id)
+    {
+        $this->validate($request, [
+            'approval' => 'required',
+            'comment' => 'required',
+        ]);
+
+        if($request->input('approval') == '1') 
+        {
+            //approve
+            $proposal = Proposal::find($id);
+            $manual_user = $request->input('manual_user');
+
+            $flow = new FlowLibrary;
+            $nextFlow = $flow->getNextFlow($this->flow_group_id, $proposal->flow_no, $request->user()->user_id, $proposal->pic, $proposal->created_by->user_id, $manual_user);
+
+            $proposal->flow_no = $nextFlow['flow_no'];
+            $proposal->current_user = $nextFlow['current_user'];
+            $proposal->updated_by = $request->user()->user_id;
+            $proposal->save();
+
+            $his = new ProposalHistory;
+            $his->proposal_id = $id;
+            $his->approval_type_id = 2;
+            $his->proposal_history_text = $request->input('comment');
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
+            $this->notif->remove($request->user()->user_id, 'proposalapproval', $proposal->proposal_id);
+            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'proposalapproval', 'Proposal "' . $proposal->proposal_name . '" has been approved.', $id);
+
+            $request->session()->flash('status', 'Data has been saved!');
+
+        }else{
+            //reject
+            $proposal = Proposal::find($id);
+            $manual_user = $request->input('manual_user');
+
+            $flow = new FlowLibrary;
+            $prevFlow = $flow->getPreviousFlow($this->flow_group_id, $proposal->flow_no, $request->user()->user_id, $proposal->pic, $proposal->created_by->user_id, $manual_user);
+
+            $proposal->flow_no = $prevFlow['flow_no'];
+            $proposal->revision_no = $proposal->revision_no + 1;
+            $proposal->current_user = $prevFlow['current_user'];
+            $proposal->updated_by = $request->user()->user_id;
+            $proposal->save();
+
+            $his = new ProposalHistory;
+            $his->proposal_id = $id;
+            $his->approval_type_id = 3;
+            $his->proposal_history_text = $request->input('comment');
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
+            $this->notif->remove($request->user()->user_id, 'proposalapproval', $proposal->proposal_id);
+            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'proposalreject', 'Proposal "' . $proposal->proposal_name . '" rejected.', $id);
+
+            $request->session()->flash('status', 'Data has been saved!');
+        }
+
+        return redirect('workorder/proposal');
     }
 
     public function apiGenerateDeadline(Request $request)

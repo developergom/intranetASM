@@ -76,7 +76,7 @@
 	            </div>
 	            <div class="form-group">
 	                <label for="proposal_deadline" class="col-sm-2 control-label">Deadline</label>
-	                <div class="col-sm-10">
+	                <div class="col-sm-3">
 	                    <div class="fg-line">
 	                        <input type="text" class="form-control input-sm" name="proposal_deadline" id="proposal_deadline" placeholder="Deadline" required="true" maxlength="100" value="{{ old('proposal_deadline') }}" readonly="true">
 	                    </div>
