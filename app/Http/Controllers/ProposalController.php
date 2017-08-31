@@ -16,6 +16,7 @@ use App\AdvertiseSize;
 use App\Brand;
 use App\Client;
 use App\ClientContact;
+use App\Holiday;
 use App\Industry;
 use App\InventoryPlanner;
 use App\Media;
@@ -85,12 +86,133 @@ class ProposalController extends Controller
                                     $query->where('users_medias.user_id', '=', $request->user()->user_id);
                                 })->where('medias.active', '1')->orderBy('media_name')->get();
 
-        $data['advertise_sizes'] = AdvertiseSize::select('advertise_size_id','advertise_size_name')->where('active', '1')->orderBy('advertise_size_name')->get();
+        /*$data['advertise_sizes'] = AdvertiseSize::select('advertise_size_id','advertise_size_name')->where('active', '1')->orderBy('advertise_size_name')->get();
         $data['advertise_positions'] = AdvertisePosition::select('advertise_position_id','advertise_position_name')->where('active', '1')->orderBy('advertise_position_name')->get();
         $data['papers'] = Paper::select('paper_id','paper_name')->where('active', '1')->orderBy('paper_name')->get();
-        $data['price_types'] = PriceType::select('price_type_id','price_type_name')->where('active', '1')->orderBy('price_type_name')->get();
+        $data['price_types'] = PriceType::select('price_type_id','price_type_name')->where('active', '1')->orderBy('price_type_name')->get();*/
 
         return view('vendor.material.workorder.proposal.create', $data);   
+    }
+
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'proposal_type_id' => 'required',
+            'proposal_name' => 'required|max:200',
+            'industry_id[]' => 'array',
+            'proposal_deadline' => 'required',
+            'proposal_budget' => 'required|numeric',
+            'client_id' => 'required',
+            'client_contact_id[]' => 'array',
+            'brand_id' => 'required',
+            'media_id' => 'array',
+            'proposal_desc' => 'required'
+        ]);
+
+        $flow = new FlowLibrary;
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
+
+        $obj = new Proposal;
+        $obj->proposal_type_id = $request->input('proposal_type_id');
+        $obj->proposal_name = $request->input('proposal_name');
+        $obj->proposal_deadline = $request->input('proposal_deadline');
+        $obj->proposal_desc = $request->input('proposal_desc');
+        $obj->proposal_budget = $request->input('proposal_budget');
+        $obj->client_id = $request->input('client_id');
+        $obj->brand_id = $request->input('brand_id');
+        $obj->flow_no = $nextFlow['flow_no'];
+        $obj->current_user = $nextFlow['current_user'];
+        $obj->revision_no = 0;
+        $obj->active = '1';
+        $obj->created_by = $request->user()->user_id;
+
+        $obj->save();
+
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_revision = 0;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => 0 ];
+            }
+        }
+
+        if(!empty($fileArray)) {
+            Proposal::find($obj->proposal_id)->uploadfiles()->sync($fileArray);    
+        }
+
+        if(!empty($request->input('industry_id'))) {
+            Proposal::find($obj->proposal_id)->industries()->sync($request->input('industry_id'));
+        }
+
+        if(!empty($request->input('client_contact_id'))) {
+            Proposal::find($obj->proposal_id)->client_contacts()->sync($request->input('client_contact_id'));
+        }
+
+        if(!empty($request->input('media_id'))) {
+            Proposal::find($obj->proposal_id)->medias()->sync($request->input('media_id'));
+        }
+
+        $his = new ProposalHistory;
+        $his->proposal_id = $obj->proposal_id;
+        $his->approval_type_id = 1;
+        $his->proposal_history_text = $request->input('proposal_desc');
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'proposalapproval', 'Please check Order Proposal "' . $obj->proposal_name . '"', $obj->proposal_id);
+
+        $request->session()->flash('status', 'Data has been saved!');
+
+        return redirect('workorder/proposal');
+    }
+
+    public function show(Request $request, $id)
+    {
+        if(Gate::denies('Proposal-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['proposal'] = Proposal::with(
+                                        'proposaltype', 
+                                        'industries', 
+                                        'client_contacts',
+                                        'client',
+                                        'brand',
+                                        'medias',
+                                        'uploadfiles'
+                                        )->find($id);
+
+        return view('vendor.material.workorder.proposal.show', $data);
     }
 
     public function apiList($listtype, Request $request)
@@ -236,7 +358,24 @@ class ProposalController extends Controller
 
         $proposaltype = ProposalType::select('proposal_type_id','proposal_type_name', 'proposal_type_duration')->find($proposal_type_id);
 
-        $deadline = Carbon::now()->addDays($proposaltype->proposal_type_duration);
+        $deadline = Carbon::now();
+        for ($i = 0; $i < $proposaltype->proposal_type_duration; $i++) {
+            $deadline = $deadline->addDays(1);
+            $count = Holiday::where('active', '1')->where('holiday_date', $deadline->format('Y-m-d'))->count();
+
+            if($count > 0) {
+                $deadline = $deadline->addDays(1);
+            }
+
+            if($deadline->isWeekend()) {
+                $deadline = $deadline->addDays(1);
+                if($deadline->isWeekend()) {
+                    $deadline = $deadline->addDays(1);
+                }
+            }
+        }
+
+        //$deadline = Carbon::now()->addDays($proposaltype->proposal_type_duration);
 
         echo $deadline;
     }

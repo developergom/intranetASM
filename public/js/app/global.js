@@ -5,3 +5,7 @@ $(document).ready(function(){
   		menubar: false
   	});
 });
+
+function previewMoney(inputValue){
+	return inputValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

@@ -40,7 +40,7 @@
 	                <label for="proposal_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="proposal_name" id="proposal_name" placeholder="Proposal Name" required="true" maxlength="100" value="{{ old('proposal_name') }}">
+	                        <input type="text" class="form-control input-sm" name="proposal_name" id="proposal_name" placeholder="Proposal Name" required="true" maxlength="200" value="{{ old('proposal_name') }}">
 	                    </div>
 	                    @if ($errors->has('proposal_name'))
 			                <span class="help-block">
@@ -85,6 +85,22 @@
 			                    <strong>{{ $errors->first('proposal_deadline') }}</strong>
 			                </span>
 			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="proposal_budget" class="col-sm-2 control-label">Budget</label>
+	                <div class="col-sm-3">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm input-mask" name="proposal_budget" id="proposal_budget" placeholder="Budget" required="true" maxlength="17" value="{{ old('proposal_budget') }}">
+	                    </div>
+	                    @if ($errors->has('proposal_budget'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('proposal_budget') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	                <div class="col-sm-7">
+	                	<span class="badge" id="result_proposal_budget"></span>
 	                </div>
 	            </div>
 	            <div class="form-group">
@@ -154,7 +170,7 @@
 			                </span>
 			            @endif
 	                </div>
-	            </div>
+	            </div><!-- 
 	            <div class="form-group">
 	                <label for="inventory_planner_id" class="col-sm-2 control-label">Inventory Planner</label>
 	                <div class="col-sm-10">
@@ -169,13 +185,22 @@
 			                </span>
 			            @endif
 	                </div>
-	            </div>
+	            </div> -->
 	            <div class="form-group">
-	                <label for="proposal_desc" class="col-sm-2 control-label">Description</label>
+	                <label for="proposal_desc" class="col-sm-2 control-label">Creative Brief</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        <textarea name="proposal_desc" id="proposal_desc" class="form-control input-sm" placeholder="Description">{{ old('proposal_desc') }}</textarea>
 	                    </div>
+	                    <span class="help-block">
+	                    	1. What is the BRAND? <br/>
+							2. Background-WHAT WE SHOULD KNOW.  <br/>
+							3. Advertising Objective-WHAT WE WANT TO HAPPEN  <br/>
+							4. Target Audience-WHO TO SELL  <br/>
+							5. Positioning. HOW TO SELL. <br/>
+							6. Desire Response  <br/>
+							7. Tonality & Manner (Execution)
+	                    </span>
 	                    @if ($errors->has('proposal_desc'))
 			                <span class="help-block">
 			                    <strong>{{ $errors->first('proposal_desc') }}</strong>
@@ -364,8 +389,6 @@
 	        </form>
         </div>
     </div>
-
-    @include('vendor.material.workorder.proposal.modal')
 @endsection
 
 @section('vendorjs')

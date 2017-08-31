@@ -52,4 +52,9 @@ class Client extends Model
 	{
 		return $this->hasMany('App\Project', 'client_id');	
 	}
+
+	public function proposals()
+	{
+		return $this->hasMany('App\Proposal', 'client_id');
+	}
 }

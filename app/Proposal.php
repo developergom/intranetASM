@@ -13,6 +13,7 @@ class Proposal extends Model
 				'proposal_type_id', 
 				'proposal_name',
 				'proposal_deadline',
+				'proposal_budget',
 				'proposal_desc',
 				'proposal_no',
 				'proposal_status_id',
@@ -44,6 +45,16 @@ class Proposal extends Model
 	public function proposaltype()
 	{
 		return $this->belongsTo('App\ProposalType', 'proposal_type_id');
+	}
+
+	public function brand() 
+	{
+		return $this->belongsTo('App\Brand', 'brand_id');
+	}
+
+	public function client()
+	{
+		return $this->belongsTo('App\Client', 'client_id');
 	}
 
 	public function proposalstatus()

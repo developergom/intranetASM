@@ -67,6 +67,13 @@ $(document).ready(function(){
 		});
 	});
 
+	//budget number format
+	$('#proposal_budget').keyup(function() {
+		$('#result_proposal_budget').empty();
+		var res = previewMoney($(this).val());
+		$('#result_proposal_budget').append(res);
+	});
+
 	//bootstrap select
 	$('#client_id')
     .selectpicker({
@@ -226,7 +233,7 @@ $(document).ready(function(){
 
 
 	//load all prices
-	load_all_prices();
+	//load_all_prices();
 
 	//modal
 	$(".command-add-proposal-price").click(function(){

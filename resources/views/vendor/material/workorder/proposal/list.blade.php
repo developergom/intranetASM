@@ -60,7 +60,7 @@
                                 <tr>
                                     <th data-column-id="proposal_name" data-order="asc">Title</th>
                                     <th data-column-id="proposal_deadline" data-order="asc">Deadline</th>
-                                    <th data-column-id="user_firstname" data-order="asc">Created By</th>
+                                    <th data-column-id="user_firstname" data-order="asc">Current User</th>
                                     @can('Proposal-Delete')
                                         <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
                                     @else
