@@ -347,6 +347,10 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('proposal/action/{flow_no}/{id}', 'ProposalController@postAction');
         Route::get('proposal/approval/{flow_no}/{id}', 'ProposalController@approve');
         Route::post('proposal/approval/{flow_no}/{id}', 'ProposalController@postApprove');
+        Route::get('proposal/approvalpic/{flow_no}/{id}', 'ProposalController@approvepic');
+        Route::post('proposal/approvalpic/{flow_no}/{id}', 'ProposalController@postApprovepic');
+        Route::get('proposal/formsubmit/{flow_no}/{id}', 'ProposalController@formsubmit');
+        Route::post('proposal/formsubmit/{flow_no}/{id}', 'ProposalController@postFormsubmit');
 
         Route::post('proposal/api/getMedias', 'ProposalController@apiGetMedias');
         Route::post('proposal/api/generateDeadline', 'ProposalController@apiGenerateDeadline');

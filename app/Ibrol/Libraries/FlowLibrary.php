@@ -28,14 +28,14 @@ class FlowLibrary{
 		$nextFlow['current_user'] = $user_id;
 		$nextFlow['counter'] = 0;
 
-		while ($nextFlow['current_user']==$user_id) {
+		while (($nextFlow['current_user']==$user_id) && ($nextFlow['flow_no']!=98)) {
 			//checking flow if it's using optional condition
 			$currFlow = Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $flow_no + 1)->first();
 			//dd($currFlow);
 			if(is_null($currFlow)){
 				$currFlow = Flow::where('flow_group_id', $flow_group_id)->where('flow_no', $flow_no)->first();
 			}
-			//dd($currFlow);
+
 			$fn = $flow_no + 1;
 			if($currFlow->flow_using_optional=='1') {
 				//check optional condition
@@ -121,6 +121,8 @@ class FlowLibrary{
 			$flow_no += 1;
 			$nextFlow['counter'] += 1;
 		}
+
+		//dd($nextFlow);
 		
 		return $nextFlow;
 	}

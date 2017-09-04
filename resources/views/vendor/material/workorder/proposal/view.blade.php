@@ -131,6 +131,14 @@
     </div>
 </div>
 <div class="form-group">
+    <label for="proposal_no" class="col-sm-2 control-label">Proposal No</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <input type="text" class="form-control input-sm" id="proposal_no" readonly="true" value="{{ $proposal->proposal_no }}">
+        </div>
+    </div>
+</div>
+<div class="form-group">
     <label for="created_by" class="col-sm-2 control-label">Created By</label>
     <div class="col-sm-10">
         <div class="fg-line">

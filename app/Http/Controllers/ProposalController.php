@@ -16,6 +16,7 @@ use App\AdvertiseSize;
 use App\Brand;
 use App\Client;
 use App\ClientContact;
+use App\Flow;
 use App\Holiday;
 use App\Industry;
 use App\InventoryPlanner;
@@ -36,6 +37,7 @@ use App\ProposalType;
 use App\User;
 
 use App\Ibrol\Libraries\FlowLibrary;
+use App\Ibrol\Libraries\GeneratorLibrary;
 use App\Ibrol\Libraries\NotificationLibrary;
 use App\Ibrol\Libraries\UserLibrary;
 
@@ -333,7 +335,7 @@ class ProposalController extends Controller
 
         $his->save();
 
-        $this->notif->remove($request->user()->user_id, 'proposalreject', $proposal->proposal_id);
+        $this->notif->remove($request->user()->user_id, 'proposalreject', $obj->proposal_id);
         $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'proposalapproval', 'Please check Order Proposal "' . $obj->proposal_name . '"', $obj->proposal_id);
 
         $request->session()->flash('status', 'Data has been saved!');
@@ -374,7 +376,8 @@ class ProposalController extends Controller
                                 ->where('proposals.current_user', '<>' , $request->user()->user_id)
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('proposals.created_by', '=' , $request->user()->user_id)
-                                            ->orWhereIn('proposals.created_by', $subordinate);
+                                            ->orWhereIn('proposals.created_by', $subordinate)
+                                            ->orWhereIn('proposals.pic', $subordinate);
                                 })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('proposal_name','like','%' . $searchPhrase . '%')
@@ -389,7 +392,8 @@ class ProposalController extends Controller
                                 ->where('proposals.current_user', '<>' , $request->user()->user_id)
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('proposals.created_by', '=' , $request->user()->user_id)
-                                            ->orWhereIn('proposals.created_by', $subordinate);
+                                            ->orWhereIn('proposals.created_by', $subordinate)
+                                            ->orWhereIn('proposals.pic', $subordinate);
                                 })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('proposal_name','like','%' . $searchPhrase . '%')
@@ -543,7 +547,14 @@ class ProposalController extends Controller
             $his->save();
 
             $this->notif->remove($request->user()->user_id, 'proposalapproval', $proposal->proposal_id);
-            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'proposalapproval', 'Proposal "' . $proposal->proposal_name . '" has been approved.', $id);
+            $this->notif->remove($request->user()->user_id, 'proposalreject', $proposal->proposal_id);
+
+            if($proposal->flow_no!=98){
+                $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'proposalapproval', 'You have to check proposal "' . $proposal->proposal_name . '".', $id);
+            }else{
+                $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'proposalfinished', 'Proposal "' . $proposal->proposal_name . '" has been finished.', $id);
+            }
+            
 
             $request->session()->flash('status', 'Data has been saved!');
 
@@ -571,10 +582,200 @@ class ProposalController extends Controller
             $his->save();
 
             $this->notif->remove($request->user()->user_id, 'proposalapproval', $proposal->proposal_id);
+            $this->notif->remove($request->user()->user_id, 'proposalreject', $proposal->proposal_id);
             $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'proposalreject', 'Proposal "' . $proposal->proposal_name . '" rejected.', $id);
 
             $request->session()->flash('status', 'Data has been saved!');
         }
+
+        return redirect('workorder/proposal');
+    }
+
+    public function approvepic(Request $request, $flow_no, $id)
+    {
+        $ul = new UserLibrary;
+        $flow = Flow::where('flow_group_id', $this->flow_group_id)->where('active', '1')->where('flow_no', $flow_no + 1)->first();
+
+
+        $data['proposal'] = Proposal::with(
+                                        'proposaltype', 
+                                        'industries', 
+                                        'client_contacts',
+                                        'client',
+                                        'brand',
+                                        'medias',
+                                        'uploadfiles'
+                                        )->find($id);
+        
+        $data['pic'] = $ul->getUserSubordinate($request->user()->user_id);
+
+        return view('vendor.material.workorder.proposal.approvepic', $data);
+    }
+
+    public function postApprovepic(Request $request, $flow_no, $id)
+    {
+        $this->validate($request, [
+            'approval' => 'required',
+            'pic' => 'required',
+            'comment' => 'required',
+        ]);
+
+        if($request->input('approval') == '1') 
+        {
+            //approve
+            $proposal = Proposal::find($id);
+            $manual_user = $request->input('pic');
+
+            $flow = new FlowLibrary;
+            $nextFlow = $flow->getNextFlow($this->flow_group_id, $proposal->flow_no, $request->user()->user_id, $request->input('pic'), $proposal->created_by->user_id, $manual_user);
+
+            $proposal->flow_no = $nextFlow['flow_no'];
+            $proposal->current_user = $nextFlow['current_user'];
+            $proposal->pic = $manual_user;
+            $proposal->updated_by = $request->user()->user_id;
+            $proposal->save();
+
+            $his = new ProposalHistory;
+            $his->proposal_id = $id;
+            $his->approval_type_id = 2;
+            $his->proposal_history_text = $request->input('comment');
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
+            $this->notif->remove($request->user()->user_id, 'proposalapproval', $proposal->proposal_id);
+            $this->notif->remove($request->user()->user_id, 'proposalreject', $proposal->proposal_id);
+            $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'proposalapproval', 'You have to check proposal "' . $proposal->proposal_name . '".', $id);
+
+            $request->session()->flash('status', 'Data has been saved!');
+
+        }else{
+            //reject
+            $proposal = Proposal::find($id);
+            $manual_user = $request->input('pic');
+
+            $flow = new FlowLibrary;
+            $prevFlow = $flow->getPreviousFlow($this->flow_group_id, $proposal->flow_no, $request->user()->user_id, $request->input('pic'), $proposal->created_by->user_id, $manual_user);
+
+            $proposal->flow_no = $prevFlow['flow_no'];
+            $proposal->revision_no = $proposal->revision_no + 1;
+            $proposal->current_user = $prevFlow['current_user'];
+            $proposal->updated_by = $request->user()->user_id;
+            $proposal->save();
+
+            $his = new ProposalHistory;
+            $his->proposal_id = $id;
+            $his->approval_type_id = 3;
+            $his->proposal_history_text = $request->input('comment');
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
+            $this->notif->remove($request->user()->user_id, 'proposalapproval', $proposal->proposal_id);
+            $this->notif->remove($request->user()->user_id, 'proposalreject', $proposal->proposal_id);
+            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'proposalreject', 'Proposal "' . $proposal->proposal_name . '" rejected.', $id);
+
+            $request->session()->flash('status', 'Data has been saved!');
+        }
+
+        return redirect('workorder/proposal');
+    }
+
+    public function formsubmit(Request $request, $flow_no, $id)
+    {
+        /*$generator = new GeneratorLibrary;
+
+        $proposal_no = $generator->proposal_no($id);*/
+
+        $data['proposal'] = Proposal::with(
+                                        'proposaltype', 
+                                        'industries', 
+                                        'client_contacts',
+                                        'client',
+                                        'brand',
+                                        'medias',
+                                        'uploadfiles'
+                                        )->find($id);
+
+        return view('vendor.material.workorder.proposal.formsubmit', $data);
+    }
+
+    public function postFormsubmit(Request $request, $flow_no, $id)
+    {
+        $this->validate($request, [
+            'comment' => 'required',
+        ]);
+
+        $proposal = Proposal::find($id);
+        $generator = new GeneratorLibrary;
+        $manual_user = $request->input('manual_user');
+
+        $proposal_no = $generator->proposal_no($id);
+
+        $flow = new FlowLibrary;
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, $proposal->flow_no, $request->user()->user_id, $proposal->pic, $proposal->created_by->user_id, $manual_user);
+
+        $proposal->flow_no = $nextFlow['flow_no'];
+        $proposal->current_user = $nextFlow['current_user'];
+        $proposal->proposal_no = $proposal_no;
+        $proposal->proposal_ready_date = date('Y-m-d H:i:s');
+        $proposal->updated_by = $request->user()->user_id;
+        $proposal->save();
+
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_revision = $proposal->revision_no;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => $proposal->revision_no ];
+            }
+        }
+
+        if(!empty($fileArray)) {
+            Proposal::find($proposal->proposal_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
+        }
+
+        $his = new ProposalHistory;
+        $his->proposal_id = $id;
+        $his->approval_type_id = 2;
+        $his->proposal_history_text = $request->input('comment');
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        $this->notif->remove($request->user()->user_id, 'proposalapproval', $proposal->proposal_id);
+        $this->notif->remove($request->user()->user_id, 'proposalreject', $proposal->proposal_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'proposalapproval', 'You have to check proposal "' . $proposal->proposal_name . '".', $id);
+
+        $request->session()->flash('status', 'Data has been saved!');
 
         return redirect('workorder/proposal');
     }
