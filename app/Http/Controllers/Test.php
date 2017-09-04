@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Excel;
 use App\AdvertisePosition;
+use App\Brand;
 use App\ClientContact;
 use App\Client;
 use App\CreativeFormat;
@@ -355,6 +356,34 @@ class Test extends Controller{
 				$items = $result->all();
 
 				dd($items);
+			});
+		}elseif($table == 'brands') {
+			Excel::selectSheets('Sheet1')->load('MasterBrand.xlsx', function($reader) {
+				$result = $reader->all();
+
+				$items = $result->all();
+
+				//dd($items);
+
+				$i = 0;
+				foreach ($items as $item) {
+					$row = $item->toArray();
+
+					//dd($row);
+					
+					$data = new Brand;
+					$data->subindustry_id = intval($row['brandsubindustryid']);
+					$data->brand_code = intval($row['brandindustryid']) . '000' . intval($row['brandsubindustryid']) . '00' . $i;
+					$data->brand_name = $row['brandname'];
+					$data->brand_desc = $row['brandname'];
+					$data->active = '1';
+					$data->created_by = '1';
+
+					$data->save();
+					$i++;
+				}
+
+				echo $i . ' rows has been saved...';
 			});
 		}
 
