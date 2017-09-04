@@ -144,7 +144,12 @@ $("#grid-data-finished").bootgrid({
     formatters: {
         "link-r": function(column, row)
         {
-            return '<a title="View Proposal" href="' + base_url + 'workorder/proposal/' + row.proposal_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.proposal_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
+            if(uid==row.user_id) {
+                return '<a title="View Proposal" href="' + base_url + 'workorder/proposal/' + row.proposal_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.proposal_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                        +'<a title="Update Status Proposal" href="' + base_url + 'workorder/proposal/update_status/' + row.proposal_id + '" class="btn btn-icon waves-effect waves-circle" type="button" data-row-id="' + row.proposal_id + '"><span class="zmdi zmdi-alert-triangle"></span></a>&nbsp;&nbsp;';
+            }else{
+                return '<a title="View Proposal" href="' + base_url + 'workorder/proposal/' + row.proposal_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.proposal_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
+            }
         }
     },
     converters: {

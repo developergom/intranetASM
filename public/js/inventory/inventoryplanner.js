@@ -148,7 +148,13 @@ $("#grid-data-finished").bootgrid({
                 return '<a title="View Inventory Planner" href="' + base_url + 'inventory/inventoryplanner/' + row.inventory_planner_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.inventory_planner_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
                 +'<a title="Edit Inventory Planner" href="' + base_url + 'inventory/inventoryplanner/renew/' + row.inventory_planner_id + '" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.inventory_planner_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;';
             }else{
-                return '<a title="View Inventory Planner" href="' + base_url + 'inventory/inventoryplanner/' + row.inventory_planner_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.inventory_planner_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                if(cancreateproposal==true) 
+                {
+                    return '<a title="View Inventory Planner" href="' + base_url + 'inventory/inventoryplanner/' + row.inventory_planner_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.inventory_planner_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                            +'<a title="Create to Direct Proposal" href="' + base_url + 'workorder/proposal/create_direct/' + row.inventory_planner_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.inventory_planner_id + '"><span class="zmdi zmdi-mail-send"></span></a>&nbsp;&nbsp;';
+                }else{
+                    return '<a title="View Inventory Planner" href="' + base_url + 'inventory/inventoryplanner/' + row.inventory_planner_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.inventory_planner_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
+                }
             }
         }
     },

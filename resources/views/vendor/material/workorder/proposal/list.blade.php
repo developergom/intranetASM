@@ -81,8 +81,9 @@
                             <thead>
                                 <tr>
                                     <th data-column-id="proposal_name" data-order="asc">Title</th>
-                                    <th data-column-id="proposal_deadline" data-order="asc">Deadline</th>
+                                    <th data-column-id="proposal_no" data-order="asc">Proposal No</th>
                                     <th data-column-id="user_firstname" data-order="asc">Created By</th>
+                                    <th data-column-id="proposal_status_name" data-order="asc">Status</th>
                                     <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
                                 </tr>
                             </thead>
@@ -118,5 +119,8 @@
 @endsection
 
 @section('customjs')
+<script type="text/javascript">
+var uid = '{{ Request::user()->user_id }}';
+</script>
 <script src="{{ url('js/workorder/proposal.js') }}"></script>
 @endsection

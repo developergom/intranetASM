@@ -140,6 +140,11 @@
 @section('customjs')
 <script type="text/javascript">
 var uid = '{{ Request::user()->user_id }}';
+@can('Proposal-Create')
+var cancreateproposal = true;
+@else
+var cancreateproposal = false;
+@endcan
 </script>
 <script src="{{ url('js/inventory/inventoryplanner.js') }}"></script>
 @endsection

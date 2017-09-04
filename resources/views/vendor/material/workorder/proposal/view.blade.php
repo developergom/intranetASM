@@ -138,6 +138,24 @@
         </div>
     </div>
 </div>
+@if($proposal->flow_no==98)
+<div class="form-group">
+    <label for="proposal_status" class="col-sm-2 control-label">Proposal Status</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <input type="text" class="form-control input-sm" id="proposal_status" readonly="true" value="{{ $proposal->proposalstatus->proposal_status_name }}">
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="ready_date" class="col-sm-2 control-label">Ready Date</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <input type="text" class="form-control input-sm" id="ready_date" readonly="true" value="{{ $proposal->proposal_ready_date }}">
+        </div>
+    </div>
+</div>
+@endif
 <div class="form-group">
     <label for="created_by" class="col-sm-2 control-label">Created By</label>
     <div class="col-sm-10">

@@ -206,6 +206,7 @@ class ProposalController extends Controller
 
         $data['proposal'] = Proposal::with(
                                         'proposaltype', 
+                                        'proposalstatus',
                                         'industries', 
                                         'client_contacts',
                                         'client',
@@ -233,6 +234,7 @@ class ProposalController extends Controller
 
         $data['proposal'] = Proposal::with(
                                         'proposaltype', 
+                                        'proposalstatus',
                                         'industries', 
                                         'client_contacts',
                                         'client',
@@ -377,6 +379,7 @@ class ProposalController extends Controller
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('proposals.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('proposals.created_by', $subordinate)
+                                            ->orWhere('proposals.pic', $request->user()->user_id)
                                             ->orWhereIn('proposals.pic', $subordinate);
                                 })
                                 ->where(function($query) use($searchPhrase) {
@@ -393,6 +396,7 @@ class ProposalController extends Controller
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('proposals.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('proposals.created_by', $subordinate)
+                                            ->orWhere('proposals.pic', $request->user()->user_id)
                                             ->orWhereIn('proposals.pic', $subordinate);
                                 })
                                 ->where(function($query) use($searchPhrase) {
@@ -425,6 +429,7 @@ class ProposalController extends Controller
                                 })->count();
         }elseif($listtype == 'finished') {
             $data['rows'] = Proposal::join('users','users.user_id', '=', 'proposals.created_by')
+                                ->join('proposal_status','proposal_status.proposal_status_id', '=', 'proposals.proposal_status_id')
                                 ->where('proposals.active','1')
                                 ->where('proposals.flow_no','=','98')
                                 ->where(function($query) use($request, $subordinate){
@@ -433,12 +438,14 @@ class ProposalController extends Controller
                                 })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('proposal_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('proposal_deadline','like','%' . $searchPhrase . '%')
-                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
+                                            ->orWhere('proposal_no','like','%' . $searchPhrase . '%')
+                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%')
+                                            ->orWhere('proposal_status_name','like','%' . $searchPhrase . '%');
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = Proposal::join('users','users.user_id', '=', 'proposals.created_by')
+                                ->join('proposal_status','proposal_status.proposal_status_id', '=', 'proposals.proposal_status_id')
                                 ->where('proposals.active','1')
                                 ->where('proposals.flow_no','=','98')
                                 ->where(function($query) use($request, $subordinate){
@@ -447,8 +454,9 @@ class ProposalController extends Controller
                                 })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('proposal_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('proposal_deadline','like','%' . $searchPhrase . '%')
-                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
+                                            ->orWhere('proposal_no','like','%' . $searchPhrase . '%')
+                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%')
+                                            ->orWhere('proposal_status_name','like','%' . $searchPhrase . '%');
                                 })->count();
         }elseif($listtype == 'canceled') {
             $data['rows'] = Proposal::join('users','users.user_id', '=', 'proposals.created_by')
@@ -599,6 +607,7 @@ class ProposalController extends Controller
 
         $data['proposal'] = Proposal::with(
                                         'proposaltype', 
+                                        'proposalstatus',
                                         'industries', 
                                         'client_contacts',
                                         'client',
@@ -685,12 +694,9 @@ class ProposalController extends Controller
 
     public function formsubmit(Request $request, $flow_no, $id)
     {
-        /*$generator = new GeneratorLibrary;
-
-        $proposal_no = $generator->proposal_no($id);*/
-
         $data['proposal'] = Proposal::with(
                                         'proposaltype', 
+                                        'proposalstatus',
                                         'industries', 
                                         'client_contacts',
                                         'client',
@@ -721,6 +727,7 @@ class ProposalController extends Controller
         $proposal->current_user = $nextFlow['current_user'];
         $proposal->proposal_no = $proposal_no;
         $proposal->proposal_ready_date = date('Y-m-d H:i:s');
+        $proposal->proposal_status_id = 3;
         $proposal->updated_by = $request->user()->user_id;
         $proposal->save();
 
@@ -778,6 +785,11 @@ class ProposalController extends Controller
         $request->session()->flash('status', 'Data has been saved!');
 
         return redirect('workorder/proposal');
+    }
+
+    public function createDirect(Request $request, $inventory_planner_id)
+    {
+        echo 'Coming soon';
     }
 
     public function apiGenerateDeadline(Request $request)
