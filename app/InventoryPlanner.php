@@ -40,6 +40,11 @@ class InventoryPlanner extends Model
 		return $this->belongsTo('App\InventoryType', 'inventory_type_id');
 	}
 
+	public function proposaltype()
+	{
+		return $this->belongsTo('App\ProposalType', 'proposal_type_id');
+	}
+
 	public function inventorycategories()
 	{
 		return $this->belongsToMany('App\InventoryCategory', 'inventory_category_inventory_planner');

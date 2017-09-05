@@ -15,24 +15,24 @@
         	<form class="form-horizontal" role="form" method="POST" action="{{ url('inventory/inventoryplanner') }}">
         		{{ csrf_field() }}
         		<div class="form-group">
-        			<label for="inventory_type_id" class="col-sm-2 control-label">Type</label>
+        			<label for="proposal_type_id" class="col-sm-2 control-label">Type</label>
         			<div class="col-sm-10">
         				<div class="fg-line">
-	        				<select name="inventory_type_id" id="inventory_type_id" class="selectpicker" data-live-search="true" required="true">
+	        				<select name="proposal_type_id" id="proposal_type_id" class="selectpicker" data-live-search="true" required="true">
 	        					<option value=""></option>
-	        					@foreach($inventory_types as $row)
+	        					@foreach($proposal_types as $row)
 	        						{!! $selected = '' !!}
-                                	@if(old('inventory_type_id')==$row->inventory_type_id)
+                                	@if(old('proposal_type_id')==$row->proposal_type_id)
 	                                	{!! $selected = 'selected' !!}
                                 	@endif
-	        						<option value="{{ $row->inventory_type_id }}" {{ $selected }}>{{ $row->inventory_type_name }}</option>
+	        						<option value="{{ $row->proposal_type_id }}" {{ $selected }}>{{ $row->proposal_type_name . ' - ' . $row->proposal_type_desc }}</option>
 	        					@endforeach
 	        				</select>
 	        			</div>
         			</div>
-        			@if ($errors->has('inventory_type_id'))
+        			@if ($errors->has('proposal_type_id'))
 		                <span class="help-block">
-		                    <strong>{{ $errors->first('inventory_type_id') }}</strong>
+		                    <strong>{{ $errors->first('proposal_type_id') }}</strong>
 		                </span>
 		            @endif
         		</div>
@@ -75,7 +75,7 @@
 	                <label for="implementation_id" class="col-sm-2 control-label">Implementation</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="implementation_id[]" id="implementation_id" class="selectpicker" data-live-search="true" multiple required="true">
+	                        <select name="implementation_id[]" id="implementation_id" class="selectpicker" data-live-search="true" multiple required="true" title="filled with month(s) of the inventory’s implementation">
                                 @foreach ($implementations as $row)
                                 	{!! $selected = '' !!}
                                 	@if(old('implementation_id'))
@@ -113,7 +113,7 @@
 	                <label for="inventory_planner_deadline" class="col-sm-2 control-label">Deadline</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="inventory_planner_deadline" id="inventory_planner_deadline" placeholder="e.g 17/08/1945" required="true" maxlength="10" value="{{ old('inventory_planner_deadline') }}" autocomplete="off" data-mask="00/00/0000">
+	                        <input type="text" class="form-control input-sm input-mask" name="inventory_planner_deadline" id="inventory_planner_deadline" placeholder="e.g 17/08/1945 (filled with the deadline which the inventory can be sold)" required="true" maxlength="10" value="{{ old('inventory_planner_deadline') }}" autocomplete="off" data-mask="00/00/0000" data-toggle="tooltip" data-placement="bottom" title="filled with the deadline which the inventory can be sold">
 	                    </div>
 	                    @if ($errors->has('inventory_planner_deadline'))
 			                <span class="help-block">

@@ -31,6 +31,7 @@ use App\MediaGroup;
 use App\MediaEdition;
 use App\Paper;
 use App\PriceType;
+use App\ProposalType;
 use App\User;
 
 use App\Ibrol\Libraries\FlowLibrary;
@@ -76,7 +77,7 @@ class InventoryPlannerController extends Controller
 
         $data = array();
 
-        $data['inventory_types'] = InventoryType::where('active', '1')->orderBy('inventory_type_name')->get();
+        $data['proposal_types'] = ProposalType::where('active', '1')->orderBy('proposal_type_name')->get();
         $data['inventory_categories'] = InventoryCategory::where('active', '1')->orderBy('inventory_category_name')->get();
         $data['implementations'] = Implementation::where('active', '1')->orderBy('implementation_month')->get();
         $data['medias'] = Media::whereHas('users', function($query) use($request){
@@ -96,7 +97,7 @@ class InventoryPlannerController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'inventory_type_id' => 'required',
+            'proposal_type_id' => 'required',
         	'inventory_category_id[]' => 'array',
             'inventory_planner_title' => 'required|max:100',
             'inventory_planner_desc' => 'required',
@@ -115,7 +116,7 @@ class InventoryPlannerController extends Controller
         $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
 
         $obj = new InventoryPlanner;
-        $obj->inventory_type_id = $request->input('inventory_type_id');
+        $obj->proposal_type_id = $request->input('proposal_type_id');
         //$obj->inventory_category_id = $request->input('inventory_category_id');
         $obj->inventory_planner_title = $request->input('inventory_planner_title');
         $obj->inventory_planner_desc = $request->input('inventory_planner_desc');
@@ -335,7 +336,7 @@ class InventoryPlannerController extends Controller
         $data = array();
 
         $data['inventoryplanner'] = InventoryPlanner::with(
-                                                        'inventorytype', 
+                                                        'proposaltype', 
         												'inventorycategories', 
         												'implementations',
         												'medias',
@@ -404,7 +405,7 @@ class InventoryPlannerController extends Controller
 
         $data = array();
 
-        $data['inventory'] = InventoryPlanner::with('inventorytype', 
+        $data['inventory'] = InventoryPlanner::with('proposaltype', 
                                                     'inventorycategories',
                                                     'implementations',
                                                     'medias', 
@@ -436,7 +437,7 @@ class InventoryPlannerController extends Controller
         $inventory_deadline = Carbon::createFromFormat('Y-m-d', ($data['inventory']->inventory_deadline==null) ? date('Y-m-d') : $data['inventory']->inventory_deadline);
         $data['inventory_deadline'] = $inventory_deadline->format('d/m/Y');
 
-        $data['inventory_types'] = InventoryType::where('active', '1')->orderBy('inventory_type_name')->get();
+        $data['proposal_types'] = ProposalType::where('active', '1')->orderBy('proposal_type_name')->get();
         $data['inventory_categories'] = InventoryCategory::where('active', '1')->orderBy('inventory_category_name')->get();
         $data['implementations'] = Implementation::where('active', '1')->orderBy('implementation_month')->get();
         $data['medias'] = Media::whereHas('users', function($query) use($request){
@@ -580,7 +581,7 @@ class InventoryPlannerController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'inventory_type_id' => 'required',
+            'proposal_type_id' => 'required',
             'inventory_category_id[]' => 'array',
             'inventory_planner_title' => 'required|max:100',
             'inventory_planner_desc' => 'required',
@@ -599,7 +600,7 @@ class InventoryPlannerController extends Controller
         $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
 
         $obj = InventoryPlanner::find($id);
-        $obj->inventory_type_id = $request->input('inventory_type_id');
+        $obj->proposal_type_id = $request->input('proposal_type_id');
         //$obj->inventory_category_id = $request->input('inventory_category_id');
         $obj->inventory_planner_title = $request->input('inventory_planner_title');
         $obj->inventory_planner_desc = $request->input('inventory_planner_desc');
@@ -844,7 +845,7 @@ class InventoryPlannerController extends Controller
         $data = array();
 
         $data['inventoryplanner'] = InventoryPlanner::with(
-                                                        'inventorytype', 
+                                                        'proposaltype', 
         												'inventorycategories', 
         												'implementations',
         												'medias',
@@ -1735,7 +1736,7 @@ class InventoryPlannerController extends Controller
 
         $data = array();
 
-        $data['inventory'] = InventoryPlanner::with('inventorytype', 
+        $data['inventory'] = InventoryPlanner::with('proposaltype', 
                                                     'inventorycategories',
                                                     'implementations',
                                                     'medias'
@@ -1743,7 +1744,7 @@ class InventoryPlannerController extends Controller
         $inventory_deadline = Carbon::createFromFormat('Y-m-d', ($data['inventory']->inventory_deadline==null) ? date('Y-m-d') : $data['inventory']->inventory_deadline);
         $data['inventory_deadline'] = $inventory_deadline->format('d/m/Y');
 
-        $data['inventory_types'] = InventoryType::where('active', '1')->orderBy('inventory_type_name')->get();
+        $data['proposal_types'] = ProposalType::where('active', '1')->orderBy('proposal_type_name')->get();
         $data['inventory_categories'] = InventoryCategory::where('active', '1')->orderBy('inventory_category_name')->get();
         $data['implementations'] = Implementation::where('active', '1')->orderBy('implementation_month')->get();
         $data['medias'] = Media::whereHas('users', function($query) use($request){
@@ -1756,7 +1757,7 @@ class InventoryPlannerController extends Controller
     public function postRenew(Request $request, $id)
     {
         $this->validate($request, [
-            'inventory_type_id' => 'required',
+            'proposal_type_id' => 'required',
             'inventory_category_id[]' => 'array',
             'inventory_planner_title' => 'required|max:100',
             'inventory_planner_desc' => 'required',
@@ -1773,7 +1774,7 @@ class InventoryPlannerController extends Controller
 
 
         $obj = InventoryPlanner::find($id);
-        $obj->inventory_type_id = $request->input('inventory_type_id');
+        $obj->proposal_type_id = $request->input('proposal_type_id');
         //$obj->inventory_category_id = $request->input('inventory_category_id');
         $obj->inventory_planner_title = $request->input('inventory_planner_title');
         $obj->inventory_planner_desc = $request->input('inventory_planner_desc');

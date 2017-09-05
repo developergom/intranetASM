@@ -2,7 +2,7 @@
 	<label for="inventory_type_id" class="col-sm-2 control-label">Type</label>
 	<div class="col-sm-10">
 		<div class="fg-line">
-			<input class="form-control input-sm" placeholder="Type" readonly="true" value="{{ $inventoryplanner->inventorytype->inventory_type_name }}">
+			<input class="form-control input-sm" placeholder="Type" readonly="true" value="{{ $inventoryplanner->proposaltype->proposal_type_name }}">
 		</div>
 	</div>
 </div>
@@ -25,7 +25,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label for="implementation_id" class="col-sm-2 control-label">Implementation</label>
+    <label for="implementation_id" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="right" title="Implementation of this inventory">Implementation</label>
     <div class="col-sm-10">
         <div class="fg-line">
             @foreach($inventoryplanner->implementations as $row)
@@ -43,7 +43,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label for="inventory_planner_deadline" class="col-sm-2 control-label">Deadline</label>
+    <label for="inventory_planner_deadline" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="right" title="This deadline is deadline which the inventory can be sold">Deadline</label>
     <div class="col-sm-10">
         <div class="fg-line">
             <input class="form-control input-sm" placeholder="Deadline" readonly="true" value="{{ Carbon\Carbon::createFromFormat('Y-m-d', $inventoryplanner->inventory_planner_deadline)->format('d/m/Y') }}">

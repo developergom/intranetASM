@@ -21,4 +21,9 @@ class ProposalType extends Model
 	{
 		return $this->hasMany('App\Proposal', 'proposal_type_id');
 	}
+
+	public function inventories_planner()
+	{
+		return $this->hasMany('App\InventoryPlanner', 'proposal_type_id');
+	}
 }
