@@ -77,6 +77,16 @@
     </div>
 </div>
 <div class="form-group">
+    <label for="inventory_planner_name" class="col-sm-2 control-label">Inventory Planner Linked</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+        @foreach($proposal->inventoriesplanner as $inventoryplanner)
+            <a href="{{ url('inventory/inventoryplanner/' . $inventoryplanner->inventory_planner_id) }}" target="_blank" title="Click to View"><span class="badge">{{ $inventoryplanner->inventory_planner_title . ' created by ' . $inventoryplanner->created_by->user_firstname . ' ' . $inventoryplanner->created_by->user_lastname }}</span></a><br/>
+        @endforeach
+        </div>
+    </div>
+</div>
+<div class="form-group">
     <label for="proposal_desc" class="col-sm-2 control-label">Creative Brief</label>
     <div class="col-sm-10">
         <div class="fg-line">
@@ -139,6 +149,14 @@
     </div>
 </div>
 @if($proposal->flow_no==98)
+<div class="form-group">
+    <label for="proposal_method" class="col-sm-2 control-label">Method</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <input type="text" class="form-control input-sm" id="proposal_method" readonly="true" value="{{ $proposal->proposalmethod->proposal_method_name }}">
+        </div>
+    </div>
+</div>
 <div class="form-group">
     <label for="proposal_status" class="col-sm-2 control-label">Proposal Status</label>
     <div class="col-sm-10">

@@ -125,6 +125,7 @@ class ProposalController extends Controller
         $obj->flow_no = $nextFlow['flow_no'];
         $obj->current_user = $nextFlow['current_user'];
         $obj->revision_no = 0;
+        $obj->proposal_method_id = 1; //Brief Proposal
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
 
@@ -206,13 +207,15 @@ class ProposalController extends Controller
 
         $data['proposal'] = Proposal::with(
                                         'proposaltype', 
+                                        'proposalmethod', 
                                         'proposalstatus',
                                         'industries', 
                                         'client_contacts',
                                         'client',
                                         'brand',
                                         'medias',
-                                        'uploadfiles'
+                                        'uploadfiles',
+                                        'inventoriesplanner'
                                         )->find($id);
 
         return view('vendor.material.workorder.proposal.show', $data);
@@ -234,13 +237,15 @@ class ProposalController extends Controller
 
         $data['proposal'] = Proposal::with(
                                         'proposaltype', 
+                                        'proposalmethod', 
                                         'proposalstatus',
                                         'industries', 
                                         'client_contacts',
                                         'client',
                                         'brand',
                                         'medias',
-                                        'uploadfiles'
+                                        'uploadfiles',
+                                        'inventoriesplanner'
                                         )->find($id);
 
         return view('vendor.material.workorder.proposal.edit', $data);
@@ -513,12 +518,15 @@ class ProposalController extends Controller
     {
         $data['proposal'] = Proposal::with(
                                         'proposaltype', 
+                                        'proposalmethod', 
+                                        'proposalstatus',
                                         'industries', 
                                         'client_contacts',
                                         'client',
                                         'brand',
                                         'medias',
-                                        'uploadfiles'
+                                        'uploadfiles',
+                                        'inventoriesplanner'
                                         )->find($id);
 
         return view('vendor.material.workorder.proposal.approve', $data);
@@ -607,13 +615,15 @@ class ProposalController extends Controller
 
         $data['proposal'] = Proposal::with(
                                         'proposaltype', 
+                                        'proposalmethod', 
                                         'proposalstatus',
                                         'industries', 
                                         'client_contacts',
                                         'client',
                                         'brand',
                                         'medias',
-                                        'uploadfiles'
+                                        'uploadfiles',
+                                        'inventoriesplanner'
                                         )->find($id);
         
         $data['pic'] = $ul->getUserSubordinate($request->user()->user_id);
@@ -696,13 +706,15 @@ class ProposalController extends Controller
     {
         $data['proposal'] = Proposal::with(
                                         'proposaltype', 
+                                        'proposalmethod', 
                                         'proposalstatus',
                                         'industries', 
                                         'client_contacts',
                                         'client',
                                         'brand',
                                         'medias',
-                                        'uploadfiles'
+                                        'uploadfiles',
+                                        'inventoriesplanner'
                                         )->find($id);
 
         return view('vendor.material.workorder.proposal.formsubmit', $data);
@@ -789,7 +801,109 @@ class ProposalController extends Controller
 
     public function createDirect(Request $request, $inventory_planner_id)
     {
-        echo 'Coming soon';
+        if(Gate::denies('Proposal-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['inventoryplanner'] = InventoryPlanner::find($inventory_planner_id);
+        //dd($data['inventoryplanner']->uploadfiles);
+        $data['proposal_types'] = ProposalType::select('proposal_type_id','proposal_type_name', 'proposal_type_duration')->where('active', '1')->orderBy('proposal_type_name')->get();
+        $data['industries'] = Industry::select('industry_id','industry_name')->where('active', '1')->orderBy('industry_name')->get();
+        $data['medias'] = Media::select('media_id','media_name')->whereHas('users', function($query) use($request){
+                                    $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                                })->where('medias.active', '1')->orderBy('media_name')->get();
+
+        return view('vendor.material.workorder.proposal.createdirect', $data);
+    }
+
+    public function postCreateDirect(Request $request, $inventory_planner_id)
+    {
+        $this->validate($request, [
+            'proposal_type_id' => 'required',
+            'proposal_name' => 'required|max:200',
+            'industry_id[]' => 'array',
+            'proposal_deadline' => 'required',
+            'proposal_budget' => 'required|numeric',
+            'client_id' => 'required',
+            'client_contact_id[]' => 'array',
+            'brand_id' => 'required',
+            'media_id' => 'array'
+        ]);
+
+        $inventoryplanner = InventoryPlanner::with('uploadfiles')->find($inventory_planner_id);
+
+        $obj = new Proposal;
+        $obj->proposal_type_id = $request->input('proposal_type_id');
+        $obj->proposal_name = $request->input('proposal_name');
+        $obj->proposal_deadline = $request->input('proposal_deadline');
+        $obj->proposal_desc = '';
+        $obj->proposal_budget = $request->input('proposal_budget');
+        $obj->client_id = $request->input('client_id');
+        $obj->brand_id = $request->input('brand_id');
+        $obj->flow_no = 98;
+        $obj->current_user = $request->user()->user_id;
+        $obj->revision_no = 0;
+        $obj->proposal_method_id = 2; //Direct Proposal
+        $obj->pic = $inventoryplanner->created_by->user_id;
+        $obj->active = '1';
+        $obj->created_by = $request->user()->user_id;
+
+        $obj->save();          
+
+        //file saving
+        $fileArray = array();
+
+        foreach($inventoryplanner->uploadfiles as $key => $value) {
+            array_push($fileArray, $value->upload_file_id);
+            $fileArray[$value->upload_file_id] = [ 'revision_no' => 0 ];
+        }
+
+        if(!empty($fileArray)) {
+            Proposal::find($obj->proposal_id)->uploadfiles()->sync($fileArray);    
+        }
+
+        if(!empty($request->input('industry_id'))) {
+            Proposal::find($obj->proposal_id)->industries()->sync($request->input('industry_id'));
+        }
+
+        if(!empty($request->input('client_contact_id'))) {
+            Proposal::find($obj->proposal_id)->client_contacts()->sync($request->input('client_contact_id'));
+        }
+
+        if(!empty($request->input('media_id'))) {
+            Proposal::find($obj->proposal_id)->medias()->sync($request->input('media_id'));
+        }
+
+        //insert inventory planner
+        $iv = array();
+        array_push($iv, $inventory_planner_id);
+        Proposal::find($obj->proposal_id)->inventoriesplanner()->sync($iv);
+
+        //generate proposal no
+        $generator = new GeneratorLibrary;
+        $proposal_no = $generator->proposal_no($obj->proposal_id);
+
+        $proposal = Proposal::find($obj->proposal_id);
+        $proposal->proposal_no = $proposal_no;
+        $proposal->proposal_ready_date = date('Y-m-d H:i:s');
+        $proposal->proposal_status_id = 3;
+        $proposal->updated_by = $request->user()->user_id;
+        $proposal->save();
+
+        $his = new ProposalHistory;
+        $his->proposal_id = $obj->proposal_id;
+        $his->approval_type_id = 1;
+        $his->proposal_history_text = '';
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        $request->session()->flash('status', 'Data has been saved!');
+
+        return redirect('workorder/proposal');
     }
 
     public function apiGenerateDeadline(Request $request)

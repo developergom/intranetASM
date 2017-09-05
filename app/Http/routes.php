@@ -353,6 +353,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('proposal/formsubmit/{flow_no}/{id}', 'ProposalController@postFormsubmit');
 
         Route::get('proposal/create_direct/{inventory_planner_id}', 'ProposalController@createDirect');
+        Route::post('proposal/create_direct/{inventory_planner_id}', 'ProposalController@postCreateDirect');
 
         Route::post('proposal/api/getMedias', 'ProposalController@apiGetMedias');
         Route::post('proposal/api/generateDeadline', 'ProposalController@apiGenerateDeadline');
