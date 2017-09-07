@@ -389,4 +389,8 @@ class Test extends Controller{
 
 	}
 
+	public function handsontable(){
+		return view('vendor.material.test_handsontable');
+	}
+
 }

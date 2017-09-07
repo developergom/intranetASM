@@ -191,4 +191,16 @@ class AdvertisePositionController extends Controller
             return response()->json(200); //failed
         }
     }
+
+    public function apiGetAll(Request $request)
+    {
+        $pos = AdvertisePosition::select('advertise_position_name')->where('active', '1')->where('advertise_position_name','like','%' . $request->input('query') . '%')->orderBy('advertise_position_name')->limit(5)->get();
+
+        $result = array();
+        foreach ($pos as $value) {
+            array_push($result, $value->advertise_position_name);
+        }
+
+        return response()->json($result);
+    }
 }

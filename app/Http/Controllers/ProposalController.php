@@ -1479,7 +1479,7 @@ class ProposalController extends Controller
 
         $proposal_name = $request->proposal_name;
 
-        $result = Proposal::where('proposal_name','like','%' . $proposal_name . '%')->where('active', '1')->take(5)->orderBy('proposal_name')->get();
+        $result = Proposal::where('proposal_name','like','%' . $proposal_name . '%')->where('flow_no','98')->where('active', '1')->take(5)->orderBy('proposal_name')->get();
 
         return response()->json($result, 200);
     }

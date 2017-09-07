@@ -24,6 +24,7 @@ Route::get('/api/loadPlan', 'HomeController@apiPlan')->middleware(['auth','menu'
 Route::get('/api/loadUpcomingPlan/{mode}/{day}', 'HomeController@apiUpcomingPlan')->middleware(['auth','menu']);
 
 Route::get('/test', 'Test@index');
+Route::get('/handsontable', 'Test@handsontable');
 Route::get('/import_data/{table}', 'Test@import_data');
 
 Route::get('/download/file/{id}', 'DownloadController@downloadFile');
@@ -74,6 +75,8 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('advertiseposition/apiList', 'AdvertisePositionController@apiList');
         Route::post('advertiseposition/apiDelete', 'AdvertisePositionController@apiDelete');
         Route::resource('advertiseposition', 'AdvertisePositionController');
+
+        Route::post('advertiseposition/api/all', 'AdvertisePositionController@apiGetAll');
 
         //Advertise Rate
         Route::post('advertiserate/apiList', 'AdvertiseRateController@apiList');

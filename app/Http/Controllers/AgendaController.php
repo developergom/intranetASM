@@ -234,6 +234,7 @@ class AgendaController extends Controller
         //
     }
 
+    
     public function apiList(Request $request)
     {
         $u = new UserLibrary;
