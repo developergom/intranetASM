@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	tinymce.init({ 
-		selector:'textarea',
+		selector:'textarea.form-control',
 		height: 200,
   		menubar: false
   	});
