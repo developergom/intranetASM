@@ -260,6 +260,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('spottype/apiDelete', 'SpotTypeController@apiDelete');
         Route::resource('spottype', 'SpotTypeController');
 
+        //Studio
+        Route::post('studio/apiList', 'StudioController@apiList');
+        Route::post('studio/apiDelete', 'StudioController@apiDelete');
+        Route::resource('studio', 'StudioController');
+
         //Sub Industry
         Route::post('subindustry/apiList', 'SubIndustryController@apiList');
         Route::post('subindustry/apiDelete', 'SubIndustryController@apiDelete');
