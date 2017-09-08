@@ -16,4 +16,9 @@ class Color extends Model
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
+
+	public function rates()
+    {
+    	return $this->hasMany('App\Rate', 'color_id');
+    }
 }

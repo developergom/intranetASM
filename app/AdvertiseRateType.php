@@ -10,10 +10,15 @@ class AdvertiseRateType extends Model
 	protected $primaryKey = 'advertise_rate_type_id';
 
 	protected $fillable = [
-				'advertise_rate_type_name', 'advertise_rate_type_desc'
+				'advertise_rate_type_name', 'advertise_rate_required_fields', 'advertise_rate_type_desc'
 	];
 
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
+
+	public function rates()
+	{
+		return $this->hasMany('App\Rate', 'advertise_rate_type_id');
+	}
 }

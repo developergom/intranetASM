@@ -14,6 +14,18 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	            	<label for="advertise_rate_required_fields" class="col-sm-2 control-label">Required Fields</label>
+	            	<div class="col-sm-10">
+	            		<div class="fg-line">
+	            			@foreach($cols as $row)
+	            				@if(in_array($row['key'], $cols_selected))
+	            					<span class="badge">{{ $row['text'] }}</span><br/>
+	            				@endif
+	            			@endforeach
+	            		</div>
+	            	</div>
+	            </div>
+	            <div class="form-group">
 	                <label for="advertise_rate_type_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">

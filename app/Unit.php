@@ -33,4 +33,9 @@ class Unit extends Model
 	{
 		return $this->hasMany('App\Creative','unit_id');		
 	}
+
+	public function rates()
+	{
+		return $this->hasMany('App\Rate','unit_id');
+	}
 }

@@ -30,4 +30,9 @@ class Paper extends Model
     {
     	return $this->hasMany('App\AdvertiseRate','paper_id');
     }
+
+    public function rates()
+    {
+    	return $this->hasMany('App\Rate', 'paper_id');
+    }
 }

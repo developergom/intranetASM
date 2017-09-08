@@ -245,6 +245,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('publisher/apiDelete', 'PublisherController@apiDelete');
         Route::resource('publisher', 'PublisherController');
 
+        //Rate
+        Route::post('rate/apiList', 'RateController@apiList');
+        Route::post('rate/apiDelete', 'RateController@apiDelete');
+        Route::resource('rate', 'RateController');
+
         //Religion
         Route::post('religion/apiList', 'ReligionController@apiList');
         Route::post('religion/apiEdit', 'ReligionController@apiEdit');

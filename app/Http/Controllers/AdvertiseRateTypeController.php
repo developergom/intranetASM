@@ -11,6 +11,80 @@ use App\AdvertiseRateType;
 
 class AdvertiseRateTypeController extends Controller
 {
+    public $cols = [
+                        [ 
+                            'key' => 'advertise_rate_type_id',
+                            'text' => 'Rate Type'
+                        ],
+                        [ 
+                            'key' => 'media_id',
+                            'text' => 'Media'
+                        ],
+                        [ 
+                            'key' => 'rate_name',
+                            'text' => 'Rate Name'
+                        ],
+                        [ 
+                            'key' => 'width',
+                            'text' => 'Width'
+                        ],
+                        [ 
+                            'key' => 'length',
+                            'text' => 'Length'
+                        ],
+                        [ 
+                            'key' => 'unit_id',
+                            'text' => 'Unit (cm,mm,px,etc)'
+                        ],
+                        [ 
+                            'key' => 'studio_id',
+                            'text' => 'Studio'
+                        ],
+                        [ 
+                            'key' => 'duration',
+                            'text' => 'Duration'
+                        ],
+                        [ 
+                            'key' => 'duration_type',
+                            'text' => 'Duration Type'
+                        ],
+                        [ 
+                            'key' => 'spot_type_id',
+                            'text' => 'Spot Type'
+                        ],
+                        [ 
+                            'key' => 'gross_rate',
+                            'text' => 'Gross Rate'
+                        ],
+                        [ 
+                            'key' => 'discount',
+                            'text' => 'Discount'
+                        ],
+                        [ 
+                            'key' => 'nett_rate',
+                            'text' => 'Nett Rate'
+                        ],
+                        [ 
+                            'key' => 'start_valid_date',
+                            'text' => 'Start Valid Date'
+                        ],
+                        [ 
+                            'key' => 'end_valid_date',
+                            'text' => 'End Valid Date'
+                        ],
+                        [ 
+                            'key' => 'cinema_tax',
+                            'text' => 'Cinema Tax'
+                        ],
+                        [ 
+                            'key' => 'paper_id',
+                            'text' => 'Paper'
+                        ],
+                        [ 
+                            'key' => 'color_id',
+                            'text' => 'Color'
+                        ]     
+                    ];
     /**
      * Display a listing of the resource.
      *
@@ -34,9 +108,11 @@ class AdvertiseRateTypeController extends Controller
     {
         if(Gate::denies('Advertise Rate Types Management-Create')) {
             abort(403, 'Unauthorized action.');
-        }
+        }        
+
+        $data['cols'] = $this->cols;
            
-        return view('vendor.material.master.advertiseratetype.create');
+        return view('vendor.material.master.advertiseratetype.create', $data);
     }
 
     /**
@@ -49,11 +125,13 @@ class AdvertiseRateTypeController extends Controller
     {
         $this->validate($request, [
             'advertise_rate_type_name' => 'required|max:255',
+            'advertise_rate_required_fields' => 'array'
         ]);
 
         $obj = new AdvertiseRateType;
 
         $obj->advertise_rate_type_name = $request->input('advertise_rate_type_name');
+        $obj->advertise_rate_required_fields = serialize($request->input('advertise_rate_required_fields'));
         $obj->advertise_rate_type_desc = $request->input('advertise_rate_type_desc');
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
@@ -79,6 +157,8 @@ class AdvertiseRateTypeController extends Controller
 
         $data = array();
         $data['advertiseratetype'] = AdvertiseRateType::where('active','1')->find($id);
+        $data['cols'] = $this->cols;
+        $data['cols_selected'] = unserialize($data['advertiseratetype']->advertise_rate_required_fields);
         return view('vendor.material.master.advertiseratetype.show', $data);
     }
 
@@ -96,6 +176,8 @@ class AdvertiseRateTypeController extends Controller
 
         $data = array();
         $data['advertiseratetype'] = AdvertiseRateType::where('active','1')->find($id);
+        $data['cols'] = $this->cols;
+        $data['cols_selected'] = (is_null($data['advertiseratetype']->advertise_rate_required_fields)) ? array() : unserialize($data['advertiseratetype']->advertise_rate_required_fields);
         return view('vendor.material.master.advertiseratetype.edit', $data);
     }
 
@@ -110,11 +192,13 @@ class AdvertiseRateTypeController extends Controller
     {
         $this->validate($request, [
             'advertise_rate_type_name' => 'required|max:100',
+            'advertise_rate_required_fields' => 'array'
         ]);
 
         $obj = AdvertiseRateType::find($id);
 
         $obj->advertise_rate_type_name = $request->input('advertise_rate_type_name');
+        $obj->advertise_rate_required_fields = serialize($request->input('advertise_rate_required_fields'));
         $obj->advertise_rate_type_desc = $request->input('advertise_rate_type_desc');
         $obj->updated_by = $request->user()->user_id;
 

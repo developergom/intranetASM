@@ -122,4 +122,9 @@ class Media extends Model
 	{
 		return $this->hasMany('App\ProposalOtherPrice', 'media_id');
 	}
+
+	public function rates()
+	{
+		return $this->hasMany('App\Rate', 'media_id');
+	}
 }
