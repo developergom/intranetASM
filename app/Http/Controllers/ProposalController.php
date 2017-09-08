@@ -906,6 +906,75 @@ class ProposalController extends Controller
         return redirect('workorder/proposal');
     }
 
+    public function updateStatus(Request $request, $id)
+    {
+        $data['proposal'] = Proposal::with(
+                                        'proposaltype', 
+                                        'proposalmethod', 
+                                        'proposalstatus',
+                                        'industries', 
+                                        'client_contacts',
+                                        'client',
+                                        'brand',
+                                        'medias',
+                                        'uploadfiles',
+                                        'inventoriesplanner'
+                                        )->find($id);
+
+        return view('vendor.material.workorder.proposal.updatestatus', $data);
+    }
+
+    public function postUpdateStatus(Request $request, $id)
+    {
+        $this->validate($request, [
+            'status' => 'required',
+            'comment' => 'required',
+        ]);
+
+        $proposal = Proposal::find($id);
+
+        if($request->input('status')=='1') {
+            //Sold
+            $proposal->proposal_status_id = 1;
+            
+        }elseif($request->input('status')=='2') {
+            //Not Sold
+            $proposal->proposal_status_id = 2;
+
+        }elseif($request->input('status')=='3') {
+            //Revision
+            $flow = Flow::where('flow_group_id', $this->flow_group_id)
+                        ->where('active', '1')
+                        ->where('flow_url', '/workorder/proposal/formsubmit/')
+                        ->first();
+
+            $proposal->proposal_status_id = 3;
+            $proposal->flow_no = $flow->flow_no;
+            $proposal->current_user = $proposal->pic;
+            $proposal->revision_no = $proposal->revision_no + 1;
+
+            $this->notif->generate($request->user()->user_id, $proposal->pic, 'proposalapproval', 'You have to check proposal "' . $proposal->proposal_name . '".', $id);
+        }else{
+            //Nothing
+        }
+
+        $proposal->updated_by = $request->user()->user_id;
+        $proposal->save();
+
+        $his = new ProposalHistory;
+        $his->proposal_id = $id;
+        $his->approval_type_id = 5;
+        $his->proposal_history_text = $request->input('comment');
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        $request->session()->flash('status', 'Data has been saved!');
+
+        return redirect('workorder/proposal');
+    }
+
     public function apiGenerateDeadline(Request $request)
     {
         $proposal_type_id = $request->proposal_type_id;

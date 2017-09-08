@@ -358,6 +358,9 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('proposal/create_direct/{inventory_planner_id}', 'ProposalController@createDirect');
         Route::post('proposal/create_direct/{inventory_planner_id}', 'ProposalController@postCreateDirect');
 
+        Route::get('proposal/update_status/{id}', 'ProposalController@updateStatus');
+        Route::post('proposal/update_status/{id}', 'ProposalController@postUpdateStatus');
+
         Route::post('proposal/api/getMedias', 'ProposalController@apiGetMedias');
         Route::post('proposal/api/generateDeadline', 'ProposalController@apiGenerateDeadline');
         Route::post('proposal/api/getRates', 'ProposalController@apiGetRates');

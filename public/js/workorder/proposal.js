@@ -145,8 +145,20 @@ $("#grid-data-finished").bootgrid({
         "link-r": function(column, row)
         {
             if(uid==row.user_id) {
-                return '<a title="View Proposal" href="' + base_url + 'workorder/proposal/' + row.proposal_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.proposal_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                var html = '';
+                if(row.proposal_status_id==1) {
+                    //sold
+                    html = '<a title="View Proposal" href="' + base_url + 'workorder/proposal/' + row.proposal_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.proposal_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                        +'<a title="Create Summary" href="' + base_url + 'workorder/proposal/summary/' + row.proposal_id + '" class="btn btn-icon waves-effect waves-circle" type="button" data-row-id="' + row.proposal_id + '"><span class="zmdi zmdi-assignment"></span></a>&nbsp;&nbsp;';
+                }else if(row.proposal_status_id==2){
+                    html = '<a title="View Proposal" href="' + base_url + 'workorder/proposal/' + row.proposal_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.proposal_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
+                }else{
+                    html = '<a title="View Proposal" href="' + base_url + 'workorder/proposal/' + row.proposal_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.proposal_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
                         +'<a title="Update Status Proposal" href="' + base_url + 'workorder/proposal/update_status/' + row.proposal_id + '" class="btn btn-icon waves-effect waves-circle" type="button" data-row-id="' + row.proposal_id + '"><span class="zmdi zmdi-alert-triangle"></span></a>&nbsp;&nbsp;';
+                }
+                
+
+                return html;
             }else{
                 return '<a title="View Proposal" href="' + base_url + 'workorder/proposal/' + row.proposal_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.proposal_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
             }
