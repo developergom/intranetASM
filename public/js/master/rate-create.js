@@ -11,6 +11,34 @@ $(document).ready(function() {
 		show_columns(advertise_rate_type_id);
 		
 	});
+
+	//gross rate number format
+	$('#gross_rate').keyup(function() {
+		$('#result_gross_rate').empty();
+		var res = previewMoney($(this).val());
+		$('#result_gross_rate').append(res);
+	});
+
+	//discount number format
+	$('#discount').keyup(function() {
+		$('#result_discount').empty();
+		var res = previewMoney($(this).val());
+		$('#result_discount').append(res);
+	});
+
+	//nett rate number format
+	$('#nett_rate').keyup(function() {
+		$('#result_nett_rate').empty();
+		var res = previewMoney($(this).val());
+		$('#result_nett_rate').append(res);
+	});
+
+	//cinema tax number format
+	$('#cinema_tax').keyup(function() {
+		$('#result_cinema_tax').empty();
+		var res = previewMoney($(this).val());
+		$('#result_cinema_tax').append(res);
+	});
 });
 
 function reset_columns()

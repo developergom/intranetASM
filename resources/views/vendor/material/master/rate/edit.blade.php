@@ -6,10 +6,11 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Rates Management<small>Create New Rate</small></h2></div>
+        <div class="card-header"><h2>Rates Management<small>Edit Rate</small></h2></div>
         <div class="card-body card-padding">
-        	<form class="form-horizontal" id="form_add_rate" role="form" method="POST" action="{{ url('master/rate') }}">
+        	<form class="form-horizontal" id="form_edit_rate" role="form" method="POST" action="{{ url('master/rate/' . $rate->rate_id) }}">
         		{{ csrf_field() }}
+        		<input type="hidden" name="_method" value="PUT">
         		<div class="form-group" id="advertise_rate_type_id_container">
 	                <label for="advertise_rate_type_id" class="col-sm-2 control-label">Rate Type</label>
 	                <div class="col-sm-10">
@@ -18,7 +19,7 @@
 	                        	<option value=""></option>
                                 @foreach ($advertiseratetypes as $row)
                                 	{!! $selected = '' !!}
-                                	@if($row->advertise_rate_type_id==old('advertise_rate_type_id'))
+                                	@if($row->advertise_rate_type_id==$rate->advertise_rate_type_id)
                                 		{!! $selected = 'selected' !!}
                                 	@endif
 								    <option value="{{ $row->advertise_rate_type_id }}" {{ $selected }}>{{ $row->advertise_rate_type_name }}</option>
@@ -40,7 +41,7 @@
 	                        	<option value=""></option>
                                 @foreach ($medias as $row)
                                 	{!! $selected = '' !!}
-                                	@if($row->media_id==old('media_id'))
+                                	@if($row->media_id==$rate->media_id)
                                 		{!! $selected = 'selected' !!}
                                 	@endif
 								    <option value="{{ $row->media_id }}" {{ $selected }}>{{ $row->media_name }}</option>
@@ -58,7 +59,7 @@
 	            	<label for="rate_name" class="col-sm-2 control-label">Rate Name</label>
 	            	<div class="col-sm-10">
 	            		<div class="fg-line">
-	            			<input type="text" name="rate_name" id="rate_name" class="form-control input-sm" placeholder="Rate Name" autocomplete="off" value="{{ old('rate_name') }}">
+	            			<input type="text" name="rate_name" id="rate_name" class="form-control input-sm" placeholder="Rate Name" autocomplete="off" value="{{ $rate->rate_name }}">
 	            		</div>
 	            		@if($errors->has('rate_name'))
 	            			<span class="help-block">
@@ -71,7 +72,7 @@
 	            	<label for="width" class="col-sm-2 control-label">Width</label>
 	            	<div class="col-sm-10">
 	            		<div class="fg-line">
-	            			<input type="text" name="width" id="width" class="form-control input-sm" placeholder="Width (numeric only)" autocomplete="off" value="{{ old('width') }}">
+	            			<input type="text" name="width" id="width" class="form-control input-sm" placeholder="Width (numeric only)" autocomplete="off" value="{{ $rate->width }}">
 	            		</div>
 	            		@if($errors->has('width'))
 	            			<span class="help-block">
@@ -84,7 +85,7 @@
 	            	<label for="length" class="col-sm-2 control-label">Length</label>
 	            	<div class="col-sm-10">
 	            		<div class="fg-line">
-	            			<input type="text" name="length" id="length" class="form-control input-sm" placeholder="Length (numeric only)" autocomplete="off" value="{{ old('length') }}">
+	            			<input type="text" name="length" id="length" class="form-control input-sm" placeholder="Length (numeric only)" autocomplete="off" value="{{ $rate->length }}">
 	            		</div>
 	            		@if($errors->has('length'))
 	            			<span class="help-block">
@@ -101,7 +102,7 @@
 	                        	<option value=""></option>
                                 @foreach($units as $row)
                                 	{!! $selected = '' !!}
-                                	@if($row->unit_id==old('unit_id'))
+                                	@if($row->unit_id==$rate->unit_id)
                                 		{!! $selected = 'selected' !!}
                                 	@endif
 								    <option value="{{ $row->unit_id }}" {{ $selected }}>{{ $row->unit_name }}</option>
@@ -123,7 +124,7 @@
 	                        	<option value=""></option>
                                 @foreach($studios as $row)
                                 	{!! $selected = '' !!}
-                                	@if($row->studio_id==old('studio_id'))
+                                	@if($row->studio_id==$rate->studio_id)
                                 		{!! $selected = 'selected' !!}
                                 	@endif
 								    <option value="{{ $row->studio_id }}" {{ $selected }}>{{ $row->studio_name }}</option>
@@ -141,7 +142,7 @@
 	            	<label for="duration" class="col-sm-2 control-label">Duration</label>
 	            	<div class="col-sm-10">
 	            		<div class="fg-line">
-	            			<input type="text" name="duration" id="duration" class="form-control input-sm" placeholder="Duration (numeric only)" autocomplete="off" value="{{ old('duration') }}">
+	            			<input type="text" name="duration" id="duration" class="form-control input-sm" placeholder="Duration (numeric only)" autocomplete="off" value="{{ $rate->duration }}">
 	            		</div>
 	            		@if($errors->has('duration'))
 	            			<span class="help-block">
@@ -158,7 +159,7 @@
 	                        	<option value=""></option>
                                 @foreach($durationtypes as $row)
                                 	{!! $selected = '' !!}
-                                	@if($row==old('duration_type'))
+                                	@if($row==$rate->duration_type)
                                 		{!! $selected = 'selected' !!}
                                 	@endif
 								    <option value="{{ $row }}" {{ $selected }}>{{ $row }}</option>
@@ -180,7 +181,7 @@
 	                        	<option value=""></option>
                                 @foreach($spottypes as $row)
                                 	{!! $selected = '' !!}
-                                	@if($row->spot_type_id==old('spot_type_id'))
+                                	@if($row->spot_type_id==$rate->spot_type_id)
                                 		{!! $selected = 'selected' !!}
                                 	@endif
 								    <option value="{{ $row->spot_type_id }}" {{ $selected }}>{{ $row->spot_type_name }}</option>
@@ -198,7 +199,7 @@
 	                <label for="gross_rate" class="col-sm-2 control-label">Gross Rate</label>
 	                <div class="col-sm-3">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="gross_rate" id="gross_rate" placeholder="Gross Rate"  maxlength="15" value="{{ old('gross_rate') }}">
+	                        <input type="text" class="form-control input-sm" name="gross_rate" id="gross_rate" placeholder="Gross Rate"  maxlength="15" value="{{ $rate->gross_rate }}">
 	                    </div>
 	                    @if ($errors->has('gross_rate'))
 			                <span class="help-block">
@@ -214,7 +215,7 @@
 	                <label for="discount" class="col-sm-2 control-label">Discount</label>
 	                <div class="col-sm-3">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="discount" id="discount" placeholder="Discount" maxlength="15" value="{{ old('discount') }}">
+	                        <input type="text" class="form-control input-sm" name="discount" id="discount" placeholder="Discount" maxlength="15" value="{{ $rate->discount }}">
 	                    </div>
 	                    @if ($errors->has('discount'))
 			                <span class="help-block">
@@ -230,7 +231,7 @@
 	                <label for="nett_rate" class="col-sm-2 control-label">Nett Rate</label>
 	                <div class="col-sm-3">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="nett_rate" id="nett_rate" placeholder="Nett Rate"  maxlength="15" value="{{ old('nett_rate') }}">
+	                        <input type="text" class="form-control input-sm" name="nett_rate" id="nett_rate" placeholder="Nett Rate"  maxlength="15" value="{{ $rate->nett_rate }}">
 	                    </div>
 	                    @if ($errors->has('nett_rate'))
 			                <span class="help-block">
@@ -246,7 +247,7 @@
 	                <label for="start_valid_date" class="col-sm-2 control-label">Start Valid Date</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="start_valid_date" id="start_valid_date" placeholder="e.g 17/08/1945"  maxlength="10" value="{{ old('start_valid_date') }}" autocomplete="off" data-mask="00/00/0000">
+	                        <input type="text" class="form-control input-sm input-mask" name="start_valid_date" id="start_valid_date" placeholder="e.g 17/08/1945"  maxlength="10" value="{{ $start_valid_date }}" autocomplete="off" data-mask="00/00/0000">
 	                    </div>
 	                    @if ($errors->has('start_valid_date'))
 			                <span class="help-block">
@@ -259,7 +260,7 @@
 	                <label for="end_valid_date" class="col-sm-2 control-label">End Valid Date</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="end_valid_date" id="end_valid_date" placeholder="e.g 17/08/1945"  maxlength="10" value="{{ old('end_valid_date') }}" autocomplete="off" data-mask="00/00/0000">
+	                        <input type="text" class="form-control input-sm input-mask" name="end_valid_date" id="end_valid_date" placeholder="e.g 17/08/1945"  maxlength="10" value="{{ $end_valid_date }}" autocomplete="off" data-mask="00/00/0000">
 	                    </div>
 	                    @if ($errors->has('end_valid_date'))
 			                <span class="help-block">
@@ -272,7 +273,7 @@
 	                <label for="cinema_tax" class="col-sm-2 control-label">Cinema Tax</label>
 	                <div class="col-sm-3">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="cinema_tax" id="cinema_tax" placeholder="Cinema Tax"  maxlength="15" value="{{ old('cinema_tax') }}">
+	                        <input type="text" class="form-control input-sm" name="cinema_tax" id="cinema_tax" placeholder="Cinema Tax"  maxlength="15" value="{{ $rate->cinema_tax }}">
 	                    </div>
 	                    @if ($errors->has('cinema_tax'))
 			                <span class="help-block">
@@ -292,7 +293,7 @@
 	                        	<option value=""></option>
                                 @foreach($papers as $row)
                                 	{!! $selected = '' !!}
-                                	@if($row->paper_id==old('paper_id'))
+                                	@if($row->paper_id==$rate->paper_id)
                                 		{!! $selected = 'selected' !!}
                                 	@endif
 								    <option value="{{ $row->paper_id }}" {{ $selected }}>{{ $row->paper_name }}</option>
@@ -314,7 +315,7 @@
 	                        	<option value=""></option>
                                 @foreach($colors as $row)
                                 	{!! $selected = '' !!}
-                                	@if($row->color_id==old('color_id'))
+                                	@if($row->color_id==$rate->color_id)
                                 		{!! $selected = 'selected' !!}
                                 	@endif
 								    <option value="{{ $row->color_id }}" {{ $selected }}>{{ $row->color_name }}</option>

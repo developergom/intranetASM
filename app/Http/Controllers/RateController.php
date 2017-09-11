@@ -125,6 +125,10 @@ class RateController extends Controller
 
     public function create()
     {
+        if(Gate::denies('Rates Management-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
 
         $data['advertiseratetypes'] = AdvertiseRateType::where('active', '1')->orderBy('advertise_rate_type_name')->get();
@@ -183,6 +187,102 @@ class RateController extends Controller
 
     }
 
+    public function show($id)
+    {
+        if(Gate::denies('Rates Management-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['rate'] = Rate::with('advertiseratetype',
+                                    'color',
+                                    'paper',
+                                    'media',
+                                    'spottype',
+                                    'studio',
+                                    'unit')->where('rates.active', '1')->find($id);
+
+        $data['advertiseratetypes'] = AdvertiseRateType::where('active', '1')->orderBy('advertise_rate_type_name')->get();
+        $data['colors'] = Color::where('active', '1')->orderBy('color_name')->get();
+        $data['medias'] = Media::where('active', '1')->orderBy('media_name')->get();
+        $data['papers'] = Paper::where('active', '1')->orderBy('paper_name')->get();
+        $data['durationtypes'] = $this->duration_types;
+        $data['spottypes'] = SpotType::where('active', '1')->orderBy('spot_type_name')->get();
+        $data['studios'] = Studio::where('active', '1')->orderBy('studio_name')->get();
+        $data['units'] = Unit::where('active', '1')->orderBy('unit_name')->get();
+        $data['start_valid_date'] = Carbon::createFromFormat('Y-m-d', ($data['rate']->start_valid_date==null) ? date('Y-m-d') : $data['rate']->start_valid_date)->format('d/m/Y');
+        $data['end_valid_date'] = Carbon::createFromFormat('Y-m-d', ($data['rate']->end_valid_date==null) ? date('Y-m-d') : $data['rate']->end_valid_date)->format('d/m/Y');
+
+        return view('vendor.material.master.rate.show', $data);
+    }
+
+    public function edit($id)
+    {
+        if(Gate::denies('Rates Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $data['rate'] = Rate::where('active', '1')->find($id);
+
+        $data['advertiseratetypes'] = AdvertiseRateType::where('active', '1')->orderBy('advertise_rate_type_name')->get();
+        $data['colors'] = Color::where('active', '1')->orderBy('color_name')->get();
+        $data['medias'] = Media::where('active', '1')->orderBy('media_name')->get();
+        $data['papers'] = Paper::where('active', '1')->orderBy('paper_name')->get();
+        $data['durationtypes'] = $this->duration_types;
+        $data['spottypes'] = SpotType::where('active', '1')->orderBy('spot_type_name')->get();
+        $data['studios'] = Studio::where('active', '1')->orderBy('studio_name')->get();
+        $data['units'] = Unit::where('active', '1')->orderBy('unit_name')->get();
+        $data['start_valid_date'] = Carbon::createFromFormat('Y-m-d', ($data['rate']->start_valid_date==null) ? date('Y-m-d') : $data['rate']->start_valid_date)->format('d/m/Y');
+        $data['end_valid_date'] = Carbon::createFromFormat('Y-m-d', ($data['rate']->end_valid_date==null) ? date('Y-m-d') : $data['rate']->end_valid_date)->format('d/m/Y');
+
+        return view('vendor.material.master.rate.edit', $data);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $advertiseratetype = AdvertiseRateType::find($request->input('advertise_rate_type_id'));
+        $requiredFields = unserialize($advertiseratetype->advertise_rate_required_fields);
+
+        //dynamic validation
+        $dynamic_validation = array();
+        foreach ($requiredFields as $value) {
+            $dynamic_validation[$value] ='required';
+        }
+
+        $this->validate($request, $dynamic_validation);
+
+        $obj = Rate::find($id);
+
+        $obj->advertise_rate_type_id = $request->input('advertise_rate_type_id');
+        $obj->media_id = $request->input('media_id');
+        $obj->rate_name = $request->input('rate_name');
+        $obj->width = $request->input('width');
+        $obj->length = $request->input('length');
+        $obj->unit_id = $request->input('unit_id');
+        $obj->studio_id = $request->input('studio_id');
+        $obj->duration = $request->input('duration');
+        $obj->duration_type = $request->input('duration_type');
+        $obj->spot_type_id = $request->input('spot_type_id');
+        $obj->gross_rate = $request->input('gross_rate');
+        $obj->discount = $request->input('discount');
+        $obj->nett_rate = $request->input('nett_rate');
+        $obj->start_valid_date = Carbon::createFromFormat('d/m/Y', $request->input('start_valid_date'))->toDateString();
+        $obj->end_valid_date = Carbon::createFromFormat('d/m/Y', $request->input('end_valid_date'))->toDateString();
+        $obj->cinema_tax = $request->input('cinema_tax');
+        $obj->paper_id = $request->input('paper_id');
+        $obj->color_id = $request->input('color_id');
+        $obj->updated_by = $request->user()->user_id;
+
+        $obj->save();
+
+        $request->session()->flash('status', 'Data has been updated!');
+
+        return redirect('master/rate');
+    }
+
     public function apiList(Request $request)
     {
         $current = $request->input('current') or 1;
@@ -229,5 +329,26 @@ class RateController extends Controller
                             })->count();
 
         return response()->json($data);
+    }
+
+    public function apiDelete(Request $request)
+    {
+        if(Gate::denies('Rates Management-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $id = $request->input('rate_id');
+
+        $obj = Rate::find($id);
+
+        $obj->active = '0';
+        $obj->updated_by = $request->user()->user_id;
+
+        if($obj->save())
+        {
+            return response()->json(100); //success
+        }else{
+            return response()->json(200); //failed
+        }
     }
 }
