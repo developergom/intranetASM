@@ -261,4 +261,16 @@ class MediaController extends Controller
             return response()->json(200); //failed
         }
     }
+
+    public function apiAll(Request $request)
+    {
+        $pos = Media::select('media_name')->where('active', '1')->where('media_name','like','%' . $request->input('query') . '%')->orderBy('media_name')->limit(5)->get();
+
+        $result = array();
+        foreach ($pos as $value) {
+            array_push($result, $value->media_name);
+        }
+
+        return response()->json($result);
+    }
 }

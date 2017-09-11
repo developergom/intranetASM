@@ -975,6 +975,24 @@ class ProposalController extends Controller
         return redirect('workorder/proposal');
     }
 
+    public function summary(Request $request, $id)
+    {
+        $data['proposal'] = Proposal::with(
+                                        'proposaltype', 
+                                        'proposalmethod', 
+                                        'proposalstatus',
+                                        'industries', 
+                                        'client_contacts',
+                                        'client',
+                                        'brand',
+                                        'medias',
+                                        'uploadfiles',
+                                        'inventoriesplanner'
+                                        )->find($id);
+
+        return view('vendor.material.workorder.proposal.summary', $data);
+    }
+
     public function apiGenerateDeadline(Request $request)
     {
         $proposal_type_id = $request->proposal_type_id;

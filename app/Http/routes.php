@@ -88,6 +88,8 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('advertiseratetype/apiDelete', 'AdvertiseRateTypeController@apiDelete');
         Route::resource('advertiseratetype', 'AdvertiseRateTypeController');
 
+        Route::post('advertiseratetype/api/getRequiredFields', 'AdvertiseRateTypeController@apiGetRequiredFields');
+
         //Advertise Size
         Route::post('advertisesize/apiList', 'AdvertiseSizeController@apiList');
         Route::post('advertisesize/apiDelete', 'AdvertiseSizeController@apiDelete');
@@ -185,6 +187,8 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('media/apiList', 'MediaController@apiList');
         Route::post('media/apiDelete', 'MediaController@apiDelete');
         Route::resource('media', 'MediaController');
+
+        Route::post('media/api/all', 'MediaController@apiAll');
 
         //Media Category
         Route::post('mediacategory/apiList', 'MediaCategoryController@apiList');
@@ -370,6 +374,8 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
 
         Route::get('proposal/update_status/{id}', 'ProposalController@updateStatus');
         Route::post('proposal/update_status/{id}', 'ProposalController@postUpdateStatus');
+
+        Route::get('proposal/summary/{id}', 'ProposalController@summary');
 
         Route::post('proposal/api/getMedias', 'ProposalController@apiGetMedias');
         Route::post('proposal/api/generateDeadline', 'ProposalController@apiGenerateDeadline');

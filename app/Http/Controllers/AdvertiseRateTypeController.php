@@ -279,4 +279,12 @@ class AdvertiseRateTypeController extends Controller
             return response()->json(200); //failed
         }
     }
+
+    public function apiGetRequiredFields(Request $request)
+    {
+        $advertiseratetype = AdvertiseRateType::find($request->input('advertise_rate_type_id'));
+        $requiredFields = unserialize($advertiseratetype->advertise_rate_required_fields);
+
+        return response()->json($requiredFields);
+    }
 }

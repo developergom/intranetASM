@@ -44,7 +44,7 @@
     <label for="client_id" class="col-sm-2 control-label">Client</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <span class="badge">{{ $proposal->client->client_name }}</span>
+            <a href="{{ url('/master/client/' . $proposal->client->client_id) }}" target="_blank"><span class="badge">{{ $proposal->client->client_name }}</span></a>
         </div>
     </div>
 </div>
@@ -53,7 +53,7 @@
     <div class="col-sm-10">
         <div class="fg-line">
             @foreach ($proposal->client_contacts as $row)
-            	<span class="badge">{{ $row->client_contact_name . ' | ' . $row->client_contact_phone }}</span><br/>
+            	<a href="{{ url('/master/client/' . $proposal->client->client_id) }}" target="_blank"><span class="badge">{{ $row->client_contact_name . ' | ' . $row->client_contact_phone }}</span></a><br/>
 			@endforeach
         </div>
     </div>
@@ -71,7 +71,7 @@
     <div class="col-sm-10">
         <div class="fg-line">
             @foreach ($proposal->medias as $row)
-            	<span class="badge">{{ $row->media_name }}</span>
+            	<a href="{{ url('/master/media/' . $row->media_id) }}" target="_blank"><span class="badge">{{ $row->media_name }}</span></a>
 			@endforeach
         </div>
     </div>

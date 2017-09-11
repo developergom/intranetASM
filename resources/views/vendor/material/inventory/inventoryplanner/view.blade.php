@@ -63,7 +63,7 @@
     <div class="col-sm-10">
         <div class="fg-line">
             @foreach($inventoryplanner->medias as $row)
-            	<span class="badge">{{ $row->media_name }}</span>
+            	<a href="{{ url('/master/media/' . $row->media_id) }}" target="_blank"><span class="badge">{{ $row->media_name }}</span></a>
             @endforeach
         </div>
     </div>

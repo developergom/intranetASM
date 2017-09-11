@@ -39,7 +39,7 @@
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        @foreach($agenda->clients as $client)
-								<span id="span-client-id-{{ $client->client_id }}" class="badge">{{ $client->client_name }}&nbsp;</span>&nbsp;
+								<a href="{{ url('/master/client/' . $client->client_id) }}" target="_blank"><span id="span-client-id-{{ $client->client_id }}" class="badge">{{ $client->client_name }}&nbsp;</span></a>&nbsp;
 							@endforeach
 	                    </div>
 	                </div>
@@ -49,7 +49,7 @@
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
 	                        @foreach($agenda->clientcontacts as $clientcontact)
-								<span id="span-clientcontact-id-{{ $clientcontact->client_contact_id }}" class="badge">{{ $clientcontact->client_contact_name . ' - ' . $clientcontact->client->client_name }}&nbsp;</span>&nbsp;
+								<a href="{{ url('/master/client/' . $clientcontact->client_id) }}" target="_blank"><span id="span-clientcontact-id-{{ $clientcontact->client_contact_id }}" class="badge">{{ $clientcontact->client_contact_name . ' - ' . $clientcontact->client->client_name }}&nbsp;</span></a>&nbsp;
 							@endforeach
 	                    </div>
 	                </div>
@@ -69,7 +69,7 @@
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
                         	@foreach ($agenda->proposals as $key => $value)
-                        		<span id="span-proposal-id-{{ $value->proposal_id }}"class="badge">{{ $value->proposal_name }}&nbsp;</span>&nbsp;
+                        		<a href="{{ url('/workorder/proposal/' . $value->proposal_id) }}" target="_blank"><span id="span-proposal-id-{{ $value->proposal_id }}"class="badge">{{ $value->proposal_name . ' - ' . $value->proposal_no }}&nbsp;</span></a>&nbsp;
                         	@endforeach
 	                    </div>
 	                </div>

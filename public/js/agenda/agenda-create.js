@@ -223,7 +223,7 @@ $(document).ready(function(){
                 proposals.push(
                     {
                         'value': curr.proposal_id,
-                        'text': curr.proposal_name,
+                        'text': curr.proposal_name + ' - ' + curr.proposal_no,
                         'disabled': false
                     }
                 );
