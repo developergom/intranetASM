@@ -14,7 +14,7 @@ class RoleAccess{
             // if(DB::table('roles_modules')->select('access')->where('role_id', $role->role_id)->where('module_id', $module_id)->where('action_id', $action_id)->count() > 0) {
             //     $access = true;
             // }
-            if(Cache::has('roles_module_' . $role->role_id . '_' . $module_id . '_' . $action_id) > 0) {
+            if(Cache::has('roles_module_' . $role->role_id . '_' . $module_id . '_' . $action_id)) {
                 //dd('ok');
                 $access = true;
             }
