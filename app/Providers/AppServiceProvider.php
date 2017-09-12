@@ -5,7 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 
 use App\Setting;
+use App\RolesModules;
 use Cache;
+use DB;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +29,19 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
         }
+
+        if(!Cache::has('roles_modules')) {
+            $roles_modules = DB::table('roles_modules')->get();
+            Cache::add('roles_modules', $roles_modules, 1440);
+            foreach ($roles_modules as $key => $value) {
+                if(!Cache::has('roles_module_' . $value->role_id . '_' . $value->module_id . '_' . $value->action_id)) {
+                    Cache::add('roles_module_' . $value->role_id . '_' . $value->module_id . '_' . $value->action_id, true, 1440);
+                }
+            }
+            //Cache::add('roles_modules', DB::table('roles_modules')->get(), 1440);
+        }
+
+        //dd(Cache::get('roles_modules'));
 
         if(!\App::environment('local')) {
             \URL::forceSchema('https');
