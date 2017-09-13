@@ -9,6 +9,15 @@
         <div class="card-header"><h2>Rates Management<small>View Rate</small></h2></div>
         <div class="card-body card-padding">
         	<form class="form-horizontal">
+        		<div class="form-group" id="parent_id_container">
+	                <label for="parent_id" class="col-sm-2 control-label">Package Rate</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                    	<input type="hidden" id="parent_id" value="{{ $rate->parent_id }}">
+	                        <input type="text" class="form-control input-sm" readonly="true" value="{{ ($rate->parent_id!=0) ? $rate->parent->rate_name : 'NOT BELONG TO ANY PACKAGES' }}">
+	                    </div>
+	                </div>
+	            </div>
         		<div class="form-group" id="advertise_rate_type_id_container">
 	                <label for="advertise_rate_type_id" class="col-sm-2 control-label">Rate Type</label>
 	                <div class="col-sm-10">
@@ -166,6 +175,31 @@
 	                    </div>
 	                </div>
 	            </div>
+	            @if($rate->child->count() > 0)
+	            <div class="form-group">
+	            	<div class="col-sm-12">
+	            		<table class="table table-hover table-bordered">
+	            			<caption>Package Items</caption>
+	            			<thead>
+	            				<tr>
+	            					<th>Media</th>
+	            					<th>Rate Name</th>
+	            					<th>Gross Rate</th>
+	            				</tr>
+	            			</thead>
+	            			<tbody>
+	            			@foreach($rate->child as $row)
+	            				<tr>
+	            					<td>{{ $row->media->media_name }}</td>
+	            					<td>{{ $row->rate_name }}</td>
+	            					<td>{{ number_format($row->gross_rate) }}</td>
+	            				</tr>
+	            			@endforeach
+	            			</tbody>
+	            		</table>
+	            	</div>
+	            </div>
+	            @endif
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                    <a href="{{ url('master/rate') }}" class="btn btn-danger btn-sm">Back</a>

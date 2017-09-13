@@ -43,6 +43,7 @@ $(document).ready(function() {
 
 function reset_columns()
 {
+	$('#parent_id_container').hide();
 	$('#media_id_container').hide();
 	$('#rate_name_container').hide();
 	$('#width_container').hide();

@@ -10,6 +10,7 @@ class Rate extends Model
 	protected $primaryKey = 'rate_id';
 
 	protected $fillable = [
+				'parent_id',
 				'advertise_rate_type_id',
 				'media_id',
 				'rate_name',
@@ -33,6 +34,16 @@ class Rate extends Model
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
+
+	public function parent()
+	{	
+		return $this->belongsTo('App\Rate', 'parent_id');
+	}
+
+	public function child()
+	{
+		return $this->hasMany('App\Rate', 'parent_id');
+	}
 
 	public function advertiseratetype()
 	{

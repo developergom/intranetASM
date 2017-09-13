@@ -453,7 +453,7 @@ class ProposalController extends Controller
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })->count();
         }elseif($listtype == 'finished') {
-            $data['rows'] = Proposal::select('proposal_name', 'proposal_deadline', 'user_firstname', 'proposal_no', 'proposal_status_name', 'proposals.updated_at', 'proposals.proposal_id', 'flow_no')
+            $data['rows'] = Proposal::select('proposal_name', 'proposal_deadline', 'user_firstname', 'proposal_no', 'proposal_status_name', 'proposals.updated_at', 'proposals.proposal_id', 'flow_no', 'proposals.proposal_status_id', 'users.user_id')
                                 ->join('users','users.user_id', '=', 'proposals.created_by')
                                 ->join('proposal_status','proposal_status.proposal_status_id', '=', 'proposals.proposal_status_id')
                                 ->where('proposals.active','1')
@@ -470,7 +470,7 @@ class ProposalController extends Controller
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = Proposal::select('proposal_name', 'proposal_deadline', 'user_firstname', 'proposal_no', 'proposal_status_name', 'proposals.updated_at', 'proposals.proposal_id', 'flow_no')
+            $data['total'] = Proposal::select('proposal_name', 'proposal_deadline', 'user_firstname', 'proposal_no', 'proposal_status_name', 'proposals.updated_at', 'proposals.proposal_id', 'flow_no', 'proposals.proposal_status_id', 'users.user_id')
                                 ->join('users','users.user_id', '=', 'proposals.created_by')
                                 ->join('proposal_status','proposal_status.proposal_status_id', '=', 'proposals.proposal_status_id')
                                 ->where('proposals.active','1')
@@ -1104,6 +1104,27 @@ class ProposalController extends Controller
         
 
         return $data;
+    }
+
+    public function apiDelete(Request $request)
+    {
+        if(Gate::denies('Proposal-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $id = $request->input('proposal_id');
+
+        $obj = Proposal::find($id);
+
+        $obj->active = '0';
+        $obj->updated_by = $request->user()->user_id;
+
+        if($obj->save())
+        {
+            return response()->json(100); //success
+        }else{
+            return response()->json(200); //failed
+        }
     }
 
     public function apiLoadPrintPrices(Request $request) {

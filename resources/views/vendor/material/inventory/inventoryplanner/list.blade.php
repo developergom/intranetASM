@@ -35,13 +35,13 @@
                         <table id="grid-data-needchecking" class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th data-column-id="updated_at" data-order="desc">Last Updated</th>
                                     <th data-column-id="media_name" data-order="asc">Media</th>
                                     <th data-column-id="inventory_category_name" data-order="asc">Category</th>
                                     <th data-column-id="implementation_month_name" data-order="asc">Implementation</th>
                                     <th data-column-id="inventory_planner_year" data-order="asc">Year</th>
                                     <th data-column-id="inventory_planner_title" data-order="asc">Title</th>
                                     <th data-column-id="user_firstname" data-order="asc">Created By</th>
-                                    <th data-column-id="updated_at" data-order="asc">Last Updated</th>
                                     @can('Inventory Planner-Update')
                                         @can('Inventory Planner-Approval')
                                             <th data-column-id="link" data-formatter="link-rua" data-sortable="false">Action</th>
@@ -67,13 +67,13 @@
                         <table id="grid-data-onprocess" class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th data-column-id="updated_at" data-order="desc">Last Updated</th>
                                     <th data-column-id="media_name" data-order="asc">Media</th>
                                     <th data-column-id="inventory_category_name" data-order="asc">Category</th>
                                     <th data-column-id="implementation_month_name" data-order="asc">Implementation</th>
                                     <th data-column-id="inventory_planner_year" data-order="asc">Year</th>
                                     <th data-column-id="inventory_planner_title" data-order="asc">Title</th>
                                     <th data-column-id="user_firstname" data-order="asc">Current User</th>
-                                    <th data-column-id="updated_at" data-order="asc">Last Updated</th>
                                     @can('Inventory Planner-Delete')
                                         <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
                                     @else
@@ -94,13 +94,13 @@
                         <table id="grid-data-finished" class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th data-column-id="updated_at" data-order="desc">Last Updated</th>
                                     <th data-column-id="media_name" data-order="asc">Media</th>
                                     <th data-column-id="inventory_category_name" data-order="asc">Category</th>
                                     <th data-column-id="implementation_month_name" data-order="asc">Implementation</th>
                                     <th data-column-id="inventory_planner_year" data-order="asc">Year</th>
                                     <th data-column-id="inventory_planner_title" data-order="asc">Title</th>
                                     <th data-column-id="user_firstname" data-order="asc">Created By</th>
-                                    <th data-column-id="updated_at" data-order="asc">Last Updated</th>
                                     <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
                                 </tr>
                             </thead>
@@ -117,13 +117,13 @@
                         <table id="grid-data-canceled" class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th data-column-id="updated_at" data-order="desc">Last Updated</th>
                                     <th data-column-id="media_name" data-order="asc">Media</th>
                                     <th data-column-id="inventory_category_name" data-order="asc">Category</th>
                                     <th data-column-id="implementation_month_name" data-order="asc">Implementation</th>
                                     <th data-column-id="inventory_planner_year" data-order="asc">Year</th>
                                     <th data-column-id="inventory_planner_title" data-order="asc">Title</th>
                                     <th data-column-id="user_firstname" data-order="asc">Created By</th>
-                                    <th data-column-id="updated_at" data-order="asc">Last Updated</th>
                                     <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
                                 </tr>
                             </thead>

@@ -14,10 +14,9 @@
             <thead>
                 <tr>
                     <th data-column-id="advertise_rate_type_name" data-order="asc">Type</th>
-                    <th data-column-id="media_name" data-order="asc">Media</th>
                     <th data-column-id="rate_name" data-order="asc">Name</th>
                     <th data-column-id="end_valid_date" data-order="asc">Valid Until</th>
-                    <th data-column-id="nett_rate" data-converter="price" data-order="asc">Nett Rate</th>
+                    <th data-column-id="gross_rate" data-converter="price" data-order="asc">Gross Rate</th>
                     @can('Rates Management-Update')
                         @can('Rates Management-Delete')
                             <th data-column-id="link" data-formatter="link-rud" data-sortable="false">Action</th>

@@ -30,10 +30,10 @@
                         <table id="grid-data-needchecking" class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th data-column-id="updated_at" data-order="desc">Last Updated</th>
                                     <th data-column-id="proposal_name" data-order="asc">Title</th>
                                     <th data-column-id="proposal_deadline" data-order="asc">Deadline</th>
                                     <th data-column-id="user_firstname" data-order="asc">Created By</th>
-                                    <th data-column-id="updated_at" data-order="asc">Last Updated</th>
                                     @can('Proposal-Update')
                                         @can('Proposal-Approval')
                                             <th data-column-id="link" data-formatter="link-rua" data-sortable="false">Action</th>
@@ -59,10 +59,10 @@
                         <table id="grid-data-onprocess" class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th data-column-id="updated_at" data-order="desc">Last Updated</th>
                                     <th data-column-id="proposal_name" data-order="asc">Title</th>
                                     <th data-column-id="proposal_deadline" data-order="asc">Deadline</th>
                                     <th data-column-id="user_firstname" data-order="asc">Current User</th>
-                                    <th data-column-id="updated_at" data-order="asc">Last Updated</th>
                                     @can('Proposal-Delete')
                                         <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
                                     @else
@@ -82,11 +82,11 @@
                         <table id="grid-data-finished" class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th data-column-id="updated_at" data-order="desc">Last Updated</th>
                                     <th data-column-id="proposal_name" data-order="asc">Title</th>
                                     <th data-column-id="proposal_no" data-order="asc">Proposal No</th>
                                     <th data-column-id="user_firstname" data-order="asc">Created By</th>
                                     <th data-column-id="proposal_status_name" data-order="asc">Status</th>
-                                    <th data-column-id="updated_at" data-order="asc">Last Updated</th>
                                     <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
                                 </tr>
                             </thead>
@@ -102,10 +102,10 @@
                         <table id="grid-data-canceled" class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th data-column-id="updated_at" data-order="desc">Last Updated</th>
                                     <th data-column-id="proposal_name" data-order="asc">Title</th>
                                     <th data-column-id="proposal_deadline" data-order="asc">Deadline</th>
                                     <th data-column-id="user_firstname" data-order="asc">Created By</th>
-                                    <th data-column-id="updated_at" data-order="asc">Last Updated</th>
                                     <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
                                 </tr>
                             </thead>

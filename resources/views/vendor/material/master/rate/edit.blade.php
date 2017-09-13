@@ -11,6 +11,28 @@
         	<form class="form-horizontal" id="form_edit_rate" role="form" method="POST" action="{{ url('master/rate/' . $rate->rate_id) }}">
         		{{ csrf_field() }}
         		<input type="hidden" name="_method" value="PUT">
+        		<div class="form-group" id="parent_id_container">
+	                <label for="parent_id" class="col-sm-2 control-label">Package Rate</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <select name="parent_id" id="parent_id" class="selectpicker" data-live-search="true" required="true">
+	                        	<option value="0">NOT BELONG TO ANY PACKAGES</option>
+                                @foreach ($parents as $row)
+                                	{!! $selected = '' !!}
+                                	@if($row->rate_id==$rate->parent_id)
+                                		{!! $selected = 'selected' !!}
+                                	@endif
+								    <option value="{{ $row->rate_id }}" {{ $selected }}>{{ $row->rate_name }}</option>
+								@endforeach
+                            </select>
+	                    </div>
+	                    @if ($errors->has('parent_id'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('parent_id') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
         		<div class="form-group" id="advertise_rate_type_id_container">
 	                <label for="advertise_rate_type_id" class="col-sm-2 control-label">Rate Type</label>
 	                <div class="col-sm-10">

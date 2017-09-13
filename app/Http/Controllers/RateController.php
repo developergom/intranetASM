@@ -20,6 +20,10 @@ use App\Unit;
 class RateController extends Controller
 {
 	public $cols = [
+                        [
+                            'key' => 'parent_id',
+                            'text' => 'Package Rate'
+                        ],
                         [ 
                             'key' => 'advertise_rate_type_id',
                             'text' => 'Rate Type'
@@ -107,19 +111,6 @@ class RateController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $x = [
-        		'advertise_rate_type_id' => true,
-        		'rate_name' => true,
-        		'gross_rate' => true,
-        		'discount' => true,
-        		'nett_rate' => true,
-        		'paper_id' => false
-        		];
-
-        /*$ser = serialize($x);
-        $unser = unserialize($ser);
-        dd($unser);*/
-
         return view('vendor.material.master.rate.list');
     }
 
@@ -131,6 +122,7 @@ class RateController extends Controller
 
         $data = array();
 
+        $data['parents'] = Rate::with('media')->where('active', '1')->where('parent_id', '0')->orderBy('rate_name')->get();
         $data['advertiseratetypes'] = AdvertiseRateType::where('active', '1')->orderBy('advertise_rate_type_name')->get();
         $data['colors'] = Color::where('active', '1')->orderBy('color_name')->get();
         $data['medias'] = Media::where('active', '1')->orderBy('media_name')->get();
@@ -158,6 +150,7 @@ class RateController extends Controller
 
         $obj = new Rate;
 
+        $obj->parent_id = $request->input('parent_id');
         $obj->advertise_rate_type_id = $request->input('advertise_rate_type_id');
         $obj->media_id = $request->input('media_id');
         $obj->rate_name = $request->input('rate_name');
@@ -195,13 +188,17 @@ class RateController extends Controller
 
         $data = array();
 
-        $data['rate'] = Rate::with('advertiseratetype',
+        $data['rate'] = Rate::with('parent',
+                                    'child',
+                                    'advertiseratetype',
                                     'color',
                                     'paper',
                                     'media',
                                     'spottype',
                                     'studio',
                                     'unit')->where('rates.active', '1')->find($id);
+
+        //dd($data);
 
         $data['advertiseratetypes'] = AdvertiseRateType::where('active', '1')->orderBy('advertise_rate_type_name')->get();
         $data['colors'] = Color::where('active', '1')->orderBy('color_name')->get();
@@ -227,6 +224,7 @@ class RateController extends Controller
 
         $data['rate'] = Rate::where('active', '1')->find($id);
 
+        $data['parents'] = Rate::with('media')->where('active', '1')->where('parent_id', '0')->orderBy('rate_name')->get();
         $data['advertiseratetypes'] = AdvertiseRateType::where('active', '1')->orderBy('advertise_rate_type_name')->get();
         $data['colors'] = Color::where('active', '1')->orderBy('color_name')->get();
         $data['medias'] = Media::where('active', '1')->orderBy('media_name')->get();
@@ -306,11 +304,9 @@ class RateController extends Controller
         $data['rowCount'] = $rowCount;
         $data['searchPhrase'] = $searchPhrase;
         $data['rows'] = Rate::join('advertise_rate_types','advertise_rate_types.advertise_rate_type_id','=','rates.advertise_rate_type_id')
-                            ->join('medias','medias.media_id','=','rates.media_id')
                             ->where('rates.active','1')
                             ->where(function($query) use($searchPhrase) {
                                 $query->where('advertise_rate_type_name','like','%' . $searchPhrase . '%')
-                                        ->orWhere('media_name','like','%' . $searchPhrase . '%')
                                         ->orWhere('rate_name','like','%' . $searchPhrase . '%')
                                         ->orWhere('end_valid_date','like','%' . $searchPhrase . '%')
                                         ->orWhere('nett_rate','like','%' . $searchPhrase . '%');
@@ -318,11 +314,9 @@ class RateController extends Controller
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
         $data['total'] = Rate::join('advertise_rate_types','advertise_rate_types.advertise_rate_type_id','=','rates.advertise_rate_type_id')
-                            ->join('medias','medias.media_id','=','rates.media_id')
                             ->where('rates.active','1')
                             ->where(function($query) use($searchPhrase) {
                                 $query->where('advertise_rate_type_name','like','%' . $searchPhrase . '%')
-                                        ->orWhere('media_name','like','%' . $searchPhrase . '%')
                                         ->orWhere('rate_name','like','%' . $searchPhrase . '%')
                                         ->orWhere('end_valid_date','like','%' . $searchPhrase . '%')
                                         ->orWhere('nett_rate','like','%' . $searchPhrase . '%');

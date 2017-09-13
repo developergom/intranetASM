@@ -1239,6 +1239,27 @@ class InventoryPlannerController extends Controller
     	return $data;
     }
 
+    public function apiDelete(Request $request)
+    {
+        if(Gate::denies('Inventory Planner-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $id = $request->input('inventory_planner_id');
+
+        $obj = InventoryPlanner::find($id);
+
+        $obj->active = '0';
+        $obj->updated_by = $request->user()->user_id;
+
+        if($obj->save())
+        {
+            return response()->json(100); //success
+        }else{
+            return response()->json(200); //failed
+        }
+    }
+
     public function apiLoadPrintPrices(Request $request) {
     	if(Gate::denies('Inventory Planner-Read')) {
             abort(403, 'Unauthorized action.');

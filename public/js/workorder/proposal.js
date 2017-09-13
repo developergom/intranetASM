@@ -105,7 +105,7 @@ $("#grid-data-onprocess").bootgrid({
             url: base_url + 'workorder/proposal/apiDelete',
             type: 'POST',
             data: {
-                'inventory_planner_id' : delete_id,
+                'proposal_id' : delete_id,
                 '_token' : $('meta[name="csrf-token"]').attr('content')
             },
             dataType: 'json',
