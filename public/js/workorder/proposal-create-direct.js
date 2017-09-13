@@ -64,8 +64,10 @@ $(document).ready(function(){
     .on('hidden.bs.select', function(e) {
     	var client_id = $(this).val();
 
+        console.log(client_id);
+
     	$.ajax({
-    		url: base_url + 'master/clientcontact/apiSearchPerClient',
+    		url: base_url + 'master/clientcontact/apiSearchPerMultipleClients',
     		dataType: 'json',
     		type: 'POST',
     		data: { 
@@ -75,10 +77,11 @@ $(document).ready(function(){
             	console.log('error loading contacts');
             },
             success: function(data) {
+                console.log(data);
             	var dr = '';
             	$('#client_contact_id').empty();
             	$.each(data, function(key, value) {
-            		dr += '<option value="' + value.client_contact_id + '">' + value.client_contact_name + ' - ' + value.client_contact_position + '</option>';
+            		dr += '<option value="' + value.client_contact_id + '">' + value.client_contact_name + ' - ' + value.client_contact_position + ' (' + value.client_name + ')</option>';
             	});
             	$('#client_contact_id').append(dr);
 

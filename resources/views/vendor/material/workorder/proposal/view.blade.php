@@ -87,10 +87,42 @@
     </div>
 </div>
 <div class="form-group">
-    <label for="proposal_desc" class="col-sm-2 control-label">Creative Brief</label>
+    <label for="proposal_background" class="col-sm-2 control-label">Background</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            {!! $proposal->proposal_desc !!}
+            {!! $proposal->proposal_background !!}
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="proposal_objective" class="col-sm-2 control-label">Objective</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            {!! $proposal->proposal_objective !!}
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="proposal_target_audience" class="col-sm-2 control-label">Target Audience</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            {!! $proposal->proposal_target_audience !!}
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="proposal_mandatory" class="col-sm-2 control-label">Mandatory</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            {!! $proposal->proposal_mandatory !!}
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="proposal_campaign_product" class="col-sm-2 control-label">Campaign/Product</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            {!! $proposal->proposal_campaign_product !!}
         </div>
     </div>
 </div>
@@ -137,6 +169,14 @@
     <div class="col-sm-10">
         <div class="fg-line">
             <input type="text" class="form-control input-sm" placeholder=Current User" readonly="true" maxlength="100" value="{{ $proposal->_currentuser->user_firstname . ' ' . $proposal->_currentuser->user_lastname }}">
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="pic" class="col-sm-2 control-label">PIC</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <input type="text" class="form-control input-sm" placeholder=PIC" readonly="true" maxlength="100" value="{{ ($proposal->pic!=null) ? ($proposal->_pic->user_firstname . ' ' . $proposal->_pic->user_lastname) : '-' }}">
         </div>
     </div>
 </div>

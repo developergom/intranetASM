@@ -108,7 +108,11 @@ class ProposalController extends Controller
             'client_contact_id[]' => 'array',
             'brand_id' => 'required',
             'media_id' => 'array',
-            'proposal_desc' => 'required'
+            'proposal_background' => 'required',
+            'proposal_objective' => 'required',
+            'proposal_target_audience' => 'required',
+            'proposal_campaign_product' => 'required',
+            'proposal_mandatory' => 'required'
         ]);
 
         $flow = new FlowLibrary;
@@ -118,7 +122,11 @@ class ProposalController extends Controller
         $obj->proposal_type_id = $request->input('proposal_type_id');
         $obj->proposal_name = $request->input('proposal_name');
         $obj->proposal_deadline = $request->input('proposal_deadline');
-        $obj->proposal_desc = $request->input('proposal_desc');
+        $obj->proposal_background = $request->input('proposal_background');
+        $obj->proposal_objective = $request->input('proposal_objective');
+        $obj->proposal_target_audience = $request->input('proposal_target_audience');
+        $obj->proposal_campaign_product = $request->input('proposal_campaign_product');
+        $obj->proposal_mandatory = $request->input('proposal_mandatory');
         $obj->proposal_budget = $request->input('proposal_budget');
         $obj->client_id = $request->input('client_id');
         $obj->brand_id = $request->input('brand_id');
@@ -184,7 +192,7 @@ class ProposalController extends Controller
         $his = new ProposalHistory;
         $his->proposal_id = $obj->proposal_id;
         $his->approval_type_id = 1;
-        $his->proposal_history_text = $request->input('proposal_desc');
+        $his->proposal_history_text = $request->input('proposal_background');
         $his->active = '1';
         $his->created_by = $request->user()->user_id;
 
@@ -263,7 +271,11 @@ class ProposalController extends Controller
             'client_contact_id[]' => 'array',
             'brand_id' => 'required',
             'media_id' => 'array',
-            'proposal_desc' => 'required'
+            'proposal_background' => 'required',
+            'proposal_objective' => 'required',
+            'proposal_target_audience' => 'required',
+            'proposal_campaign_product' => 'required',
+            'proposal_mandatory' => 'required'
         ]);
 
         $flow = new FlowLibrary;
@@ -273,7 +285,11 @@ class ProposalController extends Controller
         $obj->proposal_type_id = $request->input('proposal_type_id');
         $obj->proposal_name = $request->input('proposal_name');
         $obj->proposal_deadline = $request->input('proposal_deadline');
-        $obj->proposal_desc = $request->input('proposal_desc');
+        $obj->proposal_background = $request->input('proposal_background');
+        $obj->proposal_objective = $request->input('proposal_objective');
+        $obj->proposal_target_audience = $request->input('proposal_target_audience');
+        $obj->proposal_campaign_product = $request->input('proposal_campaign_product');
+        $obj->proposal_mandatory = $request->input('proposal_mandatory');
         $obj->proposal_budget = $request->input('proposal_budget');
         $obj->client_id = $request->input('client_id');
         $obj->brand_id = $request->input('brand_id');
@@ -336,7 +352,7 @@ class ProposalController extends Controller
         $his = new ProposalHistory;
         $his->proposal_id = $obj->proposal_id;
         $his->approval_type_id = 1;
-        $his->proposal_history_text = $request->input('proposal_desc');
+        $his->proposal_history_text = $request->input('proposal_background');
         $his->active = '1';
         $his->created_by = $request->user()->user_id;
 
@@ -360,8 +376,8 @@ class ProposalController extends Controller
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
         $searchPhrase = $request->input('searchPhrase') or '';
         
-        $sort_column = 'proposal_id';
-        $sort_type = 'asc';
+        $sort_column = 'updated_at';
+        $sort_type = 'desc';
 
         if(is_array($request->input('sort'))) {
             foreach($request->input('sort') as $key => $value)
@@ -377,7 +393,8 @@ class ProposalController extends Controller
         $data['searchPhrase'] = $searchPhrase;
 
         if($listtype == 'onprocess') {
-            $data['rows'] = Proposal::join('users','users.user_id', '=', 'proposals.current_user')
+            $data['rows'] = Proposal::select('proposal_name', 'proposal_deadline', 'user_firstname', 'proposals.updated_at', 'proposals.proposal_id', 'flow_no')
+                                ->join('users','users.user_id', '=', 'proposals.current_user')
                                 ->where('proposals.flow_no','<>','98')
                                 ->where('proposals.active', '=', '1')
                                 ->where('proposals.current_user', '<>' , $request->user()->user_id)
@@ -394,7 +411,8 @@ class ProposalController extends Controller
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = Proposal::join('users','users.user_id', '=', 'proposals.current_user')
+            $data['total'] = Proposal::select('proposal_name', 'proposal_deadline', 'user_firstname', 'proposals.updated_at', 'proposals.proposal_id', 'flow_no')
+                                ->join('users','users.user_id', '=', 'proposals.current_user')
                                 ->where('proposals.flow_no','<>','98')
                                 ->where('proposals.active', '=', '1')
                                 ->where('proposals.current_user', '<>' , $request->user()->user_id)
@@ -410,7 +428,8 @@ class ProposalController extends Controller
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })->count();    
         }elseif($listtype == 'needchecking') {
-            $data['rows'] = Proposal::join('users','users.user_id', '=', 'proposals.created_by')
+            $data['rows'] = Proposal::select('proposal_name', 'proposal_deadline', 'user_firstname', 'proposals.updated_at', 'proposals.proposal_id', 'flow_no')
+                                ->join('users','users.user_id', '=', 'proposals.created_by')
                                 ->where('proposals.active','1')
                                 ->where('proposals.flow_no','<>','98')
                                 ->where('proposals.flow_no','<>','99')
@@ -422,7 +441,8 @@ class ProposalController extends Controller
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = Proposal::join('users','users.user_id', '=', 'proposals.created_by')
+            $data['total'] = Proposal::select('proposal_name', 'proposal_deadline', 'user_firstname', 'proposals.updated_at', 'proposals.proposal_id', 'flow_no')
+                                ->join('users','users.user_id', '=', 'proposals.created_by')
                                 ->where('proposals.active','1')
                                 ->where('proposals.flow_no','<>','98')
                                 ->where('proposals.flow_no','<>','99')
@@ -433,7 +453,8 @@ class ProposalController extends Controller
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })->count();
         }elseif($listtype == 'finished') {
-            $data['rows'] = Proposal::join('users','users.user_id', '=', 'proposals.created_by')
+            $data['rows'] = Proposal::select('proposal_name', 'proposal_deadline', 'user_firstname', 'proposal_no', 'proposal_status_name', 'proposals.updated_at', 'proposals.proposal_id', 'flow_no')
+                                ->join('users','users.user_id', '=', 'proposals.created_by')
                                 ->join('proposal_status','proposal_status.proposal_status_id', '=', 'proposals.proposal_status_id')
                                 ->where('proposals.active','1')
                                 ->where('proposals.flow_no','=','98')
@@ -449,7 +470,8 @@ class ProposalController extends Controller
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = Proposal::join('users','users.user_id', '=', 'proposals.created_by')
+            $data['total'] = Proposal::select('proposal_name', 'proposal_deadline', 'user_firstname', 'proposal_no', 'proposal_status_name', 'proposals.updated_at', 'proposals.proposal_id', 'flow_no')
+                                ->join('users','users.user_id', '=', 'proposals.created_by')
                                 ->join('proposal_status','proposal_status.proposal_status_id', '=', 'proposals.proposal_status_id')
                                 ->where('proposals.active','1')
                                 ->where('proposals.flow_no','=','98')
@@ -464,7 +486,8 @@ class ProposalController extends Controller
                                             ->orWhere('proposal_status_name','like','%' . $searchPhrase . '%');
                                 })->count();
         }elseif($listtype == 'canceled') {
-            $data['rows'] = Proposal::join('users','users.user_id', '=', 'proposals.created_by')
+            $data['rows'] = Proposal::select('proposal_name', 'proposal_deadline', 'user_firstname', 'proposals.updated_at', 'proposals.proposal_id', 'flow_no')
+                                ->join('users','users.user_id', '=', 'proposals.created_by')
                                 ->where('proposals.active','0')
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('proposals.created_by', '=' , $request->user()->user_id)
@@ -477,7 +500,8 @@ class ProposalController extends Controller
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = Proposal::join('users','users.user_id', '=', 'proposals.created_by')
+            $data['total'] = Proposal::select('proposal_name', 'proposal_deadline', 'user_firstname', 'proposals.updated_at', 'proposals.proposal_id', 'flow_no')
+                                ->join('users','users.user_id', '=', 'proposals.created_by')
                                 ->where('proposals.active','0')
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('proposals.created_by', '=' , $request->user()->user_id)
@@ -613,6 +637,7 @@ class ProposalController extends Controller
         $flow = Flow::where('flow_group_id', $this->flow_group_id)->where('active', '1')->where('flow_no', $flow_no + 1)->first();
 
 
+        $data['proposal_types'] = ProposalType::select('proposal_type_id','proposal_type_name', 'proposal_type_duration')->where('active', '1')->orderBy('proposal_type_name')->get();
         $data['proposal'] = Proposal::with(
                                         'proposaltype', 
                                         'proposalmethod', 
@@ -634,6 +659,7 @@ class ProposalController extends Controller
     public function postApprovepic(Request $request, $flow_no, $id)
     {
         $this->validate($request, [
+            'proposal_type_id' => 'required',
             'approval' => 'required',
             'pic' => 'required',
             'comment' => 'required',
@@ -650,6 +676,8 @@ class ProposalController extends Controller
 
             $proposal->flow_no = $nextFlow['flow_no'];
             $proposal->current_user = $nextFlow['current_user'];
+            $proposal->proposal_type_id = $request->input('proposal_type_id');
+            $proposal->proposal_deadline = $request->input('proposal_deadline');
             $proposal->pic = $manual_user;
             $proposal->updated_by = $request->user()->user_id;
             $proposal->save();
@@ -679,6 +707,8 @@ class ProposalController extends Controller
 
             $proposal->flow_no = $prevFlow['flow_no'];
             $proposal->revision_no = $proposal->revision_no + 1;
+            $proposal->proposal_type_id = $request->input('proposal_type_id');
+            $proposal->proposal_deadline = $request->input('proposal_deadline');
             $proposal->current_user = $prevFlow['current_user'];
             $proposal->updated_by = $request->user()->user_id;
             $proposal->save();
@@ -825,8 +855,7 @@ class ProposalController extends Controller
             'proposal_name' => 'required|max:200',
             'industry_id[]' => 'array',
             'proposal_deadline' => 'required',
-            'proposal_budget' => 'required|numeric',
-            'client_id' => 'required',
+            'client_id[]' => 'array',
             'client_contact_id[]' => 'array',
             'brand_id' => 'required',
             'media_id' => 'array'
@@ -834,72 +863,83 @@ class ProposalController extends Controller
 
         $inventoryplanner = InventoryPlanner::with('uploadfiles')->find($inventory_planner_id);
 
-        $obj = new Proposal;
-        $obj->proposal_type_id = $request->input('proposal_type_id');
-        $obj->proposal_name = $request->input('proposal_name');
-        $obj->proposal_deadline = $request->input('proposal_deadline');
-        $obj->proposal_desc = '';
-        $obj->proposal_budget = $request->input('proposal_budget');
-        $obj->client_id = $request->input('client_id');
-        $obj->brand_id = $request->input('brand_id');
-        $obj->flow_no = 98;
-        $obj->current_user = $request->user()->user_id;
-        $obj->revision_no = 0;
-        $obj->proposal_method_id = 2; //Direct Proposal
-        $obj->pic = $inventoryplanner->created_by->user_id;
-        $obj->active = '1';
-        $obj->created_by = $request->user()->user_id;
+        $client_contacts = $request->input('client_contact_id');
+        foreach ($client_contacts as $value) {
+            $contact = ClientContact::find($value);
 
-        $obj->save();          
+            $obj = new Proposal;
+            $obj->proposal_type_id = $request->input('proposal_type_id');
+            $obj->proposal_name = $request->input('proposal_name');
+            $obj->proposal_deadline = $request->input('proposal_deadline');
+            $obj->proposal_background = '';
+            $obj->proposal_budget = 0;
+            $obj->client_id = $contact->client_id;
+            $obj->brand_id = $request->input('brand_id');
+            $obj->flow_no = 98;
+            $obj->current_user = $request->user()->user_id;
+            $obj->revision_no = 0;
+            $obj->proposal_method_id = 2; //Direct Proposal
+            $obj->pic = $inventoryplanner->created_by->user_id;
+            $obj->active = '1';
+            $obj->created_by = $request->user()->user_id;
 
-        //file saving
-        $fileArray = array();
+            $obj->save();          
 
-        foreach($inventoryplanner->uploadfiles as $key => $value) {
-            array_push($fileArray, $value->upload_file_id);
-            $fileArray[$value->upload_file_id] = [ 'revision_no' => 0 ];
+            //file saving
+            $fileArray = array();
+
+            foreach($inventoryplanner->uploadfiles as $key => $value) {
+                array_push($fileArray, $value->upload_file_id);
+                $fileArray[$value->upload_file_id] = [ 'revision_no' => 0 ];
+            }
+
+            if(!empty($fileArray)) {
+                Proposal::find($obj->proposal_id)->uploadfiles()->sync($fileArray);    
+            }
+
+            if(!empty($request->input('industry_id'))) {
+                Proposal::find($obj->proposal_id)->industries()->sync($request->input('industry_id'));
+            }
+
+            /*if(!empty($request->input('client_contact_id'))) {
+                Proposal::find($obj->proposal_id)->client_contacts()->sync($request->input('client_contact_id'));
+            }*/
+
+            $contactArray = array();
+            array_push($contactArray, $contact->client_contact_id);
+            Proposal::find($obj->proposal_id)->client_contacts()->sync($contactArray);
+
+            if(!empty($request->input('media_id'))) {
+                Proposal::find($obj->proposal_id)->medias()->sync($request->input('media_id'));
+            }
+
+            //insert inventory planner
+            $iv = array();
+            array_push($iv, $inventory_planner_id);
+            Proposal::find($obj->proposal_id)->inventoriesplanner()->sync($iv);
+
+            //generate proposal no
+            $generator = new GeneratorLibrary;
+            $proposal_no = $generator->proposal_no($obj->proposal_id);
+
+            $proposal = Proposal::find($obj->proposal_id);
+            $proposal->proposal_no = $proposal_no;
+            $proposal->proposal_ready_date = date('Y-m-d H:i:s');
+            $proposal->proposal_status_id = 3;
+            $proposal->updated_by = $request->user()->user_id;
+            $proposal->save();
+
+            $his = new ProposalHistory;
+            $his->proposal_id = $obj->proposal_id;
+            $his->approval_type_id = 1;
+            $his->proposal_history_text = '';
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
         }
 
-        if(!empty($fileArray)) {
-            Proposal::find($obj->proposal_id)->uploadfiles()->sync($fileArray);    
-        }
-
-        if(!empty($request->input('industry_id'))) {
-            Proposal::find($obj->proposal_id)->industries()->sync($request->input('industry_id'));
-        }
-
-        if(!empty($request->input('client_contact_id'))) {
-            Proposal::find($obj->proposal_id)->client_contacts()->sync($request->input('client_contact_id'));
-        }
-
-        if(!empty($request->input('media_id'))) {
-            Proposal::find($obj->proposal_id)->medias()->sync($request->input('media_id'));
-        }
-
-        //insert inventory planner
-        $iv = array();
-        array_push($iv, $inventory_planner_id);
-        Proposal::find($obj->proposal_id)->inventoriesplanner()->sync($iv);
-
-        //generate proposal no
-        $generator = new GeneratorLibrary;
-        $proposal_no = $generator->proposal_no($obj->proposal_id);
-
-        $proposal = Proposal::find($obj->proposal_id);
-        $proposal->proposal_no = $proposal_no;
-        $proposal->proposal_ready_date = date('Y-m-d H:i:s');
-        $proposal->proposal_status_id = 3;
-        $proposal->updated_by = $request->user()->user_id;
-        $proposal->save();
-
-        $his = new ProposalHistory;
-        $his->proposal_id = $obj->proposal_id;
-        $his->approval_type_id = 1;
-        $his->proposal_history_text = '';
-        $his->active = '1';
-        $his->created_by = $request->user()->user_id;
-
-        $his->save();
+        
 
         $request->session()->flash('status', 'Data has been saved!');
 

@@ -20,7 +20,7 @@
 	                        <div class="input-group form-group">
                                 <span class="input-group-addon"><i class="zmdi zmdi-calendar"></i></span>
                                 <div class="dtp-container fg-line">
-                                    <input type="text" class="form-control date-picker" name="agenda_date" id="agenda_date" placeholder="Agenda Date" required="true" maxlength="10" value="{{ $agenda_date }}">
+                                    <input type="text" class="form-control date-picker" name="agenda_date" id="agenda_date" placeholder="AGENDA DATE" required="true" maxlength="10" value="{{ $agenda_date }}">
                                 </div>
                             </div>
 	                    </div>
@@ -113,7 +113,7 @@
 	                <label for="agenda_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="agenda_desc" id="agenda_desc" class="form-control input-sm" placeholder="Description">{{ $agenda->agenda_desc }}</textarea>
+	                        <textarea name="agenda_desc" id="agenda_desc" class="form-control input-sm" placeholder="DESCRIPTION">{{ $agenda->agenda_desc }}</textarea>
 	                    </div>
 	                    @if ($errors->has('agenda_desc'))
 			                <span class="help-block">

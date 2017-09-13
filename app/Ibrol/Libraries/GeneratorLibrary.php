@@ -13,12 +13,12 @@ class GeneratorLibrary{
 
 		$code = 'PROP';
 		if($proposal->medias()->count() > 1) {
-			$code = 'GAB';
+			$code = 'G';
 		}elseif($proposal->medias()->count() == 1){
 			$media = $proposal->medias()->first();
 			$code = $media->media_code;
 		}else{
-			$code = 'EMPTY';
+			$code = 'UNDEFINED';
 		}
 
 		$no = '000001';

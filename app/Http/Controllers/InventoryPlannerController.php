@@ -978,8 +978,8 @@ class InventoryPlannerController extends Controller
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
         $searchPhrase = $request->input('searchPhrase') or '';
         
-        $sort_column = 'inventory_planner_id';
-        $sort_type = 'asc';
+        $sort_column = 'updated_at';
+        $sort_type = 'desc';
 
         if(is_array($request->input('sort'))) {
             foreach($request->input('sort') as $key => $value)
@@ -995,7 +995,8 @@ class InventoryPlannerController extends Controller
         $data['searchPhrase'] = $searchPhrase;
 
         if($listtype == 'onprocess') {
-            $data['rows'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
+            $data['rows'] = InventoryPlanner::select('media_name', 'inventory_category_name', 'implementation_month_name', 'inventory_planner_year', 'inventory_planner_title', 'user_firstname', 'inventories_planner.updated_at', 'inventories_planner.inventory_planner_id', 'flow_no')
+                                ->join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
                                 ->join('inventory_category_inventory_planner', 'inventory_category_inventory_planner.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventory_category_inventory_planner.inventory_category_id')
@@ -1015,11 +1016,13 @@ class InventoryPlannerController extends Controller
                                             ->orWhere('implementation_month_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_year','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_title','like','%' . $searchPhrase . '%')
-                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
+                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%')
+                                            ->orWhere('inventories_planner.updated_at','like','%' . $searchPhrase . '%');
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
+            $data['total'] = InventoryPlanner::select('media_name', 'inventory_category_name', 'implementation_month_name', 'inventory_planner_year', 'inventory_planner_title', 'user_firstname', 'inventories_planner.updated_at', 'inventories_planner.inventory_planner_id', 'flow_no')
+                                ->join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
                                 ->join('inventory_category_inventory_planner', 'inventory_category_inventory_planner.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventory_category_inventory_planner.inventory_category_id')
@@ -1039,10 +1042,12 @@ class InventoryPlannerController extends Controller
                                             ->orWhere('implementation_month_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_year','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_title','like','%' . $searchPhrase . '%')
-                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
+                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%')
+                                            ->orWhere('inventories_planner.updated_at','like','%' . $searchPhrase . '%');
                                 })->count();    
         }elseif($listtype == 'needchecking') {
-            $data['rows'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
+            $data['rows'] = InventoryPlanner::select('media_name', 'inventory_category_name', 'implementation_month_name', 'inventory_planner_year', 'inventory_planner_title', 'user_firstname', 'inventories_planner.updated_at', 'inventories_planner.inventory_planner_id', 'flow_no')
+                                ->join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
                                 ->join('inventory_category_inventory_planner', 'inventory_category_inventory_planner.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventory_category_inventory_planner.inventory_category_id')
@@ -1059,11 +1064,13 @@ class InventoryPlannerController extends Controller
                                             ->orWhere('implementation_month_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_year','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_title','like','%' . $searchPhrase . '%')
-                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
+                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%')
+                                            ->orWhere('inventories_planner.updated_at','like','%' . $searchPhrase . '%');
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
+            $data['total'] = InventoryPlanner::select('media_name', 'inventory_category_name', 'implementation_month_name', 'inventory_planner_year', 'inventory_planner_title', 'user_firstname', 'inventories_planner.updated_at', 'inventories_planner.inventory_planner_id', 'flow_no')
+                                ->join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
                                 ->join('inventory_category_inventory_planner', 'inventory_category_inventory_planner.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventory_category_inventory_planner.inventory_category_id')
@@ -1080,10 +1087,12 @@ class InventoryPlannerController extends Controller
                                             ->orWhere('implementation_month_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_year','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_title','like','%' . $searchPhrase . '%')
-                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
+                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%')
+                                            ->orWhere('inventories_planner.updated_at','like','%' . $searchPhrase . '%');
                                 })->count();
         }elseif($listtype == 'finished') {
-            $data['rows'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
+            $data['rows'] = InventoryPlanner::select('media_name', 'inventory_category_name', 'implementation_month_name', 'inventory_planner_year', 'inventory_planner_title', 'user_firstname', 'inventories_planner.updated_at', 'inventories_planner.inventory_planner_id', 'users.user_id', 'flow_no')
+                                ->join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
                                 ->join('inventory_category_inventory_planner', 'inventory_category_inventory_planner.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventory_category_inventory_planner.inventory_category_id')
@@ -1102,11 +1111,13 @@ class InventoryPlannerController extends Controller
                                             ->orWhere('implementation_month_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_year','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_title','like','%' . $searchPhrase . '%')
-                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
+                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%')
+                                            ->orWhere('inventories_planner.updated_at','like','%' . $searchPhrase . '%');
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
+            $data['total'] = InventoryPlanner::select('media_name', 'inventory_category_name', 'implementation_month_name', 'inventory_planner_year', 'inventory_planner_title', 'user_firstname', 'inventories_planner.updated_at', 'inventories_planner.inventory_planner_id', 'users.user_id', 'flow_no')
+                                ->join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
                                 ->join('inventory_category_inventory_planner', 'inventory_category_inventory_planner.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventory_category_inventory_planner.inventory_category_id')
@@ -1125,10 +1136,12 @@ class InventoryPlannerController extends Controller
                                             ->orWhere('implementation_month_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_year','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_title','like','%' . $searchPhrase . '%')
-                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
+                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%')
+                                            ->orWhere('inventories_planner.updated_at','like','%' . $searchPhrase . '%');
                                 })->count();
         }elseif($listtype == 'canceled') {
-            $data['rows'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
+            $data['rows'] = InventoryPlanner::select('media_name', 'inventory_category_name', 'implementation_month_name', 'inventory_planner_year', 'inventory_planner_title', 'user_firstname', 'inventories_planner.updated_at', 'inventories_planner.inventory_planner_id', 'flow_no')
+                                ->join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
                                 ->join('inventory_category_inventory_planner', 'inventory_category_inventory_planner.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventory_category_inventory_planner.inventory_category_id')
@@ -1146,11 +1159,13 @@ class InventoryPlannerController extends Controller
                                             ->orWhere('implementation_month_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_year','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_title','like','%' . $searchPhrase . '%')
-                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
+                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%')
+                                            ->orWhere('inventories_planner.updated_at','like','%' . $searchPhrase . '%');
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = InventoryPlanner::join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
+            $data['total'] = InventoryPlanner::select('media_name', 'inventory_category_name', 'implementation_month_name', 'inventory_planner_year', 'inventory_planner_title', 'user_firstname', 'inventories_planner.updated_at', 'inventories_planner.inventory_planner_id', 'flow_no')
+                                ->join('inventory_planner_media', 'inventory_planner_media.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('medias', 'medias.media_id', '=', 'inventory_planner_media.media_id')
                                 ->join('inventory_category_inventory_planner', 'inventory_category_inventory_planner.inventory_planner_id', '=', 'inventories_planner.inventory_planner_id')
                                 ->join('inventory_categories', 'inventory_categories.inventory_category_id', '=', 'inventory_category_inventory_planner.inventory_category_id')
@@ -1168,7 +1183,8 @@ class InventoryPlannerController extends Controller
                                             ->orWhere('implementation_month_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_year','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_planner_title','like','%' . $searchPhrase . '%')
-                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
+                                            ->orWhere('user_firstname','like','%' . $searchPhrase . '%')
+                                            ->orWhere('inventories_planner.updated_at','like','%' . $searchPhrase . '%');
                                 })->count();
         }
 

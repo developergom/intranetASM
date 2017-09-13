@@ -40,7 +40,7 @@
 	                <label for="proposal_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="proposal_name" id="proposal_name" placeholder="Proposal Name" required="true" maxlength="200" value="{{ old('proposal_name') }}">
+	                        <input type="text" class="form-control input-sm" name="proposal_name" id="proposal_name" placeholder="PROPOSAL NAME" required="true" maxlength="200" value="{{ old('proposal_name') }}">
 	                    </div>
 	                    @if ($errors->has('proposal_name'))
 			                <span class="help-block">
@@ -91,7 +91,7 @@
 	                <label for="proposal_budget" class="col-sm-2 control-label">Budget</label>
 	                <div class="col-sm-3">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="proposal_budget" id="proposal_budget" placeholder="Budget" required="true" maxlength="17" value="{{ old('proposal_budget') }}">
+	                        <input type="text" class="form-control input-sm input-mask" name="proposal_budget" id="proposal_budget" placeholder="BUDGET" required="true" maxlength="17" value="{{ old('proposal_budget') }}">
 	                    </div>
 	                    @if ($errors->has('proposal_budget'))
 			                <span class="help-block">
@@ -187,23 +187,66 @@
 	                </div>
 	            </div> -->
 	            <div class="form-group">
-	                <label for="proposal_desc" class="col-sm-2 control-label">Creative Brief</label>
+	                <label for="proposal_background" class="col-sm-2 control-label">Background</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="proposal_desc" id="proposal_desc" class="form-control input-sm" placeholder="Description">{{ old('proposal_desc') }}</textarea>
+	                        <textarea name="proposal_background" id="proposal_background" class="form-control input-sm" placeholder="BACKGROUND">{{ old('proposal_background') }}</textarea>
 	                    </div>
-	                    <span class="help-block">
-	                    	1. What is the BRAND? <br/>
-							2. Background-WHAT WE SHOULD KNOW.  <br/>
-							3. Advertising Objective-WHAT WE WANT TO HAPPEN  <br/>
-							4. Target Audience-WHO TO SELL  <br/>
-							5. Positioning. HOW TO SELL. <br/>
-							6. Desire Response  <br/>
-							7. Tonality & Manner (Execution)
-	                    </span>
-	                    @if ($errors->has('proposal_desc'))
+	                    @if ($errors->has('proposal_background'))
 			                <span class="help-block">
-			                    <strong>{{ $errors->first('proposal_desc') }}</strong>
+			                    <strong>{{ $errors->first('proposal_background') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="proposal_objective" class="col-sm-2 control-label">Objective</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <textarea name="proposal_objective" id="proposal_objective" class="form-control input-sm" placeholder="OBJECTIVE">{{ old('proposal_objective') }}</textarea>
+	                    </div>
+	                    @if ($errors->has('proposal_objective'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('proposal_objective') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="proposal_target_audience" class="col-sm-2 control-label">Target Audience</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <textarea name="proposal_target_audience" id="proposal_target_audience" class="form-control input-sm" placeholder="TARGET AUDIENCE">{{ old('proposal_target_audience') }}</textarea>
+	                    </div>
+	                    @if ($errors->has('proposal_target_audience'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('proposal_target_audience') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="proposal_mandatory" class="col-sm-2 control-label">Mandatory</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <textarea name="proposal_mandatory" id="proposal_mandatory" class="form-control input-sm" placeholder="MANDATORY">{{ old('proposal_mandatory') }}</textarea>
+	                    </div>
+	                    @if ($errors->has('proposal_mandatory'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('proposal_mandatory') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="proposal_campaign_product" class="col-sm-2 control-label">Campaign/Product</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <textarea name="proposal_campaign_product" id="proposal_campaign_product" class="form-control input-sm" placeholder="CAMPAIGN/PRODUCT">{{ old('proposal_campaign_product') }}</textarea>
+	                    </div>
+	                    @if ($errors->has('proposal_campaign_product'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('proposal_campaign_product') }}</strong>
 			                </span>
 			            @endif
 	                </div>
@@ -216,7 +259,7 @@
 	                        	
 	                        </div>
 	                    </div>
-	                    <span class="help-block">
+	                    <span>
 		                    <strong>Max filesize: 10 MB. Allowed File(s): .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .rar, .zip</strong>
 		                </span>
 	                </div>

@@ -81,7 +81,7 @@
 	                <label for="agenda_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="agenda_desc" id="agenda_desc" class="form-control input-sm" placeholder="Description" readonly="true">{{ $agenda->agenda_desc }}</textarea>
+	                        <textarea name="agenda_desc" id="agenda_desc" class="form-control input-sm" placeholder="DESCRIPTION" readonly="true">{{ $agenda->agenda_desc }}</textarea>
 	                    </div>
 	                </div>
 	            </div>
@@ -98,7 +98,7 @@
 	                <label for="created_at" class="col-sm-2 control-label">Created At</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-                            <input type="text" class="form-control" name="created_at" id="created_at" placeholder="Created At" required="true" value="{{ $created_at }}" readonly="true">
+                            <input type="text" class="form-control" name="created_at" id="created_at" placeholder="CREATED AT" required="true" value="{{ $created_at }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -106,7 +106,7 @@
 	                <label for="created_by" class="col-sm-2 control-label">Created By</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-                            <input type="text" class="form-control" name="created_by" id="created_by" placeholder="Created By" required="true" value="{{ $agenda->created_by->user_firstname . ' ' . $agenda->created_by->user_lastname }}" readonly="true">
+                            <input type="text" class="form-control" name="created_by" id="created_by" placeholder="CREATED BY" required="true" value="{{ $agenda->created_by->user_firstname . ' ' . $agenda->created_by->user_lastname }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -115,9 +115,14 @@
 	                <label for="agenda_meeting_time" class="col-sm-2 control-label">Meeting Time</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-                            <input type="text" class="form-control date-picker" name="agenda_meeting_time" id="agenda_meeting_time" placeholder="Meeting Time" required="true" value="">
+                            <input type="text" class="form-control date-picker" name="agenda_meeting_time" id="agenda_meeting_time" placeholder="MEETING TIME" required="true" value="{{ old('agenda_meeting_time') }}">
 	                    </div>
 	                </div>
+	                @if ($errors->has('agenda_meeting_time'))
+		                <span class="help-block">
+		                    <strong>{{ $errors->first('agenda_meeting_time') }}</strong>
+		                </span>
+		            @endif
 	            </div><!-- 
 	            <div class="form-group">
 	                <label for="agenda_report_time" class="col-sm-2 control-label">Report Time</label>
@@ -131,9 +136,14 @@
 	                <label for="agenda_report_desc" class="col-sm-2 control-label">Report Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="agenda_report_desc" id="agenda_report_desc" class="form-control input-sm" placeholder="Report Description"></textarea>
+	                        <textarea name="agenda_report_desc" id="agenda_report_desc" class="form-control input-sm" placeholder="REPORT DESCRIPTION"></textarea>
 	                    </div>
 	                </div>
+	                @if ($errors->has('agenda_report_desc'))
+		                <span class="help-block">
+		                    <strong>{{ $errors->first('agenda_report_desc') }}</strong>
+		                </span>
+		            @endif
 	            </div>
 	            <div class="form-group">
 	                <label for="upload_file" class="col-sm-2 control-label">Upload File(s)</label>
@@ -143,7 +153,7 @@
 	                        	
 	                        </div>
 	                    </div>
-	                    <span class="help-block">
+	                    <span>
 		                    <strong>Max filesize: 10 MB. Allowed File(s): .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .rar, .zip</strong>
 		                </span>
 	                </div>

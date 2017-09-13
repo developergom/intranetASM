@@ -132,4 +132,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Proposal', 'current_user');
     }
+
+    public function proposalpic()
+    {
+        return $this->hasMany('App\Proposal', 'pic');
+    }
 }

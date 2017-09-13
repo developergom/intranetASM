@@ -120,6 +120,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('clientcontact/apiEdit', 'ClientContactController@apiEdit');
         Route::get('clientcontact/apiSearch/{query}', 'ClientContactController@apiSearch');
         Route::post('clientcontact/apiSearchPerClient', 'ClientContactController@apiSearchPerClient');
+        Route::post('clientcontact/apiSearchPerMultipleClients', 'ClientContactController@apiSearchPerMultipleClients');
 
         //Client Type
         Route::post('clienttype/apiList', 'ClientTypeController@apiList');

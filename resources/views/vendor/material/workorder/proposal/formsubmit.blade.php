@@ -20,7 +20,7 @@
 	                        	
 	                        </div>
 	                    </div>
-	                    <span class="help-block">
+	                    <span>
 		                    <strong>Max filesize: 10 MB. Allowed File(s): .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .rar, .zip</strong>
 		                </span>
 	                </div>
@@ -29,9 +29,14 @@
 	                <label for="comment" class="col-sm-2 control-label">Message</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="comment" id="comment" class="form-control input-sm" placeholder="Comment">{{ old('comment') }}</textarea>
+	                        <textarea name="comment" id="comment" class="form-control input-sm" placeholder="MESSAGE">{{ old('comment') }}</textarea>
 	                    </div>
 	                </div>
+	                @if ($errors->has('comment'))
+		                <span class="help-block">
+		                    <strong>{{ $errors->first('comment') }}</strong>
+		                </span>
+		            @endif
 	            </div>
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">

@@ -30,7 +30,7 @@
 	            	<label for="rate_name" class="col-sm-2 control-label">Rate Name</label>
 	            	<div class="col-sm-10">
 	            		<div class="fg-line">
-	            			<input type="text" name="rate_name" id="rate_name" class="form-control input-sm" placeholder="Rate Name" autocomplete="off" value="{{ $rate->rate_name or '' }}">
+	            			<input type="text" name="rate_name" id="rate_name" class="form-control input-sm" placeholder="Rate Name" autocomplete="off" readonly="true" value="{{ $rate->rate_name or '' }}">
 	            		</div>
 	            	</div>
 	            </div>
@@ -168,7 +168,6 @@
 	            </div>
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
-	                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
 	                    <a href="{{ url('master/rate') }}" class="btn btn-danger btn-sm">Back</a>
 	                </div>
 	            </div>

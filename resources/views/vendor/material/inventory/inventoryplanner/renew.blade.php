@@ -5,6 +5,7 @@
 <link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 <link href="{{ url('css/basic.min.css') }}" rel="stylesheet">
 <link href="{{ url('css/dropzone.min.css') }}" rel="stylesheet">
+<link href="{{ url('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -24,7 +25,7 @@
                                 	@if($inventory->proposal_type_id==$row->proposal_type_id)
 	                                	{!! $selected = 'selected' !!}
                                 	@endif
-	        						<option value="{{ $row->proposal_type_id }}" {{ $selected }}>{{ $row->proposal_type_name . ' - ' . $row->proposal_type_desc}}</option>
+	        						<option value="{{ $row->proposal_type_id }}" {{ $selected }}>{{ $row->proposal_type_name }} - {!! $row->proposal_type_desc !!}</option>
 	        					@endforeach
 	        				</select>
 	        			</div>
@@ -65,7 +66,7 @@
 	                <label for="inventory_planner_title" class="col-sm-2 control-label">Title</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="inventory_planner_title" id="inventory_planner_title" placeholder="Inventory Planner Title" required="true" maxlength="100" value="{{ $inventory->inventory_planner_title }}">
+	                        <input type="text" class="form-control input-sm" name="inventory_planner_title" id="inventory_planner_title" placeholder="INVENTORY PLANNER TITLE" required="true" maxlength="100" value="{{ $inventory->inventory_planner_title }}">
 	                    </div>
 	                    @if ($errors->has('inventory_planner_title'))
 			                <span class="help-block">
@@ -116,7 +117,7 @@
 	                <label for="inventory_planner_deadline" class="col-sm-2 control-label">Deadline</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="inventory_planner_deadline" id="inventory_planner_deadline" placeholder="e.g 17/08/1945 (filled with the deadline which the inventory can be sold)" required="true" maxlength="10" value="{{ $inventory_deadline }}" autocomplete="off" data-mask="00/00/0000" data-toggle="tooltip" data-placement="bottom" title="filled with the deadline which the inventory can be sold">
+	                        <input type="text" class="form-control input-sm date-picker" name="inventory_planner_deadline" id="inventory_planner_deadline" placeholder="e.g 17/08/1945 (FILLED WITH THE DEADLINE WHICH THE INVENTORY CAN BE SOLD)" required="true" maxlength="10" value="{{ $inventory_deadline }}" data-toggle="tooltip" data-placement="bottom" title="filled with the deadline which the inventory can be sold">
 	                    </div>
 	                    @if ($errors->has('inventory_planner_deadline'))
 			                <span class="help-block">
@@ -167,10 +168,10 @@
 	                <label for="inventory_planner_desc" class="col-sm-2 control-label">Description</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <textarea name="inventory_planner_desc" id="inventory_planner_desc" class="form-control input-sm" placeholder="Description">{{ $inventory->inventory_planner_desc }}</textarea>
+	                        <textarea name="inventory_planner_desc" id="inventory_planner_desc" class="form-control input-sm" placeholder="DESCRIPTION">{{ $inventory->inventory_planner_desc }}</textarea>
 	                    </div>
 	                    @if ($errors->has('inventory_planner_desc'))
-			                <span class="help-block">
+			                <span class="has-error help-block">
 			                    <strong>{{ $errors->first('inventory_planner_desc') }}</strong>
 			                </span>
 			            @endif
@@ -184,7 +185,7 @@
 	                        	
 	                        </div>
 	                    </div>
-	                    <span class="help-block">
+	                    <span>
 		                    <strong>Max filesize: 10 MB. Allowed File(s): .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .rar, .zip</strong>
 		                </span>
 	                </div>
@@ -205,6 +206,7 @@
 <script src="{{ url('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/dropzone.min.js') }}"></script>
 <script src="{{ url('js/input-mask.min.js') }}"></script>
+<script src="{{ url('js/bootstrap-datetimepicker.min.js') }}"></script>
 @endsection
 
 @section('customjs')

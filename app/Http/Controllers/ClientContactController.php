@@ -172,4 +172,13 @@ class ClientContactController extends Controller
 
         return response()->json($result);
     }
+
+    public function apiSearchPerMultipleClients(Request $request)
+    {
+        $client_id = $request->client_id;
+
+        $result = ClientContact::select('client_contact_id','client_contact_name','client_contact_position','client_name')->join('clients','clients.client_id', '=', 'client_contacts.client_id')->whereIn('client_contacts.client_id', $client_id)->where('client_contacts.active', '1')->orderBy('client_contact_name')->get();
+
+        return response()->json($result);
+    }
 }

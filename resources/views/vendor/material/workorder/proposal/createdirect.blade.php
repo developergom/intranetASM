@@ -40,7 +40,7 @@
 	                <label for="proposal_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="proposal_name" id="proposal_name" placeholder="Proposal Name" required="true" maxlength="200" value="{{ $inventoryplanner->inventory_planner_title }}">
+	                        <input type="text" class="form-control input-sm" name="proposal_name" id="proposal_name" placeholder="PROPOSAL NAME" required="true" maxlength="200" value="{{ $inventoryplanner->inventory_planner_title }}">
 	                    </div>
 	                    @if ($errors->has('proposal_name'))
 			                <span class="help-block">
@@ -88,26 +88,10 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="proposal_budget" class="col-sm-2 control-label">Budget</label>
-	                <div class="col-sm-3">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="proposal_budget" id="proposal_budget" placeholder="Budget" required="true" maxlength="17" value="{{ old('proposal_budget') }}">
-	                    </div>
-	                    @if ($errors->has('proposal_budget'))
-			                <span class="help-block">
-			                    <strong>{{ $errors->first('proposal_budget') }}</strong>
-			                </span>
-			            @endif
-	                </div>
-	                <div class="col-sm-7">
-	                	<span class="badge" id="result_proposal_budget"></span>
-	                </div>
-	            </div>
-	            <div class="form-group">
 	                <label for="client_id" class="col-sm-2 control-label">Client</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <select name="client_id" id="client_id" class="selectpicker with-ajax" data-live-search="true" required="true">
+	                        <select name="client_id[]" id="client_id" class="selectpicker with-ajax" data-live-search="true" multiple required="true">
                                 
                             </select>
 	                    </div>

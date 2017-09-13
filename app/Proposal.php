@@ -26,10 +26,11 @@ class Proposal extends Model
 				'flow_no',
 				'revision_no',
 				'current_user',
+				'updated_at',
 	];
 
 	protected $hidden = [
-				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
+				'active', 'created_by', 'created_at', 'updated_by'
 	];
 
 	public function agendas()
@@ -137,5 +138,10 @@ class Proposal extends Model
 	public function _currentuser()
 	{
 		return $this->belongsTo('App\User', 'current_user');
+	}
+
+	public function _pic()
+	{
+		return $this->belongsTo('App\User', 'pic');
 	}
 }
