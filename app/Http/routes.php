@@ -225,6 +225,10 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('notificationtype/apiDelete', 'NotificationTypeController@apiDelete');
         Route::resource('notificationtype', 'NotificationTypeController');
 
+        //Omzet Type
+        Route::resource('omzettype', 'OmzetTypeController');
+        Route::post('omzettype/api/all', 'OmzetTypeController@apiGetAll');
+
         //Paper Type
         Route::post('paper/apiList', 'PaperController@apiList');
         Route::post('paper/apiDelete', 'PaperController@apiDelete');
@@ -254,6 +258,9 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('rate/apiList', 'RateController@apiList');
         Route::post('rate/apiDelete', 'RateController@apiDelete');
         Route::resource('rate', 'RateController');
+
+        Route::post('rate/api/all', 'RateController@apiGetAll');
+        Route::post('rate/api/name', 'RateController@apiGetByName');
 
         //Religion
         Route::post('religion/apiList', 'ReligionController@apiList');
@@ -398,6 +405,8 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('proposal/api/deleteOtherPrices', 'ProposalController@apiDeleteOtherPrices');
         Route::get('proposal/api/loadOtherPrices', 'ProposalController@apiLoadOtherPrices');
         Route::post('proposal/apiSearch', 'ProposalController@apiSearch');
+
+        Route::get('summary/create/{proposal_id}', 'SummaryController@create');
     });
 
     Route::group(['prefix' => 'grid'], function() {

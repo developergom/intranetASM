@@ -345,4 +345,23 @@ class RateController extends Controller
             return response()->json(200); //failed
         }
     }
+
+    public function apiGetAll(Request $request)
+    {
+        $pos = Rate::select('rate_id', 'rate_name')->where('active', '1')->where('rate_name','like','%' . $request->input('query') . '%')->orderBy('rate_name')->limit(5)->get();
+
+        $result = array();
+        foreach ($pos as $value) {
+            array_push($result, $value->rate_name);
+        }
+
+        return response()->json($result);
+    }
+
+    public function apiGetByName(Request $request)
+    {
+        $rate = Rate::with('media')->where('rate_name', $request->input('rate_name'))->first();
+
+        return response()->json($rate);
+    }
 }

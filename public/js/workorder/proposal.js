@@ -149,7 +149,7 @@ $("#grid-data-finished").bootgrid({
                 if(row.proposal_status_id==1) {
                     //sold
                     html = '<a title="View Proposal" href="' + base_url + 'workorder/proposal/' + row.proposal_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.proposal_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                        +'<a title="Create Summary" href="' + base_url + 'workorder/proposal/summary/' + row.proposal_id + '" class="btn btn-icon waves-effect waves-circle" type="button" data-row-id="' + row.proposal_id + '"><span class="zmdi zmdi-assignment"></span></a>&nbsp;&nbsp;';
+                        +'<a title="Create Summary" href="' + base_url + 'workorder/summary/create/' + row.proposal_id + '" class="btn btn-icon waves-effect waves-circle" type="button" data-row-id="' + row.proposal_id + '"><span class="zmdi zmdi-assignment"></span></a>&nbsp;&nbsp;';
                 }else if(row.proposal_status_id==2){
                     html = '<a title="View Proposal" href="' + base_url + 'workorder/proposal/' + row.proposal_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.proposal_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
                 }else{

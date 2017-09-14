@@ -22,10 +22,10 @@ function loadNotification() {
 				$('#notification_lists').empty();
 				$('#notification_count').empty();
 				$.each(data.notifications, function(key, value) {
-					html += '<a class="lv-item notification-item" href="' + value.notification_type_url + '" title="' + value.notification_text + '" data-notification_id="' + value.notification_id + '">'
+					html += '<a class="lv-item notification-item" href="' + base_url + value.notification_type_url + '" title="' + value.notification_text + '" data-notification_id="' + value.notification_id + '">'
                                 +'<div class="media">'
                                     +'<div class="pull-left">'
-                                        +'<img class="lv-img-sm" src="img/avatar/' + value.user_avatar + '" alt="">'
+                                        +'<img class="lv-img-sm" src="' + base_url + 'img/avatar/' + value.user_avatar + '" alt="">'
                                     +'</div>'
                                     +'<div class="media-body">'
                                         +'<div class="lv-title">' + value.user_firstname + ' ' + value.user_lastname + '</div>'

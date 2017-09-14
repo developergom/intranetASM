@@ -124,7 +124,7 @@
 				        			<img src="{{ url('img/filetypes/' . $uploadedfile->upload_file_type . '.png') }}" alt="">
 				        			@endif
 				        			<div class="caption">
-				        				<h4>{{ $uploadedfile->upload_file_name }}</h4>
+				        				<h6>{{ $uploadedfile->upload_file_name }}</h6>
 				        				<p>{{ $uploadedfile->upload_file_desc }}</p>
 				        				<div class="m-b-5">
 				        					<a class="btn btn-sm btn-primary waves-effect" href="{{ url('download/file/' . $uploadedfile->upload_file_id) }}" role="button">Download File</a>
