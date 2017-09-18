@@ -58,6 +58,39 @@
             You are logged in!
         </div>
     </div> -->
+    
+    <div class="row">
+        @can('Agenda-Read')
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header"><h4>My Agenda</h4></div>
+                <div class="card-body card-padding">
+                    <div class="monthly" id="my-agenda"></div>
+                </div>
+            </div>
+        </div>
+        @endcan
+        @can('Inventory Planner-Read')
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header"><h4>Last Updated Inventories Planner</h4></div>
+                <div class="card-body card-padding">
+                    <div role="tabpanel" class="tab">
+                        <ul class="tab-nav" role="tablist">
+                            <li class="active"><a href="#lastUpdatedInventoriesPlanner" aria-controls="lastUpdatedInventoriesPlanner" role="tab" data-toggle="tab" aria-expanded="true">Inventories Planner</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane animated flipInX active" id="lastUpdatedInventoriesPlanner">
+                                <div class="listview" id="list-lastUpdatedInventoriesPlanner"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endcan
+    </div>
+
     @can('Action Plan-Read')
     <div class="row">
         <div class="col-sm-6">
@@ -391,6 +424,34 @@ $(document).ready(function(){
         startVisible: true,
         duplicated: true
       });
+
+    @can('Agenda-Read')
+    $('#my-agenda').monthly({
+        'mode' : 'event',
+        'stylePast' : true,
+        'dataType' : 'json',
+        'jsonUrl' : base_url + 'agenda/plan/api/loadMyAgenda',
+    });
+    @endcan
+
+    @can('Inventory Planner-Read')
+    $.ajax({
+        url: base_url + 'inventory/inventoryplanner/api/apiLoadLastUpdated/5',
+        type: 'GET',
+        dataType: 'json',
+        error: function(){
+            console.log('Error loading data');
+        },
+        success:function(data) {
+            console.log(data);
+            $.each(data, function(key, value){
+                var ls = '';
+                ls += '<a class="lv-item" href="' + base_url + 'inventory/inventoryplanner/' + value.inventory_planner_id + '"><div class="media"><div class="media-body"><div class="lv-title">' + value.inventory_planner_title + '</div><small class="lv-small">Created by : ' + value.created_by.user_firstname + ' ' + value.created_by.user_lastname + '</small></div></div></a>';
+                $('#list-lastUpdatedInventoriesPlanner').append(ls);
+            });
+        }
+    });
+    @endcan
 
     @can('Action Plan-Read')
     $('#calendar').monthly({

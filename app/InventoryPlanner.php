@@ -20,10 +20,11 @@ class InventoryPlanner extends Model
 				'revision_no',
 				'current_user',
 				'updated_at',
+				'created_by',
 	];
 
 	protected $hidden = [
-				'active', 'created_by', 'created_at', 'updated_by'
+				'active', 'created_at', 'updated_by'
 	];
 
 	public function agendas()

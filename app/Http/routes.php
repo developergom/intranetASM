@@ -332,6 +332,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('plan/do_report/{id}', 'AgendaController@doReport');
         Route::post('plan/do_report/{id}', 'AgendaController@postDoReport');
         Route::resource('plan', 'AgendaController');
+        Route::get('plan/api/loadMyAgenda', 'AgendaController@apiLoadMyAgenda');
     });
 
     Route::group(['prefix' => 'inventory'], function() {
@@ -362,6 +363,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('inventoryplanner/apiSearch', 'InventoryPlannerController@apiSearch');
         Route::get('inventoryplanner/renew/{id}', 'InventoryPlannerController@renew');
         Route::post('inventoryplanner/renew/{id}', 'InventoryPlannerController@postRenew');
+        Route::get('inventoryplanner/api/apiLoadLastUpdated/{limit}', 'InventoryPlannerController@apiLoadLastUpdated');
     });
 
     Route::group(['prefix' => 'workorder'], function() {

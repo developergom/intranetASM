@@ -420,4 +420,42 @@ class AgendaController extends Controller
 
         return response()->json($data);
     }
+
+    public function apiLoadMyAgenda(Request $request)
+    {
+        $data = array();
+        $data['monthly'] = array();
+
+        $u = new UserLibrary;
+        $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+
+        $agendas = Agenda::with('agendatype','clientcontacts','clientcontacts.client')
+                            ->where(function($query) use($request, $subordinate){
+                                    $query->where('agendas.created_by', '=' , $request->user()->user_id)
+                                            ->orWhereIn('agendas.created_by', $subordinate);
+                                })->where('agendas.active', '1')->get();
+        foreach ($agendas as $key => $value) {
+            $client_name = '';
+
+            foreach ($value->clientcontacts as $v) {
+                $client_name .= $v->client_contact_name . ' (' . $v->client->client_name . ') .';
+            }
+
+            $ap = array();
+            $ap['id'] = $value->agenda_id;
+            $ap['name'] = $value->agendatype->agenda_type_name . '. Client: ' . $client_name;
+            if($request->user()->user_id != $value->created_by->user_id) {
+                $ap['name'] .= ' Created by ' . $value->created_by->user_firstname . ' ' . $value->created_by->user_lastname; 
+            }
+            $ap['startdate'] = $value->agenda_date;
+            $ap['enddate'] = $value->agenda_date;
+            $ap['starttime'] = '0:00';
+            $ap['endtime'] = '23:59';
+            $ap['color'] = ($value->agenda_is_report=='1') ? '#0ba852' : '#a20303';
+            $ap['url'] = (($value->agenda_is_report=='0') && ($request->user()->user_id == $value->created_by->user_id)) ? url('/agenda/plan/do_report/' . $value->agenda_id) : url('/agenda/plan/' . $value->agenda_id);
+            array_push($data['monthly'], $ap);
+        }
+
+        return response()->json($data);
+    }
 }

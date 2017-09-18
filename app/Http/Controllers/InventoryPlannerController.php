@@ -1885,4 +1885,11 @@ class InventoryPlannerController extends Controller
 
         return redirect('inventory/inventoryplanner');
     }
+
+    public function apiLoadLastUpdated($limit)
+    {
+        $inventoryplanner = InventoryPlanner::with('implementations')->where('flow_no', 98)->where('active', '1')->orderBy('updated_at', 'desc')->limit($limit)->get();
+
+        return response()->json($inventoryplanner);
+    }
 }
