@@ -407,6 +407,9 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('proposal/apiSearch', 'ProposalController@apiSearch');
 
         Route::get('summary/create/{proposal_id}', 'SummaryController@create');
+        Route::post('summary/apiList/{listtype}', 'SummaryController@apiList');
+        Route::resource('summary', 'SummaryController');
+        Route::post('summary/api/saveDetails', 'SummaryController@apiSaveDetails');
     });
 
     Route::group(['prefix' => 'grid'], function() {

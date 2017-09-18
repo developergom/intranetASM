@@ -189,14 +189,20 @@ var
 
                     calculateTotal(this);
                 }
-
-                /*if(changes[i][1]=='10')
-                {
-                    var result = dataRef[changes[i][0]][9] - dataRef[changes[i][0]][10];
-                    //console.log(result);
-                    this.setDataAtCell(changes[i][0],11,result);
-                }*/
             }
+
+            $.ajax({
+              url: base_url + 'workorder/summary/api/saveDetails',
+              dataType: 'json',
+              method: 'POST',
+              data: {
+                  _token: $('meta[name="csrf-token"]').attr('content'),
+                  details: dataRef
+              },
+              success: function (response) {
+
+              }
+            });
         }
     }/*,
     cells: function (row, col, prop) {

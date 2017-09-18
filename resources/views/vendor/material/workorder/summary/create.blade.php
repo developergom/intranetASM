@@ -8,8 +8,9 @@
     <div class="card">
         <div class="card-header"><h2>Summary<small>Create Summary Proposal</small></h2></div>
         <div class="card-body card-padding">
-        	<form class="form-horizontal" role="form" method="POST" action="">
+        	<form class="form-horizontal" role="form" method="POST" action="{{ url('workorder/summary') }}">
         		{{ csrf_field() }}
+            <input type="hidden" name="proposal_id" value="{{ $proposal->proposal_id }}">
         		@include('vendor.material.workorder.proposal.view')
 	            <div class="form-group">
   			        <div class="col-sm-12">          
