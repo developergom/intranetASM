@@ -137,4 +137,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Proposal', 'pic');
     }
+
+    public function summarycurrentuser()
+    {
+        return $this->hasMany('App\Summary', 'current_user');
+    }
+
+    public function summarypic()
+    {
+        return $this->hasMany('App\Summary', 'pic');
+    }
 }

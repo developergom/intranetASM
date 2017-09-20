@@ -30,4 +30,41 @@ class Summary extends Model
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by'
 	];
+
+	public function proposal()
+	{
+		return $this->belongsTo('App\Proposal', 'proposal_id');
+	}
+
+	public function summaryitems()
+	{
+		return $this->hasMany('App\SummaryItem', 'summary_id');
+	}
+
+	public function summaryhistories()
+	{
+		return $this->hasMany('App\SummaryHistory', 'summary_id');
+	}
+
+	public function getCreatedByAttribute($value)
+	{
+		$user = User::find($value); 
+		return $user;
+	}
+
+	public function getUpdatedByAttribute($value)
+	{
+		$user = User::find($value); 
+		return $user;
+	}
+
+	public function _currentuser()
+	{
+		return $this->belongsTo('App\User', 'current_user');
+	}
+
+	public function _pic()
+	{
+		return $this->belongsTo('App\User', 'pic');
+	}
 }

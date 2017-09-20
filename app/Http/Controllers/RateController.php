@@ -20,10 +20,10 @@ use App\Unit;
 class RateController extends Controller
 {
 	public $cols = [
-                        [
+                        /*[
                             'key' => 'parent_id',
                             'text' => 'Package Rate'
-                        ],
+                        ],*/
                         [ 
                             'key' => 'advertise_rate_type_id',
                             'text' => 'Rate Type'
@@ -122,7 +122,7 @@ class RateController extends Controller
 
         $data = array();
 
-        $data['parents'] = Rate::with('media')->where('active', '1')->where('parent_id', '0')->orderBy('rate_name')->get();
+        //$data['parents'] = Rate::with('media')->where('active', '1')->where('parent_id', '0')->orderBy('rate_name')->get();
         $data['advertiseratetypes'] = AdvertiseRateType::where('active', '1')->orderBy('advertise_rate_type_name')->get();
         $data['colors'] = Color::where('active', '1')->orderBy('color_name')->get();
         $data['medias'] = Media::where('active', '1')->orderBy('media_name')->get();
@@ -146,11 +146,14 @@ class RateController extends Controller
             $dynamic_validation[$value] ='required';
         }
 
+        $dynamic_validation['rate_name'] = 'required|unique:rates,rate_name';
+
         $this->validate($request, $dynamic_validation);
 
         $obj = new Rate;
 
-        $obj->parent_id = $request->input('parent_id');
+        //$obj->parent_id = $request->input('parent_id');
+        $obj->parent_id = 0;
         $obj->advertise_rate_type_id = $request->input('advertise_rate_type_id');
         $obj->media_id = $request->input('media_id');
         $obj->rate_name = $request->input('rate_name');
@@ -188,17 +191,13 @@ class RateController extends Controller
 
         $data = array();
 
-        $data['rate'] = Rate::with('parent',
-                                    'child',
-                                    'advertiseratetype',
+        $data['rate'] = Rate::with('advertiseratetype',
                                     'color',
                                     'paper',
                                     'media',
                                     'spottype',
                                     'studio',
                                     'unit')->where('rates.active', '1')->find($id);
-
-        //dd($data);
 
         $data['advertiseratetypes'] = AdvertiseRateType::where('active', '1')->orderBy('advertise_rate_type_name')->get();
         $data['colors'] = Color::where('active', '1')->orderBy('color_name')->get();
@@ -224,7 +223,7 @@ class RateController extends Controller
 
         $data['rate'] = Rate::where('active', '1')->find($id);
 
-        $data['parents'] = Rate::with('media')->where('active', '1')->where('parent_id', '0')->orderBy('rate_name')->get();
+        //$data['parents'] = Rate::with('media')->where('active', '1')->where('parent_id', '0')->orderBy('rate_name')->get();
         $data['advertiseratetypes'] = AdvertiseRateType::where('active', '1')->orderBy('advertise_rate_type_name')->get();
         $data['colors'] = Color::where('active', '1')->orderBy('color_name')->get();
         $data['medias'] = Media::where('active', '1')->orderBy('media_name')->get();
@@ -249,6 +248,8 @@ class RateController extends Controller
         foreach ($requiredFields as $value) {
             $dynamic_validation[$value] ='required';
         }
+
+        $dynamic_validation['rate_name'] = 'required|unique:rates,rate_name,'.$id.',rate_id';
 
         $this->validate($request, $dynamic_validation);
 

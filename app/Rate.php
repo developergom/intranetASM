@@ -79,4 +79,9 @@ class Rate extends Model
 	{
 		return $this->belongsTo('App\Color', 'color_id');
 	}
+
+	public function summaryitems()
+	{
+		return $this->hasMany('App\SummaryItem', 'rate_id');
+	}
 }

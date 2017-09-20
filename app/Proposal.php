@@ -123,6 +123,11 @@ class Proposal extends Model
 		return $this->hasMany('App\ProposalHistory', 'proposal_id');
 	}
 
+	public function summary()
+	{
+		return $this->hasMany('App\Summary', 'proposal_id');
+	}
+
 	public function getCreatedByAttribute($value)
 	{
 		$user = User::find($value); 

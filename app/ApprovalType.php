@@ -48,4 +48,8 @@ class ApprovalType extends Model
 	public function gridproposalhistories() {
 		return $this->hasMany('App\GridProposalHistory', 'approval_type_id');
 	}
+
+	public function summaryhistories() {
+		return $this->hasMany('App\SummaryHistory', 'approval_type_id');
+	}
 }

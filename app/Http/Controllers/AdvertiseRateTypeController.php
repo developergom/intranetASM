@@ -12,10 +12,10 @@ use App\AdvertiseRateType;
 class AdvertiseRateTypeController extends Controller
 {
     public $cols = [
-                        [
+                        /*[
                             'key' => 'parent_id',
                             'text' => 'Package Rate'
-                        ],
+                        ],*/
                         [ 
                             'key' => 'advertise_rate_type_id',
                             'text' => 'Rate Type'

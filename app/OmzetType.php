@@ -16,4 +16,9 @@ class OmzetType extends Model
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
 	];
+
+	public function summaryitems()
+	{
+		return $this->hasMany('App\SummaryItem', 'omzet_type_id');
+	}
 }

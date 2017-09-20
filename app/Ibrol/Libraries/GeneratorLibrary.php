@@ -4,6 +4,7 @@ namespace App\Ibrol\Libraries;
 
 use App\Media;
 use App\Proposal;
+use App\Summary;
 
 class GeneratorLibrary{
 	public function proposal_no($proposal_id) {
@@ -51,6 +52,53 @@ class GeneratorLibrary{
 		$proposal_no = $code . '.' . $no . '/IKL/' . $this->getMonthCode(date('n')) . '/' . date('y');
 
 		return $proposal_no;
+	}
+
+	public function summary_order_no($summary_id) {
+		//AUT.033980/IKL/IX/17
+
+		$summary = Summary::with('proposal','proposal.medias')->find($summary_id);
+
+		$code = 'SUM';
+		if($summary->proposal->medias()->count() > 1) {
+			$code = 'G';
+		}elseif($summary->proposal->medias()->count() == 1){
+			$media = $summary->proposal->medias()->first();
+			$code = $media->media_code;
+		}else{
+			$code = 'UNDEFINED';
+		}
+
+		$no = '000001';
+		switch ($summary_id) {
+			case $summary_id >= 100000:
+				$no = $summary_id;
+				break;
+
+			case $summary_id >= 10000:
+				$no = '0' . $summary_id;
+				break;
+			
+			case $summary_id >= 1000:
+				$no = '00' . $summary_id;
+				break;
+
+			case $summary_id >= 100:
+				$no = '000' . $summary_id;
+				break;
+
+			case $summary_id >= 10:
+				$no = '0000' . $summary_id;
+				break;
+
+			default:
+				$no = '00000' . $summary_id;
+				break;
+		}
+
+		$summary_order_no = 'SUM.' . $code . '.' . $no . '/IKL/' . $this->getMonthCode(date('n')) . '/' . date('y');
+
+		return $summary_order_no;
 	}
 
 	public function getMonthCode($month) {

@@ -18,7 +18,9 @@ use App\OmzetType;
 use App\PO;
 use App\Proposal;
 use App\ProposalHistory;
+use App\Rate;
 use App\Summary;
+use App\SummaryHistory;
 use App\SummaryItem;
 use App\User;
 
@@ -78,6 +80,8 @@ class SummaryController extends Controller
                                         'inventoriesplanner'
                                         )->find($proposal_id);
 
+        $notes = '';
+
         return view('vendor.material.workorder.summary.create', $data);
     }
 
@@ -89,10 +93,100 @@ class SummaryController extends Controller
      */
     public function store(Request $request)
     {
-        //
         //dd($request->all(), false);
+        //dd($request->session()->get('summary_details_' . $request->user()->user_id));
 
-        dd($request->session()->get('summary_details_' . $request->user()->user_id));
+        $this->validate($request,
+            [
+                'proposal_id' => 'required|numeric',
+                'summary_total_gross' => 'required|numeric',
+                'summary_total_discount' => 'required|numeric',
+                'summary_total_nett' => 'required|numeric',
+                'summary_total_internal_omzet' => 'required|numeric',
+                'summary_total_media_cost' => 'required|numeric',
+                'summary_total_cost_pro' => 'required|numeric',
+                'top_type' => 'required',
+                'summary_notes' => 'required',
+                'messages' => 'required'
+            ]
+        );
+
+        $flow = new FlowLibrary;
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
+
+        $obj = new Summary;
+        $obj->proposal_id = $request->input('proposal_id');
+        $obj->summary_order_no = '';
+        $obj->summary_sent_date = '';
+        $obj->summary_total_gross = $request->input('summary_total_gross');
+        $obj->summary_total_disc = $request->input('summary_total_discount');
+        $obj->summary_total_nett = $request->input('summary_total_nett');
+        $obj->summary_total_internal_omzet = $request->input('summary_total_internal_omzet');
+        $obj->summary_total_media_cost = $request->input('summary_total_media_cost');
+        $obj->summary_total_cost_pro = $request->input('summary_total_cost_pro');
+        $obj->top_type = $request->input('top_type');
+        $obj->flow_no = $nextFlow['flow_no'];
+        $obj->current_user = $nextFlow['current_user'];
+        $obj->revision_no = 0;
+        $obj->active = '1';
+        $obj->created_by = $request->user()->user_id;
+
+        $obj->save();
+
+        $generator = new GeneratorLibrary;
+        $summary_order_no = $generator->summary_order_no($obj->summary_id);
+
+        $obj->summary_order_no = $summary_order_no;
+        $obj->save();
+        //
+        
+
+        $hot = $request->session()->get('summary_details_' . $request->user()->user_id);
+
+        for($i = 0;$i < (count($hot)-1);$i++)
+        {
+            //dd($hot[$i]);
+
+            $rate = Rate::where('rate_name', $hot[$i][2])->where('active', 1)->first();
+            $omzettype = OmzetType::where('omzet_type_name', $hot[$i][6])->where('active', 1)->first();
+
+            $detail = new SummaryItem;
+            $detail->rate_id = $rate->rate_id;
+            $detail->summary_id = $obj->summary_id;
+            $detail->summary_item_type = $hot[$i][1];
+            $detail->summary_item_period_start = ($hot[$i][4]!='') ? Carbon::createFromFormat('d/m/Y', $hot[$i][4])->toDateString() : '';
+            $detail->summary_item_period_end = ($hot[$i][5]!='') ? Carbon::createFromFormat('d/m/Y', $hot[$i][5])->toDateString() : '';
+            $detail->omzet_type_id = $omzettype->omzet_type_id;
+            $detail->summary_item_insertion = $hot[$i][7];
+            $detail->summary_item_gross = $hot[$i][8];
+            $detail->summary_item_disc = $hot[$i][9];
+            $detail->summary_item_nett = $hot[$i][10];
+            $detail->summary_item_internal_omzet = $hot[$i][11];
+            $detail->summary_item_remarks = $hot[$i][12];
+            $detail->summary_item_termin = $hot[$i][13];
+            $detail->summary_item_viewed = $hot[$i][14];
+            $detail->revision_no = 0;
+            $detail->active = '1';
+            $detail->created_by = $request->user()->user_id;
+
+            $detail->save();
+        }
+
+        $his = new SummaryHistory;
+        $his->summary_id = $obj->summary_id;
+        $his->approval_type_id = 1;
+        $his->summary_history_text = $request->input('messages');
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'summaryapproval', 'Please check Summary', $obj->summary_id);
+
+        $request->session()->forget('summary_details_' . $request->user()->user_id);
+        $request->session()->flash('status', 'Data has been saved!');
+
+        return redirect('workorder/summary');
     }
 
     /**

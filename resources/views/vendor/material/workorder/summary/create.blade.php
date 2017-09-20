@@ -14,14 +14,15 @@
         		@include('vendor.material.workorder.proposal.view')
 	            <div class="form-group">
   			        <div class="col-sm-12">          
-  			            <div id="example"></div>
+  			            <div id="example" style="overflow: scroll;"></div>
   			        </div>
   			      </div>
               <div class="form-group">
-                <label for="summary_total_gross" class="col-sm-2 control-label">Total Gross Rate</label>
-                <div class="col-sm-10">
+                <label for="format_summary_total_gross" class="col-sm-2 control-label">Total Gross Rate</label>
+                <div class="col-sm-4">
                     <div class="fg-line">
-                        <input type="text" class="form-control input-sm" name="summary_total_gross" id="summary_total_gross" placeholder="Total Gross Rate" required="true" maxlength="100" value="{{ old('summary_total_gross') }}">
+                        <input type="text" class="form-control input-sm" name="format_summary_total_gross" id="format_summary_total_gross" placeholder="Total Gross Rate" required="true" maxlength="100" value="{{ old('format_summary_total_gross') }}">
+                        <input type="hidden" name="summary_total_gross" id="summary_total_gross" value="{{ old('summary_total_gross') }}">
                     </div>
                     @if ($errors->has('summary_total_gross'))
                         <span class="help-block">
@@ -29,12 +30,25 @@
                         </span>
                     @endif
                 </div>
+                <label for="format_summary_total_internal_omzet" class="col-sm-2 control-label">Total Internal Omzet</label>
+                <div class="col-sm-4">
+                    <div class="fg-line">
+                        <input type="text" class="form-control input-sm" name="format_summary_total_internal_omzet" id="format_summary_total_internal_omzet" placeholder="Total Internal Omzet" required="true" maxlength="100" value="{{ old('format_summary_total_internal_omzet') }}">
+                        <input type="hidden" name="summary_total_internal_omzet" id="summary_total_internal_omzet" value="{{ old('summary_total_internal_omzet') }}">
+                    </div>
+                    @if ($errors->has('summary_total_internal_omzet'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('summary_total_internal_omzet') }}</strong>
+                        </span>
+                    @endif
+                </div>
               </div>
               <div class="form-group">
-                <label for="summary_total_disc" class="col-sm-2 control-label">Total Discount</label>
-                <div class="col-sm-10">
+                <label for="format_summary_total_disc" class="col-sm-2 control-label">Total Discount</label>
+                <div class="col-sm-4">
                     <div class="fg-line">
-                        <input type="text" class="form-control input-sm" name="summary_total_disc" id="summary_total_disc" placeholder="Total Discount" required="true" maxlength="100" value="{{ old('summary_total_discount') }}">
+                        <input type="text" class="form-control input-sm" name="format_summary_total_disc" id="format_summary_total_disc" placeholder="Total Discount" required="true" maxlength="100" value="{{ old('format_summary_total_discount') }}">
+                        <input type="hidden" name="summary_total_discount" id="summary_total_discount" value="{{ old('summary_total_discount') }}">
                     </div>
                     @if ($errors->has('summary_total_discount'))
                         <span class="help-block">
@@ -42,12 +56,25 @@
                         </span>
                     @endif
                 </div>
+                <label for="format_summary_total_media_cost" class="col-sm-2 control-label">Total Media Cost</label>
+                <div class="col-sm-4">
+                    <div class="fg-line">
+                        <input type="text" class="form-control input-sm" name="format_summary_total_media_cost" id="format_summary_total_media_cost" placeholder="Total Media Cost" required="true" maxlength="100" value="{{ old('format_summary_total_media_cost') }}">
+                        <input type="hidden" name="summary_total_media_cost" id="summary_total_media_cost" value="{{ old('summary_total_media_cost') }}">
+                    </div>
+                    @if ($errors->has('summary_total_media_cost'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('summary_total_media_cost') }}</strong>
+                        </span>
+                    @endif
+                </div>
               </div>
               <div class="form-group">
-                <label for="summary_total_nett" class="col-sm-2 control-label">Total Nett Rate</label>
-                <div class="col-sm-10">
+                <label for="format_summary_total_nett" class="col-sm-2 control-label">Total Nett Rate</label>
+                <div class="col-sm-4">
                     <div class="fg-line">
-                        <input type="text" class="form-control input-sm" name="summary_total_nett" id="summary_total_nett" placeholder="Total Nett Rate" required="true" maxlength="100" value="{{ old('summary_total_nett') }}">
+                        <input type="text" class="form-control input-sm" name="format_summary_total_nett" id="format_summary_total_nett" placeholder="Total Nett Rate" required="true" maxlength="100" value="{{ old('format_summary_total_nett') }}">
+                        <input type="hidden" name="summary_total_nett" id="summary_total_nett" value="{{ old('summary_total_nett') }}">
                     </div>
                     @if ($errors->has('summary_total_nett'))
                         <span class="help-block">
@@ -55,16 +82,15 @@
                         </span>
                     @endif
                 </div>
-              </div>
-              <div class="form-group">
-                <label for="summary_total_internal_omzet" class="col-sm-2 control-label">Total Internal Omzet</label>
-                <div class="col-sm-10">
+                <label for="format_summary_total_cost_pro" class="col-sm-2 control-label">Total Cost Pro</label>
+                <div class="col-sm-4">
                     <div class="fg-line">
-                        <input type="text" class="form-control input-sm" name="summary_total_internal_omzet" id="summary_total_internal_omzet" placeholder="Total Internal Omzet" required="true" maxlength="100" value="{{ old('summary_total_internal_omzet') }}">
+                        <input type="text" class="form-control input-sm" name="format_summary_total_cost_pro" id="format_summary_total_cost_pro" placeholder="Total Cost Pro" required="true" maxlength="100" value="{{ old('format_summary_total_cost_pro') }}">
+                        <input type="hidden" name="summary_total_cost_pro" id="summary_total_cost_pro" value="{{ old('summary_total_cost_pro') }}">
                     </div>
-                    @if ($errors->has('summary_total_internal_omzet'))
+                    @if ($errors->has('summary_total_cost_pro'))
                         <span class="help-block">
-                            <strong>{{ $errors->first('summary_total_internal_omzet') }}</strong>
+                            <strong>{{ $errors->first('summary_total_cost_pro') }}</strong>
                         </span>
                     @endif
                 </div>
@@ -107,6 +133,14 @@
                 <div class="col-sm-10">
                   <div class="fg-line">
                     <textarea name="summary_notes" id="summary_notes" class="form-control input-sm" placeholder="Summary Notes"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="messages" class="col-sm-2 control-label">Messages</label>
+                <div class="col-sm-10">
+                  <div class="fg-line">
+                    <textarea name="messages" id="messages" class="form-control input-sm" placeholder="Messages"></textarea>
                   </div>
                 </div>
               </div>

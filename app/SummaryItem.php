@@ -30,4 +30,19 @@ class SummaryItem extends Model
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by'
 	];
+
+	public function summary()
+	{
+		return $this->belongsTo('App\Summary', 'summary_id');
+	}
+
+	public function rate()
+	{
+		return $this->belongsTo('App\Rate', 'rate_id');
+	}
+
+	public function omzettype()
+	{
+		return $this->belongsTo('App\OmzetType', 'omzet_type_id');
+	}
 }

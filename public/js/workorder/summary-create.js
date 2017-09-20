@@ -40,7 +40,7 @@ var
     minSpareRows: 1,
     formulas:true,
     contextMenu: true,
-    colHeaders: ['No', 'Type', 'Rate Name', 'Media', 'Edition/Period Start', 'Period End', 'Omzet Type', 'Insertion', 'Gross Rate', 'Disc(%)', 'Nett Rate', 'Omzet Internal', 'Remarks'],
+    colHeaders: ['No', 'Type', 'Rate Name', 'Media', 'Edition/Period Start', 'Period End', 'Omzet Type', 'Insertion', 'Gross Rate', 'Disc(%)', 'Nett Rate', 'Internal Omzet', 'Remarks', 'Termin', 'Viewed Status'],
     columns: [
       {type: 'numeric'}, //no
       {//type
@@ -139,7 +139,16 @@ var
         format: 'Rp 0,0.00',
         language: 'id'
       },
-      {}
+      {},
+      {type: 'numeric'}, //termin
+      {//status tayang
+        type: 'autocomplete',
+        source: [
+                'COMPLETED',
+                'PROCESS',
+                ],
+        strict: true
+      }
     ],
     afterChange: function(changes) {
         if(changes!==null){
@@ -174,20 +183,35 @@ var
                         gross_rate = response.gross_rate;
 
                         instance.setDataAtCell(changes[loop_index][0],3,media_name);
+                        //instance.setDataAtCell(changes[loop_index][0],7,1);
                         instance.setDataAtCell(changes[loop_index][0],8,gross_rate);
                       }
                   });
                 }
 
-                //count nett rate
-                if(changes[i][1]=='8' || changes[i][1]== '9')
+                //on change insertion
+                if(changes[i][1]=='7')
                 {
-                    var result = dataRef[changes[i][0]][8] - (dataRef[changes[i][0]][8] * dataRef[changes[i][0]][9] / 100);
+                  var gross_rate = dataRef[changes[i][0]][7] * dataRef[changes[i][0]][8];
+                  this.setDataAtCell(changes[i][0],8,gross_rate);
+                }
+
+                //count nett rate
+                if(changes[i][1]=='8' || changes[i][1]== '10')
+                {
+                    //var result = dataRef[changes[i][0]][8] - (dataRef[changes[i][0]][8] * dataRef[changes[i][0]][9] / 100);
+                    var discount = Math.ceil(((dataRef[changes[i][0]][8] - dataRef[changes[i][0]][10]) / dataRef[changes[i][0]][8]) * 100);
                     //console.log(result);
-                    this.setDataAtCell(changes[i][0],10,result);
-                    this.setDataAtCell(changes[i][0],11,result);
+                    this.setDataAtCell(changes[i][0],9,discount);
+                    //this.setDataAtCell(changes[i][0],11,dataRef[changes[i][0]][10]);
 
                     calculateTotal(this);
+                }
+
+                //count omzet
+                if(changes[i][1]=='11')
+                {
+                  calculateOmzet(this);
                 }
             }
 
@@ -204,6 +228,10 @@ var
               }
             });
         }
+    },
+    afterRemoveRow: function(index, amount) {
+      calculateTotal(this);
+      calculateOmzet(this);
     }/*,
     cells: function (row, col, prop) {
       var cellProperties = {};
@@ -250,24 +278,57 @@ var
   {
     var data = hot.getData();
     total_gross = 0;
-    //total_disc = 0;
     total_nett = 0;
-    total_omzet = 0;
-    //console.log(data.length);
-    //console.log(data);
     for(x=0;x<data.length;x++)
     {
       var nett = data[x][8] - (data[x][8] * data[x][9] / 100);
       total_gross += data[x][8];
-      //total_disc += data[x][9];
-      total_nett += nett;
-      total_omzet += nett;
+      total_nett += data[x][10];
     }
     
     total_disc = Math.ceil((total_gross - total_nett) / total_gross * 100);
     
     $('#summary_total_gross').val(total_gross);
-    $('#summary_total_disc').val(total_disc);
+    $('#summary_total_discount').val(total_disc);
     $('#summary_total_nett').val(total_nett);
+
+    $('#summary_total_media_cost').val(calculatePerType(hot, 'media_cost'));
+    $('#summary_total_cost_pro').val(calculatePerType(hot, 'cost_pro'));
+
+    $('#format_summary_total_gross').val(previewMoney(total_gross));
+    $('#format_summary_total_disc').val(total_disc);
+    $('#format_summary_total_nett').val(previewMoney(total_nett));
+
+    $('#format_summary_total_media_cost').val(previewMoney(calculatePerType(hot, 'media_cost')));
+    $('#format_summary_total_cost_pro').val(previewMoney(calculatePerType(hot, 'cost_pro')));    
+  }
+
+  function calculateOmzet(hot)
+  {
+    var data = hot.getData();
+    total_omzet = 0;
+
+    for(x=0;x<data.length;x++)
+    {
+      total_omzet += data[x][11];
+    }
+    
     $('#summary_total_internal_omzet').val(total_omzet);
+    $('#format_summary_total_internal_omzet').val(previewMoney(total_omzet));
+  } 
+
+  function calculatePerType(hot, type)
+  {
+    var data = hot.getData();
+    var totalType = 0;
+
+    for(x = 0; x < data.length; x++)
+    {
+      if(data[x][1]==type)
+      {
+        totalType += data[x][10];
+      }
+    }
+
+    return totalType;
   }
