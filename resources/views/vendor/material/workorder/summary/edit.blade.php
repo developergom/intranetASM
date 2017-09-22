@@ -6,11 +6,12 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Summary<small>Create Summary Proposal</small></h2></div>
+        <div class="card-header"><h2>Summary<small>Edit Summary</small></h2></div>
         <div class="card-body card-padding">
-        	<form class="form-horizontal" role="form" method="POST" action="{{ url('workorder/summary') }}">
+        	<form class="form-horizontal" role="form" method="POST" action="{{ url('workorder/summary/' . $summary->summary_id) }}">
         		{{ csrf_field() }}
-            <input type="hidden" name="proposal_id" value="{{ $proposal->proposal_id }}">
+            <input type="hidden" name="_method" value="PUT">
+            <input type="hidden" name="proposal_id" value="{{ $summary->proposal_id }}">
         		@include('vendor.material.workorder.proposal.view')
 	            <div class="form-group">
   			        <div class="col-sm-12">          
@@ -22,7 +23,7 @@
                 <div class="col-sm-4">
                     <div class="fg-line">
                         <input type="text" class="form-control input-sm" name="format_summary_total_gross" id="format_summary_total_gross" placeholder="Total Gross Rate" required="true" maxlength="100" value="{{ old('format_summary_total_gross') }}">
-                        <input type="hidden" name="summary_total_gross" id="summary_total_gross" value="{{ old('summary_total_gross') }}">
+                        <input type="hidden" name="summary_total_gross" id="summary_total_gross" value="{{ $summary->summary_total_gross }}">
                     </div>
                     @if ($errors->has('summary_total_gross'))
                         <span class="help-block">
@@ -34,7 +35,7 @@
                 <div class="col-sm-4">
                     <div class="fg-line">
                         <input type="text" class="form-control input-sm" name="format_summary_total_internal_omzet" id="format_summary_total_internal_omzet" placeholder="Total Internal Omzet" required="true" maxlength="100" value="{{ old('format_summary_total_internal_omzet') }}">
-                        <input type="hidden" name="summary_total_internal_omzet" id="summary_total_internal_omzet" value="{{ old('summary_total_internal_omzet') }}">
+                        <input type="hidden" name="summary_total_internal_omzet" id="summary_total_internal_omzet" value="{{ $summary->summary_total_internal_omzet }}">
                     </div>
                     @if ($errors->has('summary_total_internal_omzet'))
                         <span class="help-block">
@@ -48,7 +49,7 @@
                 <div class="col-sm-4">
                     <div class="fg-line">
                         <input type="text" class="form-control input-sm" name="format_summary_total_disc" id="format_summary_total_disc" placeholder="Total Discount" required="true" maxlength="100" value="{{ old('format_summary_total_disc') }}">
-                        <input type="hidden" name="summary_total_discount" id="summary_total_discount" value="{{ old('summary_total_discount') }}">
+                        <input type="hidden" name="summary_total_discount" id="summary_total_discount" value="{{ $summary->summary_total_discount }}">
                     </div>
                     @if ($errors->has('summary_total_discount'))
                         <span class="help-block">
@@ -60,7 +61,7 @@
                 <div class="col-sm-4">
                     <div class="fg-line">
                         <input type="text" class="form-control input-sm" name="format_summary_total_media_cost" id="format_summary_total_media_cost" placeholder="Total Media Cost" required="true" maxlength="100" value="{{ old('format_summary_total_media_cost') }}">
-                        <input type="hidden" name="summary_total_media_cost" id="summary_total_media_cost" value="{{ old('summary_total_media_cost') }}">
+                        <input type="hidden" name="summary_total_media_cost" id="summary_total_media_cost" value="{{ $summary->summary_total_media_cost }}">
                     </div>
                     @if ($errors->has('summary_total_media_cost'))
                         <span class="help-block">
@@ -74,7 +75,7 @@
                 <div class="col-sm-4">
                     <div class="fg-line">
                         <input type="text" class="form-control input-sm" name="format_summary_total_nett" id="format_summary_total_nett" placeholder="Total Nett Rate" required="true" maxlength="100" value="{{ old('format_summary_total_nett') }}">
-                        <input type="hidden" name="summary_total_nett" id="summary_total_nett" value="{{ old('summary_total_nett') }}">
+                        <input type="hidden" name="summary_total_nett" id="summary_total_nett" value="{{ $summary->summary_total_nett }}">
                     </div>
                     @if ($errors->has('summary_total_nett'))
                         <span class="help-block">
@@ -86,7 +87,7 @@
                 <div class="col-sm-4">
                     <div class="fg-line">
                         <input type="text" class="form-control input-sm" name="format_summary_total_cost_pro" id="format_summary_total_cost_pro" placeholder="Total Cost Pro" required="true" maxlength="100" value="{{ old('format_summary_total_cost_pro') }}">
-                        <input type="hidden" name="summary_total_cost_pro" id="summary_total_cost_pro" value="{{ old('summary_total_cost_pro') }}">
+                        <input type="hidden" name="summary_total_cost_pro" id="summary_total_cost_pro" value="{{ $summary->summary_total_cost_pro }}">
                     </div>
                     @if ($errors->has('summary_total_cost_pro'))
                         <span class="help-block">
@@ -101,21 +102,21 @@
                       <div class="fg-line">
                         <div class="radio m-b-15">
                           <label>
-                              <input type="radio" name="top_type" value="bulk" {{ (old('top_type')=='bulk') ? 'checked' : '' }}>
+                              <input type="radio" name="top_type" value="bulk" {{ ($summary->top_type=='bulk') ? 'checked' : '' }}>
                               <i class="input-helper"></i>
                               Bulk
                             </label>
                         </div>
                         <div class="radio m-b-15">
                           <label>
-                              <input type="radio" name="top_type" value="termin" {{ (old('top_type')=='termin') ? 'checked' : '' }}>
+                              <input type="radio" name="top_type" value="termin" {{ ($summary->top_type=='termin') ? 'checked' : '' }}>
                               <i class="input-helper"></i>
                               Termin
                             </label>
                         </div>
                         <div class="radio m-b-15">
                           <label>
-                              <input type="radio" name="top_type" value="insertion" {{ (old('top_type')=='insertion') ? 'checked' : '' }}>
+                              <input type="radio" name="top_type" value="insertion" {{ ($summary->top_type=='insertion') ? 'checked' : '' }}>
                               <i class="input-helper"></i>
                               Insertion
                             </label>
@@ -132,7 +133,7 @@
                 <label for="summary_notes" class="col-sm-2 control-label">Notes</label>
                 <div class="col-sm-10">
                   <div class="fg-line">
-                    <textarea name="summary_notes" id="summary_notes" class="form-control input-sm" placeholder="Summary Notes">{{ old('summary_notes') }}</textarea>
+                    <textarea name="summary_notes" id="summary_notes" class="form-control input-sm" placeholder="Summary Notes">{{ $summary->summary_notes }}</textarea>
                   </div>
                   @if ($errors->has('summary_notes'))
                         <span class="help-block">

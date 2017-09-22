@@ -29,7 +29,7 @@
                                 <tr>
                                     <th data-column-id="updated_at" data-order="desc">Last Updated</th>
                                     <th data-column-id="proposal_name" data-order="asc">Title</th>
-                                    <th data-column-id="proposal_no" data-order="asc">Proposal No</th>
+                                    <th data-column-id="summary_order_no" data-order="asc">Order No</th>
                                     <th data-column-id="user_firstname" data-order="asc">Created By</th>
                                     @can('Summary-Update')
                                         @can('Summary-Approval')
@@ -58,7 +58,7 @@
                                 <tr>
                                     <th data-column-id="updated_at" data-order="desc">Last Updated</th>
                                     <th data-column-id="proposal_name" data-order="asc">Title</th>
-                                    <th data-column-id="proposal_no" data-order="asc">Proposal No</th>
+                                    <th data-column-id="summary_order_no" data-order="asc">Order No</th>
                                     <th data-column-id="user_firstname" data-order="asc">Current User</th>
                                     @can('Summary-Delete')
                                         <th data-column-id="link" data-formatter="link-rd" data-sortable="false">Action</th>
@@ -81,7 +81,7 @@
                                 <tr>
                                     <th data-column-id="updated_at" data-order="desc">Last Updated</th>
                                     <th data-column-id="proposal_name" data-order="asc">Title</th>
-                                    <th data-column-id="summary_order_no" data-order="asc">Summary Order No</th>
+                                    <th data-column-id="summary_order_no" data-order="asc">Order No</th>
                                     <th data-column-id="user_firstname" data-order="asc">Created By</th>
                                     <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
                                 </tr>
@@ -100,7 +100,7 @@
                                 <tr>
                                     <th data-column-id="updated_at" data-order="desc">Last Updated</th>
                                     <th data-column-id="proposal_name" data-order="asc">Title</th>
-                                    <th data-column-id="proposal_no" data-order="asc">Proposal No</th>
+                                    <th data-column-id="summary_order_no" data-order="asc">Order No</th>
                                     <th data-column-id="user_firstname" data-order="asc">Created By</th>
                                     <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
                                 </tr>

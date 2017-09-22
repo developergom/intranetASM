@@ -146,17 +146,9 @@ $("#grid-data-finished").bootgrid({
         {
             if(uid==row.user_id) {
                 var html = '';
-                if(row.proposal_status_id==1) {
-                    //sold
-                    html = '<a title="View Summary" href="' + base_url + 'workorder/summary/' + row.summary_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.summary_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                        +'<a title="Create Summary" href="' + base_url + 'workorder/summary/create/' + row.summary_id + '" class="btn btn-icon waves-effect waves-circle" type="button" data-row-id="' + row.summary_id + '"><span class="zmdi zmdi-assignment"></span></a>&nbsp;&nbsp;';
-                }else if(row.proposal_status_id==2){
-                    html = '<a title="View Summary" href="' + base_url + 'workorder/summary/' + row.summary_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.summary_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
-                }else{
-                    html = '<a title="View Summary" href="' + base_url + 'workorder/summary/' + row.summary_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.summary_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                        +'<a title="Update Status Summary" href="' + base_url + 'workorder/summary/update_status/' + row.summary_id + '" class="btn btn-icon waves-effect waves-circle" type="button" data-row-id="' + row.summary_id + '"><span class="zmdi zmdi-alert-triangle"></span></a>&nbsp;&nbsp;';
-                }
                 
+                html = '<a title="View Summary" href="' + base_url + 'workorder/summary/' + row.summary_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.summary_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                        +'<a title="Edit Summary" href="' + base_url + 'workorder/summary/' + row.summary_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.summary_id + '"><span class="zmdi zmdi-edit"></span></a>';
 
                 return html;
             }else{

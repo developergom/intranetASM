@@ -272,6 +272,20 @@ var
     }*/
   });
 
+
+$(document).ready(function(){
+  $.ajax({
+    url: base_url + 'workorder/summary/api/loadDetails',
+    dataType: 'json',
+    method: 'GET',
+    success: function (response) {
+      var data = response;
+
+      hot1.loadData(data);
+    }
+  });
+});
+
   //hot1.loadData(data);
 
   function calculateTotal(hot)

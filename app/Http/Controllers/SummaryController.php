@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Carbon\Carbon;
 
+use Excel;
 use File;
 use Gate;
 use App\Http\Requests;
@@ -57,6 +58,8 @@ class SummaryController extends Controller
 
         $data = array();
 
+        //$this->exportToExcel(13);
+
         return view('vendor.material.workorder.summary.list', $data);
     }
 
@@ -67,6 +70,10 @@ class SummaryController extends Controller
      */
     public function create($proposal_id)
     {
+        if(Gate::denies('Summary-Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data['proposal'] = Proposal::with(
                                         'proposaltype', 
                                         'proposalmethod', 
@@ -124,6 +131,7 @@ class SummaryController extends Controller
         $obj->summary_total_internal_omzet = $request->input('summary_total_internal_omzet');
         $obj->summary_total_media_cost = $request->input('summary_total_media_cost');
         $obj->summary_total_cost_pro = $request->input('summary_total_cost_pro');
+        $obj->summary_notes = $request->input('summary_notes');
         $obj->top_type = $request->input('top_type');
         $obj->flow_no = $nextFlow['flow_no'];
         $obj->current_user = $nextFlow['current_user'];
@@ -197,7 +205,29 @@ class SummaryController extends Controller
      */
     public function show($id)
     {
-        //
+        if(Gate::denies('Summary-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $summary = Summary::find($id);
+
+        $data['summary'] = Summary::with(
+                    'summaryitems', 
+                    'proposal', 
+                    'proposal.brand', 
+                    'proposal.medias', 
+                    'proposal.client', 
+                    'proposal.client.clienttype', 
+                    'proposal.client_contacts', 
+                    'proposal.industries', 
+                    'summaryitems.rate', 
+                    'summaryitems.rate.media', 
+                    'summaryitems.omzettype'
+                )->whereHas('summaryitems', function($query) use ($summary){
+                    $query->where('revision_no', '=', $summary->revision_no);
+                })->find($id);
+
+        return view('vendor.material.workorder.summary.show', $data);
     }
 
     /**
@@ -208,7 +238,42 @@ class SummaryController extends Controller
      */
     public function edit($id)
     {
-        //
+        if(Gate::denies('Summary-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $summary = Summary::find($id);
+
+        $data['summary'] = Summary::with(
+                    'summaryitems', 
+                    'proposal', 
+                    'proposal.brand', 
+                    'proposal.medias', 
+                    'proposal.client', 
+                    'proposal.client.clienttype', 
+                    'proposal.client_contacts', 
+                    'proposal.industries', 
+                    'summaryitems.rate', 
+                    'summaryitems.rate.media', 
+                    'summaryitems.omzettype'
+                )->whereHas('summaryitems', function($query) use ($summary){
+                    $query->where('revision_no', '=', $summary->revision_no);
+                })->find($id);
+
+        $data['proposal'] = Proposal::with(
+                                        'proposaltype', 
+                                        'proposalmethod', 
+                                        'proposalstatus',
+                                        'industries', 
+                                        'client_contacts',
+                                        'client',
+                                        'brand',
+                                        'medias',
+                                        'uploadfiles',
+                                        'inventoriesplanner'
+                                        )->find($summary->proposal_id);
+
+        return view('vendor.material.workorder.summary.edit', $data);
     }
 
     /**
@@ -261,7 +326,7 @@ class SummaryController extends Controller
         $data['searchPhrase'] = $searchPhrase;
 
         if($listtype == 'onprocess') {
-            $data['rows'] = Summary::select('summaries.summary_id', 'proposal_name', 'proposal_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
+            $data['rows'] = Summary::select('summaries.summary_id', 'proposal_name', 'summary_order_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
                                 ->join('users','users.user_id', '=', 'summaries.current_user')
                                 ->where('summaries.flow_no','<>','98')
@@ -280,7 +345,7 @@ class SummaryController extends Controller
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = Summary::select('summaries.summary_id', 'proposal_name', 'proposal_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
+            $data['total'] = Summary::select('summaries.summary_id', 'proposal_name', 'summary_order_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
                                 ->join('users','users.user_id', '=', 'summaries.current_user')
                                 ->where('summaries.flow_no','<>','98')
@@ -298,7 +363,7 @@ class SummaryController extends Controller
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })->count();    
         }elseif($listtype == 'needchecking') {
-            $data['rows'] = Summary::select('summaries.summary_id', 'proposal_name', 'proposal_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
+            $data['rows'] = Summary::select('summaries.summary_id', 'proposal_name', 'summary_order_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
                                 ->join('users','users.user_id', '=', 'summaries.current_user')
                                 ->where('summaries.active','1')
@@ -312,7 +377,7 @@ class SummaryController extends Controller
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = Summary::select('summaries.summary_id', 'proposal_name', 'proposal_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
+            $data['total'] = Summary::select('summaries.summary_id', 'proposal_name', 'summary_order_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
                                 ->join('users','users.user_id', '=', 'summaries.current_user')
                                 ->where('summaries.active','1')
@@ -325,7 +390,7 @@ class SummaryController extends Controller
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })->count();
         }elseif($listtype == 'finished') {
-            $data['rows'] =  Summary::select('summaries.summary_id', 'summary_order_no', 'proposal_name', 'proposal_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
+            $data['rows'] =  Summary::select('summaries.summary_id', 'summary_order_no', 'proposal_name' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no', 'users.user_id')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
                                 ->join('users','users.user_id', '=', 'summaries.created_by')
                                 ->where('summaries.active','1')
@@ -341,7 +406,7 @@ class SummaryController extends Controller
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = Summary::select('summaries.summary_id', 'summary_order_no', 'proposal_name', 'proposal_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
+            $data['total'] = Summary::select('summaries.summary_id', 'summary_order_no', 'proposal_name', 'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no', 'users.user_id')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
                                 ->join('users','users.user_id', '=', 'summaries.created_by')
                                 ->where('summaries.active','1')
@@ -356,7 +421,7 @@ class SummaryController extends Controller
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })->count();
         }elseif($listtype == 'canceled') {
-            $data['rows'] = Summary::select('summaries.summary_id', 'summary_order_no', 'proposal_name', 'proposal_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
+            $data['rows'] = Summary::select('summaries.summary_id', 'summary_order_no', 'proposal_name', 'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
                                 ->join('users','users.user_id', '=', 'summaries.created_by')
                                 ->where('summaries.active','0')
@@ -371,7 +436,7 @@ class SummaryController extends Controller
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = Summary::select('summaries.summary_id', 'summary_order_no', 'proposal_name', 'proposal_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
+            $data['total'] = Summary::select('summaries.summary_id', 'summary_order_no', 'proposal_name', 'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
                                 ->join('users','users.user_id', '=', 'summaries.created_by')
                                 ->where('summaries.active','0')
@@ -402,5 +467,304 @@ class SummaryController extends Controller
         }
 
         $request->session()->put('summary_details_' . $request->user()->user_id, $details);
+    }
+
+    public function apiLoadDetails(Request $request)
+    {
+        $data = array();
+        if($request->session()->has('summary_details_' . $request->user()->user_id)) {
+            $data = $request->session()->get('summary_details_' . $request->user()->user_id);
+        }
+
+        return response()->json($data);
+    }
+
+    private function exportToExcel($summary_id)
+    {
+        $data = Summary::with('summaryitems', 'proposal', 'proposal.brand', 'proposal.medias', 'proposal', 'proposal.client', 'proposal.client.clienttype', 'proposal.client_contacts', 'proposal.industries', 'summaryitems.rate', 'summaryitems.rate.media', 'summaryitems.omzettype')->find($summary_id);
+
+        //dd($summary);
+
+        Excel::create('Summary - ' . $data->proposal->proposal_name . ' Revision No = ' . $data->revision_no, function($excel) use($data) {
+
+            $excel->sheet('SUMMARY', function($sheet) use($data) {
+
+                $summaryitems = array();
+                foreach($data->summaryitems as $key => $value)
+                {
+                    $item = array(
+                                $key+1,
+                                $value->summary_item_type,
+                                $value->rate->media->media_name,
+                                $value->summary_item_period_start . '-' . $value->summary_item_period_end,
+                                $value->rate->rate_name,
+                                $value->omzettype->omzet_type_name,
+                                $value->summary_item_insertion,
+                                $value->summary_item_gross,
+                                $value->summary_item_disc,
+                                $value->summary_item_nett,
+                                '',
+                                $value->summary_item_internal_omzet,
+                                $value->summary_item_remarks
+                            );
+
+                    array_push($summaryitems, $item);
+                }
+
+                //dd($summaryitems);
+
+                $sheet->fromArray($summaryitems);
+
+                $sheet->prependRow(1, array(
+                    ''
+                ));
+
+                $sheet->prependRow(2, array(
+                    'NAMA PT', '', '', 'SALES AGENT', 'ORDER FO', '', '', 'INDUSTRY/BRAND', '', '', 'PAYER', ': ' . $data->proposal->client->clienttype->client_type_name, ''
+                ));
+
+                $industry = '';
+                foreach($data->proposal->industries as $row){
+                    $industry .= $row->industry_name . ', ';
+                }
+
+                $sheet->prependRow(3, array(
+                                        'PT ...', '', '',
+                                        $data->proposal->created_by->user_firstname . ' ' . $data->proposal->created_by->user_lastname,
+                                        'NO ORDER', ': ' . $data->summary_order_no, '',
+                                        'INDUSTRY', ': ' . $industry, '',
+                                        'BILL TO PARTY', ': ' . $data->proposal->client->client_name, ''
+                                    ));
+
+                $media = '';
+                foreach($data->proposal->medias as $row){
+                    $media .= $row->media_name . ', ';
+                }
+                $sheet->prependRow(4, array(
+                                        '', '', '', '',
+                                        'MEDIA', ': ' . $media, '',
+                                        'COMPANY', ':', '',
+                                        'PIC', '', ''
+                                    ));
+
+                $client_contact_name = '';
+                $client_contact_position = '';
+                $client_contact_phone = '';
+                foreach($data->proposal->client_contacts as $row){
+                    $client_contact_name .= $row->client_contact_name;
+                    $client_contact_position .= $row->client_contact_position;
+                    $client_contact_phone .= $row->client_contact_phone;
+                }
+                $sheet->prependRow(5, array(
+                                        '', '', '', '',
+                                        'Attn. No', ': ', '',
+                                        'BRAND', ': ' . $data->proposal->brand->brand_name, '',
+                                        'NAMA', ': ' . $client_contact_name, ''
+                                    ));
+
+                $sheet->prependRow(6, array(
+                                        'Jl Panjang 8A Kebon Jeruk Jakarta Barat', '', '', '',
+                                        'Tgl Penyerahan', ': ', '',
+                                        'ALAMAT', ': ', '',
+                                        'JABATAN', ': ' . $client_contact_position, ''
+                                    ));
+
+                $sheet->prependRow(7, array(
+                                        'Telp 5330150 ext. 32143', '', '', '',
+                                        '', '', '',
+                                        '', '', '',
+                                        'NO. CP', ': ' . $client_contact_phone, ''
+                                    ));
+
+                $sheet->prependRow(8, array(
+                    ''
+                ));
+
+                $sheet->prependRow(9, array(
+                                        'No',
+                                        'Type',
+                                        'Media',
+                                        'Tgl Tayang',
+                                        'Jenis Iklan',
+                                        'Jenis Omzet',
+                                        'Ins',
+                                        'Gross/Ins',
+                                        'Disc(%)', 
+                                        'Netto',
+                                        'PO Klien',
+                                        'Omzet Internal',
+                                        'Remarks'
+                                    ));
+
+                $sheet->appendRow(array(
+                                        '','','','','','',
+                                        'Total',
+                                        $data->summary_total_gross,
+                                        $data->summary_total_disc,
+                                        $data->summary_total_nett,
+                                        '',
+                                        $data->summary_total_internal_omzet,
+                                        ''
+                                    ));
+
+                $sheet->appendRow(array(''));
+
+                $sheet->mergeCells('A1:C1');
+                $sheet->mergeCells('A2:C2');
+                $sheet->mergeCells('A3:C3');
+                $sheet->mergeCells('A4:C4');
+                $sheet->mergeCells('A5:C5');
+                $sheet->mergeCells('A6:C6');
+                $sheet->mergeCells('A7:C7');
+                $sheet->mergeCells('A8:C8');
+
+                $sheet->mergeCells('E2:G2');
+                $sheet->mergeCells('F3:G3');
+                $sheet->mergeCells('F4:G4');
+                $sheet->mergeCells('F5:G5');
+                $sheet->mergeCells('F6:G6');
+                $sheet->mergeCells('F7:G7');
+                $sheet->mergeCells('F8:G8');
+
+                $sheet->mergeCells('H2:J2');
+                $sheet->mergeCells('I3:J3');
+                $sheet->mergeCells('I4:J4');
+                $sheet->mergeCells('I5:J5');
+                $sheet->mergeCells('I6:J6');
+                $sheet->mergeCells('I7:J7');
+                $sheet->mergeCells('I8:J8');
+
+                $sheet->mergeCells('L2:M2');
+                $sheet->mergeCells('L3:M3');
+                $sheet->mergeCells('L4:M4');
+                $sheet->mergeCells('L5:M5');
+                $sheet->mergeCells('L6:M6');
+                $sheet->mergeCells('L7:M7');
+                $sheet->mergeCells('L8:M8');
+
+                $sheet->setBorder('A2:M7', 'thin');
+                $sheet->setBorder('A9:M9', 'thin');
+
+
+            });
+
+
+
+        })->export('xlsx');
+    }
+
+    public function action(Request $request, $flow_no, $id)
+    {
+        if(Gate::denies('Summary-Approval')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $flow = new FlowLibrary;
+        $url = $flow->getCurrentUrl($this->flow_group_id, $flow_no);
+
+        return redirect($url . $flow_no . '/' . $id);
+    }
+
+    public function postAction(Request $request, $flow_no, $id)
+    {
+        return redirect('workorder/summary');
+    }
+
+    public function approve(Request $request, $flow_no, $id)
+    {
+        $summary = Summary::find($id);
+
+        $data['summary'] = Summary::with(
+                    'summaryitems', 
+                    'proposal', 
+                    'proposal.brand', 
+                    'proposal.medias', 
+                    'proposal.client', 
+                    'proposal.client.clienttype', 
+                    'proposal.client_contacts', 
+                    'proposal.industries', 
+                    'summaryitems.rate', 
+                    'summaryitems.rate.media', 
+                    'summaryitems.omzettype'
+                )->whereHas('summaryitems', function($query) use ($summary){
+                    $query->where('revision_no', $summary->revision_no);
+                })->find($id);
+
+        return view('vendor.material.workorder.summary.approve', $data);
+    }
+
+    public function postApprove(Request $request, $flow_no, $id)
+    {
+        $this->validate($request, [
+            'approval' => 'required',
+            'messages' => 'required',
+        ]);
+
+        if($request->input('approval') == '1') 
+        {
+            //approve
+            $summary = Summary::find($id);
+            $manual_user = $request->input('manual_user');
+
+            $flow = new FlowLibrary;
+            $nextFlow = $flow->getNextFlow($this->flow_group_id, $summary->flow_no, $request->user()->user_id, $summary->pic, $summary->created_by->user_id, $manual_user);
+
+            $summary->flow_no = $nextFlow['flow_no'];
+            $summary->current_user = $nextFlow['current_user'];
+            $summary->updated_by = $request->user()->user_id;
+            $summary->save();
+
+            $his = new SummaryHistory;
+            $his->summary_id = $id;
+            $his->approval_type_id = 2;
+            $his->summary_history_text = $request->input('messages');
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
+            $this->notif->remove($request->user()->user_id, 'summaryapproval', $summary->summary_id);
+            $this->notif->remove($request->user()->user_id, 'summaryrejected', $summary->summary_id);
+
+            if($summary->flow_no!=98){
+                $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'summaryapproval', 'You have to check summary "' . $summary->summary_order_no . '".', $id);
+            }else{
+                $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'summaryfinished', 'Summary "' . $summary->summary_order_no . '" has been finished.', $id);
+            }
+            
+
+            $request->session()->flash('status', 'Data has been saved!');
+
+        }else{
+            //reject
+            $summary = Summary::find($id);
+            $manual_user = $request->input('manual_user');
+
+            $flow = new FlowLibrary;
+            $prevFlow = $flow->getPreviousFlow($this->flow_group_id, $summary->flow_no, $request->user()->user_id, $summary->pic, $summary->created_by->user_id, $manual_user);
+
+            $summary->flow_no = $prevFlow['flow_no'];
+            $summary->revision_no = $summary->revision_no + 1;
+            $summary->current_user = $prevFlow['current_user'];
+            $summary->updated_by = $request->user()->user_id;
+            $summary->save();
+
+            $his = new SummaryHistory;
+            $his->summary_id = $id;
+            $his->approval_type_id = 3;
+            $his->summary_history_text = $request->input('messages');
+            $his->active = '1';
+            $his->created_by = $request->user()->user_id;
+
+            $his->save();
+
+            $this->notif->remove($request->user()->user_id, 'summaryapproval', $summary->summary_id);
+            $this->notif->remove($request->user()->user_id, 'summaryrejected', $summary->summary_id);
+            $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'summaryrejected', 'Summary "' . $summary->summary_order_no . '" rejected.', $id);
+
+            $request->session()->flash('status', 'Data has been saved!');
+        }
+
+        return redirect('workorder/summary');
     }
 }

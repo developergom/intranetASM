@@ -412,6 +412,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('summary/apiList/{listtype}', 'SummaryController@apiList');
         Route::resource('summary', 'SummaryController');
         Route::post('summary/api/saveDetails', 'SummaryController@apiSaveDetails');
+        Route::get('summary/api/loadDetails', 'SummaryController@apiLoadDetails');
+        Route::get('summary/action/{flow_no}/{id}', 'SummaryController@action');
+        Route::post('summary/action/{flow_no}/{id}', 'SummaryController@postAction');
+        Route::get('summary/approval/{flow_no}/{id}', 'SummaryController@approve');
+        Route::post('summary/approval/{flow_no}/{id}', 'SummaryController@postApprove');
     });
 
     Route::group(['prefix' => 'grid'], function() {
