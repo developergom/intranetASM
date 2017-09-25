@@ -605,6 +605,20 @@ class SummaryController extends Controller
         return response()->json(200);
     }
 
+    public function apiGetDetails(Request $request)
+    {
+        $summary_id = $request->summary_id;
+        $revision_no = $request->revision_no;
+
+        $details = SummaryItem::with('rate', 'rate.media', 'omzettype')
+                                    ->where('summary_id', $summary_id)
+                                    ->where('revision_no', $revision_no)
+                                    ->where('active', 1)
+                                    ->get();
+
+        return response()->json($details);
+    }
+
     private function exportToExcel($summary_id)
     {
         $data = Summary::with('summaryitems', 'proposal', 'proposal.brand', 'proposal.medias', 'proposal', 'proposal.client', 'proposal.client.clienttype', 'proposal.client_contacts', 'proposal.industries', 'summaryitems.rate', 'summaryitems.rate.media', 'summaryitems.omzettype')->find($summary_id);

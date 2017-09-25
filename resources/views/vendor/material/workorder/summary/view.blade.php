@@ -1,7 +1,13 @@
+@section('vendorcss')
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
+<link href="{{ url('css/ajax-bootstrap-select.min.css') }}" rel="stylesheet">
+@endsection
+
 <div class="form-group">
     <label for="proposal_no" class="col-sm-2 control-label">Proposal No</label>
     <div class="col-sm-10">
         <div class="fg-line">
+            <input type="hidden" id="summary_id" value="{{ $summary->summary_id }}">
             <input type="text" class="form-control input-sm" id="proposal_no" readonly="true" value="{{ $summary->proposal->proposal_no }}">
         </div>
     </div>
@@ -96,7 +102,15 @@
     <label for="revision_no" class="col-sm-2 control-label">Revision</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input type="text" class="form-control input-sm" id="revision_no" readonly="true" value="{{ $summary->revision_no }}">
+            <select name="revision_no" id="revision_no" class="selectpicker" data-live-search="true" required="true">
+                @for($i = 0;$i <= $summary->revision_no;$i++)
+                    {!! $selected = '' !!}
+                    @if($i==$summary->revision_no)
+                        {!! $selected = 'selected' !!}
+                    @endif
+                    <option value="{{ $i }}" {{ $selected }}>{{ $i }}</option> 
+                @endfor
+            </select>
         </div>
     </div>
 </div>
@@ -119,7 +133,7 @@
 <hr/>
 <div class="form-group">
     <div class="col-sm-12 table-responsive">
-        <table class="table">
+        <table id="details-table" class="table">
             <thead>
                 <tr>
                     <th>Type</th>
@@ -212,5 +226,80 @@
     </div>
 </div>
 
+@section('vendorjs')
+<script src="{{ url('js/bootstrap-select.min.js') }}"></script>
+<script src="{{ url('js/ajax-bootstrap-select.min.js') }}"></script>
+@endsection
+
 @section('customjs')
+<script type="text/javascript">
+    $('#revision_no').change(function() {
+        var rev = $(this).val();
+        var summary_id = $('#summary_id').val();
+
+        $('#details-table tbody').empty();
+        $('#details-table tfoot').empty();
+        $('#details-table tbody').append('<center>Loading...</center>');
+
+        $.ajax({
+            url: base_url + 'workorder/summary/api/getDetails',
+            dataType: 'json',
+            method: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                revision_no: rev,
+                summary_id: summary_id
+            },
+            success: function (response) {
+              var body = '';
+              var foot = '';
+              var total_gross = 0;
+              var total_disc = 0;
+              var total_nett = 0;
+              var total_omzet = 0;
+
+              $.each(response, function(key, value){
+                body += '<tr>';
+                    body += '<td>' + value.summary_item_type + '</td>';
+                    body += '<td>' + value.rate.media.media_name + '</td>';
+                    body += '<td>' + ((value.summary_item_period_start=='0000-00-00') ? '-' : value.summary_item_period_start) + '</td>';
+                    body += '<td>' + ((value.summary_item_period_end=='0000-00-00') ? '-' : value.summary_item_period_end) + '</td>';
+                    body += '<td>' + value.rate.rate_name + '</td>';
+                    body += '<td>' + value.omzettype.omzet_type_name + '</td>';
+                    body += '<td>' + value.summary_item_insertion + '</td>';
+                    body += '<td>' + previewMoney(value.summary_item_gross) + '</td>';
+                    body += '<td>' + value.summary_item_disc + '</td>';
+                    body += '<td>' + previewMoney(value.summary_item_nett) + '</td>';
+                    body += '<td>' + previewMoney(value.summary_item_internal_omzet) + '</td>';
+                    body += '<td>' + value.summary_item_termin + '</td>';
+                    body += '<td>' + value.summary_item_viewed + '</td>';
+                    body += '<td>' + value.summary_item_remarks + '</td>';
+                body += '</tr>';
+
+                total_gross += value.summary_item_gross;
+                total_nett += value.summary_item_nett;
+                total_omzet += value.summary_item_internal_omzet;
+              });
+
+              total_disc = Math.ceil((total_gross-total_nett)/total_gross*100);
+
+              $('#details-table tbody').empty();
+              $('#details-table tbody').append(body);
+
+              foot += '<tr>';
+                foot += '<th colspan="7">Total</th>';
+                foot += '<th>' + previewMoney(total_gross) + '</th>';
+                foot += '<th>' + total_disc + '</th>';
+                foot += '<th>' + previewMoney(total_nett) + '</th>';
+                foot += '<th>' + previewMoney(total_omzet) + '</th>';
+                foot += '<th></th>';
+                foot += '<th></th>';
+                foot += '<th></th>';
+              foot += '</tr>';
+
+              $('#details-table tfoot').append(foot);
+            }
+          });
+    });
+</script>
 @endsection

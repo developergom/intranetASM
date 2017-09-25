@@ -413,6 +413,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::resource('summary', 'SummaryController');
         Route::post('summary/api/saveDetails', 'SummaryController@apiSaveDetails');
         Route::get('summary/api/loadDetails', 'SummaryController@apiLoadDetails');
+        Route::post('summary/api/getDetails', 'SummaryController@apiGetDetails');
         Route::get('summary/api/exportXls/{id}', 'SummaryController@apiExportXls');
         Route::get('summary/action/{flow_no}/{id}', 'SummaryController@action');
         Route::post('summary/action/{flow_no}/{id}', 'SummaryController@postAction');
