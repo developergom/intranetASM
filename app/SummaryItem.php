@@ -11,6 +11,7 @@ class SummaryItem extends Model
 
 	protected $fillable = [
 				'rate_id', 
+				'summary_id',
 				'summary_item_type',
 				'summary_item_period_start',
 				'summary_item_period_end',

@@ -148,7 +148,7 @@ $("#grid-data-finished").bootgrid({
                 var html = '';
                 
                 html = '<a title="View Summary" href="' + base_url + 'workorder/summary/' + row.summary_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.summary_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                        +'<a title="Edit Summary" href="' + base_url + 'workorder/summary/' + row.summary_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.summary_id + '"><span class="zmdi zmdi-edit"></span></a>';
+                        +'<a title="Edit Summary" href="' + base_url + 'workorder/summary/renew/' + row.summary_id + '" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.summary_id + '"><span class="zmdi zmdi-edit"></span></a>';
 
                 return html;
             }else{

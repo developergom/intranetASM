@@ -140,22 +140,24 @@
             </thead>
             <tbody>
                 @foreach($summary->summaryitems as $row)
-                <tr>
-                    <td>{{ $row->summary_item_type }}</td>
-                    <td>{{ $row->rate->media->media_name }}</td>
-                    <td>{{ $row->summary_item_period_start }}</td>
-                    <td>{{ ($row->summary_item_period_end!='0000-00-00') ? $row->summary_item_period_end : '-' }}</td>
-                    <td>{{ $row->rate->rate_name }}</td>
-                    <td>{{ $row->omzettype->omzet_type_name }}</td>
-                    <td>{{ $row->summary_item_insertion }}</td>
-                    <td>{{ number_format($row->summary_item_gross) }}</td>
-                    <td>{{ $row->summary_item_disc }}</td>
-                    <td>{{ number_format($row->summary_item_nett) }}</td>
-                    <td>{{ number_format($row->summary_item_internal_omzet) }}</td>
-                    <td>{{ $row->summary_item_termin }}</td>
-                    <td>{{ $row->summary_item_viewed }}</td>
-                    <td>{{ $row->summary_item_remarks }}</td>
-                </tr>
+                    @if($row->revision_no == $summary->revision_no)
+                        <tr>
+                            <td>{{ $row->summary_item_type }}</td>
+                            <td>{{ $row->rate->media->media_name }}</td>
+                            <td>{{ $row->summary_item_period_start }}</td>
+                            <td>{{ ($row->summary_item_period_end!='0000-00-00') ? $row->summary_item_period_end : '-' }}</td>
+                            <td>{{ $row->rate->rate_name }}</td>
+                            <td>{{ $row->omzettype->omzet_type_name }}</td>
+                            <td>{{ $row->summary_item_insertion }}</td>
+                            <td>{{ number_format($row->summary_item_gross) }}</td>
+                            <td>{{ $row->summary_item_disc }}</td>
+                            <td>{{ number_format($row->summary_item_nett) }}</td>
+                            <td>{{ number_format($row->summary_item_internal_omzet) }}</td>
+                            <td>{{ $row->summary_item_termin }}</td>
+                            <td>{{ $row->summary_item_viewed }}</td>
+                            <td>{{ $row->summary_item_remarks }}</td>
+                        </tr>
+                    @endif
                 @endforeach
             </tbody>
             <tfoot>
@@ -201,3 +203,14 @@
         </div>
     </div>
 </div>
+<div class="form-group">
+    <label for="export" class="col-sm-2 control-label">Export</label>
+    <div class="col-sm-10">
+        @can('Summary-Download')
+            <a href="{{ url('workorder/summary/api/exportXls/' . $summary->summary_id) }}" target="_blank"><button class="btn btn-success waves-effect collapsed" type="button">Export to .xlsx</button></a>
+        @endcan
+    </div>
+</div>
+
+@section('customjs')
+@endsection

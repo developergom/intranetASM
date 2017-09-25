@@ -209,8 +209,6 @@ class SummaryController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $summary = Summary::find($id);
-
         $data['summary'] = Summary::with(
                     'summaryitems', 
                     'proposal', 
@@ -223,9 +221,7 @@ class SummaryController extends Controller
                     'summaryitems.rate', 
                     'summaryitems.rate.media', 
                     'summaryitems.omzettype'
-                )->whereHas('summaryitems', function($query) use ($summary){
-                    $query->where('revision_no', '=', $summary->revision_no);
-                })->find($id);
+                )->find($id);
 
         return view('vendor.material.workorder.summary.show', $data);
     }
@@ -236,7 +232,7 @@ class SummaryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         if(Gate::denies('Summary-Update')) {
             abort(403, 'Unauthorized action.');
@@ -256,9 +252,7 @@ class SummaryController extends Controller
                     'summaryitems.rate', 
                     'summaryitems.rate.media', 
                     'summaryitems.omzettype'
-                )->whereHas('summaryitems', function($query) use ($summary){
-                    $query->where('revision_no', '=', $summary->revision_no);
-                })->find($id);
+                )->find($id);
 
         $data['proposal'] = Proposal::with(
                                         'proposaltype', 
@@ -273,6 +267,46 @@ class SummaryController extends Controller
                                         'inventoriesplanner'
                                         )->find($summary->proposal_id);
 
+        if($data['summary']->summaryitems->count() > 0)
+        {
+            $details = array();
+            $no = 1;
+            foreach($data['summary']->summaryitems as $key => $value)
+            {
+                if($value->revision_no==$summary->revision_no-1)
+                {
+                    $arr = [
+                        $no,
+                        $value->summary_item_type,
+                        $value->rate->rate_name,
+                        $value->rate->media->media_name,
+                        ($value->summary_item_period_start=='0000-00-00') ? '' : Carbon::createFromFormat('Y-m-d', $value->summary_item_period_start)->format('d/m/Y'),
+                        ($value->summary_item_period_end=='0000-00-00') ? '' : Carbon::createFromFormat('Y-m-d', $value->summary_item_period_end)->format('d/m/Y'),
+                        $value->omzettype->omzet_type_name,
+                        $value->summary_item_insertion,
+                        $value->summary_item_gross,
+                        $value->summary_item_disc,
+                        $value->summary_item_nett,
+                        $value->summary_item_internal_omzet,
+                        $value->summary_item_remarks,
+                        $value->summary_item_termin,
+                        $value->summary_item_viewed
+                    ];
+
+                    array_push($details, $arr);
+                    $no++;
+                }
+            }
+
+            //store details to session
+            if($request->session()->has('summary_details_' . $request->user()->user_id)) {
+                $request->session()->forget('summary_details_' . $request->user()->user_id);
+            }
+
+            $request->session()->put('summary_details_' . $request->user()->user_id, $details);
+        }
+        
+
         return view('vendor.material.workorder.summary.edit', $data);
     }
 
@@ -285,7 +319,88 @@ class SummaryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,
+            [
+                'proposal_id' => 'required|numeric',
+                'summary_total_gross' => 'required|numeric',
+                'summary_total_discount' => 'required|numeric',
+                'summary_total_nett' => 'required|numeric',
+                'summary_total_internal_omzet' => 'required|numeric',
+                'summary_total_media_cost' => 'required|numeric',
+                'summary_total_cost_pro' => 'required|numeric',
+                'top_type' => 'required',
+                'summary_notes' => 'required',
+                'messages' => 'required'
+            ]
+        );
+
+        $flow = new FlowLibrary;
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
+
+        $obj = Summary::find($id);
+        $obj->proposal_id = $request->input('proposal_id');
+        $obj->summary_total_gross = $request->input('summary_total_gross');
+        $obj->summary_total_disc = $request->input('summary_total_discount');
+        $obj->summary_total_nett = $request->input('summary_total_nett');
+        $obj->summary_total_internal_omzet = $request->input('summary_total_internal_omzet');
+        $obj->summary_total_media_cost = $request->input('summary_total_media_cost');
+        $obj->summary_total_cost_pro = $request->input('summary_total_cost_pro');
+        $obj->summary_notes = $request->input('summary_notes');
+        $obj->top_type = $request->input('top_type');
+        $obj->flow_no = $nextFlow['flow_no'];
+        $obj->current_user = $nextFlow['current_user'];
+        $obj->updated_by = $request->user()->user_id;
+
+        $obj->save();
+
+        $hot = $request->session()->get('summary_details_' . $request->user()->user_id);
+
+        for($i = 0;$i < (count($hot)-1);$i++)
+        {
+            //dd($hot[$i]);
+
+            $rate = Rate::where('rate_name', $hot[$i][2])->where('active', 1)->first();
+            $omzettype = OmzetType::where('omzet_type_name', $hot[$i][6])->where('active', 1)->first();
+
+            $detail = new SummaryItem;
+            $detail->rate_id = $rate->rate_id;
+            $detail->summary_id = $obj->summary_id;
+            $detail->summary_item_type = $hot[$i][1];
+            $detail->summary_item_period_start = ($hot[$i][4]!='') ? Carbon::createFromFormat('d/m/Y', $hot[$i][4])->toDateString() : '';
+            $detail->summary_item_period_end = ($hot[$i][5]!='') ? Carbon::createFromFormat('d/m/Y', $hot[$i][5])->toDateString() : '';
+            $detail->omzet_type_id = $omzettype->omzet_type_id;
+            $detail->summary_item_insertion = $hot[$i][7];
+            $detail->summary_item_gross = $hot[$i][8];
+            $detail->summary_item_disc = $hot[$i][9];
+            $detail->summary_item_nett = $hot[$i][10];
+            $detail->summary_item_internal_omzet = $hot[$i][11];
+            $detail->summary_item_remarks = $hot[$i][12];
+            $detail->summary_item_termin = $hot[$i][13];
+            $detail->summary_item_viewed = $hot[$i][14];
+            $detail->revision_no = $obj->revision_no;
+            $detail->active = '1';
+            $detail->created_by = $request->user()->user_id;
+
+            $detail->save();
+        }
+
+        $his = new SummaryHistory;
+        $his->summary_id = $obj->summary_id;
+        $his->approval_type_id = 1;
+        $his->summary_history_text = $request->input('messages');
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        $this->notif->remove($request->user()->user_id, 'summaryapproval', $obj->summary_id);
+        $this->notif->remove($request->user()->user_id, 'summaryrejected', $obj->summary_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'summaryapproval', 'Please check Summary', $obj->summary_id);
+
+        $request->session()->forget('summary_details_' . $request->user()->user_id);
+        $request->session()->flash('status', 'Data has been saved!');
+
+        return redirect('workorder/summary');
     }
 
     /**
@@ -395,10 +510,10 @@ class SummaryController extends Controller
                                 ->join('users','users.user_id', '=', 'summaries.created_by')
                                 ->where('summaries.active','1')
                                 ->where('summaries.flow_no','=','98')
-                                ->where(function($query) use($request, $subordinate){
+                                /*->where(function($query) use($request, $subordinate){
                                     $query->where('summaries.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('summaries.created_by', $subordinate);
-                                })
+                                })*/
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('proposal_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('summary_order_no','like','%' . $searchPhrase . '%')
@@ -411,10 +526,10 @@ class SummaryController extends Controller
                                 ->join('users','users.user_id', '=', 'summaries.created_by')
                                 ->where('summaries.active','1')
                                 ->where('summaries.flow_no','=','98')
-                                ->where(function($query) use($request, $subordinate){
+                                /*->where(function($query) use($request, $subordinate){
                                     $query->where('summaries.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('summaries.created_by', $subordinate);
-                                })
+                                })*/
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('proposal_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('summary_order_no','like','%' . $searchPhrase . '%')
@@ -479,6 +594,17 @@ class SummaryController extends Controller
         return response()->json($data);
     }
 
+    public function apiExportXls($id)
+    {
+        if(Gate::denies('Summary-Download')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $this->exportToExcel($id);
+
+        return response()->json(200);
+    }
+
     private function exportToExcel($summary_id)
     {
         $data = Summary::with('summaryitems', 'proposal', 'proposal.brand', 'proposal.medias', 'proposal', 'proposal.client', 'proposal.client.clienttype', 'proposal.client_contacts', 'proposal.industries', 'summaryitems.rate', 'summaryitems.rate.media', 'summaryitems.omzettype')->find($summary_id);
@@ -490,25 +616,30 @@ class SummaryController extends Controller
             $excel->sheet('SUMMARY', function($sheet) use($data) {
 
                 $summaryitems = array();
+                $no = 1;
                 foreach($data->summaryitems as $key => $value)
                 {
-                    $item = array(
-                                $key+1,
-                                $value->summary_item_type,
-                                $value->rate->media->media_name,
-                                $value->summary_item_period_start . '-' . $value->summary_item_period_end,
-                                $value->rate->rate_name,
-                                $value->omzettype->omzet_type_name,
-                                $value->summary_item_insertion,
-                                $value->summary_item_gross,
-                                $value->summary_item_disc,
-                                $value->summary_item_nett,
-                                '',
-                                $value->summary_item_internal_omzet,
-                                $value->summary_item_remarks
-                            );
+                    if($value->revision_no==$data->revision_no)
+                    {
+                        $item = array(
+                                    $no,
+                                    $value->summary_item_type,
+                                    $value->rate->media->media_name,
+                                    $value->summary_item_period_start . '-' . $value->summary_item_period_end,
+                                    $value->rate->rate_name,
+                                    $value->omzettype->omzet_type_name,
+                                    $value->summary_item_insertion,
+                                    $value->summary_item_gross,
+                                    $value->summary_item_disc,
+                                    $value->summary_item_nett,
+                                    '',
+                                    $value->summary_item_internal_omzet,
+                                    $value->summary_item_remarks
+                                );
 
-                    array_push($summaryitems, $item);
+                        array_push($summaryitems, $item);
+                        $no++;
+                    }
                 }
 
                 //dd($summaryitems);
@@ -672,8 +803,6 @@ class SummaryController extends Controller
 
     public function approve(Request $request, $flow_no, $id)
     {
-        $summary = Summary::find($id);
-
         $data['summary'] = Summary::with(
                     'summaryitems', 
                     'proposal', 
@@ -686,9 +815,7 @@ class SummaryController extends Controller
                     'summaryitems.rate', 
                     'summaryitems.rate.media', 
                     'summaryitems.omzettype'
-                )->whereHas('summaryitems', function($query) use ($summary){
-                    $query->where('revision_no', $summary->revision_no);
-                })->find($id);
+                )->find($id);
 
         return view('vendor.material.workorder.summary.approve', $data);
     }
@@ -764,6 +891,179 @@ class SummaryController extends Controller
 
             $request->session()->flash('status', 'Data has been saved!');
         }
+
+        return redirect('workorder/summary');
+    }
+
+    public function renew(Request $request, $id)
+    {
+        if(Gate::denies('Summary-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $summary = Summary::find($id);
+
+        $data['summary'] = Summary::with(
+                    'summaryitems', 
+                    'proposal', 
+                    'proposal.brand', 
+                    'proposal.medias', 
+                    'proposal.client', 
+                    'proposal.client.clienttype', 
+                    'proposal.client_contacts', 
+                    'proposal.industries', 
+                    'summaryitems.rate', 
+                    'summaryitems.rate.media', 
+                    'summaryitems.omzettype'
+                )->find($id);
+
+        $data['proposal'] = Proposal::with(
+                                        'proposaltype', 
+                                        'proposalmethod', 
+                                        'proposalstatus',
+                                        'industries', 
+                                        'client_contacts',
+                                        'client',
+                                        'brand',
+                                        'medias',
+                                        'uploadfiles',
+                                        'inventoriesplanner'
+                                        )->find($summary->proposal_id);
+
+        if($data['summary']->summaryitems->count() > 0)
+        {
+            $details = array();
+            $no = 1;
+            foreach($data['summary']->summaryitems as $key => $value)
+            {
+                if($value->revision_no==$summary->revision_no)
+                {
+                    $arr = [
+                        $no,
+                        $value->summary_item_type,
+                        $value->rate->rate_name,
+                        $value->rate->media->media_name,
+                        ($value->summary_item_period_start=='0000-00-00') ? '' : Carbon::createFromFormat('Y-m-d', $value->summary_item_period_start)->format('d/m/Y'),
+                        ($value->summary_item_period_end=='0000-00-00') ? '' : Carbon::createFromFormat('Y-m-d', $value->summary_item_period_end)->format('d/m/Y'),
+                        $value->omzettype->omzet_type_name,
+                        $value->summary_item_insertion,
+                        $value->summary_item_gross,
+                        $value->summary_item_disc,
+                        $value->summary_item_nett,
+                        $value->summary_item_internal_omzet,
+                        $value->summary_item_remarks,
+                        $value->summary_item_termin,
+                        $value->summary_item_viewed
+                    ];
+
+                    array_push($details, $arr);
+                    $no++;
+                }
+            }
+
+            //store details to session
+            if($request->session()->has('summary_details_' . $request->user()->user_id)) {
+                $request->session()->forget('summary_details_' . $request->user()->user_id);
+            }
+
+            $request->session()->put('summary_details_' . $request->user()->user_id, $details);
+        }
+        
+
+        return view('vendor.material.workorder.summary.renew', $data);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function postRenew(Request $request, $id)
+    {
+        $this->validate($request,
+            [
+                'proposal_id' => 'required|numeric',
+                'summary_total_gross' => 'required|numeric',
+                'summary_total_discount' => 'required|numeric',
+                'summary_total_nett' => 'required|numeric',
+                'summary_total_internal_omzet' => 'required|numeric',
+                'summary_total_media_cost' => 'required|numeric',
+                'summary_total_cost_pro' => 'required|numeric',
+                'top_type' => 'required',
+                'summary_notes' => 'required',
+                'messages' => 'required'
+            ]
+        );
+
+        $flow = new FlowLibrary;
+        $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
+
+        $obj = Summary::find($id);
+        $obj->proposal_id = $request->input('proposal_id');
+        $obj->summary_total_gross = $request->input('summary_total_gross');
+        $obj->summary_total_disc = $request->input('summary_total_discount');
+        $obj->summary_total_nett = $request->input('summary_total_nett');
+        $obj->summary_total_internal_omzet = $request->input('summary_total_internal_omzet');
+        $obj->summary_total_media_cost = $request->input('summary_total_media_cost');
+        $obj->summary_total_cost_pro = $request->input('summary_total_cost_pro');
+        $obj->summary_notes = $request->input('summary_notes');
+        $obj->top_type = $request->input('top_type');
+        $obj->flow_no = $nextFlow['flow_no'];
+        $obj->current_user = $nextFlow['current_user'];
+        $obj->revision_no = $obj->revision_no + 1;
+        $obj->updated_by = $request->user()->user_id;
+
+        $obj->save();
+
+        $hot = $request->session()->get('summary_details_' . $request->user()->user_id);
+
+        for($i = 0;$i < (count($hot)-1);$i++)
+        {
+            //dd($hot[$i]);
+
+            $rate = Rate::where('rate_name', $hot[$i][2])->where('active', 1)->first();
+            $omzettype = OmzetType::where('omzet_type_name', $hot[$i][6])->where('active', 1)->first();
+
+            $detail = new SummaryItem;
+            $detail->rate_id = $rate->rate_id;
+            $detail->summary_id = $obj->summary_id;
+            $detail->summary_item_type = $hot[$i][1];
+            $detail->summary_item_period_start = ($hot[$i][4]!='') ? Carbon::createFromFormat('d/m/Y', $hot[$i][4])->toDateString() : '';
+            $detail->summary_item_period_end = ($hot[$i][5]!='') ? Carbon::createFromFormat('d/m/Y', $hot[$i][5])->toDateString() : '';
+            $detail->omzet_type_id = $omzettype->omzet_type_id;
+            $detail->summary_item_insertion = $hot[$i][7];
+            $detail->summary_item_gross = $hot[$i][8];
+            $detail->summary_item_disc = $hot[$i][9];
+            $detail->summary_item_nett = $hot[$i][10];
+            $detail->summary_item_internal_omzet = $hot[$i][11];
+            $detail->summary_item_remarks = $hot[$i][12];
+            $detail->summary_item_termin = $hot[$i][13];
+            $detail->summary_item_viewed = $hot[$i][14];
+            $detail->revision_no = $obj->revision_no;
+            $detail->active = '1';
+            $detail->created_by = $request->user()->user_id;
+
+            $detail->save();
+        }
+
+        $his = new SummaryHistory;
+        $his->summary_id = $obj->summary_id;
+        $his->approval_type_id = 1;
+        $his->summary_history_text = $request->input('messages');
+        $his->active = '1';
+        $his->created_by = $request->user()->user_id;
+
+        $his->save();
+
+        $this->notif->remove($request->user()->user_id, 'summaryapproval', $obj->summary_id);
+        $this->notif->remove($request->user()->user_id, 'summaryrejected', $obj->summary_id);
+        $this->notif->remove($request->user()->user_id, 'summaryfinished', $obj->summary_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'summaryapproval', 'Please check Summary', $obj->summary_id);
+
+        $request->session()->forget('summary_details_' . $request->user()->user_id);
+        $request->session()->flash('status', 'Data has been saved!');
 
         return redirect('workorder/summary');
     }
