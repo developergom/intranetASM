@@ -145,7 +145,7 @@ class FlowLibrary{
 				$query->where('medias.media_id','=',$media_id);
 			})->whereHas('roles', function($query) use($role_id){
 				$query->where('roles.role_id','=',$role_id);
-			})->first();
+			})->where('active', 1)->first();
 
 			$nextUser = $user->user_id;
 		}elseif($flow_by == 'PIC')
@@ -159,7 +159,7 @@ class FlowLibrary{
 				$query->where('groups.group_id','=',$group_id);
 			})->whereHas('roles', function($query) use($role_id){
 				$query->where('roles.role_id','=',$role_id);
-			})->first();
+			})->where('active', 1)->first();
 
 			$nextUser = $user->user_id;
 		}elseif($flow_by == 'MANUAL')
