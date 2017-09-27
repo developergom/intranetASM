@@ -229,6 +229,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::resource('omzettype', 'OmzetTypeController');
         Route::post('omzettype/api/all', 'OmzetTypeController@apiGetAll');
 
+        //Organization
+        Route::post('organization/apiList', 'OrganizationController@apiList');
+        Route::post('organization/apiDelete', 'OrganizationController@apiDelete');
+        Route::resource('organization', 'OrganizationController');
+
         //Paper Type
         Route::post('paper/apiList', 'PaperController@apiList');
         Route::post('paper/apiDelete', 'PaperController@apiDelete');
@@ -332,7 +337,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('plan/do_report/{id}', 'AgendaController@doReport');
         Route::post('plan/do_report/{id}', 'AgendaController@postDoReport');
         Route::resource('plan', 'AgendaController');
-        Route::get('plan/api/loadMyAgenda', 'AgendaController@apiLoadMyAgenda');
+        Route::get('plan/api/loadMyAgenda/{user_ids}/{client_name}', 'AgendaController@apiLoadMyAgenda');
     });
 
     Route::group(['prefix' => 'inventory'], function() {

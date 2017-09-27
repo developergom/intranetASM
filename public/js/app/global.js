@@ -2,7 +2,10 @@ $(document).ready(function(){
 	tinymce.init({ 
 		selector:'textarea.form-control',
 		height: 200,
-  		menubar: false
+  		menubar: false,
+  		toolbar: [
+				    'undo redo | styleselect | bold italic | alignleft aligncenter alignright | fontsizeselect'
+				  ]
   	});
 });
 

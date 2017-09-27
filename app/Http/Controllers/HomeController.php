@@ -113,6 +113,14 @@ class HomeController extends Controller
             $data['grid_proposal_year'] = date('Y');
         }
 
+        if(Gate::allows('Agenda-Read')) {
+            $u = new UserLibrary;
+            $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+
+            $data['my_agenda_subordinate'] = User::whereIn('user_id',$subordinate)->orderBy('user_firstname')->get();
+            $data['my_agenda_current'] = User::with('groups')->find($request->user()->user_id);
+        }
+
         return view('home', $data);
     }
 

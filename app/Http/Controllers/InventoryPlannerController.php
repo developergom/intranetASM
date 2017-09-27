@@ -1886,9 +1886,23 @@ class InventoryPlannerController extends Controller
         return redirect('inventory/inventoryplanner');
     }
 
-    public function apiLoadLastUpdated($limit)
+    public function apiLoadLastUpdated(Request $request, $limit)
     {
-        $inventoryplanner = InventoryPlanner::with('implementations')->where('flow_no', 98)->where('active', '1')->orderBy('updated_at', 'desc')->limit($limit)->get();
+        $userdata = User::with('medias')->find($request->user()->user_id);
+
+        $medias = [];
+        foreach ($userdata->medias as $value) {
+            array_push($medias, $value->media_id);
+        }
+
+        $inventoryplanner = InventoryPlanner::with('implementations')
+                                ->where('flow_no', 98)
+                                ->where('active', '1')
+                                ->whereHas('medias', function($query) use($medias){
+                                    $query->whereIn('medias.media_id', $medias);
+                                })
+                                ->orderBy('updated_at', 'desc')
+                                ->limit($limit)->get();
 
         return response()->json($inventoryplanner);
     }

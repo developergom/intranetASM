@@ -12,6 +12,7 @@ class Media extends Model
 	protected $fillable = [
 				'media_group_id',
 				'media_category_id',
+				'organization_id',
 				'media_code',
 				'media_name',
 				'media_logo',
@@ -31,6 +32,11 @@ class Media extends Model
 	public function mediagroup()
 	{
 		return $this->belongsTo('App\MediaGroup','media_group_id');
+	}
+
+	public function organization()
+	{
+		return $this->belongsTo('App\Organization', 'organization_id');
 	}
 
 	public function users()

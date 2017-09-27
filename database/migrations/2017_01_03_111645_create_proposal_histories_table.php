@@ -17,7 +17,7 @@ class CreateProposalHistoriesTable extends Migration
                 $table->increments('proposal_history_id');
                 $table->integer('proposal_id');
                 $table->integer('approval_type_id');
-                $table->string('proposal_history_text');
+                $table->text('proposal_history_text');
                 $table->enum('active', ['0', '1'])->default('1');
                 $table->integer('created_by');
                 $table->integer('updated_by');

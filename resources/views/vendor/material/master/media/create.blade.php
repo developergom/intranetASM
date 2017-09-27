@@ -74,6 +74,28 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="organization_id" class="col-sm-2 control-label">Organization</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <select name="organization_id" id="organization_id" class="selectpicker" data-live-search="true" required="true">
+	                        	<option value=""></option>
+                                @foreach ($organizations as $row)
+                                	{!! $selected = '' !!}
+                                	@if($row->organization_id==old('organization_id'))
+                                		{!! $selected = 'selected' !!}
+                                	@endif
+								    <option value="{{ $row->organization_id }}" {{ $selected }}>{{ $row->organization_name }}</option>
+								@endforeach
+                            </select>
+	                    </div>
+	                    @if ($errors->has('organization_id'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('organization_id') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="media_category_id" class="col-sm-2 control-label">Category</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">

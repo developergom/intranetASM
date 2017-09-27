@@ -17,7 +17,7 @@ class CreateCreativesHistoriesTable extends Migration
                 $table->increments('creative_history_id');
                 $table->integer('creative_id');
                 $table->integer('approval_type_id');
-                $table->string('creative_history_text');
+                $table->text('creative_history_text');
                 $table->enum('active', ['0', '1'])->default('1');
                 $table->integer('created_by');
                 $table->integer('updated_by');

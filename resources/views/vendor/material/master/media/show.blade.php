@@ -39,6 +39,14 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="organization_id" class="col-sm-2 control-label">Organization</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                    	<input type="text" class="form-control input-sm" name="organization_id" id="organization_id" placeholder="Organization" required="true" maxlength="100" value="{{ $media->organization->organization_name }}" readonly="true">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="media_category_id" class="col-sm-2 control-label">Category</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">

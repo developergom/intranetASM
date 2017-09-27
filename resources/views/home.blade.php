@@ -65,7 +65,36 @@
             <div class="card">
                 <div class="card-header"><h4>My Agenda</h4></div>
                 <div class="card-body card-padding">
-                    <div class="monthly" id="my-agenda"></div>
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="my-agenda-select-author" class="col-sm-2 control-label">Author</label>
+                            <div class="col-sm-7">
+                                <div class="fg-line">
+                                    <select name="my-agenda-select-author[]" id="my-agenda-select-author" class="selectpicker" data-live-search="true" multiple>
+                                        <option value="{{ $my_agenda_current->user_id }}" selected>{{ $my_agenda_current->user_firstname . ' ' . $my_agenda_current->user_lastname }}</option>
+                                        @foreach($my_agenda_subordinate as $row)
+                                            <option value="{{ $row->user_id }}">{{ $row->user_firstname . ' ' . $row->user_lastname }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <a class="btn btn-primary waves-effect" id="btn-my-agenda-process">Process</a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="my-agenda-client-name" class="col-sm-2 control-label">Client</label>
+                            <div class="col-sm-7">
+                                <div class="fg-line">
+                                    <input type="text" id="my-agenda-client-name" class="form-control" placeholder="Client Name">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </form>
+                    <div id="my-agenda" class="monthly monthly-agenda-calendar" ></div>
                 </div>
             </div>
         </div>
@@ -426,12 +455,38 @@ $(document).ready(function(){
       });
 
     @can('Agenda-Read')
-    $('#my-agenda').monthly({
-        'mode' : 'event',
-        'stylePast' : true,
-        'dataType' : 'json',
-        'jsonUrl' : base_url + 'agenda/plan/api/loadMyAgenda',
-    });
+        var agendaauthors = $('#my-agenda-select-author').val();
+        var agendaclientname = 'all';
+        $('#my-agenda').monthly({
+            'mode' : 'event',
+            'stylePast' : true,
+            'dataType' : 'json',
+            'jsonUrl' : base_url + 'agenda/plan/api/loadMyAgenda/' + agendaauthors + '/' + agendaclientname,
+        });
+
+        $('#btn-my-agenda-process').click(function() {
+            agendaauthors = $('#my-agenda-select-author').val();
+            agendaclientname = $('#my-agenda-client-name').val();
+
+            if(agendaauthors == null) {
+                agendaauthors = 'all';
+            }
+
+            if(agendaclientname == '') {
+                agendaclientname = 'all';
+            }
+
+            newid= new Date().getTime();
+
+            $('.monthly-agenda-calendar').empty().replaceWith('<div class="monthly monthly-agenda-calendar" id="macal' + newid + '"></div>');
+
+            $('#macal' + newid).monthly({
+                'mode' : 'event',
+                'stylePast' : true,
+                'dataType' : 'json',
+                'jsonUrl' : base_url + 'agenda/plan/api/loadMyAgenda/' + agendaauthors + '/' + agendaclientname,
+            });
+        });
     @endcan
 
     @can('Inventory Planner-Read')

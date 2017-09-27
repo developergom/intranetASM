@@ -17,7 +17,7 @@ class CreateInventoryPlannerHistoriesTable extends Migration
                 $table->increments('inventory_planner_history_id');
                 $table->integer('inventory_planner_id');
                 $table->integer('approval_type_id');
-                $table->string('inventory_planner_history_text');
+                $table->text('inventory_planner_history_text');
                 $table->enum('active', ['0', '1'])->default('1');
                 $table->integer('created_by');
                 $table->integer('updated_by');

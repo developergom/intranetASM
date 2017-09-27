@@ -46,6 +46,11 @@ class Summary extends Model
 		return $this->hasMany('App\SummaryHistory', 'summary_id');
 	}
 
+	public function uploadfiles()
+	{
+		return $this->belongsToMany('App\UploadFile', 'summary_upload_file');
+	}
+
 	public function getCreatedByAttribute($value)
 	{
 		$user = User::find($value); 

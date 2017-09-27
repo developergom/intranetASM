@@ -12,6 +12,7 @@ use App\Media;
 use App\MediaCategory;
 use App\MediaEdition;
 use App\MediaGroup;
+use App\Organization;
 use App\Publisher;
 
 class MediaController extends Controller
@@ -43,7 +44,7 @@ class MediaController extends Controller
 
         $data = array();
         $data['publisher'] = Publisher::where('active', '1')->orderBy('publisher_name')->get();
-        //$data['mediagroup'] = MediaGroup::where('active','1')->orderBy('media_group_name')->get();
+        $data['organizations'] = Organization::where('active','1')->orderBy('organization_name')->get();
         $data['mediacategory'] = MediaCategory::where('active','1')->orderBy('media_category_name')->get();
         return view('vendor.material.master.media.create', $data);
     }
@@ -58,6 +59,7 @@ class MediaController extends Controller
     {
         $this->validate($request, [
             'media_group_id' => 'required',
+            'organization_id' => 'required',
             'media_category_id' => 'required',
             'media_code' => 'required|max:12|unique:medias,media_code',
             'media_name' => 'required|max:100',
@@ -83,6 +85,7 @@ class MediaController extends Controller
 
         $obj->media_category_id = $request->input('media_category_id');
         $obj->media_group_id = $request->input('media_group_id');
+        $obj->organization_id = $request->input('organization_id');
         $obj->media_code = $request->input('media_code');
         $obj->media_name = $request->input('media_name');
         $obj->media_logo = $media_logo;
@@ -111,7 +114,7 @@ class MediaController extends Controller
         }
 
         $data = array();
-        $data['media'] = Media::where('active','1')->find($id);
+        $data['media'] = Media::with('mediagroup.publisher','mediagroup','organization','mediacategory')->where('active','1')->find($id);
         return view('vendor.material.master.media.show', $data);
     }
 
@@ -130,8 +133,9 @@ class MediaController extends Controller
         $data = array();
         $data['publisher'] = Publisher::where('active', '1')->orderBy('publisher_name')->get();
         $data['mediagroup'] = MediaGroup::where('active','1')->orderBy('media_group_name')->get();
+        $data['organizations'] = Organization::where('active','1')->orderBy('organization_name')->get();
         $data['mediacategory'] = MediaCategory::where('active','1')->orderBy('media_category_name')->get();
-        $data['media'] = Media::where('active','1')->find($id);
+        $data['media'] = Media::with('mediagroup.publisher','mediagroup','organization','mediacategory')->where('active','1')->find($id);
         return view('vendor.material.master.media.edit', $data);
     }
 

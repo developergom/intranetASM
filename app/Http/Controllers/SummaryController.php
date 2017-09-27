@@ -10,7 +10,6 @@ use Excel;
 use File;
 use Gate;
 use App\Http\Requests;
-use App\UploadFile;
 use App\Client;
 use App\ClientContact;
 use App\Flow;
@@ -23,6 +22,7 @@ use App\Rate;
 use App\Summary;
 use App\SummaryHistory;
 use App\SummaryItem;
+use App\UploadFile;
 use App\User;
 
 use App\Ibrol\Libraries\FlowLibrary;
@@ -148,6 +148,43 @@ class SummaryController extends Controller
         $obj->save();
         //
         
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_revision = 0;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => 0 ];
+            }
+        }
+
+        if(!empty($fileArray)) {
+            Summary::find($obj->summary_id)->uploadfiles()->sync($fileArray);    
+        }
 
         $hot = $request->session()->get('summary_details_' . $request->user()->user_id);
 
@@ -189,7 +226,7 @@ class SummaryController extends Controller
 
         $his->save();
 
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'summaryapproval', 'Please check Summary', $obj->summary_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'summaryapproval', 'You have to check summary "' . $obj->summary_order_no . '".', $obj->summary_id);
 
         $request->session()->forget('summary_details_' . $request->user()->user_id);
         $request->session()->flash('status', 'Data has been saved!');
@@ -211,6 +248,7 @@ class SummaryController extends Controller
 
         $data['summary'] = Summary::with(
                     'summaryitems', 
+                    'uploadfiles',
                     'proposal', 
                     'proposal.brand', 
                     'proposal.medias', 
@@ -242,6 +280,7 @@ class SummaryController extends Controller
 
         $data['summary'] = Summary::with(
                     'summaryitems', 
+                    'uploadfiles',
                     'proposal', 
                     'proposal.brand', 
                     'proposal.medias', 
@@ -353,6 +392,44 @@ class SummaryController extends Controller
 
         $obj->save();
 
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_revision = $obj->revision_no;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => $obj->revision_no ];
+            }
+        }
+
+        if(!empty($fileArray)) {
+            Summary::find($obj->summary_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
+        }
+
         $hot = $request->session()->get('summary_details_' . $request->user()->user_id);
 
         for($i = 0;$i < (count($hot)-1);$i++)
@@ -395,7 +472,7 @@ class SummaryController extends Controller
 
         $this->notif->remove($request->user()->user_id, 'summaryapproval', $obj->summary_id);
         $this->notif->remove($request->user()->user_id, 'summaryrejected', $obj->summary_id);
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'summaryapproval', 'Please check Summary', $obj->summary_id);
+        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'summaryapproval', 'You have to check summary "' . $obj->summary_order_no . '".', $obj->summary_id);
 
         $request->session()->forget('summary_details_' . $request->user()->user_id);
         $request->session()->flash('status', 'Data has been saved!');
@@ -819,6 +896,7 @@ class SummaryController extends Controller
     {
         $data['summary'] = Summary::with(
                     'summaryitems', 
+                    'uploadfiles',
                     'proposal', 
                     'proposal.brand', 
                     'proposal.medias', 
@@ -919,6 +997,7 @@ class SummaryController extends Controller
 
         $data['summary'] = Summary::with(
                     'summaryitems', 
+                    'uploadfiles',
                     'proposal', 
                     'proposal.brand', 
                     'proposal.medias', 
@@ -1030,6 +1109,44 @@ class SummaryController extends Controller
         $obj->updated_by = $request->user()->user_id;
 
         $obj->save();
+
+        //file saving
+        $fileArray = array();
+
+        $tmpPath = 'uploads/tmp/' . $request->user()->user_id;
+        $files = File::files($tmpPath);
+        foreach($files as $key => $value) {
+            $oldfile = pathinfo($value);
+            $newfile = 'uploads/files/' . $oldfile['basename'];
+            if(File::exists($newfile)) {
+                $rand = rand(1, 100);
+                $newfile = 'uploads/files/' . $oldfile['filename'] . $rand . '.' . $oldfile['extension'];
+            }
+
+            if(File::move($value, $newfile)) {
+                $file = pathinfo($newfile);
+                $filesize = File::size($newfile);
+
+                $upl = new UploadFile;
+                $upl->upload_file_type = $file['extension'];
+                $upl->upload_file_name = $file['basename'];
+                $upl->upload_file_path = $file['dirname'];
+                $upl->upload_file_size = $filesize;
+                $upl->upload_file_revision = $obj->revision_no;
+                $upl->upload_file_desc = '';
+                $upl->active = '1';
+                $upl->created_by = $request->user()->user_id;
+
+                $upl->save();
+
+                array_push($fileArray, $upl->upload_file_id);
+                $fileArray[$upl->upload_file_id] = [ 'revision_no' => $obj->revision_no + 1];
+            }
+        }
+
+        if(!empty($fileArray)) {
+            Summary::find($obj->summary_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
+        }
 
         $hot = $request->session()->get('summary_details_' . $request->user()->user_id);
 

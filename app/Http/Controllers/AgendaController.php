@@ -421,7 +421,7 @@ class AgendaController extends Controller
         return response()->json($data);
     }
 
-    public function apiLoadMyAgenda(Request $request)
+    public function apiLoadMyAgenda(Request $request, $user_ids = 'all', $client_name = 'all')
     {
         $data = array();
         $data['monthly'] = array();
@@ -429,11 +429,55 @@ class AgendaController extends Controller
         $u = new UserLibrary;
         $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
 
-        $agendas = Agenda::with('agendatype','clientcontacts','clientcontacts.client')
+        /*$agendas = Agenda::with('agendatype','clientcontacts','clientcontacts.client')
                             ->where(function($query) use($request, $subordinate){
                                     $query->where('agendas.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('agendas.created_by', $subordinate);
+                                })->where('agendas.active', '1')->get();*/
+
+        if(($user_ids != 'all')){
+            $user_ids = preg_split('[,]', $user_ids);
+
+            if($client_name != 'all') {
+                $agendas = Agenda::with('agendatype','clientcontacts','clientcontacts.client')
+                                ->whereIn('agendas.created_by', $user_ids)
+                                ->whereHas('clientcontacts', function($query) use ($client_name){
+                                        $query->whereHas('client', function($q) use($client_name){
+                                            $q->where('client_name', 'like', '%' . $client_name . '%');
+                                        });
+                                    })
+                                ->where('agendas.active', '1')->get();
+            }else{
+                $agendas = Agenda::with('agendatype','clientcontacts','clientcontacts.client')
+                                        ->whereIn('agendas.created_by', $user_ids)
+                                        ->where('agendas.active', '1')->get();
+            }
+        
+        }else{
+            //user_ids all
+
+            if($client_name != 'all') {
+                $agendas = Agenda::with('agendatype','clientcontacts','clientcontacts.client')
+                                ->where(function($query) use($request, $subordinate){
+                                        $query->where('agendas.created_by', '=' , $request->user()->user_id)
+                                                ->orWhereIn('agendas.created_by', $subordinate);
+                                    })
+                                ->whereHas('clientcontacts', function($query) use ($client_name){
+                                        $query->whereHas('client', function($q) use($client_name){
+                                            $q->where('client_name', 'like', '%' . $client_name . '%');
+                                        });
+                                    })
+                                ->where('agendas.active', '1')->get();
+            }else{
+                $agendas = Agenda::with('agendatype','clientcontacts','clientcontacts.client')
+                                ->where(function($query) use($request, $subordinate){
+                                        $query->where('agendas.created_by', '=' , $request->user()->user_id)
+                                                ->orWhereIn('agendas.created_by', $subordinate);
                                 })->where('agendas.active', '1')->get();
+            }
+                                        
+        }
+
         foreach ($agendas as $key => $value) {
             $client_name = '';
 
