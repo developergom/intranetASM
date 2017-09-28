@@ -22,21 +22,21 @@
                         <label>
                             <input type="radio" name="top_type" value="bulk" {{ ($summary->top_type=='bulk') ? 'checked' : '' }}>
                             <i class="input-helper"></i>
-                            Bulk
+                            Bulk (Please insert All Termin column with "1")
                           </label>
                       </div>
                       <div class="radio m-b-15">
                         <label>
                             <input type="radio" name="top_type" value="termin" {{ ($summary->top_type=='termin') ? 'checked' : '' }}>
                             <i class="input-helper"></i>
-                            Termin
+                            Termin (Please insert Termin column with "1" - Number of Termin)
                           </label>
                       </div>
                       <div class="radio m-b-15">
                         <label>
                             <input type="radio" name="top_type" value="insertion" {{ ($summary->top_type=='insertion') ? 'checked' : '' }}>
                             <i class="input-helper"></i>
-                            Insertion
+                            Insertion (Please insert Termin column with "1" - Number of Insertion)
                           </label>
                       </div>
                     </div>
@@ -169,9 +169,11 @@
                     @endif
                 </div>
               </div>
-	            <div class="form-group">
-	                <div class="col-sm-offset-2 col-sm-10">
-	                	<button type="submit" class="btn btn-primary btn-sm">Submit</button>
+              @include('vendor.material.workorder.summary.modal_preview')
+              <div class="form-group">
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <!-- <button type="submit" class="btn btn-primary btn-sm">Submit</button> -->
+                    <a id="btn-preview" data-toggle="modal" href="#modalPreview" class="btn btn-primary btn-sm waves-effect">Preview</a>
 	                    <a href="{{ url('workorder/summary') }}" class="btn btn-danger btn-sm">Back</a>
 	                </div>
 	            </div>

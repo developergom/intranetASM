@@ -14,7 +14,7 @@ class UpdateSummaryItemsTableAddPageNoFieldColumns extends Migration
     {
         if (Schema::hasTable('summary_items')) {
             Schema::table('summary_items', function($table) {
-                DB::statement('ALTER TABLE summary_items ADD page_no INTEGER AFTER summary_item_remarks');
+                DB::statement('ALTER TABLE summary_items ADD page_no VARCHAR(255) AFTER summary_item_remarks');
             });
         }
     }

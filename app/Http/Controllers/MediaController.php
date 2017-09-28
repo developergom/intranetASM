@@ -277,4 +277,68 @@ class MediaController extends Controller
 
         return response()->json($result);
     }
+
+    public function posisi_iklan(Request $request, $media_id)
+    {
+        $data = array();
+
+        $data['media'] = Media::find($media_id);
+
+        $thisyear = date('Y');
+        $data['thisyear'] = $thisyear;
+        $data['thismonth'] = date('m');
+        $data['years'] = [$thisyear-2, $thisyear-1, $thisyear, $thisyear+1];
+        $data['months'] = [
+                            [
+                                'key' => '01',
+                                'values' => 'January'
+                            ],
+                            [
+                                'key' => '02',
+                                'values' => 'February'
+                            ],
+                            [
+                                'key' => '03',
+                                'values' => 'March'
+                            ],
+                            [
+                                'key' => '04',
+                                'values' => 'April'
+                            ],
+                            [
+                                'key' => '05',
+                                'values' => 'May'
+                            ],
+                            [
+                                'key' => '06',
+                                'values' => 'June'
+                            ],
+                            [
+                                'key' => '07',
+                                'values' => 'July'
+                            ],
+                            [
+                                'key' => '08',
+                                'values' => 'August'
+                            ],
+                            [
+                                'key' => '09',
+                                'values' => 'September'
+                            ],
+                            [
+                                'key' => '10',
+                                'values' => 'October'
+                            ],
+                            [
+                                'key' => '11',
+                                'values' => 'November'
+                            ],
+                            [
+                                'key' => '12',
+                                'values' => 'December'
+                            ]
+                        ];
+
+        return view('vendor.material.master.media.posisi_iklan', $data);
+    }
 }

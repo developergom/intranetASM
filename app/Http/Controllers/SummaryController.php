@@ -698,7 +698,7 @@ class SummaryController extends Controller
 
     private function exportToExcel($summary_id)
     {
-        $data = Summary::with('summaryitems', 'proposal', 'proposal.brand', 'proposal.medias', 'proposal', 'proposal.client', 'proposal.client.clienttype', 'proposal.client_contacts', 'proposal.industries', 'summaryitems.rate', 'summaryitems.rate.media', 'summaryitems.omzettype')->find($summary_id);
+        $data = Summary::with('summaryitems', 'proposal', 'proposal.brand', 'proposal.medias', 'proposal.medias.organization', 'proposal', 'proposal.client', 'proposal.client.clienttype', 'proposal.client_contacts', 'proposal.industries', 'summaryitems.rate', 'summaryitems.rate.media', 'summaryitems.omzettype')->find($summary_id);
 
         //dd($summary);
 
@@ -716,7 +716,7 @@ class SummaryController extends Controller
                                     $no,
                                     $value->summary_item_type,
                                     $value->rate->media->media_name,
-                                    $value->summary_item_period_start . '-' . $value->summary_item_period_end,
+                                    $value->summary_item_period_start . ' - ' . $value->summary_item_period_end,
                                     $value->rate->rate_name,
                                     $value->omzettype->omzet_type_name,
                                     $value->summary_item_insertion,
@@ -737,9 +737,9 @@ class SummaryController extends Controller
 
                 $sheet->fromArray($summaryitems);
 
-                $sheet->prependRow(1, array(
+                /*$sheet->prependRow(1, array(
                     ''
-                ));
+                ));*/
 
                 $sheet->prependRow(2, array(
                     'NAMA PT', '', '', 'SALES AGENT', 'ORDER FO', '', '', 'INDUSTRY/BRAND', '', '', 'PAYER', ': ' . $data->proposal->client->clienttype->client_type_name, ''
@@ -750,18 +750,21 @@ class SummaryController extends Controller
                     $industry .= $row->industry_name . ', ';
                 }
 
+                $media = '';
+                $organization = '';
+                foreach($data->proposal->medias as $row){
+                    $media .= $row->media_name . ', ';
+                    $organization .= $row->organization->organization_name . ', ';
+                }
+
                 $sheet->prependRow(3, array(
-                                        'PT ...', '', '',
+                                        $organization, '', '',
                                         $data->proposal->created_by->user_firstname . ' ' . $data->proposal->created_by->user_lastname,
                                         'NO ORDER', ': ' . $data->summary_order_no, '',
                                         'INDUSTRY', ': ' . $industry, '',
                                         'BILL TO PARTY', ': ' . $data->proposal->client->client_name, ''
                                     ));
 
-                $media = '';
-                foreach($data->proposal->medias as $row){
-                    $media .= $row->media_name . ', ';
-                }
                 $sheet->prependRow(4, array(
                                         '', '', '', '',
                                         'MEDIA', ': ' . $media, '',
@@ -830,6 +833,9 @@ class SummaryController extends Controller
                                     ));
 
                 $sheet->appendRow(array(''));
+
+                $sheet->appendRow(array('Keterangan:'));
+                $sheet->appendRow(array(strip_tags($data->summary_notes)));
 
                 $sheet->mergeCells('A1:C1');
                 $sheet->mergeCells('A2:C2');
@@ -1197,5 +1203,23 @@ class SummaryController extends Controller
         $request->session()->flash('status', 'Data has been saved!');
 
         return redirect('workorder/summary');
+    }
+
+    public function apiGeneratePosisiIklan(Request $request)
+    {
+        $media_id = $request->input('media_id');
+        $year = $request->input('year');
+        $month = $request->input('month');
+
+        $item = SummaryItem::with(['rate' => function($q) use($media_id){
+                                $q->where('media_id', $media_id);
+                            }, 'rate.media', 'summary'])
+                            ->where('summary_items.active', '1')
+                            ->whereYear('summary_item_period_start', '=', $year)
+                            ->whereMonth('summary_item_period_start', '=', $month)
+                            /*->where('summary_items.revision_no','summary.revision_no')*/
+                            ->get();
+
+        return response()->json($item);
     }
 }

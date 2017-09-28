@@ -188,7 +188,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('media/apiList', 'MediaController@apiList');
         Route::post('media/apiDelete', 'MediaController@apiDelete');
         Route::resource('media', 'MediaController');
-
+        Route::get('media/posisi_iklan/{media_id}', 'MediaController@posisi_iklan');
         Route::post('media/api/all', 'MediaController@apiAll');
 
         //Media Category
@@ -426,6 +426,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('summary/approval/{flow_no}/{id}', 'SummaryController@postApprove');
         Route::get('summary/renew/{id}', 'SummaryController@renew');
         Route::post('summary/renew/{id}', 'SummaryController@postRenew');
+        Route::post('summary/api/generatePosisiIklan', 'SummaryController@apiGeneratePosisiIklan');
     });
 
     Route::group(['prefix' => 'grid'], function() {

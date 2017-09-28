@@ -232,44 +232,7 @@ var
     afterRemoveRow: function(index, amount) {
       calculateTotal(this);
       calculateOmzet(this);
-    }/*,
-    cells: function (row, col, prop) {
-      var cellProperties = {};
-
-      //cellProperties.renderer = defaultValueRenderer;
-
-      return cellProperties;
-    },
-    beforeChange: function (changes) {
-      var instance = hot1,
-        ilen = changes.length,
-        clen = instance.colCount,
-        rowColumnSeen = {},
-        rowsToFill = {},
-        i,
-        c;
-
-      for (i = 0; i < ilen; i++) {
-        // if oldVal is empty
-        if (changes[i][2] === null && changes[i][3] !== null) {
-          if (isEmptyRow(instance, changes[i][0])) {
-            // add this row/col combination to cache so it will not be overwritten by template
-            rowColumnSeen[changes[i][0] + '/' + changes[i][1]] = true;
-            rowsToFill[changes[i][0]] = true;
-          }
-        }
-      }
-      for (var r in rowsToFill) {
-        if (rowsToFill.hasOwnProperty(r)) {
-          for (c = 0; c < clen; c++) {
-            // if it is not provided by user in this change set, take value from template
-            if (!rowColumnSeen[r + '/' + c]) {
-              changes.push([r, c, null, tpl[c]]);
-            }
-          }
-        }
-      }
-    }*/
+    }
   });
 
 
@@ -352,6 +315,11 @@ $(document).ready(function(){
       calculateOmzet(hot1);
     }
   });
+
+  //btn preview click function
+  $('#btn-preview').click(function(){
+    preview_summary(hot1);
+  })
 });
 
   //hot1.loadData(data);
@@ -413,4 +381,59 @@ $(document).ready(function(){
     }
 
     return totalType;
+  }
+
+  function preview_summary(hot)
+  {
+    var preview_term_of_payment = '';
+    var preview_total_gross = '';
+    var preview_total_internal_omzet = '';
+    var preview_total_disc = '';
+    var preview_total_media_cost = '';
+    var preview_total_nett = '';
+    var preview_total_cost_pro = '';
+    var preview_notes = '';
+
+    var preview_details_data = hot.getData();
+    var html = '';
+    $.each(preview_details_data, function(key, value){
+      html += '<tr>';
+      html += '<td>' + value[0] + '</td>';
+      html += '<td>' + value[1] + '</td>';
+      html += '<td>' + value[2] + '</td>';
+      html += '<td>' + value[3] + '</td>';
+      html += '<td>' + value[4] + '</td>';
+      html += '<td>' + value[5] + '</td>';
+      html += '<td>' + value[6] + '</td>';
+      html += '<td>' + value[7] + '</td>';
+      html += '<td>' + value[8] + '</td>';
+      html += '<td>' + value[9] + '</td>';
+      html += '<td>' + value[10] + '</td>';
+      html += '<td>' + value[11] + '</td>';
+      html += '<td>' + value[12] + '</td>';
+      html += '<td>' + value[13] + '</td>';
+      html += '<td>' + value[14] + '</td>';
+      html += '</tr>';
+    });
+
+    $('#preview_details_table tbody').empty().append(html);    
+
+    preview_term_of_payment = $('input[name="top_type"]:checked').val();
+    preview_total_gross = $('#format_summary_total_gross').val();
+    preview_total_internal_omzet = $('#format_summary_total_internal_omzet').val();
+    preview_total_disc = $('#format_summary_total_disc').val();
+    preview_total_media_cost = $('#format_summary_total_media_cost').val();
+    preview_total_nett = $('#format_summary_total_nett').val();
+    preview_total_cost_pro = $('#format_summary_total_cost_pro').val();
+    tinyMCE.triggerSave();
+    preview_notes = $('#summary_notes').val();
+
+    $('#preview_term_of_payment').empty().append(preview_term_of_payment);
+    $('#preview_total_gross').empty().append(preview_total_gross);
+    $('#preview_total_internal_omzet').empty().append(preview_total_internal_omzet);
+    $('#preview_total_discount').empty().append(preview_total_disc + '%');
+    $('#preview_total_media_cost').empty().append(preview_total_media_cost);
+    $('#preview_total_nett').empty().append(preview_total_nett);
+    $('#preview_total_cost_pro').empty().append(preview_total_cost_pro);
+    $('#preview_notes').empty().append(preview_notes);
   }

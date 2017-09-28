@@ -638,6 +638,9 @@ class ProposalController extends Controller
 
 
         $data['proposal_types'] = ProposalType::select('proposal_type_id','proposal_type_name', 'proposal_type_duration')->where('active', '1')->orderBy('proposal_type_name')->get();
+        $data['medias'] = Media::select('media_id','media_name')->whereHas('users', function($query) use($request){
+                                    $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                                })->where('medias.active', '1')->orderBy('media_name')->get();
         $data['proposal'] = Proposal::with(
                                         'proposaltype', 
                                         'proposalmethod', 
@@ -660,6 +663,7 @@ class ProposalController extends Controller
     {
         $this->validate($request, [
             'proposal_type_id' => 'required',
+            'media_id' => 'array',
             'approval' => 'required',
             'pic' => 'required',
             'comment' => 'required',
@@ -681,6 +685,10 @@ class ProposalController extends Controller
             $proposal->pic = $manual_user;
             $proposal->updated_by = $request->user()->user_id;
             $proposal->save();
+
+            if(!empty($request->input('media_id'))) {
+                Proposal::find($proposal->proposal_id)->medias()->sync($request->input('media_id'));
+            }
 
             $his = new ProposalHistory;
             $his->proposal_id = $id;

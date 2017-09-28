@@ -94,15 +94,28 @@
 				    </div>
 				</div>
 				<div class="form-group">
-				    <label for="media_id" class="col-sm-2 control-label">Media</label>
-				    <div class="col-sm-10">
-				        <div class="fg-line">
-				            @foreach ($proposal->medias as $row)
-				            	<a href="{{ url('/master/media/' . $row->media_id) }}" target="_blank"><span class="badge">{{ $row->media_name }}</span></a>
-							@endforeach
-				        </div>
-				    </div>
-				</div>
+	                <label for="media_id" class="col-sm-2 control-label">Media</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <select name="media_id[]" id="media_id" class="selectpicker" data-live-search="true" multiple required="true">
+                                @foreach ($medias as $row)
+                                	{!! $selected = '' !!}
+                                	@foreach ($proposal->medias as $key => $value)
+                                		@if($value->media_id==$row->media_id)
+                                			{!! $selected = 'selected' !!}
+                                		@endif
+                                	@endforeach
+								    <option value="{{ $row->media_id }}" {{ $selected }}>{{ $row->media_name }}</option>
+								@endforeach
+                            </select>
+	                    </div>
+	                    @if ($errors->has('media_id'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('media_id') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
 				<div class="form-group">
 				    <label for="inventory_planner_name" class="col-sm-2 control-label">Inventory Planner Linked</label>
 				    <div class="col-sm-10">
