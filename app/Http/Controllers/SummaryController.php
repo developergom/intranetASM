@@ -58,8 +58,6 @@ class SummaryController extends Controller
 
         $data = array();
 
-        //$this->exportToExcel(13);
-
         return view('vendor.material.workorder.summary.list', $data);
     }
 
@@ -392,6 +390,9 @@ class SummaryController extends Controller
 
         $obj->save();
 
+        //update SummaryItem Active to 0
+        $updatedSummaryItem = SummaryItem::where('summary_id', $id)->update(['active'=>0]);
+
         //file saving
         $fileArray = array();
 
@@ -434,8 +435,6 @@ class SummaryController extends Controller
 
         for($i = 0;$i < (count($hot)-1);$i++)
         {
-            //dd($hot[$i]);
-
             $rate = Rate::where('rate_name', $hot[$i][2])->where('active', 1)->first();
             $omzettype = OmzetType::where('omzet_type_name', $hot[$i][6])->where('active', 1)->first();
 
@@ -690,7 +689,7 @@ class SummaryController extends Controller
         $details = SummaryItem::with('rate', 'rate.media', 'omzettype')
                                     ->where('summary_id', $summary_id)
                                     ->where('revision_no', $revision_no)
-                                    ->where('active', 1)
+                                    /*->where('active', 1)*/
                                     ->get();
 
         return response()->json($details);
@@ -1154,6 +1153,9 @@ class SummaryController extends Controller
             Summary::find($obj->summary_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
         }
 
+        //update SummaryItem Active to 0
+        $updatedSummaryItem = SummaryItem::where('summary_id', $id)->update(['active'=>0]);
+
         $hot = $request->session()->get('summary_details_' . $request->user()->user_id);
 
         for($i = 0;$i < (count($hot)-1);$i++)
@@ -1211,14 +1213,37 @@ class SummaryController extends Controller
         $year = $request->input('year');
         $month = $request->input('month');
 
-        $item = SummaryItem::with(['rate' => function($q) use($media_id){
+        /*$item = SummaryItem::with(['rate' => function($q) use($media_id){
                                 $q->where('media_id', $media_id);
-                            }, 'rate.media', 'summary'])
+                            }, 
+                            'rate.media', 
+                            'rate.media.organization', 
+                            'summary',
+                            'summary.proposal',
+                            'summary.proposal.client',
+                            'summary.proposal.industries'])
+                            ->whereYear('summary_item_period_start', '=', $year)
+                            ->whereMonth('summary_item_period_start', '=', $month)
+                            ->where('summary_items.active', '1')
+                            ->get();*/
+
+        $item = SummaryItem::join('summaries', 'summaries.summary_id', '=', 'summary_items.summary_id')
+                            ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
+                            ->join('clients', 'clients.client_id', '=', 'proposals.client_id')
+                            ->join('rates', 'rates.rate_id', '=', 'summary_items.rate_id')
+                            ->join('medias', 'medias.media_id', '=', 'rates.media_id')
+                            ->join('users', 'users.user_id', '=', 'summary_items.created_by')
+                            ->join('units', 'units.unit_id', '=', 'rates.unit_id')
+                            ->join('brands', 'brands.brand_id', '=', 'proposals.brand_id')
+                            ->join('subindustries', 'subindustries.subindustry_id', '=', 'brands.subindustry_id')
+                            ->join('industries', 'industries.industry_id', '=', 'subindustries.industry_id')
+                            ->where('rates.media_id', $media_id)
                             ->where('summary_items.active', '1')
                             ->whereYear('summary_item_period_start', '=', $year)
                             ->whereMonth('summary_item_period_start', '=', $month)
-                            /*->where('summary_items.revision_no','summary.revision_no')*/
+                            ->orderBy('summary_item_period_start', 'asc')
                             ->get();
+
 
         return response()->json($item);
     }

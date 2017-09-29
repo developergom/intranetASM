@@ -39,7 +39,7 @@ var
     height: 200,
     minSpareRows: 1,
     formulas:true,
-    contextMenu: true,
+    contextMenu: ['row_above', 'row_below', 'col_left', 'col_right', 'remove_row', 'remove_col', 'undo', 'redo', 'alignment', 'copy', 'cut'],
     colHeaders: ['No', 'Type', 'Rate Name', 'Media', 'Edition/Period Start', 'Period End', 'Omzet Type', 'Insertion', 'Gross Rate', 'Disc(%)', 'Nett Rate', 'Internal Omzet', 'Remarks', 'Termin', 'Viewed Status'],
     columns: [
       {type: 'numeric'}, //no
@@ -313,6 +313,16 @@ $(document).ready(function(){
       hot1.loadData(data);
       calculateTotal(hot1);
       calculateOmzet(hot1);
+
+      hot1.updateSettings({
+         cells: function(row, col, prop){
+          var cellProperties = {};
+            if(hot1.getDataAtCell(row, 14) === 'COMPLETED'){
+              cellProperties.readOnly = 'true'
+            }
+          return cellProperties
+        }
+      });
     }
   });
 

@@ -91,6 +91,11 @@ $(document).ready(function(){
 			},
 			success: function(response) {
 				console.log(response);
+				var html = '';
+				$.each(response, function(key, value){
+					html = (key+1) + ' | ' + value.client_name + ' | ' + value.industry_name + ' | ' + value.rate_name + ' | ' + value.user_firstname + ' ' + value.user_lastname + ' | ' + value.width + 'x' + value.length + ' ' + value.unit_name + ' | ' + value.page_no + ' | ' + value.summary_item_gross;
+					console.log(html);
+				});
 			}
 		})
 	});
