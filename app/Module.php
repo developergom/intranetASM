@@ -29,4 +29,9 @@ class Module extends Model
     public function flowgroup() {
     	return $this->hasOne('App\FlowGroup');
     }
+
+    public function mutations()
+    {
+        return $this->hasMany('App\Mutation', 'module_id');
+    }
 }

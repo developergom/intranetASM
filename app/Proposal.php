@@ -149,4 +149,9 @@ class Proposal extends Model
 	{
 		return $this->belongsTo('App\User', 'pic');
 	}
+
+	public function mutationitems()
+	{
+		return $this->hasMany('App\Mutation', 'mutation_item');
+	}
 }

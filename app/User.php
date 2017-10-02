@@ -147,4 +147,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Summary', 'pic');
     }
+
+    public function mutationto()
+    {
+        return $this->hasMany('App\Mutation', 'mutation_to');
+    }
+
+    public function mutationfrom()
+    {
+        return $this->hasMany('App\Mutation', 'mutation_from');
+    }
 }

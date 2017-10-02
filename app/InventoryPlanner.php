@@ -128,4 +128,9 @@ class InventoryPlanner extends Model
 		$user = User::find($value); 
 		return $user;
 	}
+
+	public function mutationitems()
+	{
+		return $this->hasMany('App\Mutation', 'mutation_item');
+	}
 }

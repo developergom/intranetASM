@@ -482,6 +482,12 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('cache-management', 'CacheManagementController@index');
         Route::post('cache-management/apiClearAll', 'CacheManagementController@apiClearAll');
 
+        //Mutation Management
+        Route::post('mutation/apiList', 'MutationController@apiList');
+        Route::post('mutation/api/loadTasks', 'MutationController@apiLoadTasks');
+        Route::get('mutation', 'MutationController@index');
+        Route::get('mutation/create', 'MutationController@create');
+
         //User Log
         Route::post('log/apiList', 'LogController@apiList');
         Route::resource('log', 'LogController');
