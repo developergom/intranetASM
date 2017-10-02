@@ -427,6 +427,8 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('summary/renew/{id}', 'SummaryController@renew');
         Route::post('summary/renew/{id}', 'SummaryController@postRenew');
         Route::post('summary/api/generatePosisiIklan', 'SummaryController@apiGeneratePosisiIklan');
+
+        Route::get('posisi_iklan', 'PosisiIklanController@index');
     });
 
     Route::group(['prefix' => 'grid'], function() {

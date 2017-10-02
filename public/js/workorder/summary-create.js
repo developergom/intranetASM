@@ -407,23 +407,25 @@ $(document).ready(function(){
     var preview_details_data = hot.getData();
     var html = '';
     $.each(preview_details_data, function(key, value){
-      html += '<tr>';
-      html += '<td>' + value[0] + '</td>';
-      html += '<td>' + value[1] + '</td>';
-      html += '<td>' + value[2] + '</td>';
-      html += '<td>' + value[3] + '</td>';
-      html += '<td>' + value[4] + '</td>';
-      html += '<td>' + value[5] + '</td>';
-      html += '<td>' + value[6] + '</td>';
-      html += '<td>' + value[7] + '</td>';
-      html += '<td>' + value[8] + '</td>';
-      html += '<td>' + value[9] + '</td>';
-      html += '<td>' + value[10] + '</td>';
-      html += '<td>' + value[11] + '</td>';
-      html += '<td>' + value[12] + '</td>';
-      html += '<td>' + value[13] + '</td>';
-      html += '<td>' + value[14] + '</td>';
-      html += '</tr>';
+      if(value[0]!=null) {
+        html += '<tr>';
+        html += '<td>' + value[0] + '</td>';
+        html += '<td>' + value[1] + '</td>';
+        html += '<td>' + value[2] + '</td>';
+        html += '<td>' + value[3] + '</td>';
+        html += '<td>' + value[4] + '</td>';
+        html += '<td>' + value[5] + '</td>';
+        html += '<td>' + value[6] + '</td>';
+        html += '<td>' + value[7] + '</td>';
+        html += '<td>' + value[8] + '</td>';
+        html += '<td>' + value[9] + '</td>';
+        html += '<td>' + value[10] + '</td>';
+        html += '<td>' + value[11] + '</td>';
+        html += '<td>' + value[12] + '</td>';
+        html += '<td>' + value[13] + '</td>';
+        html += '<td>' + value[14] + '</td>';
+        html += '</tr>';
+      }
     });
 
     $('#preview_details_table tbody').empty().append(html);    

@@ -556,7 +556,7 @@ class SummaryController extends Controller
         }elseif($listtype == 'needchecking') {
             $data['rows'] = Summary::select('summaries.summary_id', 'proposal_name', 'summary_order_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
-                                ->join('users','users.user_id', '=', 'summaries.current_user')
+                                ->join('users','users.user_id', '=', 'summaries.created_by')
                                 ->where('summaries.active','1')
                                 ->where('summaries.flow_no','<>','98')
                                 ->where('summaries.flow_no','<>','99')
@@ -570,7 +570,7 @@ class SummaryController extends Controller
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = Summary::select('summaries.summary_id', 'proposal_name', 'summary_order_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
-                                ->join('users','users.user_id', '=', 'summaries.current_user')
+                                ->join('users','users.user_id', '=', 'summaries.created_by')
                                 ->where('summaries.active','1')
                                 ->where('summaries.flow_no','<>','98')
                                 ->where('summaries.flow_no','<>','99')
@@ -1212,6 +1212,7 @@ class SummaryController extends Controller
         $media_id = $request->input('media_id');
         $year = $request->input('year');
         $month = $request->input('month');
+        $view_type = $request->input('view_type');
 
         /*$item = SummaryItem::with(['rate' => function($q) use($media_id){
                                 $q->where('media_id', $media_id);
@@ -1226,8 +1227,8 @@ class SummaryController extends Controller
                             ->whereMonth('summary_item_period_start', '=', $month)
                             ->where('summary_items.active', '1')
                             ->get();*/
-
-        $item = SummaryItem::join('summaries', 'summaries.summary_id', '=', 'summary_items.summary_id')
+        if($view_type=='per_month'){ //digital
+             $items = SummaryItem::join('summaries', 'summaries.summary_id', '=', 'summary_items.summary_id')
                             ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
                             ->join('clients', 'clients.client_id', '=', 'proposals.client_id')
                             ->join('rates', 'rates.rate_id', '=', 'summary_items.rate_id')
@@ -1238,13 +1239,55 @@ class SummaryController extends Controller
                             ->join('subindustries', 'subindustries.subindustry_id', '=', 'brands.subindustry_id')
                             ->join('industries', 'industries.industry_id', '=', 'subindustries.industry_id')
                             ->where('rates.media_id', $media_id)
+                            ->where('summaries.flow_no', '98')
                             ->where('summary_items.active', '1')
                             ->whereYear('summary_item_period_start', '=', $year)
                             ->whereMonth('summary_item_period_start', '=', $month)
                             ->orderBy('summary_item_period_start', 'asc')
                             ->get();
 
+        }elseif($view_type=='per_date'){ //print
+            $dates = SummaryItem::select('summary_item_period_start')
+                            ->join('summaries', 'summaries.summary_id', '=', 'summary_items.summary_id')
+                            ->join('rates', 'rates.rate_id', '=', 'summary_items.rate_id')
+                            ->where('summaries.flow_no', '98')
+                            ->where('summary_items.active', '1')
+                            ->where('rates.media_id', $media_id)
+                            ->whereYear('summary_item_period_start', '=', $year)
+                            ->whereMonth('summary_item_period_start', '=', $month)
+                            ->groupBy('summary_item_period_start')
+                            ->get();
 
-        return response()->json($item);
+            //dd($dates);
+
+            $items = array();
+            foreach ($dates as $value) {
+                $item = SummaryItem::join('summaries', 'summaries.summary_id', '=', 'summary_items.summary_id')
+                            ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
+                            ->join('clients', 'clients.client_id', '=', 'proposals.client_id')
+                            ->join('rates', 'rates.rate_id', '=', 'summary_items.rate_id')
+                            ->join('medias', 'medias.media_id', '=', 'rates.media_id')
+                            ->join('users', 'users.user_id', '=', 'summary_items.created_by')
+                            ->join('units', 'units.unit_id', '=', 'rates.unit_id')
+                            ->join('brands', 'brands.brand_id', '=', 'proposals.brand_id')
+                            ->join('subindustries', 'subindustries.subindustry_id', '=', 'brands.subindustry_id')
+                            ->join('industries', 'industries.industry_id', '=', 'subindustries.industry_id')
+                            ->where('rates.media_id', $media_id)
+                            ->where('summaries.flow_no', '98')
+                            ->where('summary_items.active', '1')
+                            ->where('summary_item_period_start', $value->summary_item_period_start)
+                            ->orderBy('summary_item_period_start', 'asc')
+                            ->get();
+
+                array_push($items, ['items' => $item, 'index' => $value->summary_item_period_start]);
+            }
+
+            
+        }
+
+       
+
+
+        return response()->json($items);
     }
 }
