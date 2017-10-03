@@ -8,7 +8,8 @@
     <div class="card">
         <div class="card-header"><h2>Mutations Management<small>Create a mutation</small></h2></div>
         <div class="card-body card-padding">
-        	<form class="form-horizontal" role="form">
+        	<form class="form-horizontal" role="form" method="POST" action="{{ url('config/mutation') }}">
+        		{{ csrf_field() }}
 	            <div class="form-group">
 	                <label for="mutation_from" class="col-sm-2 control-label">From User</label>
 	                <div class="col-sm-10">
@@ -94,7 +95,7 @@
 	            </div>
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
-	                	<button type="button" id="btn-process" class="btn btn-primary btn-sm waves-effect">Process</button>
+	                	<button type="submit" id="btn-process" class="btn btn-primary btn-sm waves-effect">Submit</button>
 	                    <a href="{{ url('/config/mutation') }}" class="btn btn-danger btn-sm waves-effect">Back</a>
 	                </div>
 	            </div>

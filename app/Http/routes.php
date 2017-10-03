@@ -39,6 +39,12 @@ Route::post('/apiTest', 'AgendaController@apiTest')->middleware(['auth:api']);
 
 Route::get('/home', 'HomeController@index')->middleware(['auth','menu']);
 
+Route::group(['prefix'=>'public-api','middleware'=>'auth:api'], function(){
+ 
+   Route::get('/test','Test@apiTest');
+ 
+});
+
 //User
 Route::group(['middleware' => ['auth', 'menu']], function(){
     Route::post('user/apiList', 'UserController@apiList');
@@ -485,8 +491,8 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         //Mutation Management
         Route::post('mutation/apiList', 'MutationController@apiList');
         Route::post('mutation/api/loadTasks', 'MutationController@apiLoadTasks');
-        Route::get('mutation', 'MutationController@index');
-        Route::get('mutation/create', 'MutationController@create');
+        Route::resource('mutation', 'MutationController');
+        //Route::get('mutation/create', 'MutationController@create');
 
         //User Log
         Route::post('log/apiList', 'LogController@apiList');

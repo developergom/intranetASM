@@ -17,6 +17,8 @@ use App\MediaGroup;
 use App\Paper;
 use App\ProposalType;
 use App\SubIndustry;
+use App\User;
+use Auth;
 
 class Test extends Controller{
 	public function __construct() {
@@ -391,6 +393,14 @@ class Test extends Controller{
 
 	public function handsontable(){
 		return view('vendor.material.test_handsontable');
+	}
+
+	public function apiTest(){
+		return response()->json(
+ 
+           User::where('user_id',Auth::guard('api')->id())->get()
+ 
+       );
 	}
 
 }

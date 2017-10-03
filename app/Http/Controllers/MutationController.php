@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Gate;
 use App\Http\Requests;
 use App\InventoryPlanner;
+use App\Module;
 use App\Mutation;
 use App\Proposal;
 use App\Summary;
@@ -15,6 +16,25 @@ use App\User;
 
 class MutationController extends Controller
 {
+	private $proposal_uri = '/workorder/proposal';
+	private $inventory_uri = '/inventory/inventoryplanner';
+	private $summary_uri = '/workorder/summary';
+
+	private $proposal_module_id = 0;
+	private $inventory_module_id = 0;
+	private $summary_module_id = 0;
+
+	public function __construct(){
+		$proposal = Module::where('module_url', $this->proposal_uri)->first();
+		$inventory = Module::where('module_url', $this->inventory_uri)->first();
+		$summary = Module::where('module_url', $this->summary_uri)->first();
+
+		//dd($proposal);
+
+		$this->proposal_module_id = $proposal->module_id;
+		$this->inventory_module_id = $inventory->module_id;
+		$this->summary_module_id = $summary->module_id;
+	}
     /**
      * Display a listing of the resource.
      *
@@ -56,23 +76,87 @@ class MutationController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'publisher_code' => 'required|max:5|unique:publishers,publisher_code',
-            'publisher_name' => 'required|max:100',
+            'mutation_from' => 'required',
+            'inventory_assign_to' => 'array',
+            'proposal_assign_to' => 'array',
+            'summary_assign_to' => 'array',
+            'mutation_desc' => 'required',
         ]);
 
-        $obj = new Publisher;
+        //dd($request->all());
+        $inventories = $request->input('inventory_planner_id');
+        $inventory_assign_to = $request->input('inventory_assign_to');
+        if(count($inventories) > 0) {
+        	foreach($inventories as $key => $value) {
+	        	$obj = InventoryPlanner::find($value);
+	        	if($obj->current_user==$obj->created_by) {
+	        		$obj->current_user = $inventory_assign_to[$key];
+	        	}
+	        	$obj->created_by = $inventory_assign_to[$key];
+	        	$obj->save();
 
-        $obj->publisher_code = $request->input('publisher_code');
-        $obj->publisher_name = $request->input('publisher_name');
-        $obj->publisher_desc = $request->input('publisher_desc');
-        $obj->active = '1';
-        $obj->created_by = $request->user()->user_id;
+	        	$mut = new Mutation;
+	        	$mut->mutation_from = $request->input('mutation_from');
+	        	$mut->mutation_to = $inventory_assign_to[$key];
+	        	$mut->mutation_desc = $request->input('mutation_desc');
+	        	$mut->module_id = $this->inventory_module_id;
+	        	$mut->mutation_item_id = $value;
+	        	$mut->active = '1';
+	        	$mut->created_by = $request->user()->user_id;
+	        	$mut->save();
+	        }
+        }
+        
+        $proposals = $request->input('proposal_id');
+        $proposal_assign_to = $request->input('proposal_assign_to');
+        if(count($proposals) > 0) {
+        	foreach($proposals as $key => $value) {
+	        	$obj = Proposal::find($value);
+	        	//dd($obj);
+	        	if($obj->current_user===$obj->created_by) {
+	        		$obj->current_user = $proposal_assign_to[$key];
+	        	}
+	        	$obj->created_by = $proposal_assign_to[$key];
+	        	$obj->save();
 
-        $obj->save();
+	        	$mut = new Mutation;
+	        	$mut->mutation_from = $request->input('mutation_from');
+	        	$mut->mutation_to = $proposal_assign_to[$key];
+	        	$mut->mutation_desc = $request->input('mutation_desc');
+	        	$mut->module_id = $this->proposal_module_id;
+	        	$mut->mutation_item_id = $value;
+	        	$mut->active = '1';
+	        	$mut->created_by = $request->user()->user_id;
+	        	$mut->save();
+	        }
+        }
+
+        $summaries = $request->input('summary_id');
+        $summary_assign_to = $request->input('summary_assign_to');
+        if(count($summaries) > 0) {
+        	foreach($summaries as $key => $value) {
+	        	$obj = Summary::find($value);
+	        	if($obj->current_user===$obj->created_by) {
+	        		$obj->current_user = $summary_assign_to[$key];
+	        	}
+	        	$obj->created_by = $summary_assign_to[$key];
+	        	$obj->save();
+
+	        	$mut = new Mutation;
+	        	$mut->mutation_from = $request->input('mutation_from');
+	        	$mut->mutation_to = $summary_assign_to[$key];
+	        	$mut->mutation_desc = $request->input('mutation_desc');
+	        	$mut->module_id = $this->summary_module_id;
+	        	$mut->mutation_item_id = $value;
+	        	$mut->active = '1';
+	        	$mut->created_by = $request->user()->user_id;
+	        	$mut->save();
+	        }
+        }
 
         $request->session()->flash('status', 'Data has been saved!');
 
-        return redirect('master/publisher');
+        return redirect('config/mutation');
     }
 
     public function apiList(Request $request)
@@ -154,6 +238,26 @@ class MutationController extends Controller
     													->where('active', '1')
     													->where('flow_no', '<>', '98')
     													->get();
+
+    	$logged_in_user = User::with('groups', 'roles')->find($mutation_from);
+
+    	$groups_user = [];
+    	foreach ($logged_in_user->groups as $value) {
+    		array_push($groups_user, $value->group_id);
+    	}
+
+    	$roles_user = [];
+    	foreach ($logged_in_user->roles as $value) {
+    		array_push($roles_user, $value->role_id);
+    	}
+
+    	$data['users'] = User::whereHas('groups', function($query) use($groups_user){
+    		$query->whereIn('groups.group_id', $groups_user);
+    	})->whereHas('roles', function($query) use($roles_user){
+    		$query->whereIn('roles.role_id', $roles_user);
+    	})->where('users.active', '1')
+    	->orderBy('user_firstname')->get();
+    	//dd($logged_in_user->groups[0]);
 
     	return response()->json($data);
     }
