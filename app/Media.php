@@ -99,6 +99,11 @@ class Media extends Model
 		return $this->hasMany('App\InventoryPlannerOtherPrice', 'media_id');
 	}
 
+	public function posisiiklans()
+	{
+		return $this->hasMany('App\PosisiIklan', 'media_id');
+	}
+
 	public function proposals()
 	{
 		return $this->belongsToMany('App\Proposal', 'proposal_media');

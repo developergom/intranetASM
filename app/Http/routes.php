@@ -343,7 +343,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('plan/do_report/{id}', 'AgendaController@doReport');
         Route::post('plan/do_report/{id}', 'AgendaController@postDoReport');
         Route::resource('plan', 'AgendaController');
-        Route::get('plan/api/loadMyAgenda/{user_ids}/{client_name}', 'AgendaController@apiLoadMyAgenda');
+        Route::get('plan/api/loadMyAgenda/{user_ids}/{client_id}', 'AgendaController@apiLoadMyAgenda');
     });
 
     Route::group(['prefix' => 'inventory'], function() {
@@ -434,7 +434,9 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('summary/renew/{id}', 'SummaryController@postRenew');
         Route::post('summary/api/generatePosisiIklan', 'SummaryController@apiGeneratePosisiIklan');
 
-        Route::get('posisi_iklan', 'PosisiIklanController@index');
+        Route::post('posisi_iklan/apiList', 'PosisiIklanController@apiList');
+        Route::post('posisi_iklan/apiDelete', 'PosisiIklanController@apiDelete');
+        Route::resource('posisi_iklan', 'PosisiIklanController');
     });
 
     Route::group(['prefix' => 'grid'], function() {

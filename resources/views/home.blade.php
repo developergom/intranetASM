@@ -4,6 +4,8 @@
 <link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 <link href="{{ url('css/announcement-home.css') }}" rel="stylesheet">
 <link href="{{ url('css/monthly.css') }}" rel="stylesheet">
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
+<link href="{{ url('css/ajax-bootstrap-select.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -83,10 +85,12 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="my-agenda-client-name" class="col-sm-2 control-label">Client</label>
+                            <label for="my-agenda-client-id" class="col-sm-2 control-label">Client</label>
                             <div class="col-sm-7">
                                 <div class="fg-line">
-                                    <input type="text" id="my-agenda-client-name" class="form-control" placeholder="Client Name">
+                                    <!-- <input type="text" id="my-agenda-client-name" class="form-control" placeholder="Client Name"> -->
+                                    <select name="my-agenda-client-id" id="my-agenda-client-id" class="selectpicker" data-live-search="true">
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-sm-3">
@@ -291,12 +295,16 @@
 
 @section('vendorjs')
 <script src="{{ url('js/bootstrap-select.min.js') }}"></script>
+<script src="{{ url('js/ajax-bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/jquery.marquee.min.js') }}"></script>
 <script src="{{ url('js/jquery.sparkline.min.js') }}"></script>
 <script src="{{ url('js/monthly.js') }}"></script>
 @endsection
 
 @section('customjs')
+@can('Agenda-Read')
+<script src="{{ url('js/app/home-my-agenda.js') }}"></script>
+@endcan
 <script type="text/javascript">
 @can('Grid Proposal-Read')
 var barData = [];
@@ -362,8 +370,6 @@ function loadTotalProposalsData() {
 loadTotalProposalsData();
 
 $(document).ajaxSuccess(function(){
-    console.log(barData);
-
     /* Let's create the bar chart */
     if ($('#bar-chart')[0]) {
         $.plot($("#bar-chart"), barData, {
@@ -454,41 +460,6 @@ $(document).ready(function(){
         duplicated: true
       });
 
-    @can('Agenda-Read')
-        var agendaauthors = $('#my-agenda-select-author').val();
-        var agendaclientname = 'all';
-        $('#my-agenda').monthly({
-            'mode' : 'event',
-            'stylePast' : true,
-            'dataType' : 'json',
-            'jsonUrl' : base_url + 'agenda/plan/api/loadMyAgenda/' + agendaauthors + '/' + agendaclientname,
-        });
-
-        $('#btn-my-agenda-process').click(function() {
-            agendaauthors = $('#my-agenda-select-author').val();
-            agendaclientname = $('#my-agenda-client-name').val();
-
-            if(agendaauthors == null) {
-                agendaauthors = 'all';
-            }
-
-            if(agendaclientname == '') {
-                agendaclientname = 'all';
-            }
-
-            newid= new Date().getTime();
-
-            $('.monthly-agenda-calendar').empty().replaceWith('<div class="monthly monthly-agenda-calendar" id="macal' + newid + '"></div>');
-
-            $('#macal' + newid).monthly({
-                'mode' : 'event',
-                'stylePast' : true,
-                'dataType' : 'json',
-                'jsonUrl' : base_url + 'agenda/plan/api/loadMyAgenda/' + agendaauthors + '/' + agendaclientname,
-            });
-        });
-    @endcan
-
     @can('Inventory Planner-Read')
     $.ajax({
         url: base_url + 'inventory/inventoryplanner/api/apiLoadLastUpdated/5',
@@ -498,7 +469,6 @@ $(document).ready(function(){
             console.log('Error loading data');
         },
         success:function(data) {
-            console.log(data);
             $.each(data, function(key, value){
                 var ls = '';
                 ls += '<a class="lv-item" href="' + base_url + 'inventory/inventoryplanner/' + value.inventory_planner_id + '"><div class="media"><div class="media-body"><div class="lv-title">' + value.inventory_planner_title + '</div><small class="lv-small">Created by : ' + value.created_by.user_firstname + ' ' + value.created_by.user_lastname + '</small></div></div></a>';
@@ -524,7 +494,6 @@ $(document).ready(function(){
             console.log('Error loading data');
         },
         success:function(data) {
-            console.log(data);
             $.each(data['monthly'], function(key, value){
                 var ls = '';
                 ls += '<a class="lv-item" href="#"><div class="media"><div class="media-body"><div class="lv-title">' + value.name + '</div><small class="lv-small">' + value.startdate + ' ( ' + value.timeto + ' days left )</small></div></div></a>';
@@ -541,7 +510,6 @@ $(document).ready(function(){
             console.log('Error loading data');
         },
         success:function(data) {
-            console.log(data);
             $.each(data['monthly'], function(key, value){
                 var ls = '';
                 ls += '<a class="lv-item" href="#"><div class="media"><div class="media-body"><div class="lv-title">' + value.name + '</div><small class="lv-small">' + value.startdate + ' ( ' + value.timeto + ' days left )</small></div></div></a>';

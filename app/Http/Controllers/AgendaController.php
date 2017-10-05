@@ -421,7 +421,7 @@ class AgendaController extends Controller
         return response()->json($data);
     }
 
-    public function apiLoadMyAgenda(Request $request, $user_ids = 'all', $client_name = 'all')
+    public function apiLoadMyAgenda(Request $request, $user_ids = 'all', $client_id = 'all')
     {
         $data = array();
         $data['monthly'] = array();
@@ -438,13 +438,11 @@ class AgendaController extends Controller
         if(($user_ids != 'all')){
             $user_ids = preg_split('[,]', $user_ids);
 
-            if($client_name != 'all') {
+            if($client_id != 'all') {
                 $agendas = Agenda::with('agendatype','clientcontacts','clientcontacts.client')
                                 ->whereIn('agendas.created_by', $user_ids)
-                                ->whereHas('clientcontacts', function($query) use ($client_name){
-                                        $query->whereHas('client', function($q) use($client_name){
-                                            $q->where('client_name', 'like', '%' . $client_name . '%');
-                                        });
+                                ->whereHas('clientcontacts', function($query) use ($client_id){
+                                        $query->where('client_id', '=', $client_id);
                                     })
                                 ->where('agendas.active', '1')->get();
             }else{
@@ -456,16 +454,14 @@ class AgendaController extends Controller
         }else{
             //user_ids all
 
-            if($client_name != 'all') {
+            if($client_id != 'all') {
                 $agendas = Agenda::with('agendatype','clientcontacts','clientcontacts.client')
                                 ->where(function($query) use($request, $subordinate){
                                         $query->where('agendas.created_by', '=' , $request->user()->user_id)
                                                 ->orWhereIn('agendas.created_by', $subordinate);
                                     })
-                                ->whereHas('clientcontacts', function($query) use ($client_name){
-                                        $query->whereHas('client', function($q) use($client_name){
-                                            $q->where('client_name', 'like', '%' . $client_name . '%');
-                                        });
+                                ->whereHas('clientcontacts', function($query) use ($client_id){
+                                        $query->where('client_id', '=', $client_id);
                                     })
                                 ->where('agendas.active', '1')->get();
             }else{

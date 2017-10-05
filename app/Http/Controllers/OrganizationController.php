@@ -49,8 +49,8 @@ class OrganizationController extends Controller
     {
         $this->validate($request, [
             'organization_name' => 'required|max:100',
-            'organization_account_name' => 'max|50',
-            'organization_account_no' => 'max|50',
+            'organization_account_name' => 'max:50',
+            'organization_account_no' => 'max:50',
             'organization_term_of_payment' => 'numeric'
         ]);
 
@@ -118,8 +118,8 @@ class OrganizationController extends Controller
     {
        $this->validate($request, [
             'organization_name' => 'required|max:100',
-            'organization_account_name' => 'max|50',
-            'organization_account_no' => 'max|50',
+            'organization_account_name' => 'max:50',
+            'organization_account_no' => 'max:50',
             'organization_term_of_payment' => 'numeric'
         ]);
 
