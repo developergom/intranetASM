@@ -98,9 +98,6 @@ class SummaryController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all(), false);
-        //dd($request->session()->get('summary_details_' . $request->user()->user_id));
-
         $this->validate($request,
             [
                 'proposal_id' => 'required|numeric',
@@ -1369,6 +1366,7 @@ class SummaryController extends Controller
         $year = $request->input('year');
         $month = $request->input('month');
         $view_type = $request->input('view_type');
+        $edition_date = Carbon::createFromFormat('d/m/Y', $request->input('edition_date'))->toDateString();
         
         if($view_type=='digital'){ //digital
              $items = SummaryItem::join('summaries', 'summaries.summary_id', '=', 'summary_items.summary_id')
@@ -1384,6 +1382,7 @@ class SummaryController extends Controller
                             ->where('rates.media_id', $media_id)
                             ->where('summaries.flow_no', '98')
                             ->where('summary_items.active', '1')
+                            ->where('summary_items.summary_item_viewed', 'PROCESS')
                             ->whereYear('summary_item_period_start', '=', $year)
                             ->whereMonth('summary_item_period_start', '=', $month)
                             ->orderBy('summary_item_period_start', 'asc')
@@ -1395,9 +1394,11 @@ class SummaryController extends Controller
                             ->join('rates', 'rates.rate_id', '=', 'summary_items.rate_id')
                             ->where('summaries.flow_no', '98')
                             ->where('summary_items.active', '1')
+                            ->where('summary_items.summary_item_viewed', 'PROCESS')
                             ->where('rates.media_id', $media_id)
-                            ->whereYear('summary_item_period_start', '=', $year)
-                            ->whereMonth('summary_item_period_start', '=', $month)
+                            /*->whereYear('summary_item_period_start', '=', $year)
+                            ->whereMonth('summary_item_period_start', '=', $month)*/
+                            ->where('summary_item_period_start', $edition_date)
                             ->groupBy('summary_item_period_start')
                             ->get();
 
@@ -1416,6 +1417,7 @@ class SummaryController extends Controller
                             ->where('rates.media_id', $media_id)
                             ->where('summaries.flow_no', '98')
                             ->where('summary_items.active', '1')
+                            ->where('summary_items.summary_item_viewed', 'PROCESS')
                             ->where('summary_item_period_start', $value->summary_item_period_start)
                             ->orderBy('summary_item_period_start', 'asc')
                             ->get();

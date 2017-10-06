@@ -213,6 +213,7 @@ var
                 {
                   calculateOmzet(this);
                 }
+
             }
 
             $.ajax({

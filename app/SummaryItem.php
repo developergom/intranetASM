@@ -45,5 +45,11 @@ class SummaryItem extends Model
 	public function omzettype()
 	{
 		return $this->belongsTo('App\OmzetType', 'omzet_type_id');
+
+	}
+
+	public function posisiiklanitem()
+	{
+		return $this->hasOne('App\PosisiIklanItem', 'summary_item_id');
 	}
 }

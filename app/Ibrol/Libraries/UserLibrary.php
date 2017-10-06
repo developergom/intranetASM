@@ -8,7 +8,6 @@ class UserLibrary{
 	public function getUserSubordinate($user_id) {
 		$user = User::find($user_id);
 
-		//dd($user->roles);
 		$user_group = array();
 		foreach ($user->groups as $key => $value) {
 			array_push($user_group, $value['group_id']);
@@ -19,7 +18,6 @@ class UserLibrary{
 			if($role < $value['role_level_id'])
 				$role = $value['role_level_id'];
 		}
-		/*dd($role);*/
 
 		$result = User::join('users_groups', 'users_groups.user_id', '=', 'users.user_id')
 						->join('users_roles', 'users_roles.user_id', '=', 'users.user_id')
@@ -39,6 +37,18 @@ class UserLibrary{
 		$result = array();
 		foreach ($tmp as $key => $value) {
 			array_push($result, $value['user_id']);
+		}
+
+		return $result;
+	}
+
+	public function getMedias($user_id) {
+		$result = [];
+
+		$user = User::with('medias')->find($user_id);
+
+		foreach($user->medias as $key => $value) {
+			array_push($result, $value->media_id);
 		}
 
 		return $result;

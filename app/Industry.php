@@ -26,4 +26,9 @@ class Industry extends Model
 	{
 		return $this->belongsToMany('App\Proposal', 'proposal_industry');
 	}
+
+	public function posisiiklanitems()
+	{
+		return $this->hasMany('App\PosisiIklanItem', 'industry_id');
+	}
 }

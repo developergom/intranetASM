@@ -436,6 +436,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
 
         Route::post('posisi_iklan/apiList', 'PosisiIklanController@apiList');
         Route::post('posisi_iklan/apiDelete', 'PosisiIklanController@apiDelete');
+        Route::post('posisi_iklan/apiCheckCode', 'PosisiIklanController@apiCheckCode');
         Route::resource('posisi_iklan', 'PosisiIklanController');
     });
 

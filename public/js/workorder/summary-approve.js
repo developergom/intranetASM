@@ -248,7 +248,11 @@ $(document).ready(function(){
       hot1.updateSettings({
          cells: function(row, col, prop){
           var cellProperties = {};
-            cellProperties.readOnly = false;
+            if(hot1.getDataAtCell(row, 14) !== 'COMPLETED'){
+              cellProperties.readOnly = false
+            }else{
+              cellProperties.readOnly = true
+            }
           return cellProperties
         }
       });

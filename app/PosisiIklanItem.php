@@ -10,7 +10,7 @@ class PosisiIklanItem extends Model
 	protected $primaryKey = 'posisi_iklan_id';
 
 	protected $fillable = [
-				'posisi_iklan_item_id'
+				'posisi_iklan_item_id',
 				'posisi_iklan_id', 
 				'summary_item_id',
 				'client_id',
@@ -34,4 +34,29 @@ class PosisiIklanItem extends Model
 	protected $hidden = [
 				'active', 'created_by', 'created_at', 'updated_by'
 	];
+
+	public function posisiiklan()
+	{
+		return $this->belongsTo('App\PosisiIklan', 'posisi_iklan_id');
+	}
+
+	public function summaryitem()
+	{
+		return $this->belongsTo('App\SummaryItem', 'summary_item_id');
+	}
+
+	public function client()
+	{
+		return $this->belongsTo('App\Client', 'client_id');
+	}
+
+	public function industry()
+	{
+		return $this->belongsTo('App\Industry', 'industry_id');
+	}
+
+	public function sales()
+	{
+		return $this->belongsTo('App\User', 'sales_id', 'user_id');
+	}
 }

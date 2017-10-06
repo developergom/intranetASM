@@ -6,6 +6,15 @@
 <link href="{{ url('css/dropzone.min.css') }}" rel="stylesheet">
 @endsection
 
+@section('customcss')
+<style type="text/css">
+  .handsontable .htCore .htDimmed {
+      background-color: #CCCCCC;
+      font-style: italic;
+  }
+</style>
+@endsection
+
 @section('content')
     <div class="card">
         <div class="card-header"><h2>Summary<small>Edit Summary</small></h2></div>

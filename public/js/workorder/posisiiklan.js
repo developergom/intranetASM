@@ -12,23 +12,23 @@ $("#grid-data").bootgrid({
     formatters: {
         "link-rud": function(column, row)
         {
-            return '<a title="View Posisi Iklan" href="' + base_url + 'master/posisi_iklan/' + row.posisi_iklan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.posisi_iklan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                    +'<a title="Edit Posisi Iklan" href="' + base_url + 'master/posisi_iklan/' + row.posisi_iklan_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.posisi_iklan_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
+            return '<a title="View Posisi Iklan" href="' + base_url + 'workorder/posisi_iklan/' + row.posisi_iklan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.posisi_iklan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit Posisi Iklan" href="' + base_url + 'workorder/posisi_iklan/' + row.posisi_iklan_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.posisi_iklan_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;'
                     +'<a title="Delete Posisi Iklan" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.posisi_iklan_id + '"><span class="zmdi zmdi-delete"></span></a>';
         },
         "link-ru": function(column, row)
         {
-            return '<a title="View Posisi Iklan" href="' + base_url + 'master/posisi_iklan/' + row.posisi_iklan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.posisi_iklan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                    +'<a title="Edit Posisi Iklan" href="' + base_url + 'master/posisi_iklan/' + row.posisi_iklan_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.posisi_iklan_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;';
+            return '<a title="View Posisi Iklan" href="' + base_url + 'workorder/posisi_iklan/' + row.posisi_iklan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.posisi_iklan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+                    +'<a title="Edit Posisi Iklan" href="' + base_url + 'workorder/posisi_iklan/' + row.posisi_iklan_id + '/edit" class="btn btn-icon command-edit waves-effect waves-circle" type="button" data-row-id="' + row.posisi_iklan_id + '"><span class="zmdi zmdi-edit"></span></a>&nbsp;&nbsp;';
         },
         "link-rd": function(column, row)
         {
-            return '<a title="View Posisi Iklan" href="' + base_url + 'master/posisi_iklan/' + row.posisi_iklan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.posisi_iklan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
+            return '<a title="View Posisi Iklan" href="' + base_url + 'workorder/posisi_iklan/' + row.posisi_iklan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.posisi_iklan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
                     +'<a title="Delete Posisi Iklan" href="javascript:void(0);" class="btn btn-icon btn-delete-table command-delete waves-effect waves-circle" type="button" data-row-id="' + row.posisi_iklan_id + '"><span class="zmdi zmdi-delete"></span></a>';
         },
         "link-r": function(column, row)
         {
-            return '<a title="View Posisi Iklan" href="' + base_url + 'master/posisi_iklan/' + row.posisi_iklan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.posisi_iklan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
+            return '<a title="View Posisi Iklan" href="' + base_url + 'workorder/posisi_iklan/' + row.posisi_iklan_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.posisi_iklan_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
         }
     }
 }).on("loaded.rs.jquery.bootgrid", function()

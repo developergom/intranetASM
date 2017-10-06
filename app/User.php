@@ -157,4 +157,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Mutation', 'mutation_from');
     }
+
+    public function salesposisiiklanitems()
+    {
+        return $this->hasMany('App\PosisiIklanItem', 'sales_id', 'user_id');
+    }
 }
