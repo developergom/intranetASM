@@ -47,6 +47,7 @@
                                     <th data-column-id="client_name" data-order="asc">Client</th>
                                     <th data-column-id="posisi_iklan_item_name" data-order="asc">Title</th>
                                     <th data-column-id="summary_item_period_start" data-order="asc">Show Date</th>
+                                    <th data-column-id="user_firstname" data-order="asc">PIC</th>
                                     <th data-column-id="link" data-formatter="link-rua" data-sortable="false">Action</th>
                                 </tr>
                             </thead>
@@ -67,6 +68,7 @@
                                     <th data-column-id="client_name" data-order="asc">Client</th>
                                     <th data-column-id="posisi_iklan_item_name" data-order="asc">Title</th>
                                     <th data-column-id="summary_item_period_start" data-order="asc">Show Date</th>
+                                    <th data-column-id="user_firstname" data-order="asc">PIC</th>
                                     <th data-column-id="link" data-formatter="link-rua" data-sortable="false">Action</th>
                                 </tr>
                             </thead>

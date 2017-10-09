@@ -181,7 +181,7 @@ class MutationController extends Controller
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
         $data['searchPhrase'] = $searchPhrase;
-        $data['rows'] = Mutation::select('mutation_id', 'mutations.created_at', 'a.user_firstname AS from_firstname', 'a.user_lastname AS from_lastname', 'b.user_firstname AS to_firstname', 'b.user_lastname AS to_lastname', 'inventory_planner_title', 'proposal_name', 'summary_order_no')
+        $data['rows'] = Mutation::select('mutation_id', 'mutations.created_at AS created_at', 'a.user_firstname AS from_firstname', 'a.user_lastname AS from_lastname', 'b.user_firstname AS to_firstname', 'b.user_lastname AS to_lastname', 'inventory_planner_title', 'proposal_name', 'summary_order_no')
         					->join('users AS a', 'a.user_id', '=', 'mutations.mutation_from')
         					->join('users AS b', 'b.user_id', '=', 'mutations.mutation_to')
         					->leftJoin('inventories_planner', 'inventories_planner.inventory_planner_id', '=', 'mutation_item_id')
@@ -199,7 +199,7 @@ class MutationController extends Controller
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
-        $data['total'] = Mutation::select('mutation_id', 'mutations.created_at', 'a.user_firstname AS from_firstname', 'a.user_lastname AS from_lastname', 'b.user_firstname AS to_firstname', 'b.user_lastname AS to_lastname', 'inventory_planner_title', 'proposal_name', 'summary_order_no')
+        $data['total'] = Mutation::select('mutation_id', 'mutations.created_at AS created_at', 'a.user_firstname AS from_firstname', 'a.user_lastname AS from_lastname', 'b.user_firstname AS to_firstname', 'b.user_lastname AS to_lastname', 'inventory_planner_title', 'proposal_name', 'summary_order_no')
         					->join('users AS a', 'a.user_id', '=', 'mutations.mutation_from')
         					->join('users AS b', 'b.user_id', '=', 'mutations.mutation_to')
         					->leftJoin('inventories_planner', 'inventories_planner.inventory_planner_id', '=', 'mutation_item_id')

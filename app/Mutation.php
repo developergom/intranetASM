@@ -15,10 +15,11 @@ class Mutation extends Model
 				'mutation_desc',
 				'module_id',
 				'mutation_item_id',
+				'created_at',
 	];
 
 	protected $hidden = [
-				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
+				'active', 'created_by', 'updated_by', 'updated_at'
 	];
 
 	public function _mutation_to()
