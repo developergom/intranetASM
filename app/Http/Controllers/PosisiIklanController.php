@@ -257,18 +257,21 @@ class PosisiIklanController extends Controller
 
     public function show($id)
     {
+        if(Gate::denies('Posisi Iklan-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = array();
 
-        $data['posisi_iklan'] = PosisiIklan::with('posisiiklanitems',
+        $data['posisiiklan'] = PosisiIklan::with('posisiiklanitems',
                                                     'media',
                                                     'posisiiklanitems.summaryitem',
                                                     'posisiiklanitems.client',
                                                     'posisiiklanitems.industry',
                                                     'posisiiklanitems.sales')
                                             ->find($id);
-
-        dd($data);
-
+        $data['months'] = $this->months;
+        
         return view('vendor.material.workorder.posisiiklan.show', $data); 
     }
 

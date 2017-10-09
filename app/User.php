@@ -162,4 +162,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\PosisiIklanItem', 'sales_id', 'user_id');
     }
+
+    public function picposisiiklanitemtasks()
+    {
+        return $this->hasMany('App\PosisiIklanItemTask', 'posisi_iklan_item_task_pic', 'user_id');
+    }
 }

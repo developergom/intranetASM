@@ -61,27 +61,6 @@
                                 <i class="tm-icon zmdi zmdi-email"></i>
                                 <i class="tmn-counts">0</i>
                             </a>
-                            <!-- <div class="dropdown-menu dropdown-menu-lg pull-right">
-                                <div class="listview">
-                                    <div class="lv-header">
-                                        Messages
-                                    </div>
-                                    <div class="lv-body">
-                                        <a class="lv-item" href="#">
-                                            <div class="media">
-                                                <div class="pull-left">
-                                                    <img class="lv-img-sm" src="#" alt="">
-                                                </div>
-                                                <div class="media-body">
-                                                    <div class="lv-title">Jonathan Morris</div>
-                                                    <small class="lv-small">Nunc quis diam diamurabitur at dolor elementum, dictum turpis vel</small>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <a class="lv-footer" href="#">View All</a>
-                                </div>
-                            </div> -->
                         </li>
                         <li class="dropdown">
                             <a data-toggle="dropdown" href="#">
@@ -94,25 +73,10 @@
                                         Notification
 
                                         <ul class="actions">
-                                            <!-- <li class="dropdown">
-                                                <a href="#" data-clear="notification">
-                                                    <i class="zmdi zmdi-check-all"></i>
-                                                </a>
-                                            </li> -->
                                         </ul>
                                     </div>
                                     <div class="lv-body" id="notification_lists">
-                                        <!-- <a class="lv-item" href="#">
-                                            <div class="media">
-                                                <div class="pull-left">
-                                                    <img class="lv-img-sm" src="#" alt="">
-                                                </div>
-                                                <div class="media-body">
-                                                    <div class="lv-title">Bill Phillips</div>
-                                                    <small class="lv-small">Proin laoreet commodo eros id faucibus. Donec ligula quam, imperdiet vel ante placerat</small>
-                                                </div>
-                                            </div>
-                                        </a> -->
+                                        
                                     </div>
 
                                     <!-- <a class="lv-footer" href="#">View Previous</a> -->
@@ -120,68 +84,6 @@
 
                             </div>
                         </li>
-                        <!-- <li class="dropdown hidden-xs">
-                            <a data-toggle="dropdown" href="#">
-                                <i class="tm-icon zmdi zmdi-view-list-alt"></i>
-                                <i class="tmn-counts">2</i>
-                            </a>
-                            <div class="dropdown-menu pull-right dropdown-menu-lg">
-                                <div class="listview">
-                                    <div class="lv-header">
-                                        Tasks
-                                    </div>
-                                    <div class="lv-body">
-                                        <div class="lv-item">
-                                            <div class="lv-title m-b-5">HTML5 Validation Report</div>
-
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 95%">
-                                                    <span class="sr-only">95% Complete (success)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="lv-item">
-                                            <div class="lv-title m-b-5">Google Chrome Extension</div>
-
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                                                    <span class="sr-only">80% Complete (success)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="lv-item">
-                                            <div class="lv-title m-b-5">Social Intranet Projects</div>
-
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                                    <span class="sr-only">20% Complete</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="lv-item">
-                                            <div class="lv-title m-b-5">Bootstrap Admin Template</div>
-
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                                                    <span class="sr-only">60% Complete (warning)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="lv-item">
-                                            <div class="lv-title m-b-5">Youtube Client App</div>
-
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                                                    <span class="sr-only">80% Complete (danger)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <a class="lv-footer" href="#">View All</a>
-                                </div>
-                            </div>
-                        </li> -->
                         <li class="dropdown">
                             <a data-toggle="dropdown" href="#"><i class="tm-icon zmdi zmdi-more-vert"></i></a>
                             <ul class="dropdown-menu dm-icon pull-right">
@@ -199,9 +101,6 @@
                                 </li>
                             </ul>
                         </li>
-                        <!-- <li class="hidden-xs" id="chat-trigger" data-trigger="#chat">
-                            <a href="#"><i class="tm-icon zmdi zmdi-comment-alt-text"></i></a>
-                        </li> -->
                     </ul>
                 </li>
             </ul>
@@ -244,96 +143,6 @@
                     </ul>
                 </div>
 
-                <!-- <ul class="main-menu">
-                    @can('Home-Read')
-                    <li class="{{ (Request::segment(1)=='') ? 'active' : ''  }}">
-                        <a href="{{ url('/') }}"><i class="zmdi zmdi-home"></i> Home</a>
-                    </li>
-                    @endcan
-                    @can('Users Management-Read')
-                    <li class="{{ (Request::segment(1)=='user') ? 'active' : ''  }}">
-                        <a href="{{ url('user') }}"><i class="zmdi zmdi-assignment-account"></i> Users Management</a>
-                    </li>
-                    @endcan
-                    @can('Master Data-Read')
-                    <li class="sub-menu {{ (Request::segment(1)=='master') ? 'active toggled' : ''  }}">
-                        <a href="#"><i class="zmdi zmdi-view-list"></i> Master Data</a>
-
-                        <ul>
-                            @can('Action Controls Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='action') ? 'active' : ''  }}" href="{{ url('master/action') }}">Action Controls Management</a></li>
-                            @endcan
-                            @can('Action Types Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='actiontype') ? 'active' : ''  }}" href="{{ url('master/actiontype') }}">Action Types Management</a></li>
-                            @endcan
-                            @can('Advertise Positions Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='advertiseposition') ? 'active' : ''  }}" href="{{ url('master/advertiseposition') }}">Advertise Positions Management</a></li>
-                            @endcan
-                            @can('Advertise Rates Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='advertiserate') ? 'active' : ''  }}" href="{{ url('master/advertiserate') }}">Advertise Rates Management</a></li>
-                            @endcan
-                            @can('Advertise Sizes Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='advertisesize') ? 'active' : ''  }}" href="{{ url('master/advertisesize') }}">Advertise Sizes Management</a></li>
-                            @endcan
-                            @can('Brands Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='brand') ? 'active' : ''  }}" href="{{ url('master/brand') }}">Brands Management</a></li>
-                            @endcan
-                            @can('Clients Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='client') ? 'active' : ''  }}" href="{{ url('master/client') }}">Clients Management</a></li>
-                            @endcan
-                            @can('Client Types Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='clienttype') ? 'active' : ''  }}" href="{{ url('master/clienttype') }}">Client Types Management</a></li>
-                            @endcan
-                            @can('Groups Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='group') ? 'active' : ''  }}" href="{{ url('master/group') }}">Groups Management</a></li>
-                            @endcan
-                            @can('Holidays Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='holiday') ? 'active' : ''  }}" href="{{ url('master/holiday') }}">Holidays Management</a></li>
-                            @endcan
-                            @can('Industries Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='industry') ? 'active' : ''  }}" href="{{ url('master/industry') }}">Industries Management</a></li>
-                            @endcan
-                            @can('Inventory Types Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='inventorytype') ? 'active' : ''  }}" href="{{ url('master/inventorytype') }}">Inventory Types Management</a></li>
-                            @endcan
-                            @can('Media Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='media') ? 'active' : ''  }}" href="{{ url('master/media') }}">Media Management</a></li>
-                            @endcan
-                            @can('Media Categories Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='mediacategory') ? 'active' : ''  }}" href="{{ url('master/mediacategory') }}">Media Categories Management</a></li>
-                            @endcan
-                            @can('Media Groups Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='mediagroup') ? 'active' : ''  }}" href="{{ url('master/mediagroup') }}">Media Groups Management</a></li>
-                            @endcan
-                            @can('Menus Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='menu') ? 'active' : ''  }}" href="{{ url('master/menu') }}">Menus Management</a></li>
-                            @endcan
-                            @can('Modules Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='module') ? 'active' : ''  }}" href="{{ url('master/module') }}">Modules Management</a></li>
-                            @endcan
-                            @can('Paper Types Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='paper') ? 'active' : ''  }}" href="{{ url('master/paper') }}">Paper Types Management</a></li>
-                            @endcan
-                            @can('Proposal Types Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='proposaltype') ? 'active' : ''  }}" href="{{ url('master/proposaltype') }}">Proposal Types Management</a></li>
-                            @endcan
-                            @can('Religions Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='religion') ? 'active' : ''  }}" href="{{ url('master/religion') }}">Religions Management</a></li>
-                            @endcan
-                            @can('Roles Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='role') ? 'active' : ''  }}" href="{{ url('master/role') }}">Roles Management</a></li>
-                            @endcan
-                            @can('Sub Industries Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='subindustry') ? 'active' : ''  }}" href="{{ url('master/subindustry') }}">Sub Industries Management</a></li>
-                            @endcan
-                            @can('Units Management-Read')
-                            <li><a class="{{ (Request::segment(2)=='unit') ? 'active' : ''  }}" href="{{ url('master/unit') }}">Units Management</a></li>
-                            @endcan
-                        </ul>
-                    </li>
-                    @endcan
-                </ul> -->
-                <!-- @include('vendor.material.layouts.menu') -->
                 {!! $menucomposer !!}
             </aside>
             
@@ -373,14 +182,6 @@
         
         <footer id="footer">
             Copyright &copy; 2016 Gramedia Majalah IT
-            
-            <!-- <ul class="f-menu">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Reports</a></li>
-                <li><a href="#">Support</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul> -->
         </footer>
 
         <!-- Page Loader -->

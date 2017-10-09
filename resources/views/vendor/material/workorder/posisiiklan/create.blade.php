@@ -5,18 +5,9 @@
 <link href="{{ url('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
 @endsection
 
-@section('customcss')
-<style type="text/css">
-	.handsontable .htCore .htDimmed {
-	    background-color: #CCCCCC;
-	    font-style: italic;
-	}
-</style>
-@endsection
-
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Posisi Iklan<small>View</small></h2></div>
+        <div class="card-header"><h2>Posisi Iklan<small>Generate Posisi Iklan</small></h2></div>
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form" method="POST" action="{{ url('workorder/posisi_iklan') }}">
         		{{ csrf_field() }}

@@ -7,10 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class PosisiIklanItem extends Model
 {
     protected $table = 'posisi_iklan_items';
-	protected $primaryKey = 'posisi_iklan_id';
+	protected $primaryKey = 'posisi_iklan_item_id';
 
 	protected $fillable = [
-				'posisi_iklan_item_id',
 				'posisi_iklan_id', 
 				'summary_item_id',
 				'client_id',
@@ -58,5 +57,10 @@ class PosisiIklanItem extends Model
 	public function sales()
 	{
 		return $this->belongsTo('App\User', 'sales_id', 'user_id');
+	}
+
+	public function posisiiklanitemtask()
+	{
+		return $this->hasOne('App\PosisiIklanItemTask', 'posisi_iklan_item_id');
 	}
 }
