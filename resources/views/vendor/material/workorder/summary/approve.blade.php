@@ -113,26 +113,24 @@
 				    <div class="col-sm-10">
 				        <div class="fg-line">
 				            @foreach ($summary->uploadfiles as $uploadedfile)
-				                @if($uploadedfile->upload_file_revision==$summary->revision_no)
-				                    <div class="col-sm-6 col-md-3">
-				                        <div class="thumbnail">
-				                            @if($uploadedfile->upload_file_type=='jpg' || $uploadedfile->upload_file_type=='png' || $uploadedfile->upload_file_type=='gif' || $uploadedfile->upload_file_type=='jpeg')
-				                            <img src="{{ url($uploadedfile->upload_file_path . '/' . $uploadedfile->upload_file_name) }}" alt="{{ $uploadedfile->upload_file_name }}">
-				                            @else
-				                            <img src="{{ url('img/filetypes/' . $uploadedfile->upload_file_type . '.png') }}" alt="">
-				                            @endif
-				                            <div class="caption">
-				                                <h6>{{ $uploadedfile->upload_file_name }}</h6>
-				                                <p>{{ $uploadedfile->upload_file_desc }}</p>
-				                                <div class="m-b-5">
-				                                    @can('Summary-Download')
-				                                    <a class="btn btn-sm btn-primary waves-effect" href="{{ url('download/file/' . $uploadedfile->upload_file_id) }}" role="button">Download File</a>
-				                                    @endcan
-				                                </div>
-				                            </div>
-				                        </div>
-				                    </div>
-				                @endif
+			                    <div class="col-sm-6 col-md-3">
+			                        <div class="thumbnail">
+			                            @if($uploadedfile->upload_file_type=='jpg' || $uploadedfile->upload_file_type=='png' || $uploadedfile->upload_file_type=='gif' || $uploadedfile->upload_file_type=='jpeg')
+			                            <img src="{{ url($uploadedfile->upload_file_path . '/' . $uploadedfile->upload_file_name) }}" alt="{{ $uploadedfile->upload_file_name }}">
+			                            @else
+			                            <img src="{{ url('img/filetypes/' . $uploadedfile->upload_file_type . '.png') }}" alt="">
+			                            @endif
+			                            <div class="caption">
+			                                <h6>{{ $uploadedfile->upload_file_name . ' - [Rev ' . $uploadedfile->upload_file_revision . ']' }}</h6>
+			                                <p>{{ $uploadedfile->upload_file_desc }}</p>
+			                                <div class="m-b-5">
+			                                    @can('Summary-Download')
+			                                    <a class="btn btn-sm btn-primary waves-effect" href="{{ url('download/file/' . $uploadedfile->upload_file_id) }}" role="button">Download File</a>
+			                                    @endcan
+			                                </div>
+			                            </div>
+			                        </div>
+			                    </div>
 				            @endforeach
 				        </div>
 				    </div>

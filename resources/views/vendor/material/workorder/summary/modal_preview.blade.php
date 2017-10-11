@@ -27,7 +27,8 @@
                 <th>Internal Omzet</th>
                 <th>Remarks</th>
                 <th>Termin</th>
-                <th>Viewed Status</th>
+                <th>Status</th>
+                <th>Edited</th>
               </tr>
             </thead>
             <tbody>

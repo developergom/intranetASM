@@ -15,7 +15,7 @@ var
     minSpareRows: 1,
     formulas:true,
     contextMenu: ['row_above', 'row_below', 'col_left', 'col_right', 'remove_row', 'remove_col', 'undo', 'redo', 'alignment', 'copy', 'cut'],
-    colHeaders: ['No', 'Type', 'Rate Name', 'Media', 'Edition/Period Start', 'Period End', 'Omzet Type', 'Insertion', 'Gross Rate', 'Disc(%)', 'Nett Rate', 'Internal Omzet', 'Remarks', 'Termin', 'Viewed Status'],
+    colHeaders: ['No', 'Type', 'Rate Name', 'Media', 'Edition/Period Start', 'Period End', 'Omzet Type', 'Insertion', 'Gross Rate', 'Disc(%)', 'Nett Rate', 'Internal Omzet', 'Remarks', 'Termin', 'Status', 'Edited', 'Halaman', 'Kanal', 'Order Digital', 'Materi', 'Status Materi', 'Capture Materi', 'Sales Order', 'PPN', 'Total'],
     columns: [
       {type: 'numeric'}, //no
       {//type
@@ -121,10 +121,41 @@ var
         source: [
                 'COMPLETED',
                 'PROCESS',
+                'TBC',
+                'CONFIRMED'
                 ],
         strict: true
+      },
+      {
+        //editable
+        type: 'autocomplete',
+        source: [
+                'NO',
+                'YES'
+        ]
+      },
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {//ppn
+        type: 'numeric',
+        format: 'Rp 0,0.00',
+        language: 'id'
+      },
+      {//total
+        type: 'numeric',
+        format: 'Rp 0,0.00',
+        language: 'id'
       }
     ],
+    hiddenColumns: {
+      columns: [16, 17, 18, 19, 20, 21, 22, 23, 24],
+      indicators: true
+    },
     afterChange: function(changes) {
         if(changes!==null){
             var instance = this,
@@ -360,6 +391,16 @@ $(document).ready(function(){
         html += '<td>' + value[12] + '</td>';
         html += '<td>' + value[13] + '</td>';
         html += '<td>' + value[14] + '</td>';
+        html += '<td>' + value[15] + '</td>';
+        html += '<td>' + value[16] + '</td>';
+        html += '<td>' + value[17] + '</td>';
+        html += '<td>' + value[18] + '</td>';
+        html += '<td>' + value[19] + '</td>';
+        html += '<td>' + value[20] + '</td>';
+        html += '<td>' + value[21] + '</td>';
+        html += '<td>' + value[22] + '</td>';
+        html += '<td>' + value[23] + '</td>';
+        html += '<td>' + value[24] + '</td>';
         html += '</tr>';
       }
     });

@@ -66,7 +66,7 @@ class SummaryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($proposal_id)
+    public function create(Request $request, $proposal_id)
     {
         if(Gate::denies('Summary-Create')) {
             abort(403, 'Unauthorized action.');
@@ -85,7 +85,10 @@ class SummaryController extends Controller
                                         'inventoriesplanner'
                                         )->find($proposal_id);
 
-        $notes = '';
+        //forget session
+        if($request->session()->has('summary_details_' . $request->user()->user_id)) {
+            $request->session()->forget('summary_details_' . $request->user()->user_id);
+        }
 
         return view('vendor.material.workorder.summary.create', $data);
     }
@@ -205,6 +208,18 @@ class SummaryController extends Controller
             $detail->summary_item_remarks = $hot[$i][12];
             $detail->summary_item_termin = $hot[$i][13];
             $detail->summary_item_viewed = $hot[$i][14];
+            $detail->summary_item_edited = $hot[$i][15];
+            $detail->page_no = $hot[$i][16];
+            $detail->summary_item_canal = $hot[$i][17];
+            $detail->summary_item_order_digital = $hot[$i][18];
+            $detail->summary_item_materi = $hot[$i][19];
+            $detail->summary_item_status_materi = $hot[$i][20];
+            $detail->summary_item_capture_materi = $hot[$i][21];
+            $detail->summary_item_sales_order = $hot[$i][22];
+            $detail->summary_item_ppn = $hot[$i][23];
+            $detail->summary_item_total = $hot[$i][24];
+            $detail->summary_item_task_status = 0;
+            $detail->source_type = 'SUMMARY';
             $detail->revision_no = 0;
             $detail->active = '1';
             $detail->created_by = $request->user()->user_id;
@@ -288,6 +303,7 @@ class SummaryController extends Controller
                     'summaryitems.omzettype'
                 ])->find($id);
 
+
         $data['proposal'] = Proposal::with(
                                         'proposaltype', 
                                         'proposalmethod', 
@@ -324,7 +340,17 @@ class SummaryController extends Controller
                         $value->summary_item_internal_omzet,
                         $value->summary_item_remarks,
                         $value->summary_item_termin,
-                        $value->summary_item_viewed
+                        $value->summary_item_viewed,
+                        $value->summary_item_edited,
+                        $value->page_no,
+                        $value->summary_item_canal,
+                        $value->summary_item_order_digital,
+                        $value->summary_item_materi,
+                        $value->summary_item_status_materi,
+                        $value->summary_item_capture_materi,
+                        $value->summary_item_sales_order,
+                        $value->summary_item_ppn,
+                        $value->summary_item_total
                     ];
 
                     array_push($details, $arr);
@@ -450,6 +476,18 @@ class SummaryController extends Controller
             $detail->summary_item_remarks = $hot[$i][12];
             $detail->summary_item_termin = $hot[$i][13];
             $detail->summary_item_viewed = $hot[$i][14];
+            $detail->summary_item_edited = $hot[$i][15];
+            $detail->page_no = $hot[$i][16];
+            $detail->summary_item_canal = $hot[$i][17];
+            $detail->summary_item_order_digital = $hot[$i][18];
+            $detail->summary_item_materi = $hot[$i][19];
+            $detail->summary_item_status_materi = $hot[$i][20];
+            $detail->summary_item_capture_materi = $hot[$i][21];
+            $detail->summary_item_sales_order = $hot[$i][22];
+            $detail->summary_item_ppn = $hot[$i][23];
+            $detail->summary_item_total = $hot[$i][24];
+            $detail->summary_item_task_status = 0;
+            $detail->source_type = 'SUMMARY';
             $detail->revision_no = $obj->revision_no;
             $detail->active = '1';
             $detail->created_by = $request->user()->user_id;
@@ -675,7 +713,7 @@ class SummaryController extends Controller
         $details = SummaryItem::with('rate', 'rate.media', 'omzettype')
                                     ->where('summary_id', $summary_id)
                                     ->where('revision_no', $revision_no)
-                                    /*->where('active', 1)*/
+                                    ->orderBy('summary_item_termin', 'asc')
                                     ->get();
 
         return response()->json($details);
@@ -951,7 +989,17 @@ class SummaryController extends Controller
                         $value->summary_item_internal_omzet,
                         $value->summary_item_remarks,
                         $value->summary_item_termin,
-                        $value->summary_item_viewed
+                        $value->summary_item_viewed,
+                        $value->summary_item_edited,
+                        $value->page_no,
+                        $value->summary_item_canal,
+                        $value->summary_item_order_digital,
+                        $value->summary_item_materi,
+                        $value->summary_item_status_materi,
+                        $value->summary_item_capture_materi,
+                        $value->summary_item_sales_order,
+                        $value->summary_item_ppn,
+                        $value->summary_item_total
                     ];
 
                     array_push($details, $arr);
@@ -1030,6 +1078,18 @@ class SummaryController extends Controller
                     $detail->summary_item_remarks = $hot[$i][12];
                     $detail->summary_item_termin = $hot[$i][13];
                     $detail->summary_item_viewed = $hot[$i][14];
+                    $detail->summary_item_edited = $hot[$i][15];
+                    $detail->page_no = $hot[$i][16];
+                    $detail->summary_item_canal = $hot[$i][17];
+                    $detail->summary_item_order_digital = $hot[$i][18];
+                    $detail->summary_item_materi = $hot[$i][19];
+                    $detail->summary_item_status_materi = $hot[$i][20];
+                    $detail->summary_item_capture_materi = $hot[$i][21];
+                    $detail->summary_item_sales_order = $hot[$i][22];
+                    $detail->summary_item_ppn = $hot[$i][23];
+                    $detail->summary_item_total = $hot[$i][24];
+                    $detail->summary_item_task_status = 0;
+                    $detail->source_type = 'SUMMARY';
                     $detail->revision_no = $summary->revision_no + 1;
                     $detail->active = '1';
                     $detail->created_by = $request->user()->user_id;
@@ -1116,6 +1176,18 @@ class SummaryController extends Controller
                     $detail->summary_item_remarks = $hot[$i][12];
                     $detail->summary_item_termin = $hot[$i][13];
                     $detail->summary_item_viewed = $hot[$i][14];
+                    $detail->summary_item_edited = $hot[$i][15];
+                    $detail->page_no = $hot[$i][16];
+                    $detail->summary_item_canal = $hot[$i][17];
+                    $detail->summary_item_order_digital = $hot[$i][18];
+                    $detail->summary_item_materi = $hot[$i][19];
+                    $detail->summary_item_status_materi = $hot[$i][20];
+                    $detail->summary_item_capture_materi = $hot[$i][21];
+                    $detail->summary_item_sales_order = $hot[$i][22];
+                    $detail->summary_item_ppn = $hot[$i][23];
+                    $detail->summary_item_total = $hot[$i][24];
+                    $detail->summary_item_task_status = 0;
+                    $detail->source_type = 'SUMMARY';
                     $detail->revision_no = $summary->revision_no;
                     $detail->active = '1';
                     $detail->created_by = $request->user()->user_id;
@@ -1204,7 +1276,17 @@ class SummaryController extends Controller
                         $value->summary_item_internal_omzet,
                         $value->summary_item_remarks,
                         $value->summary_item_termin,
-                        $value->summary_item_viewed
+                        $value->summary_item_viewed,
+                        $value->summary_item_edited,
+                        $value->page_no,
+                        $value->summary_item_canal,
+                        $value->summary_item_order_digital,
+                        $value->summary_item_materi,
+                        $value->summary_item_status_materi,
+                        $value->summary_item_capture_materi,
+                        $value->summary_item_sales_order,
+                        $value->summary_item_ppn,
+                        $value->summary_item_total
                     ];
 
                     array_push($details, $arr);
@@ -1333,6 +1415,18 @@ class SummaryController extends Controller
             $detail->summary_item_remarks = $hot[$i][12];
             $detail->summary_item_termin = $hot[$i][13];
             $detail->summary_item_viewed = $hot[$i][14];
+            $detail->summary_item_edited = $hot[$i][15];
+            $detail->page_no = $hot[$i][16];
+            $detail->summary_item_canal = $hot[$i][17];
+            $detail->summary_item_order_digital = $hot[$i][18];
+            $detail->summary_item_materi = $hot[$i][19];
+            $detail->summary_item_status_materi = $hot[$i][20];
+            $detail->summary_item_capture_materi = $hot[$i][21];
+            $detail->summary_item_sales_order = $hot[$i][22];
+            $detail->summary_item_ppn = $hot[$i][23];
+            $detail->summary_item_total = $hot[$i][24];
+            $detail->summary_item_task_status = 0;
+            $detail->source_type = 'SUMMARY';
             $detail->revision_no = $obj->revision_no;
             $detail->active = '1';
             $detail->created_by = $request->user()->user_id;
@@ -1382,7 +1476,7 @@ class SummaryController extends Controller
                             ->where('rates.media_id', $media_id)
                             ->where('summaries.flow_no', '98')
                             ->where('summary_items.active', '1')
-                            ->where('summary_items.summary_item_viewed', 'PROCESS')
+                            ->where('summary_items.summary_item_viewed', '<>' ,'COMPLETED')
                             ->whereYear('summary_item_period_start', '=', $year)
                             ->whereMonth('summary_item_period_start', '=', $month)
                             ->orderBy('summary_item_period_start', 'asc')
@@ -1394,7 +1488,7 @@ class SummaryController extends Controller
                             ->join('rates', 'rates.rate_id', '=', 'summary_items.rate_id')
                             ->where('summaries.flow_no', '98')
                             ->where('summary_items.active', '1')
-                            ->where('summary_items.summary_item_viewed', 'PROCESS')
+                            ->where('summary_items.summary_item_viewed', '<>' ,'COMPLETED')
                             ->where('rates.media_id', $media_id)
                             /*->whereYear('summary_item_period_start', '=', $year)
                             ->whereMonth('summary_item_period_start', '=', $month)*/
@@ -1417,7 +1511,7 @@ class SummaryController extends Controller
                             ->where('rates.media_id', $media_id)
                             ->where('summaries.flow_no', '98')
                             ->where('summary_items.active', '1')
-                            ->where('summary_items.summary_item_viewed', 'PROCESS')
+                            ->where('summary_items.summary_item_viewed', '<>' ,'COMPLETED')
                             ->where('summary_item_period_start', $value->summary_item_period_start)
                             ->orderBy('summary_item_period_start', 'asc')
                             ->get();

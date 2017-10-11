@@ -9,38 +9,13 @@ var
     container = document.getElementById('example'),
     hot1;
 
-  function isEmptyRow(instance, row) {
-    var rowData = instance.getData()[row];
-
-    for (var i = 0, ilen = rowData.length; i < ilen; i++) {
-      if (rowData[i] !== null) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  function defaultValueRenderer(instance, td, row, col, prop, value, cellProperties) {
-    var args = arguments;
-
-    if (args[5] === null && isEmptyRow(instance, row)) {
-      args[5] = tpl[col];
-      td.style.color = '#999';
-    }
-    else {
-      td.style.color = '';
-    }
-    Handsontable.renderers.TextRenderer.apply(this, args);
-  }
-
   hot1 = new Handsontable(container, {
     startRows: 1,
     height: 200,
     minSpareRows: 1,
     formulas:true,
     contextMenu: ['row_above', 'row_below', 'col_left', 'col_right', 'remove_row', 'remove_col', 'undo', 'redo', 'alignment', 'copy', 'cut'],
-    colHeaders: ['No', 'Type', 'Rate Name', 'Media', 'Edition/Period Start', 'Period End', 'Omzet Type', 'Insertion', 'Gross Rate', 'Disc(%)', 'Nett Rate', 'Internal Omzet', 'Remarks', 'Termin', 'Viewed Status'],
+    colHeaders: ['No', 'Type', 'Rate Name', 'Media', 'Edition/Period Start', 'Period End', 'Omzet Type', 'Insertion', 'Gross Rate', 'Disc(%)', 'Nett Rate', 'Internal Omzet', 'Remarks', 'Termin', 'Status', 'Edited', 'Halaman', 'Kanal', 'Order Digital', 'Materi', 'Status Materi', 'Capture Materi', 'Sales Order', 'PPN', 'Total'],
     columns: [
       {type: 'numeric'}, //no
       {//type
@@ -146,10 +121,41 @@ var
         source: [
                 'COMPLETED',
                 'PROCESS',
+                'TBC',
+                'CONFIRMED'
                 ],
         strict: true
+      },
+      {
+        //editable
+        type: 'autocomplete',
+        source: [
+                'NO',
+                'YES'
+        ]
+      },
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {//ppn
+        type: 'numeric',
+        format: 'Rp 0,0.00',
+        language: 'id'
+      },
+      {//total
+        type: 'numeric',
+        format: 'Rp 0,0.00',
+        language: 'id'
       }
     ],
+    hiddenColumns: {
+      columns: [16, 17, 18, 19, 20, 21, 22, 23, 24],
+      indicators: true
+    },
     afterChange: function(changes) {
         if(changes!==null){
             var instance = this,
@@ -333,8 +339,6 @@ $(document).ready(function(){
   })
 });
 
-  //hot1.loadData(data);
-
   function calculateTotal(hot)
   {
     var data = hot.getData();
@@ -425,6 +429,7 @@ $(document).ready(function(){
         html += '<td>' + value[12] + '</td>';
         html += '<td>' + value[13] + '</td>';
         html += '<td>' + value[14] + '</td>';
+        html += '<td>' + value[15] + '</td>';
         html += '</tr>';
       }
     });
