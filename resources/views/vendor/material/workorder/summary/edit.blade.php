@@ -62,6 +62,11 @@
   			            <div id="example" style="overflow: scroll;"></div>
   			        </div>
   			      </div>
+              <div class="form-grup">
+                <div class="col-sm-12">
+                  <button type="button" class="btn btn-warning" id="btn-recalculate">Recalculate</button>
+                </div>
+              </div>
               <div class="form-group">
                 <label for="format_summary_total_gross" class="col-sm-2 control-label">Total Gross Rate</label>
                 <div class="col-sm-4">

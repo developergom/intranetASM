@@ -273,6 +273,11 @@ $(document).ready(function(){
     preview_summary(hot1);
   });
 
+  //btn recalculate click function
+  $('#btn-recalculate').click(function(){
+    recalculate(hot1);
+  });
+
   //toggle edit
   $('#edit-items').change(function(){
     if($(this).prop('checked')){
@@ -425,4 +430,10 @@ $(document).ready(function(){
     $('#preview_total_nett').empty().append(preview_total_nett);
     $('#preview_total_cost_pro').empty().append(preview_total_cost_pro);
     $('#preview_notes').empty().append(preview_notes);
+  }
+
+  function recalculate(hot)
+  {
+    calculateTotal(hot);
+    calculateOmzet(hot);
   }

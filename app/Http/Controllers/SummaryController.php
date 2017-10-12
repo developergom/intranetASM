@@ -358,6 +358,10 @@ class SummaryController extends Controller
                 }
             }
 
+            //untuk array kosong
+            $empArr = ['','','','','','','','','','','','','','','','','','','','','','','','',''];
+            array_push($details, $empArr);
+
             //store details to session
             if($request->session()->has('summary_details_' . $request->user()->user_id)) {
                 $request->session()->forget('summary_details_' . $request->user()->user_id);
@@ -1146,7 +1150,7 @@ class SummaryController extends Controller
                 $obj->summary_total_internal_omzet = $request->input('summary_total_internal_omzet');
                 $obj->summary_total_media_cost = $request->input('summary_total_media_cost');
                 $obj->summary_total_cost_pro = $request->input('summary_total_cost_pro');
-                $obj->revision_no = $summary->revision_no;
+                $obj->revision_no = $summary->revision_no + 1;
                 $obj->updated_by = $request->user()->user_id;
 
                 $obj->save();
@@ -1293,6 +1297,10 @@ class SummaryController extends Controller
                     $no++;
                 }
             }
+
+            //untuk array kosong
+            $empArr = ['','','','','','','','','','','','','','','','','','','','','','','','',''];
+            array_push($details, $empArr);
 
             //store details to session
             if($request->session()->has('summary_details_' . $request->user()->user_id)) {

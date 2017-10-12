@@ -336,7 +336,12 @@ $(document).ready(function(){
   //btn preview click function
   $('#btn-preview').click(function(){
     preview_summary(hot1);
-  })
+  });
+
+  //btn recalculate click function
+  $('#btn-recalculate').click(function(){
+    recalculate(hot1);
+  });
 });
 
   function calculateTotal(hot)
@@ -454,4 +459,10 @@ $(document).ready(function(){
     $('#preview_total_nett').empty().append(preview_total_nett);
     $('#preview_total_cost_pro').empty().append(preview_total_cost_pro);
     $('#preview_notes').empty().append(preview_notes);
+  }
+
+  function recalculate(hot)
+  {
+    calculateTotal(hot);
+    calculateOmzet(hot);
   }

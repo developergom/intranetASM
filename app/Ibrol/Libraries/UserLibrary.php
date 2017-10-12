@@ -53,4 +53,9 @@ class UserLibrary{
 
 		return $result;
 	}
+
+	public function getUserSameMedia($user_id, $role_id)
+	{
+		$result = 0;
+	}
 }
