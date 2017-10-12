@@ -122,5 +122,14 @@
 <script type="text/javascript">
 var uid = '{{ Request::user()->user_id }}';
 </script>
+@can('Posisi Iklan-Create')
+<script type="text/javascript">
+var cpi = true;
+</script>
+@else
+<script type="text/javascript">
+var cpi = false;
+</script>
+@endcan
 <script src="{{ url('js/workorder/summary.js') }}"></script>
 @endsection

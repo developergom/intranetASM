@@ -22,6 +22,16 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	            	<label for="members" class="col-sm-2 control-label">Members</label>
+	            	<div class="col-sm-10">
+	            		<div class="fg-line">
+	            		@foreach($group->users as $user)
+	            			<a href="{{ url('user/' . $user->user_id) }}" target="_blank"><span class="badge">{{ $user->user_firstname . ' ' . $user->user_lastname . ' [' . $user->user_name . ']' }}</span><br/>
+	            		@endforeach
+	            		</div>
+	            	</div>
+	            </div>
+	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
 	                    <a href="{{ url('master/group') }}" class="btn btn-danger btn-sm">Back</a>
 	                </div>

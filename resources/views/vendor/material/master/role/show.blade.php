@@ -30,6 +30,16 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	            	<label for="members" class="col-sm-2 control-label">Members</label>
+	            	<div class="col-sm-10">
+	            		<div class="fg-line">
+	            		@foreach($role->users as $user)
+	            			<a href="{{ url('user/' . $user->user_id) }}" target="_blank"><span class="badge">{{ $user->user_firstname . ' ' . $user->user_lastname . ' [' . $user->user_name . ']' }}</span><br/>
+	            		@endforeach
+	            		</div>
+	            	</div>
+	            </div>
+	            <div class="form-group">
 	            	<div class="col-sm-12">
 	            		<table class="table table-bordered table-hover">
 	            			<thead>

@@ -120,7 +120,7 @@ class RoleController extends Controller
 
         $data = array();
         $data['actions'] = Action::where('active','1')->get();
-        $data['role'] = Role::where('active','1')->find($id);
+        $data['role'] = Role::with(['users' => function($filter){ $filter->orderBy('user_firstname', 'asc'); }])->where('active','1')->find($id);
         $data['rolelevels'] = RoleLevel::where('active','1')->get();
         $data['menus'] = $this->menulibrary->generateListModule();
         $data['rolesmodules'] = RolesModules::where('role_id', $id)->get();

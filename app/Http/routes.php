@@ -433,6 +433,8 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('summary/renew/{id}', 'SummaryController@renew');
         Route::post('summary/renew/{id}', 'SummaryController@postRenew');
         Route::post('summary/api/generatePosisiIklan', 'SummaryController@apiGeneratePosisiIklan');
+        Route::get('summary/update_posisi_iklan/{id}', 'SummaryController@updatePosisiIklan');
+        Route::post('summary/update_posisi_iklan/{id}', 'SummaryController@postUpdatePosisiIklan');
 
         Route::post('posisi_iklan/apiList', 'PosisiIklanController@apiList');
         Route::post('posisi_iklan/apiDelete', 'PosisiIklanController@apiDelete');

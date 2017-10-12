@@ -78,7 +78,8 @@ class GroupController extends Controller
         }
 
         $data = array();
-        $data['group'] = Group::where('active','1')->find($id);
+        $data['group'] = Group::with(['users' => function($filter){ $filter->orderBy('user_firstname', 'asc'); }])->where('active','1')->find($id);
+        
         return view('vendor.material.master.group.show', $data);
     }
 
