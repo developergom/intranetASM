@@ -86,14 +86,55 @@ $(document).ready(function(){
             	console.log('error loading rate');
             },
             success: function(data) {
+            	var base_rate = data.gross_rate;
+            	var gross_rate = base_rate * parseInt($('#summary_item_insertion').val());
             	$('#media_name').val(data.media_name);
-            	$('#summary_item_gross').val(data.gross_rate);
-            	$('#format_summary_item_gross').empty().append(previewMoney(data.gross_rate));
+            	$('#base_rate').val(base_rate);
+            	$('#summary_item_gross').val(gross_rate);
+            	$('#format_summary_item_gross').empty().append(previewMoney(gross_rate));
             }
     	});
     });
 
+    $('#summary_item_insertion').change(function(){
+    	var gross_rate = parseInt($('#base_rate').val()) * parseInt($('#summary_item_insertion').val());
+    	$('#summary_item_gross').val(gross_rate);
+        $('#format_summary_item_gross').empty().append(previewMoney(gross_rate));
+    });
+
     $('#summary_item_gross').keyup(function(){
     	$('#format_summary_item_gross').empty().append(previewMoney($(this).val()));
-    })
+    });
+
+    $('#summary_item_nett').keyup(function(){
+    	calculate($(this).val());
+    });
+
+    $('#btn-recalculate').click(function(){
+    	calculate($('#summary_item_nett').val());
+    });
 });
+
+function calculate(nett)
+{
+	$('#format_summary_item_nett').empty().append(previewMoney(nett));
+	$('#format_summary_item_po').empty().append(previewMoney(nett));
+	$('#format_summary_item_internal_omzet').empty().append(previewMoney(nett));
+	$('#summary_item_po').val(nett);
+	$('#summary_item_internal_omzet').val(nett);
+
+	//calculate disc
+	gross = parseInt($('#summary_item_gross').val());
+	discount = (gross - parseInt(nett));
+	disc = Math.floor((discount/gross) * 100);
+
+	$('#summary_item_disc').val(disc);
+
+	ppn = Math.floor(0.1 * parseInt(nett));
+	total = Math.floor(1.1 * parseInt(nett));
+
+	$('#summary_item_ppn').val(ppn);
+	$('#summary_item_total').val(total);
+	$('#format_summary_item_ppn').empty().append(previewMoney(ppn));
+	$('#format_summary_item_total').empty().append(previewMoney(total));
+}
