@@ -186,6 +186,29 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="publisher_id" class="col-sm-2 control-label">Publisher</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+	                        <select name="publisher_id[]" id="publisher_id" class="selectpicker" data-live-search="true" multiple>
+                                @foreach ($publishers as $row)
+                                	{!! $selected = '' !!}
+                                	@foreach ($user->publishers as $publisher)
+                                		@if($publisher->publisher_id==$row->publisher_id)
+                                			{!! $selected = 'selected' !!}
+                                		@endif
+                                	@endforeach
+								    <option value="{{ $row->publisher_id }}" {{ $selected }}>{{ $row->publisher_name }}</option>
+								@endforeach
+                            </select>
+	                    </div>
+	                    @if ($errors->has('publisher_id'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('publisher_id') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="media_group_id" class="col-sm-2 control-label">Media Group</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">

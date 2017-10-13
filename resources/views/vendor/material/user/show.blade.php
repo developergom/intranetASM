@@ -102,6 +102,20 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
+	                <label for="publisher_id" class="col-sm-2 control-label">Publisher</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+                            @foreach ($publishers as $row)
+                            	@foreach ($user->publishers as $publisher)
+                            		@if($publisher->publisher_id==$row->publisher_id)
+                            			<span class="badge">{{ $row->publisher_name }}</span>
+                            		@endif
+                            	@endforeach
+							@endforeach
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
 	                <label for="media_group_id" class="col-sm-2 control-label">Media Group</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">

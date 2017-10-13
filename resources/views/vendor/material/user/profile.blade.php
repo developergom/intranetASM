@@ -168,6 +168,18 @@
                         </dd>
                     </dl>
                     <dl class="dl-horizontal">
+                        <dt>Publisher(s)</dt>
+                        <dd>
+                            @foreach ($publishers as $row)
+                                @foreach ($user->publishers as $publisher)
+                                    @if($publisher->publisher_id==$row->publisher_id)
+                                        <span class="badge">{{ $row->publisher_name }}</span>
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        </dd>
+                    </dl>
+                    <dl class="dl-horizontal">
                         <dt>Media Group(s)</dt>
                         <dd>
                             @foreach ($mediagroups as $row)

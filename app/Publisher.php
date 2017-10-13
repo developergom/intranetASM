@@ -23,4 +23,9 @@ class Publisher extends Model
 	{
 		return $this->hasMany('App\MediaGroup','publisher_id');
 	}
+
+	public function users()
+	{
+        return $this->belongsToMany('App\User','users_publishers');
+    }
 }

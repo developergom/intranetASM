@@ -13,6 +13,7 @@ use App\User;
 use App\Group;
 use App\Media;
 use App\MediaGroup;
+use App\Publisher;
 use App\Religion;
 use App\Role;
 
@@ -61,6 +62,7 @@ class UserController extends Controller
         $data['groups'] = Group::where('active','1')->orderBy('group_name')->get();
         $data['medias'] = Media::where('active','1')->orderBy('media_name')->get();
         $data['mediagroups'] = MediaGroup::where('active','1')->orderBy('media_group_name')->get();
+        $data['publishers'] = Publisher::where('active','1')->orderBy('publisher_name')->get();
 
         return view('vendor.material.user.create', $data);
     }
@@ -86,6 +88,7 @@ class UserController extends Controller
             'group_id[]' => 'array',
             'media_id[]' => 'array',
             'media_group_id[]' => 'array',
+            'publisher_id[]' => 'array',
         ]);
 
         $obj = new User;
@@ -115,6 +118,10 @@ class UserController extends Controller
             User::find($obj->user_id)->mediagroups()->sync($request->input('media_group_id'));
         }
 
+        if(!empty($request->input('publisher_id'))) {
+            User::find($obj->user_id)->publishers()->sync($request->input('publisher_id'));
+        }
+
         $request->session()->flash('status', 'Data has been saved!');
 
         return redirect('user');
@@ -141,6 +148,7 @@ class UserController extends Controller
         $data['groups'] = Group::where('active','1')->orderBy('group_name')->get();
         $data['medias'] = Media::where('active','1')->orderBy('media_name')->get();
         $data['mediagroups'] = MediaGroup::where('active','1')->orderBy('media_group_name')->get();
+        $data['publishers'] = Publisher::where('active','1')->orderBy('publisher_name')->get();
         return view('vendor.material.user.show', $data);
     }
 
@@ -166,6 +174,7 @@ class UserController extends Controller
         $data['groups'] = Group::where('active','1')->orderBy('group_name')->get();
         $data['medias'] = Media::where('active','1')->orderBy('media_name')->get();
         $data['mediagroups'] = MediaGroup::where('active','1')->orderBy('media_group_name')->get();
+        $data['publishers'] = Publisher::where('active','1')->orderBy('publisher_name')->get();
         return view('vendor.material.user.edit', $data);
     }
 
@@ -190,7 +199,8 @@ class UserController extends Controller
             'role_id[]' => 'array',
             'group_id[]' => 'array',
             'media_id[]' => 'array',
-            'media_group_id[]' => 'array'
+            'media_group_id[]' => 'array',
+            'publisher_id[]' => 'array'
         ]);
 
         $obj = User::find($id);
@@ -219,6 +229,10 @@ class UserController extends Controller
 
         if(!empty($request->input('media_group_id'))) {
             User::find($id)->mediagroups()->sync($request->input('media_group_id'));
+        }
+
+        if(!empty($request->input('publisher_id'))) {
+            User::find($id)->publishers()->sync($request->input('publisher_id'));
         }
 
         $request->session()->flash('status', 'Data has been updated!');
@@ -348,6 +362,7 @@ class UserController extends Controller
         $data['groups'] = Group::where('active','1')->get();
         $data['medias'] = Media::where('active','1')->get();
         $data['mediagroups'] = MediaGroup::where('active','1')->get();
+        $data['publishers'] = Publisher::where('active','1')->get();
 
         return view('vendor.material.user.profile', $data);
     }
