@@ -62,4 +62,9 @@ class Client extends Model
 	{
 		return $this->hasMany('App\PosisiIklanItem', 'client_id');
 	}
+
+	public function summaryitems()
+	{
+		return $this->hasMany('App\SummaryItem', 'client_id');
+	}
 }

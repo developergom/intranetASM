@@ -119,6 +119,8 @@ class SummaryController extends Controller
         $flow = new FlowLibrary;
         $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
 
+        $proposal = Proposal::find($request->input('proposal_id'));
+
         $obj = new Summary;
         $obj->proposal_id = $request->input('proposal_id');
         $obj->summary_order_no = '';
@@ -220,6 +222,10 @@ class SummaryController extends Controller
             $detail->summary_item_total = $hot[$i][24];
             $detail->summary_item_task_status = 0;
             $detail->source_type = 'SUMMARY';
+            $detail->client_id = $proposal->client_id;
+            $detail->industry_id = $proposal->brand->subindustry->industry->industry_id;
+            $detail->summary_item_title = $proposal->proposal_name;
+            $detail->sales_id = $request->user()->user_id;
             $detail->revision_no = 0;
             $detail->active = '1';
             $detail->created_by = $request->user()->user_id;
@@ -401,6 +407,8 @@ class SummaryController extends Controller
         $flow = new FlowLibrary;
         $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
 
+        $proposal = Proposal::find($request->input('proposal_id'));
+
         $obj = Summary::find($id);
         $obj->proposal_id = $request->input('proposal_id');
         $obj->summary_total_gross = $request->input('summary_total_gross');
@@ -492,6 +500,10 @@ class SummaryController extends Controller
             $detail->summary_item_total = $hot[$i][24];
             $detail->summary_item_task_status = 0;
             $detail->source_type = 'SUMMARY';
+            $detail->client_id = $proposal->client_id;
+            $detail->industry_id = $proposal->brand->subindustry->industry->industry_id;
+            $detail->summary_item_title = $proposal->proposal_name;
+            $detail->sales_id = $request->user()->user_id;
             $detail->revision_no = $obj->revision_no;
             $detail->active = '1';
             $detail->created_by = $request->user()->user_id;
@@ -1043,6 +1055,8 @@ class SummaryController extends Controller
             $summary->updated_by = $request->user()->user_id;
             $summary->save();
 
+            $proposal = Proposal::find($summary->proposal_id);
+
             //edit-items or no
             if($request->input('edit-items') == 'on') {
                 $obj = Summary::find($id);
@@ -1094,6 +1108,10 @@ class SummaryController extends Controller
                     $detail->summary_item_total = $hot[$i][24];
                     $detail->summary_item_task_status = 0;
                     $detail->source_type = 'SUMMARY';
+                    $detail->client_id = $proposal->client_id;
+                    $detail->industry_id = $proposal->brand->subindustry->industry->industry_id;
+                    $detail->summary_item_title = $proposal->proposal_name;
+                    $detail->sales_id = $request->user()->user_id;
                     $detail->revision_no = $summary->revision_no + 1;
                     $detail->active = '1';
                     $detail->created_by = $request->user()->user_id;
@@ -1141,6 +1159,8 @@ class SummaryController extends Controller
             $summary->updated_by = $request->user()->user_id;
             $summary->save();
 
+            $proposal = Proposal::find($summary->proposal_id);
+
             //edit-items or no
             if($request->input('edit-items') == 'on') {
                 $obj = Summary::find($id);
@@ -1192,6 +1212,10 @@ class SummaryController extends Controller
                     $detail->summary_item_total = $hot[$i][24];
                     $detail->summary_item_task_status = 0;
                     $detail->source_type = 'SUMMARY';
+                    $detail->client_id = $proposal->client_id;
+                    $detail->industry_id = $proposal->brand->subindustry->industry->industry_id;
+                    $detail->summary_item_title = $proposal->proposal_name;
+                    $detail->sales_id = $request->user()->user_id;
                     $detail->revision_no = $summary->revision_no;
                     $detail->active = '1';
                     $detail->created_by = $request->user()->user_id;
@@ -1341,6 +1365,8 @@ class SummaryController extends Controller
         $flow = new FlowLibrary;
         $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
 
+        $proposal = Proposal::find($request->input('proposal_id'));
+
         $obj = Summary::find($id);
         $obj->proposal_id = $request->input('proposal_id');
         $obj->summary_total_gross = $request->input('summary_total_gross');
@@ -1435,6 +1461,10 @@ class SummaryController extends Controller
             $detail->summary_item_total = $hot[$i][24];
             $detail->summary_item_task_status = 0;
             $detail->source_type = 'SUMMARY';
+            $detail->client_id = $proposal->client_id;
+            $detail->industry_id = $proposal->brand->subindustry->industry->industry_id;
+            $detail->summary_item_title = $proposal->proposal_name;
+            $detail->sales_id = $request->user()->user_id;
             $detail->revision_no = $obj->revision_no;
             $detail->active = '1';
             $detail->created_by = $request->user()->user_id;

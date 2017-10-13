@@ -31,4 +31,9 @@ class Industry extends Model
 	{
 		return $this->hasMany('App\PosisiIklanItem', 'industry_id');
 	}
+
+	public function summaryitems()
+	{
+		return $this->hasMany('App\SummaryItem', 'industry_id');
+	}
 }

@@ -268,6 +268,8 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         //Rate
         Route::post('rate/apiList', 'RateController@apiList');
         Route::post('rate/apiDelete', 'RateController@apiDelete');
+        Route::post('rate/apiSearch', 'RateController@apiSearchPost');
+        Route::post('rate/apiSearchPerID', 'RateController@apiSearchPerID');
         Route::resource('rate', 'RateController');
 
         Route::post('rate/api/all', 'RateController@apiGetAll');
@@ -447,6 +449,13 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('posisi_iklan_item_task/update_task/{id}', 'PosisiIklanItemTaskController@updateTask');
         Route::post('posisi_iklan_item_task/update_task/{id}', 'PosisiIklanItemTaskController@updateTaskPost');
         Route::resource('posisi_iklan_item_task', 'PosisiIklanItemTaskController');
+    });
+
+    Route::group(['prefix' => 'posisi-iklan'], function() {
+        //Direct Order
+        Route::post('direct-order/apiList', 'SummaryItemDirectController@apiList');
+        Route::post('direct-order/apiDelete', 'SummaryItemDirectController@apiDelete');
+        Route::resource('direct-order', 'SummaryItemDirectController');
     });
 
     Route::group(['prefix' => 'grid'], function() {

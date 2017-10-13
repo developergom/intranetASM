@@ -52,4 +52,19 @@ class SummaryItem extends Model
 	{
 		return $this->hasOne('App\PosisiIklanItem', 'summary_item_id');
 	}
+
+	public function client()
+	{
+		return $this->belongsTo('App\Client', 'client_id');
+	}
+
+	public function industry()
+	{
+		return $this->belongsTo('App\Industry', 'industry_id');
+	}
+
+	public function sales()
+	{
+		return $this->belongsTo('App\User', 'sales_id', 'user_id');
+	}
 }

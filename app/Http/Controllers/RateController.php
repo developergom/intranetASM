@@ -365,4 +365,26 @@ class RateController extends Controller
 
         return response()->json($rate);
     }
+
+    public function apiSearchPost(Request $request)
+    {
+        if(Gate::denies('Home-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $rate_name = $request->rate_name;
+
+        $result = Rate::where('rate_name','like','%' . $rate_name . '%')->where('active', '1')->take(5)->orderBy('rate_name')->get();
+
+        return response()->json($result, 200);
+    }
+
+    public function apiSearchPerID(Request $request)
+    {
+        $rate_id = $request->rate_id;
+
+        $result = Rate::select('rate_id','rate_name','media_name','gross_rate')->join('medias', 'medias.media_id', '=', 'rates.media_id')->where('rate_id', $rate_id)->where('rates.active', '1')->first();
+
+        return response()->json($result);
+    }
 }
