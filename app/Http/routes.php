@@ -438,17 +438,10 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('summary/update_posisi_iklan/{id}', 'SummaryController@updatePosisiIklan');
         Route::post('summary/update_posisi_iklan/{id}', 'SummaryController@postUpdatePosisiIklan');
 
-        Route::post('posisi_iklan/apiList', 'PosisiIklanController@apiList');
+        /*Route::post('posisi_iklan/apiList', 'PosisiIklanController@apiList');
         Route::post('posisi_iklan/apiDelete', 'PosisiIklanController@apiDelete');
         Route::post('posisi_iklan/apiCheckCode', 'PosisiIklanController@apiCheckCode');
-        Route::resource('posisi_iklan', 'PosisiIklanController');
-
-        Route::post('posisi_iklan_item_task/apiList/{listtype}', 'PosisiIklanItemTaskController@apiList');
-        Route::get('posisi_iklan_item_task/take/{id}', 'PosisiIklanItemTaskController@take');
-        Route::post('posisi_iklan_item_task/take/{id}', 'PosisiIklanItemTaskController@takePost');
-        Route::get('posisi_iklan_item_task/update_task/{id}', 'PosisiIklanItemTaskController@updateTask');
-        Route::post('posisi_iklan_item_task/update_task/{id}', 'PosisiIklanItemTaskController@updateTaskPost');
-        Route::resource('posisi_iklan_item_task', 'PosisiIklanItemTaskController');
+        Route::resource('posisi_iklan', 'PosisiIklanController');*/
     });
 
     Route::group(['prefix' => 'posisi-iklan'], function() {
@@ -460,6 +453,14 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('direct-order/apiList', 'SummaryItemDirectController@apiList');
         Route::post('direct-order/apiDelete', 'SummaryItemDirectController@apiDelete');
         Route::resource('direct-order', 'SummaryItemDirectController');
+
+        //Item Task
+        Route::post('item_task/apiList/{listtype}', 'PosisiIklanItemTaskController@apiList');
+        Route::get('item_task/take/{id}', 'PosisiIklanItemTaskController@take');
+        Route::post('item_task/take/{id}', 'PosisiIklanItemTaskController@takePost');
+        Route::get('item_task/update_task/{id}', 'PosisiIklanItemTaskController@updateTask');
+        Route::post('item_task/update_task/{id}', 'PosisiIklanItemTaskController@updateTaskPost');
+        Route::resource('item_task', 'PosisiIklanItemTaskController');
     });
 
     Route::group(['prefix' => 'grid'], function() {

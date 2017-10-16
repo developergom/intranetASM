@@ -31,7 +31,7 @@ class PosisiIklanItemTaskController extends Controller
 
         $data = array();
 
-        return view('vendor.material.workorder.posisiiklanitemtask.list', $data);
+        return view('vendor.material.posisiiklan.itemtask.list', $data);
     }
 
     public function create(Request $request)
@@ -52,9 +52,9 @@ class PosisiIklanItemTaskController extends Controller
 
         $data = array();
 
-        $data['posisiiklanitemtask'] = PosisiIklanItemTask::with('posisiiklanitem', 'posisiiklanitem.posisiiklan', 'posisiiklanitem.posisiiklan.media', 'posisiiklanitem.client', 'posisiiklanitem.summaryitem', 'posisiiklanitem.summaryitem.rate', 'posisiiklanitem.summaryitem.rate.unit')->find($id);
+        $data['posisiiklanitemtask'] = PosisiIklanItemTask::with('summaryitem.rate.media', 'summaryitem.client', 'summaryitem', 'summaryitem.rate', 'summaryitem.rate.unit')->find($id);
 
-        return view('vendor.material.workorder.posisiiklanitemtask.show', $data);
+        return view('vendor.material.posisiiklan.itemtask.show', $data);
     }
 
     public function apiList($listtype, Request $request)
@@ -84,41 +84,38 @@ class PosisiIklanItemTaskController extends Controller
         $data['searchPhrase'] = $searchPhrase;
 
         if($listtype == 'available') {
-            $data['rows'] = PosisiIklanItem::select('posisi_iklan_items.posisi_iklan_item_id', 'media_name', 'client_name', 'summary_item_period_start', 'posisi_iklan_item_name', 'posisi_iklan_items.updated_at')
-                                ->join('posisi_iklan', 'posisi_iklan.posisi_iklan_id', '=', 'posisi_iklan_items.posisi_iklan_id')
-                                ->join('medias','medias.media_id', '=', 'posisi_iklan.media_id')
-                                ->join('clients','clients.client_id', '=', 'posisi_iklan_items.client_id')
-                                ->join('summary_items', 'summary_items.summary_item_id', '=', 'posisi_iklan_items.summary_item_id')
-                                ->where('posisi_iklan_items.active', '=', '1')
-                                ->where('posisi_iklan_items.posisi_iklan_item_task_status', '=' , '0')
+            $data['rows'] = SummaryItem::select('summary_items.summary_item_id', 'media_name', 'client_name', 'summary_item_period_start', 'summary_item_title', 'summary_items.updated_at')
+                                ->join('rates','rates.rate_id', '=', 'summary_items.rate_id')
+                                ->join('medias','medias.media_id', '=', 'rates.media_id')
+                                ->join('clients','clients.client_id', '=', 'summary_items.client_id')
+                                ->where('summary_items.active', '=', '1')
+                                ->where('summary_items.summary_item_task_status', '=' , '0')
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('client_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('posisi_iklan_item_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('summary_item_title','like','%' . $searchPhrase . '%')
                                             ->orWhere('summary_item_period_start','like','%' . $searchPhrase . '%');
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = PosisiIklanItem::select('posisi_iklan_items.posisi_iklan_item_id','media_name', 'client_name', 'summary_item_period_start', 'posisi_iklan_item_name', 'posisi_iklan_items.updated_at')
-                                ->join('posisi_iklan', 'posisi_iklan.posisi_iklan_id', '=', 'posisi_iklan_items.posisi_iklan_id')
-                                ->join('medias','medias.media_id', '=', 'posisi_iklan.media_id')
-                                ->join('clients','clients.client_id', '=', 'posisi_iklan_items.client_id')
-                                ->join('summary_items', 'summary_items.summary_item_id', '=', 'posisi_iklan_items.summary_item_id')
-                                ->where('posisi_iklan_items.active', '=', '1')
-                                ->where('posisi_iklan_items.posisi_iklan_item_task_status', '=' , '0')
+            $data['total'] = SummaryItem::select('summary_items.summary_item_id', 'media_name', 'client_name', 'summary_item_period_start', 'summary_item_title', 'summary_items.updated_at')
+                                ->join('rates','rates.rate_id', '=', 'summary_items.rate_id')
+                                ->join('medias','medias.media_id', '=', 'rates.media_id')
+                                ->join('clients','clients.client_id', '=', 'summary_items.client_id')
+                                ->where('summary_items.active', '=', '1')
+                                ->where('summary_items.summary_item_task_status', '=' , '0')
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('client_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('posisi_iklan_item_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('summary_item_title','like','%' . $searchPhrase . '%')
                                             ->orWhere('summary_item_period_start','like','%' . $searchPhrase . '%');
                                 })->count();    
         }elseif($listtype == 'onprocess') {
-            $data['rows'] = PosisiIklanItemTask::select('posisi_iklan_item_tasks.posisi_iklan_item_task_id','media_name', 'client_name', 'summary_item_period_start', 'posisi_iklan_item_name', 'posisi_iklan_item_tasks.updated_at', 'users.user_firstname', 'users.user_lastname')
-                                ->join('posisi_iklan_items', 'posisi_iklan_items.posisi_iklan_item_id', '=', 'posisi_iklan_item_tasks.posisi_iklan_item_id')
-                                ->join('posisi_iklan', 'posisi_iklan.posisi_iklan_id', '=', 'posisi_iklan_items.posisi_iklan_id')
-                                ->join('medias','medias.media_id', '=', 'posisi_iklan.media_id')
-                                ->join('clients','clients.client_id', '=', 'posisi_iklan_items.client_id')
-                                ->join('summary_items', 'summary_items.summary_item_id', '=', 'posisi_iklan_items.summary_item_id')
+            $data['rows'] = PosisiIklanItemTask::select('posisi_iklan_item_tasks.posisi_iklan_item_task_id','media_name', 'client_name', 'summary_item_period_start', 'summary_item_title', 'posisi_iklan_item_tasks.updated_at', 'users.user_firstname', 'users.user_lastname')
+                                ->join('summary_items', 'summary_items.summary_item_id', '=', 'posisi_iklan_item_tasks.summary_item_id')
+                                ->join('rates','rates.rate_id', '=', 'summary_items.rate_id')
+                                ->join('medias','medias.media_id', '=', 'rates.media_id')
+                                ->join('clients','clients.client_id', '=', 'summary_items.client_id')
                                 ->join('users', 'users.user_id', '=', 'posisi_iklan_item_tasks.posisi_iklan_item_task_pic')
                                 ->where('posisi_iklan_item_tasks.active', '=', '1')
                                 ->where('posisi_iklan_item_tasks.posisi_iklan_item_task_status', '=' , 'ON PROCESS')
@@ -129,17 +126,16 @@ class PosisiIklanItemTaskController extends Controller
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('client_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('posisi_iklan_item_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('summary_item_title','like','%' . $searchPhrase . '%')
                                             ->orWhere('summary_item_period_start','like','%' . $searchPhrase . '%');
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = PosisiIklanItemTask::select('posisi_iklan_item_tasks.posisi_iklan_item_task_id','media_name', 'client_name', 'summary_item_period_start', 'posisi_iklan_item_name', 'posisi_iklan_item_tasks.updated_at', 'users.user_firstname', 'users.user_lastname')
-                                ->join('posisi_iklan_items', 'posisi_iklan_items.posisi_iklan_item_id', '=', 'posisi_iklan_item_tasks.posisi_iklan_item_id')
-                                ->join('posisi_iklan', 'posisi_iklan.posisi_iklan_id', '=', 'posisi_iklan_items.posisi_iklan_id')
-                                ->join('medias','medias.media_id', '=', 'posisi_iklan.media_id')
-                                ->join('clients','clients.client_id', '=', 'posisi_iklan_items.client_id')
-                                ->join('summary_items', 'summary_items.summary_item_id', '=', 'posisi_iklan_items.summary_item_id')
+            $data['total'] = PosisiIklanItemTask::select('posisi_iklan_item_tasks.posisi_iklan_item_task_id','media_name', 'client_name', 'summary_item_period_start', 'summary_item_title', 'posisi_iklan_item_tasks.updated_at', 'users.user_firstname', 'users.user_lastname')
+                                ->join('summary_items', 'summary_items.summary_item_id', '=', 'posisi_iklan_item_tasks.summary_item_id')
+                                ->join('rates','rates.rate_id', '=', 'summary_items.rate_id')
+                                ->join('medias','medias.media_id', '=', 'rates.media_id')
+                                ->join('clients','clients.client_id', '=', 'summary_items.client_id')
                                 ->join('users', 'users.user_id', '=', 'posisi_iklan_item_tasks.posisi_iklan_item_task_pic')
                                 ->where('posisi_iklan_item_tasks.active', '=', '1')
                                 ->where('posisi_iklan_item_tasks.posisi_iklan_item_task_status', '=' , 'ON PROCESS')
@@ -150,16 +146,15 @@ class PosisiIklanItemTaskController extends Controller
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('client_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('posisi_iklan_item_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('summary_item_title','like','%' . $searchPhrase . '%')
                                             ->orWhere('summary_item_period_start','like','%' . $searchPhrase . '%');
                                 })->count();
         }elseif($listtype == 'finished') {
-            $data['rows'] = PosisiIklanItemTask::select('posisi_iklan_item_tasks.posisi_iklan_item_task_id','media_name', 'client_name', 'summary_item_period_start', 'posisi_iklan_item_name', 'posisi_iklan_item_tasks.updated_at', 'users.user_firstname', 'users.user_lastname')
-                                ->join('posisi_iklan_items', 'posisi_iklan_items.posisi_iklan_item_id', '=', 'posisi_iklan_item_tasks.posisi_iklan_item_id')
-                                ->join('posisi_iklan', 'posisi_iklan.posisi_iklan_id', '=', 'posisi_iklan_items.posisi_iklan_id')
-                                ->join('medias','medias.media_id', '=', 'posisi_iklan.media_id')
-                                ->join('clients','clients.client_id', '=', 'posisi_iklan_items.client_id')
-                                ->join('summary_items', 'summary_items.summary_item_id', '=', 'posisi_iklan_items.summary_item_id')
+            $data['rows'] = PosisiIklanItemTask::select('posisi_iklan_item_tasks.posisi_iklan_item_task_id','media_name', 'client_name', 'summary_item_period_start', 'summary_item_title', 'posisi_iklan_item_tasks.updated_at', 'users.user_firstname', 'users.user_lastname')
+                                ->join('summary_items', 'summary_items.summary_item_id', '=', 'posisi_iklan_item_tasks.summary_item_id')
+                                ->join('rates','rates.rate_id', '=', 'summary_items.rate_id')
+                                ->join('medias','medias.media_id', '=', 'rates.media_id')
+                                ->join('clients','clients.client_id', '=', 'summary_items.client_id')
                                 ->join('users', 'users.user_id', '=', 'posisi_iklan_item_tasks.posisi_iklan_item_task_pic')
                                 ->where('posisi_iklan_item_tasks.active', '=', '1')
                                 ->where('posisi_iklan_item_tasks.posisi_iklan_item_task_status', '=' , 'FINISHED')
@@ -170,17 +165,16 @@ class PosisiIklanItemTaskController extends Controller
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('client_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('posisi_iklan_item_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('summary_item_title','like','%' . $searchPhrase . '%')
                                             ->orWhere('summary_item_period_start','like','%' . $searchPhrase . '%');
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = PosisiIklanItemTask::select('posisi_iklan_item_tasks.posisi_iklan_item_task_id','media_name', 'client_name', 'summary_item_period_start', 'posisi_iklan_item_name', 'posisi_iklan_item_tasks.updated_at', 'users.user_firstname', 'users.user_lastname')
-                                ->join('posisi_iklan_items', 'posisi_iklan_items.posisi_iklan_item_id', '=', 'posisi_iklan_item_tasks.posisi_iklan_item_id')
-                                ->join('posisi_iklan', 'posisi_iklan.posisi_iklan_id', '=', 'posisi_iklan_items.posisi_iklan_id')
-                                ->join('medias','medias.media_id', '=', 'posisi_iklan.media_id')
-                                ->join('clients','clients.client_id', '=', 'posisi_iklan_items.client_id')
-                                ->join('summary_items', 'summary_items.summary_item_id', '=', 'posisi_iklan_items.summary_item_id')
+            $data['total'] = PosisiIklanItemTask::select('posisi_iklan_item_tasks.posisi_iklan_item_task_id','media_name', 'client_name', 'summary_item_period_start', 'summary_item_title', 'posisi_iklan_item_tasks.updated_at', 'users.user_firstname', 'users.user_lastname')
+                                ->join('summary_items', 'summary_items.summary_item_id', '=', 'posisi_iklan_item_tasks.summary_item_id')
+                                ->join('rates','rates.rate_id', '=', 'summary_items.rate_id')
+                                ->join('medias','medias.media_id', '=', 'rates.media_id')
+                                ->join('clients','clients.client_id', '=', 'summary_items.client_id')
                                 ->join('users', 'users.user_id', '=', 'posisi_iklan_item_tasks.posisi_iklan_item_task_pic')
                                 ->where('posisi_iklan_item_tasks.active', '=', '1')
                                 ->where('posisi_iklan_item_tasks.posisi_iklan_item_task_status', '=' , 'FINISHED')
@@ -191,7 +185,7 @@ class PosisiIklanItemTaskController extends Controller
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('client_name','like','%' . $searchPhrase . '%')
-                                            ->orWhere('posisi_iklan_item_name','like','%' . $searchPhrase . '%')
+                                            ->orWhere('summary_item_title','like','%' . $searchPhrase . '%')
                                             ->orWhere('summary_item_period_start','like','%' . $searchPhrase . '%');
                                 })->count();
         }
@@ -209,28 +203,28 @@ class PosisiIklanItemTaskController extends Controller
 
         $data = array();
 
-        $data['posisiiklanitem'] = PosisiIklanItem::with('posisiiklan', 'posisiiklan.media', 'client', 'summaryitem', 'summaryitem.rate', 'summaryitem.rate.unit')->find($id);
+        $data['summaryitem'] = SummaryItem::with('rate', 'client', 'rate.unit')->find($id);
 
-        return view('vendor.material.workorder.posisiiklanitemtask.take', $data);
+        return view('vendor.material.posisiiklan.itemtask.take', $data);
     }
 
     public function takePost(Request $request, $id)
     {
         $obj = new PosisiIklanItemTask;
-        $obj->posisi_iklan_item_id = $id;
+        $obj->summary_item_id = $id;
         $obj->posisi_iklan_item_task_pic = $request->user()->user_id;
         $obj->posisi_iklan_item_task_status = 'ON PROCESS';
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
         $obj->save();
 
-        $item = PosisiIklanItem::find($id);
-        $item->posisi_iklan_item_task_status = 1;
+        $item = SummaryItem::find($id);
+        $item->summary_item_task_status = 1;
         $item->updated_by = $request->user()->user_id;
         $item->save();
 
         $request->session()->flash('status', 'Data has been saved!');
-        return redirect('workorder/posisi_iklan_item_task');
+        return redirect('posisi-iklan/item_task');
     }
 
     public function updateTask($id)
@@ -241,9 +235,9 @@ class PosisiIklanItemTaskController extends Controller
 
         $data = array();
 
-        $data['posisiiklanitemtask'] = PosisiIklanItemTask::with('posisiiklanitem', 'posisiiklanitem.posisiiklan', 'posisiiklanitem.posisiiklan.media', 'posisiiklanitem.client', 'posisiiklanitem.summaryitem', 'posisiiklanitem.summaryitem.rate', 'posisiiklanitem.summaryitem.rate.unit')->find($id);
+        $data['posisiiklanitemtask'] = PosisiIklanItemTask::with('summaryitem.rate.media', 'summaryitem.client', 'summaryitem', 'summaryitem.rate', 'summaryitem.rate.unit')->find($id);
 
-        return view('vendor.material.workorder.posisiiklanitemtask.updatetask', $data);
+        return view('vendor.material.posisiiklan.itemtask.updatetask', $data);
     }
 
     public function updateTaskPost(Request $request, $id)
@@ -263,6 +257,6 @@ class PosisiIklanItemTaskController extends Controller
         $obj->save();
 
         $request->session()->flash('status', 'Data has been updated!');
-        return redirect('workorder/posisi_iklan_item_task');
+        return redirect('posisi-iklan/item_task');
     }
 }

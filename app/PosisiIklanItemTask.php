@@ -10,7 +10,7 @@ class PosisiIklanItemTask extends Model
 	protected $primaryKey = 'posisi_iklan_item_task_id';
 
 	protected $fillable = [
-				'posisi_iklan_item_id',
+				'summary_item_id',
 				'posisi_iklan_item_task_pic',
 				'posisi_iklan_item_task_status',
 				'posisi_iklan_item_task_finish_time',
@@ -22,9 +22,9 @@ class PosisiIklanItemTask extends Model
 				'active', 'created_by', 'created_at', 'updated_by'
 	];
 
-	public function posisiiklanitem()
+	public function summaryitem()
 	{
-		return $this->belongsTo('App\PosisiIklanItem', 'posisi_iklan_item_id');
+		return $this->belongsTo('App\SummaryItem', 'summary_item_id');
 	}
 
 	public function _pic()

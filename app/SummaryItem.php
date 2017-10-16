@@ -53,6 +53,11 @@ class SummaryItem extends Model
 		return $this->hasOne('App\PosisiIklanItem', 'summary_item_id');
 	}
 
+	public function posisiiklanitemtask()
+	{
+		return $this->hasOne('App\PosisiIklanItemTask', 'summary_item_id');
+	}
+
 	public function client()
 	{
 		return $this->belongsTo('App\Client', 'client_id');
