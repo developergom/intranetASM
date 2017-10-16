@@ -237,9 +237,21 @@
 	                    </div>
 	                </div>
 	            </div>
+	            <hr/>
+	            <div class="form-group">
+	                <label for="created_by" class="col-sm-2 control-label">Created by</label>
+	                <div class="col-sm-10">
+	                    <span class="badge">{{ $summaryitem->created_by->user_firstname . ' ' . $summaryitem->created_by->user_lastname }}</span>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="last_updated" class="col-sm-2 control-label">Last Updated</label>
+	                <div class="col-sm-10">
+	                    <span class="badge">{{ $summaryitem->updated_at }}</span>
+	                </div>
+	            </div>
 	            <div class="form-group">
 	                <div class="col-sm-offset-2 col-sm-10">
-	                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
 	                    <a href="{{ url('posisi-iklan/direct-order') }}" class="btn btn-danger btn-sm">Back</a>
 	                </div>
 	            </div>

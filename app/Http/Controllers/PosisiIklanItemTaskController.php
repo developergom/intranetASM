@@ -25,7 +25,7 @@ class PosisiIklanItemTaskController extends Controller
 
     public function index()
     {
-    	if(Gate::denies('Posisi Iklan Item Task-Read')) {
+    	if(Gate::denies('Item Task-Read')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -46,7 +46,7 @@ class PosisiIklanItemTaskController extends Controller
 
     public function show($id)
     {
-        if(Gate::denies('Posisi Iklan Item Task-Read')) {
+        if(Gate::denies('Item Task-Read')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -203,7 +203,7 @@ class PosisiIklanItemTaskController extends Controller
 
     public function take($id)
     {
-        if(Gate::denies('Posisi Iklan Item Task-Create')) {
+        if(Gate::denies('Item Task-Create')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -235,7 +235,7 @@ class PosisiIklanItemTaskController extends Controller
 
     public function updateTask($id)
     {
-        if(Gate::denies('Posisi Iklan Item Task-Create')) {
+        if(Gate::denies('Item Task-Create')) {
             abort(403, 'Unauthorized action.');
         }
 

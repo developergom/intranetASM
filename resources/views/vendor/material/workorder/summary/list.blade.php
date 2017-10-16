@@ -122,7 +122,7 @@
 <script type="text/javascript">
 var uid = '{{ Request::user()->user_id }}';
 </script>
-@can('Posisi Iklan-Create')
+@can('Checking Position-Update')
 <script type="text/javascript">
 var cpi = true;
 </script>

@@ -452,6 +452,10 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
     });
 
     Route::group(['prefix' => 'posisi-iklan'], function() {
+        //Checking Position
+        Route::get('checking', 'CheckingPositionController@index');
+        Route::post('checking/api/locking', 'CheckingPositionController@apiLocking');
+
         //Direct Order
         Route::post('direct-order/apiList', 'SummaryItemDirectController@apiList');
         Route::post('direct-order/apiDelete', 'SummaryItemDirectController@apiDelete');

@@ -67,4 +67,16 @@ class SummaryItem extends Model
 	{
 		return $this->belongsTo('App\User', 'sales_id', 'user_id');
 	}
+
+	public function getCreatedByAttribute($value)
+	{
+		$user = User::find($value); 
+		return $user;
+	}
+
+	public function getUpdatedByAttribute($value)
+	{
+		$user = User::find($value); 
+		return $user;
+	}
 }

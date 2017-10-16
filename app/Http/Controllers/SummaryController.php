@@ -687,6 +687,29 @@ class SummaryController extends Controller
         return response()->json($data);
     }
 
+    public function apiDelete(Request $request)
+    {
+        if(Gate::denies('Summary-Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $id = $request->input('summary_id');
+
+        $obj = Summary::find($id);
+
+        $obj->active = '0';
+        $obj->updated_by = $request->user()->user_id;
+
+        if($obj->save())
+        {
+            SummaryItem::where('summary_id', $id)->update(['active' => '0', 'updated_by' => $request->user()->user_id ]);
+
+            return response()->json(100); //success
+        }else{
+            return response()->json(200); //failed
+        }
+    }
+
     public function apiSaveDetails(Request $request)
     {
         //dd($request->input('details'));
@@ -1114,7 +1137,10 @@ class SummaryController extends Controller
                     $detail->sales_id = $request->user()->user_id;
                     $detail->revision_no = $summary->revision_no + 1;
                     $detail->active = '1';
-                    $detail->created_by = $request->user()->user_id;
+                    $detail->created_by = $proposal->created_by->user_id;
+                    if($hot[$i][15]=='YES') {
+                        $detail->updated_by = $request->user()->user_id;
+                    }
 
                     $detail->save();
                 }
@@ -1218,7 +1244,10 @@ class SummaryController extends Controller
                     $detail->sales_id = $request->user()->user_id;
                     $detail->revision_no = $summary->revision_no;
                     $detail->active = '1';
-                    $detail->created_by = $request->user()->user_id;
+                    $detail->created_by = $proposal->created_by->user_id;
+                    if($hot[$i][15]=='YES') {
+                        $detail->updated_by = $request->user()->user_id;
+                    }
 
                     $detail->save();
                 }
@@ -1467,7 +1496,7 @@ class SummaryController extends Controller
             $detail->sales_id = $request->user()->user_id;
             $detail->revision_no = $obj->revision_no;
             $detail->active = '1';
-            $detail->created_by = $request->user()->user_id;
+            $detail->created_by = $proposal->created_by->user_id;
 
             $detail->save();
         }
@@ -1499,22 +1528,18 @@ class SummaryController extends Controller
         $month = $request->input('month');
         $view_type = $request->input('view_type');
         $edition_date = Carbon::createFromFormat('d/m/Y', $request->input('edition_date'))->toDateString();
+        $summary_item_type = $request->input('summary_item_type');
         
         if($view_type=='digital'){ //digital
-             $items = SummaryItem::join('summaries', 'summaries.summary_id', '=', 'summary_items.summary_id')
-                            ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
-                            ->join('clients', 'clients.client_id', '=', 'proposals.client_id')
+             $items = SummaryItem::join('clients', 'clients.client_id', '=', 'summary_items.client_id')
                             ->join('rates', 'rates.rate_id', '=', 'summary_items.rate_id')
                             ->join('medias', 'medias.media_id', '=', 'rates.media_id')
                             ->join('users', 'users.user_id', '=', 'summary_items.created_by')
                             ->join('units', 'units.unit_id', '=', 'rates.unit_id')
-                            ->join('brands', 'brands.brand_id', '=', 'proposals.brand_id')
-                            ->join('subindustries', 'subindustries.subindustry_id', '=', 'brands.subindustry_id')
-                            ->join('industries', 'industries.industry_id', '=', 'subindustries.industry_id')
+                            ->join('industries', 'industries.industry_id', '=', 'summary_items.industry_id')
                             ->where('rates.media_id', $media_id)
-                            ->where('summaries.flow_no', '98')
                             ->where('summary_items.active', '1')
-                            ->where('summary_items.summary_item_viewed', '<>' ,'COMPLETED')
+                            ->where('summary_items.summary_item_type', $summary_item_type)
                             ->whereYear('summary_item_period_start', '=', $year)
                             ->whereMonth('summary_item_period_start', '=', $month)
                             ->orderBy('summary_item_period_start', 'asc')
@@ -1522,34 +1547,25 @@ class SummaryController extends Controller
 
         }elseif($view_type=='print'){ //print
             $dates = SummaryItem::select('summary_item_period_start')
-                            ->join('summaries', 'summaries.summary_id', '=', 'summary_items.summary_id')
                             ->join('rates', 'rates.rate_id', '=', 'summary_items.rate_id')
-                            ->where('summaries.flow_no', '98')
                             ->where('summary_items.active', '1')
-                            ->where('summary_items.summary_item_viewed', '<>' ,'COMPLETED')
+                            ->where('summary_items.summary_item_type', $summary_item_type)
                             ->where('rates.media_id', $media_id)
-                            /*->whereYear('summary_item_period_start', '=', $year)
-                            ->whereMonth('summary_item_period_start', '=', $month)*/
                             ->where('summary_item_period_start', $edition_date)
                             ->groupBy('summary_item_period_start')
                             ->get();
 
             $items = array();
             foreach ($dates as $value) {
-                $item = SummaryItem::join('summaries', 'summaries.summary_id', '=', 'summary_items.summary_id')
-                            ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
-                            ->join('clients', 'clients.client_id', '=', 'proposals.client_id')
+                $item = SummaryItem::join('clients', 'clients.client_id', '=', 'summary_items.client_id')
                             ->join('rates', 'rates.rate_id', '=', 'summary_items.rate_id')
                             ->join('medias', 'medias.media_id', '=', 'rates.media_id')
                             ->join('users', 'users.user_id', '=', 'summary_items.created_by')
                             ->join('units', 'units.unit_id', '=', 'rates.unit_id')
-                            ->join('brands', 'brands.brand_id', '=', 'proposals.brand_id')
-                            ->join('subindustries', 'subindustries.subindustry_id', '=', 'brands.subindustry_id')
-                            ->join('industries', 'industries.industry_id', '=', 'subindustries.industry_id')
+                            ->join('industries', 'industries.industry_id', '=', 'summary_items.industry_id')
                             ->where('rates.media_id', $media_id)
-                            ->where('summaries.flow_no', '98')
                             ->where('summary_items.active', '1')
-                            ->where('summary_items.summary_item_viewed', '<>' ,'COMPLETED')
+                            ->where('summary_items.summary_item_type', $summary_item_type)
                             ->where('summary_item_period_start', $value->summary_item_period_start)
                             ->orderBy('summary_item_period_start', 'asc')
                             ->get();
@@ -1568,7 +1584,7 @@ class SummaryController extends Controller
 
     public function updatePosisiIklan(Request $request, $id)
     {
-        if(Gate::denies('Posisi Iklan-Create')) {
+        if(Gate::denies('Checking Position-Update')) {
             abort(403, 'Unauthorized action.');
         }
 
