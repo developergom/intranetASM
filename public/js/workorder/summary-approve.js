@@ -15,7 +15,7 @@ var
     minSpareRows: 1,
     formulas:true,
     contextMenu: ['row_above', 'row_below', 'col_left', 'col_right', 'remove_row', 'remove_col', 'undo', 'redo', 'alignment', 'copy', 'cut'],
-    colHeaders: ['No', 'Type', 'Rate Name', 'Media', 'Edition/Period Start', 'Period End', 'Omzet Type', 'Insertion', 'Gross Rate', 'Disc(%)', 'Nett Rate', 'Internal Omzet', 'Remarks', 'Termin', 'Status', 'Edited', 'Halaman', 'Kanal', 'Order Digital', 'Materi', 'Status Materi', 'Capture Materi', 'Sales Order', 'PPN', 'Total'],
+    colHeaders: ['No', 'Type', 'Rate Name', 'Media', 'Edition/Period Start', 'Period End', 'Omzet Type', 'Insertion', 'Gross Rate', 'Disc(%)', 'Nett Rate', 'Internal Omzet', 'Remarks', 'Termin', 'Status', 'Edited', 'Halaman', 'Kanal', 'Order Digital', 'Materi', 'Status Materi', 'Capture Materi', 'Sales Order', 'PO-Perjanjian', 'PPN', 'Total'],
     columns: [
       {type: 'numeric'}, //no
       {//type
@@ -141,6 +141,7 @@ var
       {},
       {},
       {},
+      {},
       {//ppn
         type: 'numeric',
         format: 'Rp 0,0.00',
@@ -153,7 +154,7 @@ var
       }
     ],
     hiddenColumns: {
-      columns: [16, 17, 18, 19, 20, 21, 22, 23, 24],
+      columns: [16, 17, 18, 19, 20, 21, 22, 23, 24, 25],
       indicators: true
     },
     afterChange: function(changes) {

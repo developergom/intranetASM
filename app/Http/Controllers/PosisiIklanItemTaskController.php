@@ -67,7 +67,7 @@ class PosisiIklanItemTaskController extends Controller
         $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
         $searchPhrase = $request->input('searchPhrase') or '';
         
-        $sort_column = 'updated_at';
+        $sort_column = 'summary_item_period_start';
         $sort_type = 'desc';
 
         if(is_array($request->input('sort'))) {
@@ -88,8 +88,10 @@ class PosisiIklanItemTaskController extends Controller
                                 ->join('rates','rates.rate_id', '=', 'summary_items.rate_id')
                                 ->join('medias','medias.media_id', '=', 'rates.media_id')
                                 ->join('clients','clients.client_id', '=', 'summary_items.client_id')
+                                ->join('omzet_types','omzet_types.omzet_type_id', '=', 'summary_items.omzet_type_id')
                                 ->where('summary_items.active', '=', '1')
                                 ->where('summary_items.summary_item_task_status', '=' , '0')
+                                ->where('omzet_types.omzet_type_name', '=', 'Print')
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('client_name','like','%' . $searchPhrase . '%')
@@ -102,8 +104,10 @@ class PosisiIklanItemTaskController extends Controller
                                 ->join('rates','rates.rate_id', '=', 'summary_items.rate_id')
                                 ->join('medias','medias.media_id', '=', 'rates.media_id')
                                 ->join('clients','clients.client_id', '=', 'summary_items.client_id')
+                                ->join('omzet_types','omzet_types.omzet_type_id', '=', 'summary_items.omzet_type_id')
                                 ->where('summary_items.active', '=', '1')
                                 ->where('summary_items.summary_item_task_status', '=' , '0')
+                                ->where('omzet_types.omzet_type_name', '=', 'Print')
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('client_name','like','%' . $searchPhrase . '%')

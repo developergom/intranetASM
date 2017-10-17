@@ -93,10 +93,10 @@
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="posisi_iklan_item_page_no" class="col-sm-2 control-label">Halaman</label>
+	                <label for="posisi_iklan_item_page_no" class="col-sm-2 control-label">Halaman/Posisi</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" name="posisi_iklan_item_page_no" id="posisi_iklan_item_page_no" class="form-control input-sm" readonly="true" placeholder="Materi" value="{{ $posisiiklanitemtask->summaryitem->page_no }}">
+	                        <input type="text" name="posisi_iklan_item_page_no" id="posisi_iklan_item_page_no" class="form-control input-sm" readonly="true" placeholder="Halaman/Posisi" value="{{ $posisiiklanitemtask->summaryitem->page_no }}">
 	                    </div>
 	                </div>
 	            </div>

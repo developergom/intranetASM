@@ -177,13 +177,14 @@
                                     <th>Termin</th>
                                     <th>Status</th>
                                     <th>Remarks</th>
-                                    <th>Halaman</th>
+                                    <th>Halaman/Posisi</th>
                                     <th>Kanal</th>
                                     <th>Order Digital</th>
                                     <th>Materi</th>
                                     <th>Status Materi</th>
                                     <th>Capture Materi</th>
                                     <th>Sales Order</th>
+                                    <th>PO Perjanjian</th>
                                     <th>PPN</th>
                                     <th>Total</th>
                                 </tr>
@@ -243,6 +244,11 @@
                                             <td>
                                                 <div class="fg-line">
                                                     <input type="text" style="width:120px;" name="summary_item_sales_order[]" class="form-control" value="{{ $row->summary_item_sales_order }}">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="fg-line">
+                                                    <input type="text" style="width:120px;" name="summary_item_po_perjanjian[]" class="form-control" value="{{ $row->summary_item_po_perjanjian }}">
                                                 </div>
                                             </td>
                                             <td>

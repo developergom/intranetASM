@@ -218,8 +218,9 @@ class SummaryController extends Controller
             $detail->summary_item_status_materi = $hot[$i][20];
             $detail->summary_item_capture_materi = $hot[$i][21];
             $detail->summary_item_sales_order = $hot[$i][22];
-            $detail->summary_item_ppn = $hot[$i][23];
-            $detail->summary_item_total = $hot[$i][24];
+            $detail->summary_item_sales_order = $hot[$i][23];
+            $detail->summary_item_ppn = $hot[$i][24];
+            $detail->summary_item_total = $hot[$i][25];
             $detail->summary_item_task_status = 0;
             $detail->source_type = 'SUMMARY';
             $detail->client_id = $proposal->client_id;
@@ -355,6 +356,7 @@ class SummaryController extends Controller
                         $value->summary_item_status_materi,
                         $value->summary_item_capture_materi,
                         $value->summary_item_sales_order,
+                        $value->summary_item_po_perjanjian,
                         $value->summary_item_ppn,
                         $value->summary_item_total
                     ];
@@ -365,7 +367,7 @@ class SummaryController extends Controller
             }
 
             //untuk array kosong
-            $empArr = ['','','','','','','','','','','','','','','','','','','','','','','','',''];
+            $empArr = ['','','','','','','','','','','','','','','','','','','','','','','','','',''];
             array_push($details, $empArr);
 
             //store details to session
@@ -496,8 +498,9 @@ class SummaryController extends Controller
             $detail->summary_item_status_materi = $hot[$i][20];
             $detail->summary_item_capture_materi = $hot[$i][21];
             $detail->summary_item_sales_order = $hot[$i][22];
-            $detail->summary_item_ppn = $hot[$i][23];
-            $detail->summary_item_total = $hot[$i][24];
+            $detail->summary_item_po_perjanjian = $hot[$i][23];
+            $detail->summary_item_ppn = $hot[$i][24];
+            $detail->summary_item_total = $hot[$i][25];
             $detail->summary_item_task_status = 0;
             $detail->source_type = 'SUMMARY';
             $detail->client_id = $proposal->client_id;
@@ -1037,6 +1040,7 @@ class SummaryController extends Controller
                         $value->summary_item_status_materi,
                         $value->summary_item_capture_materi,
                         $value->summary_item_sales_order,
+                        $value->summary_item_po_perjanjian,
                         $value->summary_item_ppn,
                         $value->summary_item_total
                     ];
@@ -1127,8 +1131,9 @@ class SummaryController extends Controller
                     $detail->summary_item_status_materi = $hot[$i][20];
                     $detail->summary_item_capture_materi = $hot[$i][21];
                     $detail->summary_item_sales_order = $hot[$i][22];
-                    $detail->summary_item_ppn = $hot[$i][23];
-                    $detail->summary_item_total = $hot[$i][24];
+                    $detail->summary_item_po_perjanjian = $hot[$i][23];
+                    $detail->summary_item_ppn = $hot[$i][24];
+                    $detail->summary_item_total = $hot[$i][25];
                     $detail->summary_item_task_status = 0;
                     $detail->source_type = 'SUMMARY';
                     $detail->client_id = $proposal->client_id;
@@ -1234,8 +1239,9 @@ class SummaryController extends Controller
                     $detail->summary_item_status_materi = $hot[$i][20];
                     $detail->summary_item_capture_materi = $hot[$i][21];
                     $detail->summary_item_sales_order = $hot[$i][22];
-                    $detail->summary_item_ppn = $hot[$i][23];
-                    $detail->summary_item_total = $hot[$i][24];
+                    $detail->summary_item_po_perjanjian = $hot[$i][23];
+                    $detail->summary_item_ppn = $hot[$i][24];
+                    $detail->summary_item_total = $hot[$i][25];
                     $detail->summary_item_task_status = 0;
                     $detail->source_type = 'SUMMARY';
                     $detail->client_id = $proposal->client_id;
@@ -1342,6 +1348,7 @@ class SummaryController extends Controller
                         $value->summary_item_status_materi,
                         $value->summary_item_capture_materi,
                         $value->summary_item_sales_order,
+                        $value->summary_item_po_perjanjian,
                         $value->summary_item_ppn,
                         $value->summary_item_total
                     ];
@@ -1352,7 +1359,7 @@ class SummaryController extends Controller
             }
 
             //untuk array kosong
-            $empArr = ['','','','','','','','','','','','','','','','','','','','','','','','',''];
+            $empArr = ['','','','','','','','','','','','','','','','','','','','','','','','','',''];
             array_push($details, $empArr);
 
             //store details to session
@@ -1486,8 +1493,9 @@ class SummaryController extends Controller
             $detail->summary_item_status_materi = $hot[$i][20];
             $detail->summary_item_capture_materi = $hot[$i][21];
             $detail->summary_item_sales_order = $hot[$i][22];
-            $detail->summary_item_ppn = $hot[$i][23];
-            $detail->summary_item_total = $hot[$i][24];
+            $detail->summary_item_po_perjanjian = $hot[$i][23];
+            $detail->summary_item_ppn = $hot[$i][24];
+            $detail->summary_item_total = $hot[$i][25];
             $detail->summary_item_task_status = 0;
             $detail->source_type = 'SUMMARY';
             $detail->client_id = $proposal->client_id;
@@ -1628,6 +1636,7 @@ class SummaryController extends Controller
         $summary_item_status_materi = $request->input('summary_item_status_materi');
         $summary_item_capture_materi = $request->input('summary_item_capture_materi');
         $summary_item_sales_order = $request->input('summary_item_sales_order');
+        $summary_item_po_perjanjian = $request->input('summary_item_po_perjanjian');
         $summary_item_ppn = $request->input('summary_item_ppn');
         $summary_item_total = $request->input('summary_item_total');
 
@@ -1640,6 +1649,7 @@ class SummaryController extends Controller
             $item->summary_item_status_materi = $summary_item_status_materi[$key];
             $item->summary_item_capture_materi = $summary_item_capture_materi[$key];
             $item->summary_item_sales_order = $summary_item_sales_order[$key];
+            $item->summary_item_po_perjanjian = $summary_item_po_perjanjian[$key];
             $item->summary_item_ppn = $summary_item_ppn[$key];
             $item->summary_item_total = $summary_item_total[$key];
             $item->summary_item_pic = $request->user()->user_id;

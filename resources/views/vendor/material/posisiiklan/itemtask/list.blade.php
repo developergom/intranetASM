@@ -24,11 +24,11 @@
                         <table id="grid-data-available" class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th data-column-id="updated_at" data-order="desc">Last Updated</th>
+                                    <th data-column-id="summary_item_period_start" data-order="asc">Show Date</th>
                                     <th data-column-id="media_name" data-order="asc">Media</th>
                                     <th data-column-id="client_name" data-order="asc">Client</th>
                                     <th data-column-id="summary_item_title" data-order="asc">Title</th>
-                                    <th data-column-id="summary_item_period_start" data-order="asc">Show Date</th>
+                                    <th data-column-id="updated_at" data-order="desc">Last Updated</th>
                                     <th data-column-id="link" data-formatter="link-rua" data-sortable="false">Action</th>
                                 </tr>
                             </thead>
@@ -42,12 +42,12 @@
                         <table id="grid-data-onprocess" class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th data-column-id="updated_at" data-order="desc">Last Updated</th>
+                                    <th data-column-id="summary_item_period_start" data-order="asc">Show Date</th>
                                     <th data-column-id="media_name" data-order="asc">Media</th>
                                     <th data-column-id="client_name" data-order="asc">Client</th>
                                     <th data-column-id="summary_item_title" data-order="asc">Title</th>
-                                    <th data-column-id="summary_item_period_start" data-order="asc">Show Date</th>
                                     <th data-column-id="user_firstname" data-order="asc">PIC</th>
+                                    <th data-column-id="updated_at" data-order="desc">Last Updated</th>
                                     <th data-column-id="link" data-formatter="link-rua" data-sortable="false">Action</th>
                                 </tr>
                             </thead>
@@ -63,12 +63,12 @@
                         <table id="grid-data-finished" class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th data-column-id="updated_at" data-order="desc">Last Updated</th>
+                                    <th data-column-id="summary_item_period_start" data-order="asc">Show Date</th>
                                     <th data-column-id="media_name" data-order="asc">Media</th>
                                     <th data-column-id="client_name" data-order="asc">Client</th>
                                     <th data-column-id="summary_item_title" data-order="asc">Title</th>
-                                    <th data-column-id="summary_item_period_start" data-order="asc">Show Date</th>
                                     <th data-column-id="user_firstname" data-order="asc">PIC</th>
+                                    <th data-column-id="updated_at" data-order="desc">Last Updated</th>
                                     <th data-column-id="link" data-formatter="link-rua" data-sortable="false">Action</th>
                                 </tr>
                             </thead>
