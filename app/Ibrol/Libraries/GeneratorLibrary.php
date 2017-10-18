@@ -2,6 +2,7 @@
 
 namespace App\Ibrol\Libraries;
 
+use App\Contract;
 use App\Media;
 use App\Proposal;
 use App\Summary;
@@ -99,6 +100,59 @@ class GeneratorLibrary{
 		$summary_order_no = 'SUM.' . $code . '.' . $no . '/IKL/' . $this->getMonthCode(date('n')) . '/' . date('y');
 
 		return $summary_order_no;
+	}
+
+	public function contract_no($contract_id) {
+		//K.0000/AUT/XI/2017
+
+		$contract = Contract::with('proposal','proposal.medias')->find($contract_id);
+
+		$code = 'KON';
+		if($contract->proposal->medias()->count() > 1) {
+			$code = 'G';
+		}elseif($contract->proposal->medias()->count() == 1){
+			$media = $contract->proposal->medias()->first();
+			$code = $media->media_code;
+		}else{
+			$code = 'UNDEFINED';
+		}
+
+		$last = Contract::where('flow_no', '98')->orderBy('param_no', 'desc')->first();
+		$lastcode = $last->contract_no;
+
+		$no = 1;
+		if($lastcode!='')
+		{
+			$exp = explode('/', $lastcode);
+			if(intval($exp[3])==date('Y'))
+			{
+				$no = $last->param_no + 1;
+			}
+		}
+
+		$return = array();
+		$return['param_no'] = $no;
+		switch ($no) {
+			case $no >= 1000:
+				$no = $no;
+				break;
+
+			case $no >= 100:
+				$no = '0' . $no;
+				break;
+			
+			case $no >= 10:
+				$no = '00' . $no;
+				break;
+
+			default:
+				$no = '000' . $no;
+				break;
+		}
+		
+		$return['contract_no'] = 'K.' . $no . '/' . $code . '/' . $this->getMonthCode(date('n')) . '/' . date('Y');
+
+		return $return;
 	}
 
 	public function getMonthCode($month) {

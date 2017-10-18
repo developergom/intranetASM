@@ -445,7 +445,12 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
 
         Route::post('contract/apiList/{listtype}', 'ContractController@apiList');
         Route::post('contract/apiDelete', 'ContractController@apiDelete');
+        Route::get('contract/create/{proposal_id}', 'ContractController@create');
         Route::resource('contract', 'ContractController');
+        Route::get('contract/action/{flow_no}/{id}', 'ContractController@action');
+        Route::post('contract/action/{flow_no}/{id}', 'ContractController@postAction');
+        Route::get('contract/approval/{flow_no}/{id}', 'ContractController@approve');
+        Route::post('contract/approval/{flow_no}/{id}', 'ContractController@postApprove');
     });
 
     Route::group(['prefix' => 'posisi-iklan'], function() {
