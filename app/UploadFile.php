@@ -36,6 +36,11 @@ class UploadFile extends Model
 		return $this->belongsToMany('App\Agenda', 'agenda_upload_file');
 	}
 
+	public function contracts()
+	{
+		return $this->belongsToMany('App\Contract', 'contract_upload_file');
+	}
+
 	public function eventplan() 
 	{
 		return $this->belongsToMany('App\EventPlan', 'event_plan_upload_file');

@@ -154,4 +154,9 @@ class Proposal extends Model
 	{
 		return $this->hasMany('App\Mutation', 'mutation_item');
 	}
+
+	public function contracts()
+	{
+		return $this->hasMany('App\Contract', 'proposal_id');
+	}
 }

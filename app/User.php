@@ -176,4 +176,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\SummaryItem', 'sales_id', 'user_id');
     }
+
+    public function contractcurrentuser()
+    {
+        return $this->hasMany('App\Contract', 'current_user');
+    }
+
+    public function contractpic()
+    {
+        return $this->hasMany('App\Contract', 'pic');
+    }
 }
