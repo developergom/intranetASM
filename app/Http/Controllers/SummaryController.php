@@ -88,9 +88,9 @@ class SummaryController extends Controller
                                         )->find($contract_id);
 
         //forget session
-        if($request->session()->has('summary_details_' . $request->user()->user_id)) {
+        /*if($request->session()->has('summary_details_' . $request->user()->user_id)) {
             $request->session()->forget('summary_details_' . $request->user()->user_id);
-        }
+        }*/
 
         return view('vendor.material.workorder.summary.create', $data);
     }
@@ -103,6 +103,8 @@ class SummaryController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->all());
+
         $this->validate($request,
             [
                 'contract_id' => 'required|numeric',
@@ -117,6 +119,11 @@ class SummaryController extends Controller
                 'messages' => 'required'
             ]
         );
+
+        if(!$this->hotValidation($request))
+        {
+            return redirect()->back()->withInput();
+        }
 
         $flow = new FlowLibrary;
         $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
@@ -189,53 +196,7 @@ class SummaryController extends Controller
             Summary::find($obj->summary_id)->uploadfiles()->sync($fileArray);    
         }
 
-        $hot = $request->session()->get('summary_details_' . $request->user()->user_id);
-
-        for($i = 0;$i < (count($hot)-1);$i++)
-        {
-            //dd($hot[$i]);
-
-            $rate = Rate::where('rate_name', $hot[$i][2])->where('active', 1)->first();
-            $omzettype = OmzetType::where('omzet_type_name', $hot[$i][6])->where('active', 1)->first();
-
-            $detail = new SummaryItem;
-            $detail->rate_id = $rate->rate_id;
-            $detail->summary_id = $obj->summary_id;
-            $detail->summary_item_type = $hot[$i][1];
-            $detail->summary_item_period_start = ($hot[$i][4]!='') ? Carbon::createFromFormat('d/m/Y', $hot[$i][4])->toDateString() : '';
-            $detail->summary_item_period_end = ($hot[$i][5]!='') ? Carbon::createFromFormat('d/m/Y', $hot[$i][5])->toDateString() : '';
-            $detail->omzet_type_id = $omzettype->omzet_type_id;
-            $detail->summary_item_insertion = $hot[$i][7];
-            $detail->summary_item_gross = $hot[$i][8];
-            $detail->summary_item_disc = $hot[$i][9];
-            $detail->summary_item_nett = $hot[$i][10];
-            $detail->summary_item_internal_omzet = $hot[$i][11];
-            $detail->summary_item_remarks = $hot[$i][12];
-            $detail->summary_item_termin = $hot[$i][13];
-            $detail->summary_item_viewed = $hot[$i][14];
-            $detail->summary_item_edited = $hot[$i][15];
-            $detail->page_no = $hot[$i][16];
-            $detail->summary_item_canal = $hot[$i][17];
-            $detail->summary_item_order_digital = $hot[$i][18];
-            $detail->summary_item_materi = $hot[$i][19];
-            $detail->summary_item_status_materi = $hot[$i][20];
-            $detail->summary_item_capture_materi = $hot[$i][21];
-            $detail->summary_item_sales_order = $hot[$i][22];
-            $detail->summary_item_sales_order = $hot[$i][23];
-            $detail->summary_item_ppn = $hot[$i][24];
-            $detail->summary_item_total = $hot[$i][25];
-            $detail->summary_item_task_status = 0;
-            $detail->source_type = 'SUMMARY';
-            $detail->client_id = $contract->proposal->client_id;
-            $detail->industry_id = $contract->proposal->brand->subindustry->industry->industry_id;
-            $detail->summary_item_title = $contract->proposal->proposal_name;
-            $detail->sales_id = $request->user()->user_id;
-            $detail->revision_no = 0;
-            $detail->active = '1';
-            $detail->created_by = $request->user()->user_id;
-
-            $detail->save();
-        }
+        $this->hotInsertion($request, $obj, $contract);
 
         $his = new SummaryHistory;
         $his->summary_id = $obj->summary_id;
@@ -412,6 +373,11 @@ class SummaryController extends Controller
                 'messages' => 'required'
             ]
         );
+
+        if(!$this->hotValidation($request))
+        {
+            return redirect()->back()->withInput();
+        }
 
         $flow = new FlowLibrary;
         $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
@@ -1084,6 +1050,11 @@ class SummaryController extends Controller
             'messages' => 'required',
         ]);
 
+        if(!$this->hotValidation($request))
+        {
+            return redirect()->back()->withInput();
+        }
+
         if($request->input('approval') == '1') 
         {
             //approve
@@ -1206,7 +1177,7 @@ class SummaryController extends Controller
             $summary->updated_by = $request->user()->user_id;
             $summary->save();
 
-            $contract = Contract::with('proposal')->find($summary->proposal_id);
+            $contract = Contract::with('proposal')->find($summary->contract_id);
 
             //edit-items or no
             if($request->input('edit-items') == 'on') {
@@ -1417,6 +1388,11 @@ class SummaryController extends Controller
                 'messages' => 'required'
             ]
         );
+
+        if(!$this->hotValidation($request))
+        {
+            return redirect()->back()->withInput();
+        }
 
         $flow = new FlowLibrary;
         $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
@@ -1690,5 +1666,97 @@ class SummaryController extends Controller
             return true;
 
         return false;
+    }
+
+    private function checkMediaName($media_name)
+    {
+        $rate = Media::where('media_name', '=', $media_name)->where('active', '1')->count();
+
+        if($rate > 0)
+            return true;
+
+        return false;
+    }
+
+    private function checkOmzetTypeName($omzet_type_name)
+    {
+        $rate = OmzetType::where('omzet_type_name', '=', $omzet_type_name)->where('active', '1')->count();
+
+        if($rate > 0)
+            return true;
+
+        return false;
+    }
+
+    private function hotValidation(Request $request)
+    {
+        $hot = $request->session()->get('summary_details_' . $request->user()->user_id);
+        for($i = 0;$i < (count($hot)-1);$i++)
+        {
+            if($this->checkRateName($hot[$i][2])==false){
+                $request->session()->flash('rateNameFailed', 'The rate you have been entered is not valid at row ' . ($i+1) . '!');
+                return false;
+            }
+
+            if($this->checkMediaName($hot[$i][3])==false){
+                $request->session()->flash('mediaNameFailed', 'The media you have been entered is not valid at row ' . ($i+1) . '!');
+                return false;
+            }
+
+            if($this->checkOmzetTypeName($hot[$i][6])==false){
+                $request->session()->flash('omzetTypeNameFailed', 'The omzet type you have been entered is not valid at row ' . ($i+1) . '!');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function hotInsertion(Request $request, $obj, $contract)
+    {
+        $hot = $request->session()->get('summary_details_' . $request->user()->user_id);
+        for($i = 0;$i < (count($hot)-1);$i++)
+        {
+            $rate = Rate::where('rate_name', $hot[$i][2])->where('active', 1)->first();
+            $omzettype = OmzetType::where('omzet_type_name', $hot[$i][6])->where('active', 1)->first();
+
+            $detail = new SummaryItem;
+            $detail->rate_id = $rate->rate_id;
+            $detail->summary_id = $obj->summary_id;
+            $detail->summary_item_type = $hot[$i][1];
+            $detail->summary_item_period_start = ($hot[$i][4]!='') ? Carbon::createFromFormat('d/m/Y', $hot[$i][4])->toDateString() : '';
+            $detail->summary_item_period_end = ($hot[$i][5]!='') ? Carbon::createFromFormat('d/m/Y', $hot[$i][5])->toDateString() : '';
+            $detail->omzet_type_id = $omzettype->omzet_type_id;
+            $detail->summary_item_insertion = $hot[$i][7];
+            $detail->summary_item_gross = $hot[$i][8];
+            $detail->summary_item_disc = $hot[$i][9];
+            $detail->summary_item_nett = $hot[$i][10];
+            $detail->summary_item_internal_omzet = $hot[$i][11];
+            $detail->summary_item_remarks = $hot[$i][12];
+            $detail->summary_item_termin = $hot[$i][13];
+            $detail->summary_item_viewed = $hot[$i][14];
+            $detail->summary_item_edited = $hot[$i][15];
+            $detail->page_no = $hot[$i][16];
+            $detail->summary_item_canal = $hot[$i][17];
+            $detail->summary_item_order_digital = $hot[$i][18];
+            $detail->summary_item_materi = $hot[$i][19];
+            $detail->summary_item_status_materi = $hot[$i][20];
+            $detail->summary_item_capture_materi = $hot[$i][21];
+            $detail->summary_item_sales_order = $hot[$i][22];
+            $detail->summary_item_sales_order = $hot[$i][23];
+            $detail->summary_item_ppn = $hot[$i][24];
+            $detail->summary_item_total = $hot[$i][25];
+            $detail->summary_item_task_status = 0;
+            $detail->source_type = 'SUMMARY';
+            $detail->client_id = $contract->proposal->client_id;
+            $detail->industry_id = $contract->proposal->brand->subindustry->industry->industry_id;
+            $detail->summary_item_title = $contract->proposal->proposal_name;
+            $detail->sales_id = $request->user()->user_id;
+            $detail->revision_no = 0;
+            $detail->active = '1';
+            $detail->created_by = $request->user()->user_id;
+
+            $detail->save();
+        }
     }
 }

@@ -319,8 +319,8 @@ $(document).ready(function(){
       var data = response;
 
       hot1.loadData(data);
-      calculateTotal(hot1);
-      calculateOmzet(hot1);
+      //calculateTotal(hot1);
+      //calculateOmzet(hot1);
 
       hot1.updateSettings({
          cells: function(row, col, prop){

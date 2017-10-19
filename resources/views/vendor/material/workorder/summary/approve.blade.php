@@ -368,4 +368,6 @@
 
 @section('customjs')
 <script src="{{ url('js/workorder/summary-approve.js') }}"></script>
+
+@include('vendor.material.workorder.summary.hot_validation')
 @endsection
