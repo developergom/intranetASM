@@ -12,11 +12,19 @@
         	<form class="form-horizontal" role="form" method="POST">
         		{{ csrf_field() }}
                 <div class="form-group">
+                    <label for="contract_no" class="col-sm-2 control-label">Contract No</label>
+                    <div class="col-sm-10">
+                        <div class="fg-line">
+                            <input type="text" class="form-control input-sm" id="contract_no" readonly="true" value="{{ $summary->contract->contract_no }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="proposal_no" class="col-sm-2 control-label">Proposal No</label>
                     <div class="col-sm-10">
                         <div class="fg-line">
                             <input type="hidden" id="summary_id" value="{{ $summary->summary_id }}">
-                            <input type="text" class="form-control input-sm" id="proposal_no" readonly="true" value="{{ $summary->proposal->proposal_no }}">
+                            <input type="text" class="form-control input-sm" id="proposal_no" readonly="true" value="{{ $summary->contract->proposal->proposal_no }}">
                         </div>
                     </div>
                 </div>
@@ -24,7 +32,7 @@
                     <label for="proposal_name" class="col-sm-2 control-label">Name</label>
                     <div class="col-sm-10">
                         <div class="fg-line">
-                            <input type="text" class="form-control input-sm" name="proposal_name" id="proposal_name" placeholder="Proposal Name" required="true" maxlength="200" value="{{ $summary->proposal->proposal_name }}" readonly="true">
+                            <input type="text" class="form-control input-sm" name="proposal_name" id="proposal_name" placeholder="Proposal Name" required="true" maxlength="200" value="{{ $summary->contract->proposal->proposal_name }}" readonly="true">
                         </div>
                     </div>
                 </div>
@@ -32,7 +40,7 @@
                     <label for="industry_id" class="col-sm-2 control-label">Industry</label>
                     <div class="col-sm-10">
                         <div class="fg-line">
-                            @foreach ($summary->proposal->industries as $row)
+                            @foreach ($summary->contract->proposal->industries as $row)
                                 <span class="badge">{{ $row->industry_name }}</span>
                             @endforeach
                         </div>
@@ -42,7 +50,7 @@
                     <label for="client_id" class="col-sm-2 control-label">Client</label>
                     <div class="col-sm-10">
                         <div class="fg-line">
-                            <a href="{{ url('/master/client/' . $summary->proposal->client->client_id) }}" target="_blank"><span class="badge">{{ $summary->proposal->client->client_name }}</span></a>
+                            <a href="{{ url('/master/client/' . $summary->contract->proposal->client->client_id) }}" target="_blank"><span class="badge">{{ $summary->contract->proposal->client->client_name }}</span></a>
                         </div>
                     </div>
                 </div>
@@ -50,8 +58,8 @@
                     <label for="client_contact_id" class="col-sm-2 control-label">Contact</label>
                     <div class="col-sm-10">
                         <div class="fg-line">
-                            @foreach ($summary->proposal->client_contacts as $row)
-                                <a href="{{ url('/master/client/' . $summary->proposal->client->client_id) }}" target="_blank"><span class="badge">{{ $row->client_contact_name . ' | ' . $row->client_contact_phone }}</span></a><br/>
+                            @foreach ($summary->contract->proposal->client_contacts as $row)
+                                <a href="{{ url('/master/client/' . $summary->contract->proposal->client->client_id) }}" target="_blank"><span class="badge">{{ $row->client_contact_name . ' | ' . $row->client_contact_phone }}</span></a><br/>
                             @endforeach
                         </div>
                     </div>
@@ -60,7 +68,7 @@
                     <label for="brand_id" class="col-sm-2 control-label">Brand</label>
                     <div class="col-sm-10">
                         <div class="fg-line">
-                            <span class="badge">{{ $summary->proposal->brand->brand_name }}</span>
+                            <span class="badge">{{ $summary->contract->proposal->brand->brand_name }}</span>
                         </div>
                     </div>
                 </div>
@@ -68,7 +76,7 @@
                     <label for="media_id" class="col-sm-2 control-label">Media</label>
                     <div class="col-sm-10">
                         <div class="fg-line">
-                            @foreach ($summary->proposal->medias as $row)
+                            @foreach ($summary->contract->proposal->medias as $row)
                                 <a href="{{ url('/master/media/' . $row->media_id) }}" target="_blank"><span class="badge">{{ $row->media_name }}</span></a>
                             @endforeach
                         </div>

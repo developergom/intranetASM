@@ -58,7 +58,7 @@ class GeneratorLibrary{
 	public function summary_order_no($summary_id) {
 		//AUT.033980/IKL/IX/17
 
-		$summary = Summary::with('proposal','proposal.medias')->find($summary_id);
+		/*$summary = Summary::with('proposal','proposal.medias')->find($summary_id);
 
 		$code = 'SUM';
 		if($summary->proposal->medias()->count() > 1) {
@@ -99,7 +99,56 @@ class GeneratorLibrary{
 
 		$summary_order_no = 'SUM.' . $code . '.' . $no . '/IKL/' . $this->getMonthCode(date('n')) . '/' . date('y');
 
-		return $summary_order_no;
+		return $summary_order_no;*/
+
+		$summary = Summary::with('contract.proposal','contract.proposal.medias')->find($summary_id);
+
+		$code = 'SUM';
+		if($summary->contract->proposal->medias()->count() > 1) {
+			$code = 'G';
+		}elseif($summary->contract->proposal->medias()->count() == 1){
+			$media = $summary->contract->proposal->medias()->first();
+			$code = $media->media_code;
+		}else{
+			$code = 'UNDEFINED';
+		}
+
+		$last = Summary::orderBy('param_no', 'desc')->first();
+		$lastcode = $last->summary_order_no;
+
+		$no = 1;
+		if($lastcode!='')
+		{
+			$exp = explode('/', $lastcode);
+			if(intval($exp[3])==date('Y'))
+			{
+				$no = $last->param_no + 1;
+			}
+		}
+
+		$return = array();
+		$return['param_no'] = $no;
+		switch ($no) {
+			case $no >= 1000:
+				$no = $no;
+				break;
+
+			case $no >= 100:
+				$no = '0' . $no;
+				break;
+			
+			case $no >= 10:
+				$no = '00' . $no;
+				break;
+
+			default:
+				$no = '000' . $no;
+				break;
+		}
+		
+		$return['summary_order_no'] = 'S.' . $no . '/' . $code . '/' . $this->getMonthCode(date('n')) . '/' . date('Y');
+
+		return $return;
 	}
 
 	public function contract_no($contract_id) {

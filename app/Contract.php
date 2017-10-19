@@ -30,6 +30,11 @@ class Contract extends Model
 		return $this->belongsTo('App\Proposal', 'proposal_id');
 	}
 
+	public function summary()
+	{
+		return $this->hasOne('App\Contract', 'contract_id');
+	}
+
 	public function contracthistories()
 	{
 		return $this->hasMany('App\ContractHistory', 'contract_id');

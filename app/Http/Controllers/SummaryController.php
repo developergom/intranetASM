@@ -10,6 +10,7 @@ use Excel;
 use File;
 use Gate;
 use App\Http\Requests;
+use App\Contract;
 use App\Client;
 use App\ClientContact;
 use App\Flow;
@@ -66,24 +67,25 @@ class SummaryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request, $proposal_id)
+    public function create(Request $request, $contract_id)
     {
         if(Gate::denies('Summary-Create')) {
             abort(403, 'Unauthorized action.');
         }
 
-        $data['proposal'] = Proposal::with(
-                                        'proposaltype', 
-                                        'proposalmethod', 
-                                        'proposalstatus',
-                                        'industries', 
-                                        'client_contacts',
-                                        'client',
-                                        'brand',
-                                        'medias',
-                                        'uploadfiles',
-                                        'inventoriesplanner'
-                                        )->find($proposal_id);
+        $data['contract'] = Contract::with(
+                                        'proposal',
+                                        'proposal.proposaltype', 
+                                        'proposal.proposalmethod', 
+                                        'proposal.proposalstatus',
+                                        'proposal.industries', 
+                                        'proposal.client_contacts',
+                                        'proposal.client',
+                                        'proposal.brand',
+                                        'proposal.medias',
+                                        'proposal.uploadfiles',
+                                        'proposal.inventoriesplanner'
+                                        )->find($contract_id);
 
         //forget session
         if($request->session()->has('summary_details_' . $request->user()->user_id)) {
@@ -103,7 +105,7 @@ class SummaryController extends Controller
     {
         $this->validate($request,
             [
-                'proposal_id' => 'required|numeric',
+                'contract_id' => 'required|numeric',
                 'summary_total_gross' => 'required|numeric',
                 'summary_total_discount' => 'required|numeric',
                 'summary_total_nett' => 'required|numeric',
@@ -119,10 +121,10 @@ class SummaryController extends Controller
         $flow = new FlowLibrary;
         $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
 
-        $proposal = Proposal::find($request->input('proposal_id'));
+        $contract = Contract::with('proposal')->find($request->input('contract_id'));
 
         $obj = new Summary;
-        $obj->proposal_id = $request->input('proposal_id');
+        $obj->contract_id = $request->input('contract_id');
         $obj->summary_order_no = '';
         $obj->summary_sent_date = '';
         $obj->summary_total_gross = $request->input('summary_total_gross');
@@ -142,9 +144,10 @@ class SummaryController extends Controller
         $obj->save();
 
         $generator = new GeneratorLibrary;
-        $summary_order_no = $generator->summary_order_no($obj->summary_id);
+        $code = $generator->summary_order_no($obj->summary_id);
 
-        $obj->summary_order_no = $summary_order_no;
+        $obj->param_no = $code['param_no'];
+        $obj->summary_order_no = $code['summary_order_no'];
         $obj->save();
         //
         
@@ -223,9 +226,9 @@ class SummaryController extends Controller
             $detail->summary_item_total = $hot[$i][25];
             $detail->summary_item_task_status = 0;
             $detail->source_type = 'SUMMARY';
-            $detail->client_id = $proposal->client_id;
-            $detail->industry_id = $proposal->brand->subindustry->industry->industry_id;
-            $detail->summary_item_title = $proposal->proposal_name;
+            $detail->client_id = $contract->proposal->client_id;
+            $detail->industry_id = $contract->proposal->brand->subindustry->industry->industry_id;
+            $detail->summary_item_title = $contract->proposal->proposal_name;
             $detail->sales_id = $request->user()->user_id;
             $detail->revision_no = 0;
             $detail->active = '1';
@@ -266,13 +269,14 @@ class SummaryController extends Controller
         $data['summary'] = Summary::with([
                     'summaryitems' => function($query) { $query->orderBy('summary_item_termin', 'asc'); }, 
                     'uploadfiles',
-                    'proposal', 
-                    'proposal.brand', 
-                    'proposal.medias', 
-                    'proposal.client', 
-                    'proposal.client.clienttype', 
-                    'proposal.client_contacts', 
-                    'proposal.industries', 
+                    'contract',
+                    'contract.proposal', 
+                    'contract.proposal.brand', 
+                    'contract.proposal.medias', 
+                    'contract.proposal.client', 
+                    'contract.proposal.client.clienttype', 
+                    'contract.proposal.client_contacts', 
+                    'contract.proposal.industries', 
                     'summaryitems.rate', 
                     'summaryitems.rate.media', 
                     'summaryitems.omzettype'
@@ -297,32 +301,35 @@ class SummaryController extends Controller
 
         $data['summary'] = Summary::with([
                     'summaryitems' => function($query) { $query->orderBy('summary_item_termin', 'asc'); }, 
+                    'summaryhistories' => function($query) { $query->orderBy('created_at', 'desc')->limit(1); }, 
                     'uploadfiles',
-                    'proposal', 
-                    'proposal.brand', 
-                    'proposal.medias', 
-                    'proposal.client', 
-                    'proposal.client.clienttype', 
-                    'proposal.client_contacts', 
-                    'proposal.industries', 
+                    'contract',
+                    'contract.proposal', 
+                    'contract.proposal.brand', 
+                    'contract.proposal.medias', 
+                    'contract.proposal.client', 
+                    'contract.proposal.client.clienttype', 
+                    'contract.proposal.client_contacts', 
+                    'contract.proposal.industries',
                     'summaryitems.rate', 
                     'summaryitems.rate.media', 
                     'summaryitems.omzettype'
                 ])->find($id);
 
 
-        $data['proposal'] = Proposal::with(
-                                        'proposaltype', 
-                                        'proposalmethod', 
-                                        'proposalstatus',
-                                        'industries', 
-                                        'client_contacts',
-                                        'client',
-                                        'brand',
-                                        'medias',
-                                        'uploadfiles',
-                                        'inventoriesplanner'
-                                        )->find($summary->proposal_id);
+        $data['contract'] = Contract::with(
+                                        'proposal',
+                                        'proposal.proposaltype', 
+                                        'proposal.proposalmethod', 
+                                        'proposal.proposalstatus',
+                                        'proposal.industries', 
+                                        'proposal.client_contacts',
+                                        'proposal.client',
+                                        'proposal.brand',
+                                        'proposal.medias',
+                                        'proposal.uploadfiles',
+                                        'proposal.inventoriesplanner'
+                                        )->find($summary->contract_id);
 
         if($data['summary']->summaryitems->count() > 0)
         {
@@ -393,7 +400,7 @@ class SummaryController extends Controller
     {
         $this->validate($request,
             [
-                'proposal_id' => 'required|numeric',
+                'contract_id' => 'required|numeric',
                 'summary_total_gross' => 'required|numeric',
                 'summary_total_discount' => 'required|numeric',
                 'summary_total_nett' => 'required|numeric',
@@ -409,10 +416,10 @@ class SummaryController extends Controller
         $flow = new FlowLibrary;
         $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
 
-        $proposal = Proposal::find($request->input('proposal_id'));
+        $contract = Contract::with('proposal')->find($request->input('contract_id'));
 
         $obj = Summary::find($id);
-        $obj->proposal_id = $request->input('proposal_id');
+        $obj->contract_id = $request->input('contract_id');
         $obj->summary_total_gross = $request->input('summary_total_gross');
         $obj->summary_total_disc = $request->input('summary_total_discount');
         $obj->summary_total_nett = $request->input('summary_total_nett');
@@ -503,9 +510,9 @@ class SummaryController extends Controller
             $detail->summary_item_total = $hot[$i][25];
             $detail->summary_item_task_status = 0;
             $detail->source_type = 'SUMMARY';
-            $detail->client_id = $proposal->client_id;
-            $detail->industry_id = $proposal->brand->subindustry->industry->industry_id;
-            $detail->summary_item_title = $proposal->proposal_name;
+            $detail->client_id = $contract->proposal->client_id;
+            $detail->industry_id = $contract->proposal->brand->subindustry->industry->industry_id;
+            $detail->summary_item_title = $contract->proposal->proposal_name;
             $detail->sales_id = $request->user()->user_id;
             $detail->revision_no = $obj->revision_no;
             $detail->active = '1';
@@ -561,7 +568,8 @@ class SummaryController extends Controller
 
         if($listtype == 'onprocess') {
             $data['rows'] = Summary::select('summaries.summary_id', 'proposal_name', 'summary_order_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
-                                ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
+                                ->join('contracts', 'contracts.contract_id', '=', 'summaries.contract_id')
+                                ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
                                 ->join('users','users.user_id', '=', 'summaries.current_user')
                                 ->where('summaries.flow_no','<>','98')
                                 ->where('summaries.active', '=', '1')
@@ -580,7 +588,8 @@ class SummaryController extends Controller
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = Summary::select('summaries.summary_id', 'proposal_name', 'summary_order_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
-                                ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
+                                ->join('contracts', 'contracts.contract_id', '=', 'summaries.contract_id')
+                                ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
                                 ->join('users','users.user_id', '=', 'summaries.current_user')
                                 ->where('summaries.flow_no','<>','98')
                                 ->where('summaries.active', '=', '1')
@@ -598,7 +607,8 @@ class SummaryController extends Controller
                                 })->count();    
         }elseif($listtype == 'needchecking') {
             $data['rows'] = Summary::select('summaries.summary_id', 'proposal_name', 'summary_order_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
-                                ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
+                                ->join('contracts', 'contracts.contract_id', '=', 'summaries.contract_id')
+                                ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
                                 ->join('users','users.user_id', '=', 'summaries.created_by')
                                 ->where('summaries.active','1')
                                 ->where('summaries.flow_no','<>','98')
@@ -612,7 +622,8 @@ class SummaryController extends Controller
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = Summary::select('summaries.summary_id', 'proposal_name', 'summary_order_no' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
-                                ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
+                                ->join('contracts', 'contracts.contract_id', '=', 'summaries.contract_id')
+                                ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
                                 ->join('users','users.user_id', '=', 'summaries.created_by')
                                 ->where('summaries.active','1')
                                 ->where('summaries.flow_no','<>','98')
@@ -625,7 +636,8 @@ class SummaryController extends Controller
                                 })->count();
         }elseif($listtype == 'finished') {
             $data['rows'] =  Summary::select('summaries.summary_id', 'summary_order_no', 'proposal_name' ,'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no', 'users.user_id')
-                                ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
+                                ->join('contracts', 'contracts.contract_id', '=', 'summaries.contract_id')
+                                ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
                                 ->join('users','users.user_id', '=', 'summaries.created_by')
                                 ->where('summaries.active','1')
                                 ->where('summaries.flow_no','=','98')
@@ -641,7 +653,8 @@ class SummaryController extends Controller
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = Summary::select('summaries.summary_id', 'summary_order_no', 'proposal_name', 'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no', 'users.user_id')
-                                ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
+                                ->join('contracts', 'contracts.contract_id', '=', 'summaries.contract_id')
+                                ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
                                 ->join('users','users.user_id', '=', 'summaries.created_by')
                                 ->where('summaries.active','1')
                                 ->where('summaries.flow_no','=','98')
@@ -656,7 +669,8 @@ class SummaryController extends Controller
                                 })->count();
         }elseif($listtype == 'canceled') {
             $data['rows'] = Summary::select('summaries.summary_id', 'summary_order_no', 'proposal_name', 'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
-                                ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
+                                ->join('contracts', 'contracts.contract_id', '=', 'summaries.contract_id')
+                                ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
                                 ->join('users','users.user_id', '=', 'summaries.created_by')
                                 ->where('summaries.active','0')
                                 ->where(function($query) use($request, $subordinate){
@@ -671,7 +685,8 @@ class SummaryController extends Controller
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
             $data['total'] = Summary::select('summaries.summary_id', 'summary_order_no', 'proposal_name', 'user_firstname', 'summaries.updated_at', 'proposals.proposal_id', 'summaries.flow_no')
-                                ->join('proposals', 'proposals.proposal_id', '=', 'summaries.proposal_id')
+                                ->join('contracts', 'contracts.contract_id', '=', 'summaries.contract_id')
+                                ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
                                 ->join('users','users.user_id', '=', 'summaries.created_by')
                                 ->where('summaries.active','0')
                                 ->where(function($query) use($request, $subordinate){
@@ -715,7 +730,6 @@ class SummaryController extends Controller
 
     public function apiSaveDetails(Request $request)
     {
-        //dd($request->input('details'));
 
         $details = $request->input('details');
 
@@ -767,15 +781,16 @@ class SummaryController extends Controller
                             'summaryitems' => function($query) { 
                                 $query->orderBy('summary_item_termin', 'asc'); 
                             }, 
-                            'proposal', 
-                            'proposal.brand', 
-                            'proposal.medias', 
-                            'proposal.medias.organization', 
-                            'proposal', 
-                            'proposal.client', 
-                            'proposal.client.clienttype', 
-                            'proposal.client_contacts', 
-                            'proposal.industries', 
+                            'contract',
+                            'contract.proposal', 
+                            'contract.proposal.brand', 
+                            'contract.proposal.medias', 
+                            'contract.proposal.medias.organization', 
+                            'contract.proposal', 
+                            'contract.proposal.client', 
+                            'contract.proposal.client.clienttype', 
+                            'contract.proposal.client_contacts', 
+                            'contract.proposal.industries', 
                             'summaryitems.rate', 
                             'summaryitems.rate.media', 
                             'summaryitems.omzettype'
@@ -795,7 +810,7 @@ class SummaryController extends Controller
             }
         }
 
-        Excel::create('Summary - ' . $data->proposal->proposal_name . ' Revision No = ' . $data->revision_no, function($excel) use($data, $po) {
+        Excel::create('Summary - ' . $data->contract->proposal->proposal_name . ' Revision No = ' . $data->revision_no, function($excel) use($data, $po) {
 
             $excel->sheet('SUMMARY', function($sheet) use($data, $po) {
 
@@ -835,27 +850,27 @@ class SummaryController extends Controller
                 $sheet->fromArray($summaryitems);
 
                 $sheet->prependRow(2, array(
-                    'NAMA PT', '', '', 'SALES AGENT', 'ORDER FO', '', '', 'INDUSTRY/BRAND', '', '', 'PAYER', ': ' . $data->proposal->client->clienttype->client_type_name, ''
+                    'NAMA PT', '', '', 'SALES AGENT', 'ORDER FO', '', '', 'INDUSTRY/BRAND', '', '', 'PAYER', ': ' . $data->contract->proposal->client->clienttype->client_type_name, ''
                 ));
 
                 $industry = '';
-                foreach($data->proposal->industries as $row){
+                foreach($data->contract->proposal->industries as $row){
                     $industry .= $row->industry_name . ', ';
                 }
 
                 $media = '';
                 $organization = '';
-                foreach($data->proposal->medias as $row){
+                foreach($data->contract->proposal->medias as $row){
                     $media .= $row->media_name . ', ';
                     $organization .= $row->organization->organization_name . ', ';
                 }
 
                 $sheet->prependRow(3, array(
                                         $organization, '', '',
-                                        $data->proposal->created_by->user_firstname . ' ' . $data->proposal->created_by->user_lastname,
+                                        $data->contract->proposal->created_by->user_firstname . ' ' . $data->contract->proposal->created_by->user_lastname,
                                         'NO ORDER', ': ' . $data->summary_order_no, '',
                                         'INDUSTRY', ': ' . $industry, '',
-                                        'BILL TO PARTY', ': ' . $data->proposal->client->client_name, ''
+                                        'BILL TO PARTY', ': ' . $data->contract->proposal->client->client_name, ''
                                     ));
 
                 $sheet->prependRow(4, array(
@@ -868,7 +883,7 @@ class SummaryController extends Controller
                 $client_contact_name = '';
                 $client_contact_position = '';
                 $client_contact_phone = '';
-                foreach($data->proposal->client_contacts as $row){
+                foreach($data->contract->proposal->client_contacts as $row){
                     $client_contact_name .= $row->client_contact_name;
                     $client_contact_position .= $row->client_contact_position;
                     $client_contact_phone .= $row->client_contact_phone;
@@ -876,7 +891,7 @@ class SummaryController extends Controller
                 $sheet->prependRow(5, array(
                                         '', '', '', '',
                                         'Attn. No', ': ', '',
-                                        'BRAND', ': ' . $data->proposal->brand->brand_name, '',
+                                        'BRAND', ': ' . $data->contract->proposal->brand->brand_name, '',
                                         'NAMA', ': ' . $client_contact_name, ''
                                     ));
 
@@ -996,13 +1011,14 @@ class SummaryController extends Controller
         $data['summary'] = Summary::with([
                     'summaryitems' => function($query) { $query->orderBy('summary_item_termin', 'asc'); }, 
                     'uploadfiles',
-                    'proposal', 
-                    'proposal.brand', 
-                    'proposal.medias', 
-                    'proposal.client', 
-                    'proposal.client.clienttype', 
-                    'proposal.client_contacts', 
-                    'proposal.industries', 
+                    'contract',
+                    'contract.proposal', 
+                    'contract.proposal.brand', 
+                    'contract.proposal.medias', 
+                    'contract.proposal.client', 
+                    'contract.proposal.client.clienttype', 
+                    'contract.proposal.client_contacts', 
+                    'contract.proposal.industries', 
                     'summaryitems.rate', 
                     'summaryitems.rate.media', 
                     'summaryitems.omzettype'
@@ -1082,7 +1098,7 @@ class SummaryController extends Controller
             $summary->updated_by = $request->user()->user_id;
             $summary->save();
 
-            $proposal = Proposal::find($summary->proposal_id);
+            $contract = Contract::with('proposal')->find($summary->contract_id);
 
             //edit-items or no
             if($request->input('edit-items') == 'on') {
@@ -1136,13 +1152,13 @@ class SummaryController extends Controller
                     $detail->summary_item_total = $hot[$i][25];
                     $detail->summary_item_task_status = 0;
                     $detail->source_type = 'SUMMARY';
-                    $detail->client_id = $proposal->client_id;
-                    $detail->industry_id = $proposal->brand->subindustry->industry->industry_id;
-                    $detail->summary_item_title = $proposal->proposal_name;
+                    $detail->client_id = $contract->proposal->client_id;
+                    $detail->industry_id = $contract->proposal->brand->subindustry->industry->industry_id;
+                    $detail->summary_item_title = $contract->proposal->proposal_name;
                     $detail->sales_id = $request->user()->user_id;
                     $detail->revision_no = $summary->revision_no + 1;
                     $detail->active = '1';
-                    $detail->created_by = $proposal->created_by->user_id;
+                    $detail->created_by = $contract->created_by->user_id;
                     if($hot[$i][15]=='YES') {
                         $detail->updated_by = $request->user()->user_id;
                     }
@@ -1190,7 +1206,7 @@ class SummaryController extends Controller
             $summary->updated_by = $request->user()->user_id;
             $summary->save();
 
-            $proposal = Proposal::find($summary->proposal_id);
+            $contract = Contract::with('proposal')->find($summary->proposal_id);
 
             //edit-items or no
             if($request->input('edit-items') == 'on') {
@@ -1244,13 +1260,13 @@ class SummaryController extends Controller
                     $detail->summary_item_total = $hot[$i][25];
                     $detail->summary_item_task_status = 0;
                     $detail->source_type = 'SUMMARY';
-                    $detail->client_id = $proposal->client_id;
-                    $detail->industry_id = $proposal->brand->subindustry->industry->industry_id;
-                    $detail->summary_item_title = $proposal->proposal_name;
+                    $detail->client_id = $contract->proposal->client_id;
+                    $detail->industry_id = $contract->proposal->brand->subindustry->industry->industry_id;
+                    $detail->summary_item_title = $contract->proposal->proposal_name;
                     $detail->sales_id = $request->user()->user_id;
                     $detail->revision_no = $summary->revision_no;
                     $detail->active = '1';
-                    $detail->created_by = $proposal->created_by->user_id;
+                    $detail->created_by = $contract->created_by->user_id;
                     if($hot[$i][15]=='YES') {
                         $detail->updated_by = $request->user()->user_id;
                     }
@@ -1290,31 +1306,35 @@ class SummaryController extends Controller
 
         $data['summary'] = Summary::with([
                     'summaryitems' => function($query) { $query->orderBy('summary_item_termin', 'asc'); }, 
+                    'summaryhistories' => function($query) { $query->orderBy('created_at', 'desc')->limit(1); }, 
                     'uploadfiles',
-                    'proposal', 
-                    'proposal.brand', 
-                    'proposal.medias', 
-                    'proposal.client', 
-                    'proposal.client.clienttype', 
-                    'proposal.client_contacts', 
-                    'proposal.industries', 
+                    'contract',
+                    'contract.proposal', 
+                    'contract.proposal.brand', 
+                    'contract.proposal.medias', 
+                    'contract.proposal.client', 
+                    'contract.proposal.client.clienttype', 
+                    'contract.proposal.client_contacts', 
+                    'contract.proposal.industries',
                     'summaryitems.rate', 
                     'summaryitems.rate.media', 
                     'summaryitems.omzettype'
                 ])->find($id);
 
-        $data['proposal'] = Proposal::with(
-                                        'proposaltype', 
-                                        'proposalmethod', 
-                                        'proposalstatus',
-                                        'industries', 
-                                        'client_contacts',
-                                        'client',
-                                        'brand',
-                                        'medias',
-                                        'uploadfiles',
-                                        'inventoriesplanner'
-                                        )->find($summary->proposal_id);
+
+        $data['contract'] = Contract::with(
+                                        'proposal',
+                                        'proposal.proposaltype', 
+                                        'proposal.proposalmethod', 
+                                        'proposal.proposalstatus',
+                                        'proposal.industries', 
+                                        'proposal.client_contacts',
+                                        'proposal.client',
+                                        'proposal.brand',
+                                        'proposal.medias',
+                                        'proposal.uploadfiles',
+                                        'proposal.inventoriesplanner'
+                                        )->find($summary->contract_id);
 
         if($data['summary']->summaryitems->count() > 0)
         {
@@ -1385,7 +1405,7 @@ class SummaryController extends Controller
     {
         $this->validate($request,
             [
-                'proposal_id' => 'required|numeric',
+                'contract_id' => 'required|numeric',
                 'summary_total_gross' => 'required|numeric',
                 'summary_total_discount' => 'required|numeric',
                 'summary_total_nett' => 'required|numeric',
@@ -1401,10 +1421,10 @@ class SummaryController extends Controller
         $flow = new FlowLibrary;
         $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
 
-        $proposal = Proposal::find($request->input('proposal_id'));
+        $contract = Contract::with('proposal')->find($request->input('contract_id'));
 
         $obj = Summary::find($id);
-        $obj->proposal_id = $request->input('proposal_id');
+        $obj->contract_id = $request->input('contract_id');
         $obj->summary_total_gross = $request->input('summary_total_gross');
         $obj->summary_total_disc = $request->input('summary_total_discount');
         $obj->summary_total_nett = $request->input('summary_total_nett');
@@ -1498,13 +1518,13 @@ class SummaryController extends Controller
             $detail->summary_item_total = $hot[$i][25];
             $detail->summary_item_task_status = 0;
             $detail->source_type = 'SUMMARY';
-            $detail->client_id = $proposal->client_id;
-            $detail->industry_id = $proposal->brand->subindustry->industry->industry_id;
-            $detail->summary_item_title = $proposal->proposal_name;
+            $detail->client_id = $contract->proposal->client_id;
+            $detail->industry_id = $contract->proposal->brand->subindustry->industry->industry_id;
+            $detail->summary_item_title = $contract->proposal->proposal_name;
             $detail->sales_id = $request->user()->user_id;
             $detail->revision_no = $obj->revision_no;
             $detail->active = '1';
-            $detail->created_by = $proposal->created_by->user_id;
+            $detail->created_by = $contract->proposal->created_by->user_id;
 
             $detail->save();
         }
@@ -1604,13 +1624,14 @@ class SummaryController extends Controller
         $data['summary'] = Summary::with([
                     'summaryitems' => function($query) { $query->where('active', '1')->orderBy('summary_item_termin', 'asc'); }, 
                     'uploadfiles',
-                    'proposal', 
-                    'proposal.brand', 
-                    'proposal.medias', 
-                    'proposal.client', 
-                    'proposal.client.clienttype', 
-                    'proposal.client_contacts', 
-                    'proposal.industries', 
+                    'contract',
+                    'contract.proposal', 
+                    'contract.proposal.brand', 
+                    'contract.proposal.medias', 
+                    'contract.proposal.client', 
+                    'contract.proposal.client.clienttype', 
+                    'contract.proposal.client_contacts', 
+                    'contract.proposal.industries', 
                     'summaryitems.rate', 
                     'summaryitems.rate.media', 
                     'summaryitems.omzettype'
@@ -1621,8 +1642,6 @@ class SummaryController extends Controller
 
     public function postUpdatePosisiIklan(Request $request, $id)
     {
-        //dd($request->all());
-
         $summary = Summary::find($id);
         $summary->pic = $request->user()->user_id;
         $summary->updated_by = $request->user()->user_id;
@@ -1661,5 +1680,15 @@ class SummaryController extends Controller
 
         $request->session()->flash('status', 'Data has been updated!');
         return redirect('workorder/summary');
+    }
+
+    private function checkRateName($rate_name)
+    {
+        $rate = Rate::where('rate_name', '=', $rate_name)->where('active', '1')->count();
+
+        if($rate > 0)
+            return true;
+
+        return false;
     }
 }

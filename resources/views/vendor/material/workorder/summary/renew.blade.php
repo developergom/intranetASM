@@ -21,8 +21,9 @@
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form" method="POST">
         		{{ csrf_field() }}
-            <input type="hidden" name="proposal_id" value="{{ $summary->proposal_id }}">
-        		@include('vendor.material.workorder.proposal.view')
+            <input type="hidden" name="contract_id" value="{{ $summary->contract_id }}">
+        		@include('vendor.material.workorder.contract.view')
+            <hr/>
             <div class="form-group">
                 <label for="top_type" class="col-sm-2 control-label">Term of Payment</label>
                 <div class="col-sm-10">

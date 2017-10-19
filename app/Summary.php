@@ -10,7 +10,8 @@ class Summary extends Model
 	protected $primaryKey = 'summary_id';
 
 	protected $fillable = [
-				'proposal_id', 
+				'param_no',
+				'contract_id', 
 				'summary_order_no',
 				'summary_sent_date',
 				'summary_total_gross',
@@ -31,9 +32,9 @@ class Summary extends Model
 				'active', 'created_by', 'created_at', 'updated_by'
 	];
 
-	public function proposal()
+	public function contract()
 	{
-		return $this->belongsTo('App\Proposal', 'proposal_id');
+		return $this->belongsTo('App\Contract', 'contract_id');
 	}
 
 	public function summaryitems()

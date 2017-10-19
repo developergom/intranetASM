@@ -17,12 +17,13 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Summary<small>Create Summary Proposal</small></h2></div>
+        <div class="card-header"><h2>Summary<small>Create Summary</small></h2></div>
         <div class="card-body card-padding">
         	<form class="form-horizontal" role="form" method="POST" action="{{ url('workorder/summary') }}">
         		{{ csrf_field() }}
-            <input type="hidden" name="proposal_id" value="{{ $proposal->proposal_id }}">
-        		@include('vendor.material.workorder.proposal.view')
+            <input type="hidden" name="contract_id" value="{{ $contract->contract_id }}">
+        		@include('vendor.material.workorder.contract.view')
+            <hr/>
               <div class="form-group">
                   <label for="top_type" class="col-sm-2 control-label">Term of Payment</label>
                   <div class="col-sm-10">

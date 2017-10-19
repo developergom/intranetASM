@@ -10,6 +10,7 @@ class Proposal extends Model
 	protected $primaryKey = 'proposal_id';
 
 	protected $fillable = [
+				'param_no',
 				'proposal_type_id', 
 				'proposal_name',
 				'proposal_deadline',
@@ -121,11 +122,6 @@ class Proposal extends Model
 	public function proposalhistories()
 	{
 		return $this->hasMany('App\ProposalHistory', 'proposal_id');
-	}
-
-	public function summary()
-	{
-		return $this->hasMany('App\Summary', 'proposal_id');
 	}
 
 	public function getCreatedByAttribute($value)

@@ -421,7 +421,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('proposal/api/loadOtherPrices', 'ProposalController@apiLoadOtherPrices');
         Route::post('proposal/apiSearch', 'ProposalController@apiSearch');
 
-        Route::get('summary/create/{proposal_id}', 'SummaryController@create');
+        Route::get('summary/create/{contract_id}', 'SummaryController@create');
         Route::post('summary/apiList/{listtype}', 'SummaryController@apiList');
         Route::resource('summary', 'SummaryController');
         Route::post('summary/api/saveDetails', 'SummaryController@apiSaveDetails');
