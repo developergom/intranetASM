@@ -606,4 +606,27 @@ class ContractController extends Controller
 
         return redirect('workorder/contract');
     }
+
+    public function apiSearch(Request $request)
+    {
+        if(Gate::denies('Contract-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $keyword = $request->keyword;
+
+        $result = Contract::select('contracts.contract_id', 'contracts.contract_no', 'proposals.proposal_name')
+                            ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
+                            ->where(function($query) use($keyword) {
+                                    $query->orWhere('proposal_name','like','%' . $keyword . '%')
+                                            ->orWhere('contract_no','like','%' . $keyword . '%');
+                                })
+                            ->where('contracts.created_by','=', $request->user()->user_id)
+                            ->where('contracts.flow_no','98')
+                            ->where('contracts.active', '1')
+                            ->take(5)
+                            ->orderBy('contract_no','desc')->get();
+
+        return response()->json($result, 200);
+    }
 }

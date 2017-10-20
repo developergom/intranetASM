@@ -101,7 +101,7 @@ class GeneratorLibrary{
 				break;
 		}
 		
-		$return['contract_no'] = 'K.' . $no . '/' . $code . '/' . $this->getMonthCode(date('n')) . '/' . date('Y');
+		$return['contract_no'] = 'K' . $no . '/' . $code . '/' . $this->getMonthCode(date('n')) . '/' . date('Y');
 
 		return $return;
 	}
@@ -144,7 +144,7 @@ class GeneratorLibrary{
 				break;
 		}
 		
-		$return['letter_no'] = 'G.' . $no . '/IKL-SEKR.' . $letter->lettertype->letter_type_code . '/' . $this->getMonthCode(date('n')) . '/' . date('Y');
+		$return['letter_no'] = 'G' . $no . '/IKL-SEKR.' . $letter->lettertype->letter_type_code . '/' . $this->getMonthCode(date('n')) . '/' . date('Y');
 
 		return $return;
 	}
@@ -242,7 +242,7 @@ class GeneratorLibrary{
 				break;
 		}
 		
-		$return['summary_order_no'] = 'S.' . $no . '/' . $code . '/' . $this->getMonthCode(date('n')) . '/' . date('Y');
+		$return['summary_order_no'] = 'S' . $no . '/' . $code . '/' . $this->getMonthCode(date('n')) . '/' . date('Y');
 
 		return $return;
 	}

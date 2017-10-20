@@ -4,6 +4,9 @@
 <div class="card">
     <div class="card-header">
         <h2>Order Letter<small>List of all order letters</small></h2>
+        @can('Order Letter-Create')
+        <a href="{{ url('secretarial/orderletter/create') }}" title="Create New Order"><button class="btn bgm-blue btn-float waves-effect"><i class="zmdi zmdi-plus"></i></button></a>
+        @endcan
     </div>
 
     <div class="card-body card-padding">

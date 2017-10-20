@@ -458,6 +458,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('contract/action/{flow_no}/{id}', 'ContractController@postAction');
         Route::get('contract/approval/{flow_no}/{id}', 'ContractController@approve');
         Route::post('contract/approval/{flow_no}/{id}', 'ContractController@postApprove');
+        Route::post('contract/apiSearch', 'ContractController@apiSearch');
     });
 
     Route::group(['prefix' => 'posisi-iklan'], function() {
