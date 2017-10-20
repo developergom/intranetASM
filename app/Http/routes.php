@@ -481,6 +481,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
     });
 
     Route::group(['prefix' => 'secretarial'], function() {
+        //Direct Letter
+        Route::post('directletter/apiList', 'DirectLetterController@apiList');
+        Route::post('directletter/apiDelete', 'DirectLetterController@apiDelete');
+        Route::resource('directletter', 'DirectLetterController');
+
         //Order Letter
         Route::post('orderletter/apiList/{listtype}', 'LetterController@apiList');
         Route::post('orderletter/apiDelete', 'LetterController@apiDelete');
