@@ -42,7 +42,7 @@
             </div>
             
             <div class="input-group m-b-20 {{ $errors->has('password') ? ' has-error' : '' }}">
-                <span class="input-group-addon"><i class="zmdi zmdi-male"></i></span>
+                <span class="input-group-addon"><i class="zmdi zmdi-lock"></i></span>
                 <div class="fg-line">
                     <input type="password" class="form-control" placeholder="Password" name="password">
                 </div>

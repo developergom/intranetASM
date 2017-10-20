@@ -11,6 +11,8 @@ use App\Brand;
 use App\Industry;
 use App\SubIndustry;
 
+use App\Ibrol\Libraries\GeneratorLibrary;
+
 class BrandController extends Controller
 {
     /**
@@ -54,19 +56,21 @@ class BrandController extends Controller
     {
         $this->validate($request, [
             'subindustry_id' => 'required',
-            'brand_code' => 'required|max:15|unique:brands,brand_code',
             'brand_name' => 'required|max:100'
         ]);
 
         $obj = new Brand;
 
         $obj->subindustry_id = $request->input('subindustry_id');
-        $obj->brand_code = $request->input('brand_code');
         $obj->brand_name = $request->input('brand_name');
         $obj->brand_desc = $request->input('brand_desc');
         $obj->active = '1';
         $obj->created_by = $request->user()->user_id;
 
+        $obj->save();
+
+        $generator = new GeneratorLibrary;
+        $obj->brand_code = $generator->brand_code($obj->brand_id);
         $obj->save();
 
         $request->session()->flash('status', 'Data has been saved!');
@@ -121,19 +125,22 @@ class BrandController extends Controller
     {
         $this->validate($request, [
             'subindustry_id' => 'required',
-            'brand_code' => 'required|max:15|unique:brands,brand_code,'.$id.',brand_id',
             'brand_name' => 'required|max:100',
         ]);
 
         $obj = Brand::find($id);
 
         $obj->subindustry_id = $request->input('subindustry_id');
-        $obj->brand_code = $request->input('brand_code');
         $obj->brand_name = $request->input('brand_name');
         $obj->brand_desc = $request->input('brand_desc');
         $obj->updated_by = $request->user()->user_id;
 
         $obj->save();
+
+        $generator = new GeneratorLibrary;
+        $obj->brand_code = $generator->brand_code($id);
+        $obj->save();
+
 
         $request->session()->flash('status', 'Data has been updated!');
 
@@ -230,5 +237,29 @@ class BrandController extends Controller
         $result = Brand::where('brand_name','like','%' . $brand_name . '%')->where('active', '1')->take(5)->orderBy('brand_name')->get();
 
         return response()->json($result, 200);
+    }
+
+    public function recode(Request $request, $from, $limit)
+    {
+        if(Gate::denies('Brands Management-Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $brands = Brand::where('active', '1')->skip($from)->take($limit)->get();
+        $generator = new GeneratorLibrary();
+
+        //dd($brands);
+        $no = 0;
+        foreach ($brands as $value) {
+            $brand = Brand::find($value->brand_id);
+
+            $brand->brand_code = $generator->brand_code($value->brand_id);
+            $brand->updated_by = $request->user()->user_id;
+
+            $brand->save();
+            $no++;
+        }
+
+        echo $no . ' rows affected';
     }
 }

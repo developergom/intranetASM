@@ -4,17 +4,18 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Contract extends Model
+class Letter extends Model
 {
-    protected $table = 'contracts';
-	protected $primaryKey = 'contract_id';
+    protected $table = 'letters';
+	protected $primaryKey = 'letter_id';
 
 	protected $fillable = [
 				'param_no',
-				'proposal_id', 
-				'contract_no',
-				'contract_date',
-				'contract_notes',
+				'letter_type_id', 
+				'letter_no',
+				'letter_to',
+				'letter_notes',
+				'letter_source',
 				'revision_no',
 				'current_user',
 				'flow_no',
@@ -26,29 +27,24 @@ class Contract extends Model
 				'active', 'created_by', 'created_at', 'updated_by'
 	];
 
-	public function proposal()
+	public function lettertype()
 	{
-		return $this->belongsTo('App\Proposal', 'proposal_id');
+		return $this->belongsTo('App\LetterType', 'letter_type_id');
 	}
 
-	public function summary()
+	public function letterhistories()
 	{
-		return $this->hasOne('App\Contract', 'contract_id');
-	}
-
-	public function letters()
-	{
-		return $this->belongsToMany('App\Letter', 'letters_contracts');
-	}
-
-	public function contracthistories()
-	{
-		return $this->hasMany('App\ContractHistory', 'contract_id');
+		return $this->hasMany('App\LetterHistory', 'letter_id');
 	}
 
 	public function uploadfiles()
 	{
-		return $this->belongsToMany('App\UploadFile', 'contract_upload_file');
+		return $this->belongsToMany('App\UploadFile', 'letter_upload_file');
+	}
+
+	public function contracts()
+	{
+		return $this->belongsToMany('App\Contract', 'letters_contracts');
 	}
 
 	public function getCreatedByAttribute($value)

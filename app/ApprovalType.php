@@ -56,4 +56,8 @@ class ApprovalType extends Model
 	public function contracthistories() {
 		return $this->hasMany('App\ContractHistory', 'approval_type_id');
 	}
+
+	public function letterhistories() {
+		return $this->hasMany('App\LetterHistory', 'approval_type_id');
+	}
 }

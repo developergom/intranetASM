@@ -107,6 +107,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::resource('agendatype', 'AgendaTypeController');
 
         //Brand
+        Route::get('brand/recode/{from}/{limit}', 'BrandController@recode');
         Route::post('brand/apiList', 'BrandController@apiList');
         Route::post('brand/apiDelete', 'BrandController@apiDelete');
         Route::resource('brand', 'BrandController');
@@ -184,6 +185,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('inventorytype/apiList', 'InventoryTypeController@apiList');
         Route::post('inventorytype/apiDelete', 'InventoryTypeController@apiDelete');
         Route::resource('inventorytype', 'InventoryTypeController');
+
+        //LetterType
+        Route::post('lettertype/apiList', 'LetterTypeController@apiList');
+        Route::post('lettertype/apiDelete', 'LetterTypeController@apiDelete');
+        Route::resource('lettertype', 'LetterTypeController');
 
         //Location
         Route::post('location/apiList', 'LocationController@apiList');
@@ -443,6 +449,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('posisi_iklan/apiCheckCode', 'PosisiIklanController@apiCheckCode');
         Route::resource('posisi_iklan', 'PosisiIklanController');*/
 
+        //Contract
         Route::post('contract/apiList/{listtype}', 'ContractController@apiList');
         Route::post('contract/apiDelete', 'ContractController@apiDelete');
         Route::get('contract/create/{proposal_id}', 'ContractController@create');
@@ -470,6 +477,18 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('item_task/update_task/{id}', 'PosisiIklanItemTaskController@updateTask');
         Route::post('item_task/update_task/{id}', 'PosisiIklanItemTaskController@updateTaskPost');
         Route::resource('item_task', 'PosisiIklanItemTaskController');
+    });
+
+    Route::group(['prefix' => 'secretarial'], function() {
+        //Order Letter
+        Route::post('orderletter/apiList/{listtype}', 'LetterController@apiList');
+        Route::post('orderletter/apiDelete', 'LetterController@apiDelete');
+        Route::get('orderletter/create/{proposal_id}', 'LetterController@create');
+        Route::resource('orderletter', 'LetterController');
+        Route::get('orderletter/action/{flow_no}/{id}', 'LetterController@action');
+        Route::post('orderletter/action/{flow_no}/{id}', 'LetterController@postAction');
+        Route::get('orderletter/approval/{flow_no}/{id}', 'LetterController@approve');
+        Route::post('orderletter/approval/{flow_no}/{id}', 'LetterController@postApprove');
     });
 
     Route::group(['prefix' => 'grid'], function() {

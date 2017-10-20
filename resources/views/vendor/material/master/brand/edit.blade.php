@@ -54,19 +54,6 @@
 			            @endif
 	                </div>
 	            </div>
-        		<div class="form-group">
-	                <label for="brand_code" class="col-sm-2 control-label">Code</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="brand_code" id="brand_code" placeholder="Brand Code" required="true" maxlength="15" value="{{ $brand->brand_code }}">
-	                    </div>
-	                    @if ($errors->has('brand_code'))
-			                <span class="help-block">
-			                    <strong>{{ $errors->first('brand_code') }}</strong>
-			                </span>
-			            @endif
-	                </div>
-	            </div>
 	            <div class="form-group">
 	                <label for="brand_name" class="col-sm-2 control-label">Name</label>
 	                <div class="col-sm-10">

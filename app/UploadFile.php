@@ -66,6 +66,16 @@ class UploadFile extends Model
 		return $this->belongsToMany('App\Summary', 'summary_upload_file');
 	}
 
+	public function contracts()
+	{
+		return $this->belongsToMany('App\Contract', 'contract_upload_file');
+	}
+
+	public function letters()
+	{
+		return $this->belongsToMany('App\Letter', 'letter_upload_file');
+	}
+
 	public function projects()
 	{
 		return $this->belongsToMany('App\Project', 'project_upload_file');

@@ -186,4 +186,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Contract', 'pic');
     }
+
+    public function lettercurrentuser()
+    {
+        return $this->hasMany('App\Letter', 'current_user');
+    }
+
+    public function letterpic()
+    {
+        return $this->hasMany('App\Letter', 'pic');
+    }
 }
