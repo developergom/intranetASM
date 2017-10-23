@@ -152,12 +152,7 @@ $("#grid-data-finished").bootgrid({
 
                 return html;
             }else{
-                if(cpi==true) {
-                    return '<a title="View Summary" href="' + base_url + 'workorder/summary/' + row.summary_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.summary_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;'
-                        +'<a title="Update Posisi Iklan" href="' + base_url + 'workorder/summary/update_posisi_iklan/' + row.summary_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.summary_id + '"><span class="zmdi zmdi-compass"></span></a>&nbsp;&nbsp;';
-                }else{
-                    return '<a title="View Summary" href="' + base_url + 'workorder/summary/' + row.summary_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.summary_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
-                }
+                return '<a title="View Summary" href="' + base_url + 'workorder/summary/' + row.summary_id + '" class="btn btn-icon command-detail waves-effect waves-circle" type="button" data-row-id="' + row.summary_id + '"><span class="zmdi zmdi-more"></span></a>&nbsp;&nbsp;';
             }
         }
     },

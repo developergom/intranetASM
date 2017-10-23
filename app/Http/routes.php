@@ -427,6 +427,7 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('proposal/api/loadOtherPrices', 'ProposalController@apiLoadOtherPrices');
         Route::post('proposal/apiSearch', 'ProposalController@apiSearch');
 
+        //Summary
         Route::get('summary/create/{contract_id}', 'SummaryController@create');
         Route::post('summary/apiList/{listtype}', 'SummaryController@apiList');
         Route::resource('summary', 'SummaryController');
@@ -441,8 +442,6 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('summary/renew/{id}', 'SummaryController@renew');
         Route::post('summary/renew/{id}', 'SummaryController@postRenew');
         Route::post('summary/api/generatePosisiIklan', 'SummaryController@apiGeneratePosisiIklan');
-        Route::get('summary/update_posisi_iklan/{id}', 'SummaryController@updatePosisiIklan');
-        Route::post('summary/update_posisi_iklan/{id}', 'SummaryController@postUpdatePosisiIklan');
 
         /*Route::post('posisi_iklan/apiList', 'PosisiIklanController@apiList');
         Route::post('posisi_iklan/apiDelete', 'PosisiIklanController@apiDelete');
@@ -459,6 +458,18 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::get('contract/approval/{flow_no}/{id}', 'ContractController@approve');
         Route::post('contract/approval/{flow_no}/{id}', 'ContractController@postApprove');
         Route::post('contract/apiSearch', 'ContractController@apiSearch');
+
+        //Summary Delivered
+        Route::post('summariesdelivered/apiList', 'SummariesDeliveredController@apiList');
+        Route::get('summariesdelivered/assigned/{id}', 'SummariesDeliveredController@assigned');
+        Route::post('summariesdelivered/assigned/{id}', 'SummariesDeliveredController@assignedPost');
+        Route::resource('summariesdelivered', 'SummariesDeliveredController');
+
+        //Summary Assigned
+        Route::post('summariesassigned/apiList', 'SummariesAssignedController@apiList');
+        Route::get('summariesassigned/update_posisi_iklan/{id}', 'SummariesAssignedController@updatePosisiIklan');
+        Route::post('summariesassigned/update_posisi_iklan/{id}', 'SummariesAssignedController@postUpdatePosisiIklan');
+        Route::resource('summariesassigned', 'SummariesAssignedController');
     });
 
     Route::group(['prefix' => 'posisi-iklan'], function() {

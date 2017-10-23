@@ -1157,7 +1157,9 @@ class SummaryController extends Controller
             }else{
                 $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'summaryfinished', 'Summary "' . $summary->summary_order_no . '" has been finished.', $id);
 
-                //send notifications to FO
+                //send notifications to SPTD FO
+                $sptdfo = User::whereHas('roles', function($q){ $q->where('role_name', 'Superintendent FO'); })->first();
+                $this->notif->generate($request->user()->user_id, $sptdfo->user_name, 'summarydelivered', 'Summary "' . $summary->summary_order_no . '" has been delivered.', $id);
             }
             
 
@@ -1584,78 +1586,6 @@ class SummaryController extends Controller
 
 
         return response()->json($items);
-    }
-
-    public function updatePosisiIklan(Request $request, $id)
-    {
-        if(Gate::denies('Checking Position-Update')) {
-            abort(403, 'Unauthorized action.');
-        }
-
-        $summary = Summary::find($id);
-        if($summary->flow_no!=98) {
-            abort(403, 'Unauthorized action.');
-        }
-
-        $data['summary'] = Summary::with([
-                    'summaryitems' => function($query) { $query->where('active', '1')->orderBy('summary_item_termin', 'asc'); }, 
-                    'uploadfiles',
-                    'contract',
-                    'contract.proposal', 
-                    'contract.proposal.brand', 
-                    'contract.proposal.medias', 
-                    'contract.proposal.client', 
-                    'contract.proposal.client.clienttype', 
-                    'contract.proposal.client_contacts', 
-                    'contract.proposal.industries', 
-                    'summaryitems.rate', 
-                    'summaryitems.rate.media', 
-                    'summaryitems.omzettype'
-                ])->find($id);
-
-        return view('vendor.material.workorder.summary.update_posisi_iklan', $data);
-    }
-
-    public function postUpdatePosisiIklan(Request $request, $id)
-    {
-        $summary = Summary::find($id);
-        $summary->pic = $request->user()->user_id;
-        $summary->updated_by = $request->user()->user_id;
-        $summary->save();
-
-        $summary_item_id = $request->input('summary_item_id');
-        $page_no = $request->input('page_no');
-        $summary_item_canal = $request->input('summary_item_canal');
-        $summary_item_order_digital = $request->input('summary_item_order_digital');
-        $summary_item_materi = $request->input('summary_item_materi');
-        $summary_item_status_materi = $request->input('summary_item_status_materi');
-        $summary_item_capture_materi = $request->input('summary_item_capture_materi');
-        $summary_item_sales_order = $request->input('summary_item_sales_order');
-        $summary_item_po_perjanjian = $request->input('summary_item_po_perjanjian');
-        $summary_item_ppn = $request->input('summary_item_ppn');
-        $summary_item_total = $request->input('summary_item_total');
-
-        foreach($summary_item_id as $key => $value) {
-            $item = SummaryItem::find($value);
-            $item->page_no = $page_no[$key];
-            $item->summary_item_canal = $summary_item_canal[$key];
-            $item->summary_item_order_digital = $summary_item_order_digital[$key];
-            $item->summary_item_materi = $summary_item_materi[$key];
-            $item->summary_item_status_materi = $summary_item_status_materi[$key];
-            $item->summary_item_capture_materi = $summary_item_capture_materi[$key];
-            $item->summary_item_sales_order = $summary_item_sales_order[$key];
-            $item->summary_item_po_perjanjian = $summary_item_po_perjanjian[$key];
-            $item->summary_item_ppn = $summary_item_ppn[$key];
-            $item->summary_item_total = $summary_item_total[$key];
-            $item->summary_item_pic = $request->user()->user_id;
-            $item->summary_item_task_status = 0;
-            $item->updated_by = $request->user()->user_id;
-
-            $item->save();
-        }
-
-        $request->session()->flash('status', 'Data has been updated!');
-        return redirect('workorder/summary');
     }
 
     private function checkRateName($rate_name)

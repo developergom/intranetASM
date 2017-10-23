@@ -319,8 +319,8 @@ $(document).ready(function(){
       var data = response;
 
       hot1.loadData(data);
-      //calculateTotal(hot1);
-      //calculateOmzet(hot1);
+      calculateTotal(hot1);
+      calculateOmzet(hot1);
 
       hot1.updateSettings({
          cells: function(row, col, prop){
@@ -352,11 +352,11 @@ $(document).ready(function(){
     total_nett = 0;
     for(x=0;x<data.length;x++)
     {
-      var nett = data[x][8] - (data[x][8] * data[x][9] / 100);
-      total_gross += data[x][8];
-      total_nett += data[x][10];
+      var nett = Number(data[x][8]) - (Number(data[x][8]) * Number(data[x][9]) / 100);
+      total_gross += Number(data[x][8]);
+      total_nett += Number(data[x][10]);
     }
-    
+
     total_disc = Math.ceil((total_gross - total_nett) / total_gross * 100);
     
     $('#summary_total_gross').val(total_gross);
@@ -381,7 +381,7 @@ $(document).ready(function(){
 
     for(x=0;x<data.length;x++)
     {
-      total_omzet += data[x][11];
+      total_omzet += Number(data[x][11]);
     }
     
     $('#summary_total_internal_omzet').val(total_omzet);
@@ -397,7 +397,7 @@ $(document).ready(function(){
     {
       if(data[x][1]==type)
       {
-        totalType += data[x][10];
+        totalType += Number(data[x][10]);
       }
     }
 
