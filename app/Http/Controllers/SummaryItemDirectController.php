@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Carbon\Carbon;
 
+use DB;
 use Gate;
 use App\Http\Requests;
 use App\Client;
@@ -158,8 +159,8 @@ class SummaryItemDirectController extends Controller
     											'rate.media'
     										)
     										->find($id);
-    	$data['summary_item_period_start'] = Carbon::createFromFormat('Y-m-d', $data['summaryitem']->summary_item_period_start)->format('d/m/Y');
-        $data['summary_item_period_end'] = ($data['summaryitem']->summary_item_period_end!='0000-00-00') ? Carbon::createFromFormat('Y-m-d', $data['summaryitem']->summary_item_period_end)->format('d/m/Y') : '';
+    	$data['summary_item_period_start'] = Carbon::createFromFormat('Y-m-d', $data['summaryitem']->summary_item_period_start)->format('d-M-Y');
+        $data['summary_item_period_end'] = ($data['summaryitem']->summary_item_period_end!='0000-00-00') ? Carbon::createFromFormat('Y-m-d', $data['summaryitem']->summary_item_period_end)->format('d/M/Y') : '';
 
     	return view('vendor.material.posisiiklan.directorder.show', $data);
     }
@@ -288,7 +289,7 @@ class SummaryItemDirectController extends Controller
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
         $data['searchPhrase'] = $searchPhrase;
-        $data['rows'] = SummaryItem::select('summary_items.updated_at', 'summary_item_id', 'summary_item_title', 'clients.client_name', 'rates.rate_name', 'summary_item_period_start', 'users.user_firstname')
+        $data['rows'] = SummaryItem::select('summary_items.updated_at', 'summary_item_id', 'summary_item_title', 'clients.client_name', 'rates.rate_name', DB::raw('DATE_FORMAT(summary_item_period_start, "%d-%b-%Y") AS summary_item_period_start'), 'users.user_firstname')
         					->join('clients','clients.client_id', '=', 'summary_items.client_id')
                             ->join('rates','rates.rate_id', '=', 'summary_items.rate_id')
                             ->join('users', 'users.user_id', '=', 'summary_items.sales_id')

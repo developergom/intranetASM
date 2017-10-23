@@ -23,7 +23,7 @@
 	                <label for="edition_date" class="col-sm-2 control-label">Edition Date/Start Period</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" name="edition_date" id="edition_date" class="form-control input-sm" readonly="true" placeholder="Edition Date" value="{{ Carbon\Carbon::createFromFormat('Y-m-d', $posisiiklanitemtask->summaryitem->summary_item_period_start)->format('d/m/Y') }}">
+	                        <input type="text" name="edition_date" id="edition_date" class="form-control input-sm" readonly="true" placeholder="Edition Date" value="{{ Carbon\Carbon::createFromFormat('Y-m-d', $posisiiklanitemtask->summaryitem->summary_item_period_start)->format('d-M-Y') }}">
 	                    </div>
 	                </div>
 	            </div>
@@ -31,7 +31,7 @@
 	                <label for="end_period" class="col-sm-2 control-label">End Period</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" name="end_period" id="end_period" class="form-control input-sm" readonly="true" placeholder="Edition Date" value="{{ ($posisiiklanitemtask->summaryitem->summary_item_period_end=='0000-00-00') ? '-' : Carbon\Carbon::createFromFormat('Y-m-d', $posisiiklanitemtask->summaryitem->summary_item_period_end)->format('d/m/Y') }}">
+	                        <input type="text" name="end_period" id="end_period" class="form-control input-sm" readonly="true" placeholder="Edition Date" value="{{ ($posisiiklanitemtask->summaryitem->summary_item_period_end=='0000-00-00') ? '-' : Carbon\Carbon::createFromFormat('Y-m-d', $posisiiklanitemtask->summaryitem->summary_item_period_end)->format('d-M-Y') }}">
 	                    </div>
 	                </div>
 	            </div>

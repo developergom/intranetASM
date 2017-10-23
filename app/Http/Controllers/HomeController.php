@@ -7,11 +7,8 @@ use Illuminate\Http\Request;
 use Auth;
 use App\User;
 use App\ActionPlan;
-use App\EventPlan;
-use App\Creative;
-use App\Project;
-use App\ProjectTask;
-use App\ProjectTaskType;
+use App\InventoryPlanner;
+use App\Proposal;
 use DB;
 use Gate;
 use Mail;
@@ -41,20 +38,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        //return view('vendor.material.mail.notification');
-        /*$data = array();
-
-        $data['waktu'] = date('Y-m-d H:i:s');
-        $data['logs'] = DB::table('users')->select(DB::raw('user_name,user_firstname,user_lastname,count(log_id) AS total'))->join('logs', 'users.user_id', '=', 'logs.created_by')->whereBetween('logs.created_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->groupBy('users.user_name')->orderBy('users.user_name')->get();
-        Mail::send('vendor.material.mail.notification', array('data'=>$data), function($message) {
-            $message->to('soniibrol2011@gmail.com', 'Soni Rahayu')->subject('Notification');
-        });*/
-
-        //dd('end');
-
         $data = array();
-
-        $data['waktu'] = date('Y-m-d H:i:s');
 
         $today = date('Y-m-d');
 
@@ -66,52 +50,6 @@ class HomeController extends Controller
                                                             ->where('announcement_enddate', '>=', $today);
                                                 })->where('active', '=', '1')->get();
 
-        
-        //dd($data['logs']);
-        $data['eventplan'] = EventPlan::where('active', '1')->where('flow_no', '98')->where(DB::raw('datediff("'.date('Y-m-d').'", event_plan_deadline)'), '>', 30)->get();
-
-        if(Gate::allows('Project Task-Approval')) {
-            $u = new UserLibrary;
-            $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
-
-            $data['project_task_subordinate'] = User::whereIn('user_id',$subordinate)->orderBy('user_firstname')->get();
-            $data['project_task_current'] = User::with('groups')->find($request->user()->user_id);
-            $data['project_task_types'] = ProjectTaskType::where('active', '1')->orderBy('project_task_type_name')->get();
-            /*$data['project_tasks'] = ProjectTask::where('created_by', $request->user()->user_id)
-                                                ->orWhere('pic', $request->user()->user_id)
-                                                ->orWhere(function($query) use($subordinate) {
-                                                    $query->whereIn('created_by', $subordinate);
-                                                })
-                                                ->orWhere(function($query) use($subordinate) {
-                                                    $query->whereIn('pic', $subordinate);
-                                                })
-                                                ->where('active', '1')
-                                                ->get();*/
-            $data['projects'] = Project::where('active', '1')
-                                        ->where('created_by', $request->user()->user_id)
-                                        ->orWhere(function($query) use($subordinate) {
-                                                    $query->whereIn('created_by', $subordinate);
-                                                })
-                                        ->orWhere('pic', $request->user()->user_id)
-                                        ->orWhere(function($query) use($subordinate) {
-                                                    $query->whereIn('pic', $subordinate);
-                                                })
-                                        ->get();
-        }
-
-        if(Gate::allows('Grid Proposal-Read')) {
-            $u = new UserLibrary;
-            $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
-            $user_on_proposal = DB::select("SELECT created_by from grid_proposals group by created_by");
-            $up = array();
-            foreach ($user_on_proposal as $uop) {
-                array_push($up, $uop->created_by);
-            }
-
-            $data['grid_proposal_subordinate'] = User::whereIn('user_id',$subordinate)->whereIn('user_id', $up)->orderBy('user_firstname')->get();
-            $data['grid_proposal_current'] = User::with('groups')->find($request->user()->user_id);
-            $data['grid_proposal_year'] = date('Y');
-        }
 
         if(Gate::allows('Agenda-Read')) {
             $u = new UserLibrary;
@@ -119,6 +57,83 @@ class HomeController extends Controller
 
             $data['my_agenda_subordinate'] = User::whereIn('user_id',$subordinate)->orderBy('user_firstname')->get();
             $data['my_agenda_current'] = User::with('groups')->find($request->user()->user_id);
+        }
+
+        if(Gate::allows('Proposal-Read')) {
+            $u = new UserLibrary;
+            $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+
+            $data['proposal_created'] = Proposal::where(function($q) use ($subordinate, $request) {
+                                                    $q->whereIn('created_by', $subordinate)
+                                                        ->orWhere('created_by', $request->user()->user_id);
+                                                    })
+                                                ->where('active', '1')
+                                                ->count();
+            $data['proposal_direct'] = Proposal::where(function($q) use ($subordinate, $request) {
+                                                    $q->whereIn('created_by', $subordinate)
+                                                        ->orWhere('created_by', $request->user()->user_id);
+                                                    })
+                                                ->where('active', '1')
+                                                ->where('proposal_method_id', '2')
+                                                ->count();
+            $data['proposal_brief'] = Proposal::where(function($q) use ($subordinate, $request) {
+                                                    $q->whereIn('created_by', $subordinate)
+                                                        ->orWhere('created_by', $request->user()->user_id);
+                                                    })
+                                                ->where('active', '1')
+                                                ->where('proposal_method_id', '1')
+                                                ->count();
+            $data['proposal_sold'] = Proposal::where(function($q) use ($subordinate, $request) {
+                                                    $q->whereIn('created_by', $subordinate)
+                                                        ->orWhere('created_by', $request->user()->user_id);
+                                                    })
+                                                ->where('active', '1')
+                                                ->where('flow_no', '98')
+                                                ->where('proposal_status_id', '1')
+                                                ->count();
+        }
+
+        if(Gate::allows('Inventory Planner-Read')) {
+            $u = new UserLibrary;
+            $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+
+            $data['inventories_created'] = InventoryPlanner::where(function($q) use ($subordinate, $request) {
+                                                    $q->whereIn('created_by', $subordinate)
+                                                        ->orWhere('created_by', $request->user()->user_id);
+                                                    })
+                                                ->where('active', '1')
+                                                ->count();
+            $data['inventories_linked'] = InventoryPlanner::where(function($q) use ($subordinate, $request) {
+                                                    $q->whereIn('created_by', $subordinate)
+                                                        ->orWhere('created_by', $request->user()->user_id);
+                                                    })
+                                                ->whereHas('proposals', function($q) {
+                                                    $q->where('proposals.active', '1');
+                                                })
+                                                ->where('inventories_planner.active', '1')
+                                                ->count();
+            $data['inventories_not_sold'] = InventoryPlanner::where(function($q) use ($subordinate, $request) {
+                                                    $q->whereIn('created_by', $subordinate)
+                                                        ->orWhere('created_by', $request->user()->user_id);
+                                                    })
+                                                ->whereHas('proposals', function($q) {
+                                                    $q->where('proposals.active', '1')
+                                                        ->where('proposals.flow_no', '98')
+                                                        ->where('proposal_status_id', '2');
+                                                })
+                                                ->where('inventories_planner.active', '1')
+                                                ->count();
+            $data['inventories_sold'] = InventoryPlanner::where(function($q) use ($subordinate, $request) {
+                                                    $q->whereIn('created_by', $subordinate)
+                                                        ->orWhere('created_by', $request->user()->user_id);
+                                                    })
+                                                ->whereHas('proposals', function($q) {
+                                                    $q->where('proposals.active', '1')
+                                                        ->where('proposals.flow_no', '98')
+                                                        ->where('proposal_status_id', '1');
+                                                })
+                                                ->where('inventories_planner.active', '1')
+                                                ->count(); 
         }
 
         return view('home', $data);
@@ -254,5 +269,54 @@ class HomeController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    protected function unusefull()
+    {
+        //dd($data['logs']);
+        $data['eventplan'] = EventPlan::where('active', '1')->where('flow_no', '98')->where(DB::raw('datediff("'.date('Y-m-d').'", event_plan_deadline)'), '>', 30)->get();
+
+        if(Gate::allows('Project Task-Approval')) {
+            $u = new UserLibrary;
+            $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+
+            $data['project_task_subordinate'] = User::whereIn('user_id',$subordinate)->orderBy('user_firstname')->get();
+            $data['project_task_current'] = User::with('groups')->find($request->user()->user_id);
+            $data['project_task_types'] = ProjectTaskType::where('active', '1')->orderBy('project_task_type_name')->get();
+            /*$data['project_tasks'] = ProjectTask::where('created_by', $request->user()->user_id)
+                                                ->orWhere('pic', $request->user()->user_id)
+                                                ->orWhere(function($query) use($subordinate) {
+                                                    $query->whereIn('created_by', $subordinate);
+                                                })
+                                                ->orWhere(function($query) use($subordinate) {
+                                                    $query->whereIn('pic', $subordinate);
+                                                })
+                                                ->where('active', '1')
+                                                ->get();*/
+            $data['projects'] = Project::where('active', '1')
+                                        ->where('created_by', $request->user()->user_id)
+                                        ->orWhere(function($query) use($subordinate) {
+                                                    $query->whereIn('created_by', $subordinate);
+                                                })
+                                        ->orWhere('pic', $request->user()->user_id)
+                                        ->orWhere(function($query) use($subordinate) {
+                                                    $query->whereIn('pic', $subordinate);
+                                                })
+                                        ->get();
+        }
+
+        if(Gate::allows('Grid Proposal-Read')) {
+            $u = new UserLibrary;
+            $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+            $user_on_proposal = DB::select("SELECT created_by from grid_proposals group by created_by");
+            $up = array();
+            foreach ($user_on_proposal as $uop) {
+                array_push($up, $uop->created_by);
+            }
+
+            $data['grid_proposal_subordinate'] = User::whereIn('user_id',$subordinate)->whereIn('user_id', $up)->orderBy('user_firstname')->get();
+            $data['grid_proposal_current'] = User::with('groups')->find($request->user()->user_id);
+            $data['grid_proposal_year'] = date('Y');
+        }
     }
 }

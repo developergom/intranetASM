@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Carbon\Carbon;
 
+use DB;
 use Gate;
 use App\Http\Requests;
 use App\Media;
@@ -84,7 +85,7 @@ class PosisiIklanItemTaskController extends Controller
         $data['searchPhrase'] = $searchPhrase;
 
         if($listtype == 'available') {
-            $data['rows'] = SummaryItem::select('summary_items.summary_item_id', 'media_name', 'client_name', 'summary_item_period_start', 'summary_item_title', 'summary_items.updated_at')
+            $data['rows'] = SummaryItem::select('summary_items.summary_item_id', 'media_name', 'client_name', DB::raw('DATE_FORMAT(summary_item_period_start, "%d-%b-%Y") AS summary_item_period_start'), 'summary_item_title', 'summary_items.updated_at')
                                 ->join('rates','rates.rate_id', '=', 'summary_items.rate_id')
                                 ->join('medias','medias.media_id', '=', 'rates.media_id')
                                 ->join('clients','clients.client_id', '=', 'summary_items.client_id')
@@ -100,7 +101,7 @@ class PosisiIklanItemTaskController extends Controller
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = SummaryItem::select('summary_items.summary_item_id', 'media_name', 'client_name', 'summary_item_period_start', 'summary_item_title', 'summary_items.updated_at')
+            $data['total'] = SummaryItem::select('summary_items.summary_item_id', 'media_name', 'client_name', DB::raw('DATE_FORMAT(summary_item_period_start, "%d-%b-%Y") AS summary_item_period_start'), 'summary_item_title', 'summary_items.updated_at')
                                 ->join('rates','rates.rate_id', '=', 'summary_items.rate_id')
                                 ->join('medias','medias.media_id', '=', 'rates.media_id')
                                 ->join('clients','clients.client_id', '=', 'summary_items.client_id')
@@ -115,7 +116,7 @@ class PosisiIklanItemTaskController extends Controller
                                             ->orWhere('summary_item_period_start','like','%' . $searchPhrase . '%');
                                 })->count();    
         }elseif($listtype == 'onprocess') {
-            $data['rows'] = PosisiIklanItemTask::select('posisi_iklan_item_tasks.posisi_iklan_item_task_id','media_name', 'client_name', 'summary_item_period_start', 'summary_item_title', 'posisi_iklan_item_tasks.updated_at', 'users.user_firstname', 'users.user_lastname')
+            $data['rows'] = PosisiIklanItemTask::select('posisi_iklan_item_tasks.posisi_iklan_item_task_id','media_name', 'client_name', DB::raw('DATE_FORMAT(summary_item_period_start, "%d-%b-%Y") AS summary_item_period_start'), 'summary_item_title', 'posisi_iklan_item_tasks.updated_at', 'users.user_firstname', 'users.user_lastname')
                                 ->join('summary_items', 'summary_items.summary_item_id', '=', 'posisi_iklan_item_tasks.summary_item_id')
                                 ->join('rates','rates.rate_id', '=', 'summary_items.rate_id')
                                 ->join('medias','medias.media_id', '=', 'rates.media_id')
@@ -135,7 +136,7 @@ class PosisiIklanItemTaskController extends Controller
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = PosisiIklanItemTask::select('posisi_iklan_item_tasks.posisi_iklan_item_task_id','media_name', 'client_name', 'summary_item_period_start', 'summary_item_title', 'posisi_iklan_item_tasks.updated_at', 'users.user_firstname', 'users.user_lastname')
+            $data['total'] = PosisiIklanItemTask::select('posisi_iklan_item_tasks.posisi_iklan_item_task_id','media_name', 'client_name', DB::raw('DATE_FORMAT(summary_item_period_start, "%d-%b-%Y") AS summary_item_period_start'), 'summary_item_title', 'posisi_iklan_item_tasks.updated_at', 'users.user_firstname', 'users.user_lastname')
                                 ->join('summary_items', 'summary_items.summary_item_id', '=', 'posisi_iklan_item_tasks.summary_item_id')
                                 ->join('rates','rates.rate_id', '=', 'summary_items.rate_id')
                                 ->join('medias','medias.media_id', '=', 'rates.media_id')
@@ -154,7 +155,7 @@ class PosisiIklanItemTaskController extends Controller
                                             ->orWhere('summary_item_period_start','like','%' . $searchPhrase . '%');
                                 })->count();
         }elseif($listtype == 'finished') {
-            $data['rows'] = PosisiIklanItemTask::select('posisi_iklan_item_tasks.posisi_iklan_item_task_id','media_name', 'client_name', 'summary_item_period_start', 'summary_item_title', 'posisi_iklan_item_tasks.updated_at', 'users.user_firstname', 'users.user_lastname')
+            $data['rows'] = PosisiIklanItemTask::select('posisi_iklan_item_tasks.posisi_iklan_item_task_id','media_name', 'client_name', DB::raw('DATE_FORMAT(summary_item_period_start, "%d-%b-%Y") AS summary_item_period_start'), 'summary_item_title', 'posisi_iklan_item_tasks.updated_at', 'users.user_firstname', 'users.user_lastname')
                                 ->join('summary_items', 'summary_items.summary_item_id', '=', 'posisi_iklan_item_tasks.summary_item_id')
                                 ->join('rates','rates.rate_id', '=', 'summary_items.rate_id')
                                 ->join('medias','medias.media_id', '=', 'rates.media_id')
@@ -174,7 +175,7 @@ class PosisiIklanItemTaskController extends Controller
                                 })
                                 ->skip($skip)->take($rowCount)
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = PosisiIklanItemTask::select('posisi_iklan_item_tasks.posisi_iklan_item_task_id','media_name', 'client_name', 'summary_item_period_start', 'summary_item_title', 'posisi_iklan_item_tasks.updated_at', 'users.user_firstname', 'users.user_lastname')
+            $data['total'] = PosisiIklanItemTask::select('posisi_iklan_item_tasks.posisi_iklan_item_task_id','media_name', 'client_name', DB::raw('DATE_FORMAT(summary_item_period_start, "%d-%b-%Y") AS summary_item_period_start'), 'summary_item_title', 'posisi_iklan_item_tasks.updated_at', 'users.user_firstname', 'users.user_lastname')
                                 ->join('summary_items', 'summary_items.summary_item_id', '=', 'posisi_iklan_item_tasks.summary_item_id')
                                 ->join('rates','rates.rate_id', '=', 'summary_items.rate_id')
                                 ->join('medias','medias.media_id', '=', 'rates.media_id')

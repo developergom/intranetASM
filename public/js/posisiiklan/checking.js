@@ -132,7 +132,7 @@ $(document).ready(function(){
 							$.each(response, function(k, v){
 								html += '<tr>';
 									html += '<td>' + '<input type="hidden" name="summary_item_id[' + k + ']" value="' + v.summary_item_id + '"><input type="checkbox" name="checkDigital[' + k + ']" id="checkDigital-' + k + '" class="check-digital-child">' + '</td>';
-									html += '<td>' + v.summary_item_period_start + ' s/d ' + v.summary_item_period_end + '</td>';
+									html += '<td>' + formatSmallMonth(v.summary_item_period_start) + ' s/d ' + formatSmallMonth(v.summary_item_period_end) + '</td>';
 									html += '<td>' + '<input type="hidden" name="client_id[' + k + ']" value="' + v.client_id + '">' + v.client_name + '</td>';
 									html += '<td>' + '<input type="hidden" name="proposal_name[' + k + ']" value="' + v.summary_item_title + '">' + v.summary_item_title + '</td>';
 									html += '<td>' + '<input type="hidden" name="industry_id[' + k + ']" value="' + v.industry_id + '">' + v.industry_name + '</td>';
@@ -289,7 +289,7 @@ $(document).ready(function(){
 							$.each(response, function(k, v){
 								html += '<tr>';
 									html += '<td>' + '<input type="hidden" name="summary_item_id[' + k + ']" value="' + v.summary_item_id + '"><input type="checkbox" name="checkDigital[' + k + ']" id="checkDigital-' + k + '" class="check-digital-child">' + '</td>';
-									html += '<td>' + v.summary_item_period_start + ' s/d ' + v.summary_item_period_end + '</td>';
+									html += '<td>' + formatSmallMonth(v.summary_item_period_start) + ' s/d ' + formatSmallMonth(v.summary_item_period_end) + '</td>';
 									html += '<td>' + '<input type="hidden" name="client_id[' + k + ']" value="' + v.client_id + '">' + v.client_name + '</td>';
 									html += '<td>' + '<input type="hidden" name="proposal_name[' + k + ']" value="' + v.summary_item_title + '">' + v.summary_item_title + '</td>';
 									html += '<td>' + '<input type="hidden" name="industry_id[' + k + ']" value="' + v.industry_id + '">' + v.industry_name + '</td>';

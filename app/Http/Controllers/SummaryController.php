@@ -1576,7 +1576,8 @@ class SummaryController extends Controller
                             ->orderBy('summary_item_period_start', 'asc')
                             ->get();
 
-                array_push($items, ['items' => $item, 'index' => $value->summary_item_period_start]);
+                array_push($items, ['items' => $item, 'index' => Carbon::createFromFormat('Y-m-d', $value->summary_item_period_start)->format('d-M-Y')]);
+                
             }
 
             
