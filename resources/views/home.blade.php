@@ -147,7 +147,6 @@
                             <label for="my-agenda-client-id" class="col-sm-2 control-label">Client</label>
                             <div class="col-sm-7">
                                 <div class="fg-line">
-                                    <!-- <input type="text" id="my-agenda-client-name" class="form-control" placeholder="Client Name"> -->
                                     <select name="my-agenda-client-id" id="my-agenda-client-id" class="selectpicker" data-live-search="true">
                                     </select>
                                 </div>
@@ -161,7 +160,51 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Agenda Recap</h2>
+                </div>
+
+                <div class="card-body">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <div class="lgi-heading m-b-5">Total Created : {{ $agenda_total_created }}</div>
+
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span class="sr-only">{{ $agenda_total_created }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="lgi-heading m-b-5">Total Reported : {{ $agenda_total_reported }}</div>
+
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ $agenda_total_reported/$agenda_total_created*100 }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $agenda_total_reported/$agenda_total_created*100 }}%">
+                                    <span class="sr-only">{{ $agenda_total_reported }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        @foreach($agenda_details as $agenda)
+                        <div class="list-group-item">
+                            <div class="lgi-heading m-b-5">{{ $agenda->agenda_type_name }} : {{ $agenda->total }}</div>
+
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="{{ $agenda->total/$agenda_total_created*100 }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $agenda->total/$agenda_total_created*100 }}%">
+                                    <span class="sr-only"></span>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
         @endcan
+    </div>
+
+    <div class="row">
         @can('Inventory Planner-Read')
         <div class="col-sm-6">
             <div class="card">
@@ -180,12 +223,6 @@
                 </div>
             </div>
         </div>
-        @endcan
-    </div>
-
-    <div class="row">
-        @can('Proposal-Read')
-        
         @endcan
     </div>
 @endsection

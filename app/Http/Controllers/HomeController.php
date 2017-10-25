@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\User;
 use App\ActionPlan;
+use App\Agenda;
 use App\InventoryPlanner;
 use App\Proposal;
 use DB;
@@ -57,6 +58,32 @@ class HomeController extends Controller
 
             $data['my_agenda_subordinate'] = User::whereIn('user_id',$subordinate)->orderBy('user_firstname')->get();
             $data['my_agenda_current'] = User::with('groups')->find($request->user()->user_id);
+
+            //total created
+            $data['agenda_total_created'] = Agenda::where(function($q) use ($subordinate, $request) {
+                                                    $q->whereIn('created_by', $subordinate)
+                                                        ->orWhere('created_by', $request->user()->user_id);
+                                                    })
+                                                ->where('active', '1')
+                                                ->count();
+            //total reported
+            $data['agenda_total_reported'] = Agenda::where(function($q) use ($subordinate, $request) {
+                                                    $q->whereIn('created_by', $subordinate)
+                                                        ->orWhere('created_by', $request->user()->user_id);
+                                                    })
+                                                ->where('active', '1')
+                                                ->where('agenda_is_report', '1')
+                                                ->count();
+
+            //detailing
+            $data['agenda_details'] = Agenda::select('agenda_type_name', DB::raw('COUNT(agendas.agenda_id) AS total'))
+                                                ->join('agenda_types', 'agenda_types.agenda_type_id', '=', 'agendas.agenda_type_id')
+                                                ->where(function($q) use ($subordinate, $request) {
+                                                    $q->whereIn('agendas.created_by', $subordinate)
+                                                        ->orWhere('agendas.created_by', $request->user()->user_id);
+                                                    })
+                                                ->where('agendas.active', '1')
+                                                ->get();
         }
 
         if(Gate::allows('Proposal-Read')) {
