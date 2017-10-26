@@ -54,4 +54,19 @@ class UserLibrary{
 		return $result;
 	}
 
+	public function getBoss($user_id, $level)
+	{
+		$me = User::with('groups')->find($user_id);
+
+		$group = $me->groups[0];
+
+		$boss = User::whereHas('groups', function($query) use ($group) {
+							$query->where('groups.group_id', '=', $group->group_id);
+						})->whereHas('roles', function($query) use ($level) {
+							$query->where('roles.role_level_id', '=', $level);
+						})->first();
+
+		return $boss;
+	}
+
 }

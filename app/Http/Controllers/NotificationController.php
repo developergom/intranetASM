@@ -35,6 +35,19 @@ class NotificationController extends Controller
     	echo json_encode($data);
     }
 
+    public function loadAllNotification(Request $request) {
+        $data = array();
+
+        $data['notifications'] = Notification::join('users', 'users.user_id', '=', 'notifications.created_by')
+                                            ->join('notification_types', 'notification_types.notification_type_code', '=', 'notifications.notification_type_code')
+                                            ->where('notifications.notification_receiver', '=', $request->user()->user_id)
+                                            ->where('notifications.active', '=', '1')
+                                            ->orderBy('notifications.created_at', 'desc')
+                                            ->get();
+
+        echo json_encode($data);
+    }
+
     public function sendNotification(Request $request) {
         $this->validate($request, [
             'notification_id' => 'required',
@@ -79,5 +92,38 @@ class NotificationController extends Controller
         }else{
             return Response::json('error', 400);
         }
+    }
+
+    public function deleteNotification(Request $request) {
+        $this->validate($request, [
+            'notification_id' => 'required'
+        ]);
+
+        $obj = Notification::find($request->input('notification_id'));
+
+        $obj->active = '0';
+        $obj->updated_by = $request->user()->user_id;
+
+        $result = $obj->save();
+
+        if($result) {
+            return Response::json('success', 200);
+        }else{
+            return Response::json('error', 400);
+        }
+    }
+
+    public function viewAll(Request $request)
+    {
+        $data = array();
+
+        $data['notifications'] = Notification::join('users', 'users.user_id', '=', 'notifications.created_by')
+                                            ->join('notification_types', 'notification_types.notification_type_code', '=', 'notifications.notification_type_code')
+                                            ->where('notifications.notification_receiver', '=', $request->user()->user_id)
+                                            ->where('notifications.active', '=', '1')
+                                            ->orderBy('notifications.created_at', 'desc')
+                                            ->get();
+
+        return view('vendor.material.notification.view-all', $data);
     }
 }

@@ -3,6 +3,14 @@ $(document).ready(function(){
 	setInterval(function(){ 
 		loadNotification(); 
 	}, 60000); //check every 1 minute
+
+	$("body").on("click",".notification-delete" ,function() {
+		var notif_id = $(this).data('notif-id');
+		deleteNotification(notif_id);
+		loadAllNotification();
+		loadNotification();
+		return false;
+	});
 });
 
 $('#notification_lists').on('click', '.notification-item', function(){
@@ -43,8 +51,6 @@ function loadNotification() {
 			}
 		}
 	});
-
-	console.log('loading notification..');
 }
 
 function notify(message, notifType) {
@@ -98,4 +104,52 @@ function readNotification(notificationID) {
 			}
 		}
 	});	
+}
+
+function deleteNotification(notificationID) {
+	$.ajax({
+		url: base_url + 'api/deleteNotification',
+		type: 'POST',
+		data: {
+				'notification_id' : notificationID,
+				'_token' : $('meta[name="csrf-token"]').attr('content')
+				},
+		dataType: 'json',
+		success: function(data) {
+			if(data == 'success') {
+				console.log('Delete Notification Success');
+			}else{
+				swal('danger', 'Delete Notification Failed');
+			}
+		}
+	});	
+}
+
+function loadAllNotification() {
+	$.ajax({
+		url: base_url + 'api/loadAllNotification',
+		type: 'GET',
+		dataType: 'json',
+		success: function(data) {
+			var html = '';
+			$('#notification_all_container').empty();
+			$.each(data.notifications, function(key, value) {
+				html += '<a class="lv-item" href="' + base_url + value.notification_type_url + '" title="' + value.notification_text + '" data-notification_id="' + value.notification_id + '">'
+                            +'<div class="media">'
+                                +'<div class="pull-left">'
+                                    +'<img class="lv-img-sm" src="' + base_url + 'img/avatar/' + value.user_avatar + '" alt="">'
+                                +'</div>'
+                                +'<div class="pull-right">'
+                                +'<button type="button" class="close notification-delete" data-notif-id="' + value.notification_id + '" aria-label="Close"><span aria-hidden="true">×</span></button>'
+                                +'</div>'
+                                +'<div class="media-body">'
+                                    +'<div class="lv-title">' + value.user_firstname + ' ' + value.user_lastname + '</div>'
+                                    +'<small class="lv-small">' + value.notification_text + '</small>'
+                                +'</div>'
+                            +'</div>'
+                        +'</a>';
+			});
+			$('#notification_all_container').append(html);
+		}
+	});
 }

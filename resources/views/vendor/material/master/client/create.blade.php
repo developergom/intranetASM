@@ -88,7 +88,7 @@
 	                <label for="client_npwp" class="col-sm-2 control-label">N P W P</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="client_npwp" id="client_npwp" placeholder="N P W P" required="true" maxlength="25" value="{{ old('client_npwp') }}">
+	                        <input type="text" class="form-control input-sm" name="client_npwp" id="client_npwp" placeholder="N P W P" maxlength="25" value="{{ old('client_npwp') }}">
 	                    </div>
 	                    @if ($errors->has('client_npwp'))
 			                <span class="help-block">
@@ -114,7 +114,7 @@
 	                <label for="client_npwp_postcode" class="col-sm-2 control-label">NPWP Post Code</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="client_npwp_postcode" id="client_npwp_postcode" placeholder="Post Code" required="true" maxlength="10" value="{{ old('client_npwp_postcode') }}">
+	                        <input type="text" class="form-control input-sm" name="client_npwp_postcode" id="client_npwp_postcode" placeholder="Post Code" maxlength="10" value="{{ old('client_npwp_postcode') }}">
 	                    </div>
 	                    @if ($errors->has('client_npwp_postcode'))
 			                <span class="help-block">
@@ -140,7 +140,7 @@
 	                <label for="client_invoice_postcode" class="col-sm-2 control-label">Invoice Post Code</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="client_invoice_postcode" id="client_invoice_postcode" placeholder="Post Code" required="true" maxlength="10" value="{{ old('client_invoice_postcode') }}">
+	                        <input type="text" class="form-control input-sm" name="client_invoice_postcode" id="client_invoice_postcode" placeholder="Post Code" maxlength="10" value="{{ old('client_invoice_postcode') }}">
 	                    </div>
 	                    @if ($errors->has('client_invoice_postcode'))
 			                <span class="help-block">

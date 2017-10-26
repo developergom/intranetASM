@@ -18,10 +18,12 @@ use Log;
 use App\Announcement;
 use Carbon\Carbon;
 
+use App\Ibrol\Libraries\GeneralLibrary;
 use App\Ibrol\Libraries\UserLibrary;
 
 class HomeController extends Controller
 {
+    private $gl;
     /**
      * Create a new controller instance.
      *
@@ -30,6 +32,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->gl = new GeneralLibrary;
     }
 
     /**
@@ -42,6 +45,11 @@ class HomeController extends Controller
         $data = array();
 
         $today = date('Y-m-d');
+
+        $data['month'] = date('m');
+        $data['thisyear'] = date('Y');
+
+        $data['years'] = [date('Y'), date('Y')-1, date('Y')-2];
 
         $data['announcements'] = Announcement::where(function($query) use($today) {
                                                     $query->where('announcement_startdate', '>=', $today)
@@ -345,5 +353,51 @@ class HomeController extends Controller
             $data['grid_proposal_current'] = User::with('groups')->find($request->user()->user_id);
             $data['grid_proposal_year'] = date('Y');
         }
+    }
+
+    public function apiProposalRecap(Request $request)
+    {
+        $month = $request->input('month');
+        $year = $request->input('year');
+
+        $param = $this->gl->getMonthDate($month, $year);
+
+        $u = new UserLibrary;
+        $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+
+        $data['proposal_created'] = Proposal::where(function($q) use ($subordinate, $request) {
+                                                $q->whereIn('created_by', $subordinate)
+                                                    ->orWhere('created_by', $request->user()->user_id);
+                                                })
+                                            ->where('active', '1')
+                                            ->whereBetween('created_at', [$param['start'], $param['end']])
+                                            ->count();
+        $data['proposal_direct'] = Proposal::where(function($q) use ($subordinate, $request) {
+                                                $q->whereIn('created_by', $subordinate)
+                                                    ->orWhere('created_by', $request->user()->user_id);
+                                                })
+                                            ->where('active', '1')
+                                            ->whereBetween('created_at', [$param['start'], $param['end']])
+                                            ->where('proposal_method_id', '2')
+                                            ->count();
+        $data['proposal_brief'] = Proposal::where(function($q) use ($subordinate, $request) {
+                                                $q->whereIn('created_by', $subordinate)
+                                                    ->orWhere('created_by', $request->user()->user_id);
+                                                })
+                                            ->where('active', '1')
+                                            ->whereBetween('created_at', [$param['start'], $param['end']])
+                                            ->where('proposal_method_id', '1')
+                                            ->count();
+        $data['proposal_sold'] = Proposal::where(function($q) use ($subordinate, $request) {
+                                                $q->whereIn('created_by', $subordinate)
+                                                    ->orWhere('created_by', $request->user()->user_id);
+                                                })
+                                            ->where('active', '1')
+                                            ->whereBetween('created_at', [$param['start'], $param['end']])
+                                            ->where('flow_no', '98')
+                                            ->where('proposal_status_id', '1')
+                                            ->count();
+
+        return response()->json($data); 
     }
 }

@@ -20,6 +20,35 @@
     @endif
 	<div class="block-header">
         <h2>Dashboard</h2>
+        <ul class="actions">
+        <li>
+            <div class="fg-line">
+                <select class="form-control input-sm" id="dashboard-month">
+                    <option value="01" {{ ($month=='01') ? 'selected' : '' }}>January</option>
+                    <option value="02" {{ ($month=='02') ? 'selected' : '' }}>February</option>
+                    <option value="03" {{ ($month=='03') ? 'selected' : '' }}>March</option>
+                    <option value="04" {{ ($month=='04') ? 'selected' : '' }}>April</option>
+                    <option value="05" {{ ($month=='05') ? 'selected' : '' }}>May</option>
+                    <option value="06" {{ ($month=='06') ? 'selected' : '' }}>June</option>
+                    <option value="07" {{ ($month=='07') ? 'selected' : '' }}>July</option>
+                    <option value="08" {{ ($month=='08') ? 'selected' : '' }}>August</option>
+                    <option value="09" {{ ($month=='09') ? 'selected' : '' }}>September</option>
+                    <option value="10" {{ ($month=='10') ? 'selected' : '' }}>October</option>
+                    <option value="11" {{ ($month=='11') ? 'selected' : '' }}>November</option>
+                    <option value="12" {{ ($month=='12') ? 'selected' : '' }}>December</option>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="fg-line">
+                <select class="form-control input-sm" id="dashboard-year">
+                    @foreach($years as $year)
+                    <option value="{{ $year }}" {{ ($year==$thisyear) ? 'selected' : '' }}>{{ $year }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </li>
+    </ul>
     </div>
 
     @can('Proposal-Read')
@@ -30,7 +59,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Proposals Created</small>
-                        <h2 title="Proposals Created">{{ number_format($proposal_created) }}</h2>
+                        <h2 title="Proposals Created" id="dashboard_proposal_created">0</h2>
                     </div>
                 </div>
             </div>
@@ -41,7 +70,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Direct Proposals</small>
-                        <h2 title="Direct Proposals">{{ number_format($proposal_direct) }}</h2>
+                        <h2 title="Direct Proposals" id="dashboard_proposal_direct">{{ number_format($proposal_direct) }}</h2>
                     </div>
                 </div>
             </div>
@@ -52,7 +81,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Brief Proposals</small>
-                        <h2 title="Brief Proposals">{{ number_format($proposal_brief) }}</h2>
+                        <h2 title="Brief Proposals" id="dashboard_proposal_brief">{{ number_format($proposal_brief) }}</h2>
                     </div>
                 </div>
             </div>
@@ -63,7 +92,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Sold Proposals</small>
-                        <h2 title="Sold Proposals">{{ number_format($proposal_sold) }}</h2>
+                        <h2 title="Sold Proposals" id="dashboard_proposal_sold">{{ number_format($proposal_sold) }}</h2>
                     </div>
                 </div>
             </div>
@@ -181,7 +210,7 @@
                             <div class="lgi-heading m-b-5">Total Reported : {{ $agenda_total_reported }}</div>
 
                             <div class="progress">
-                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ $agenda_total_reported/$agenda_total_created*100 }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $agenda_total_reported/$agenda_total_created*100 }}%">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
                                     <span class="sr-only">{{ $agenda_total_reported }}</span>
                                 </div>
                             </div>
@@ -191,7 +220,7 @@
                             <div class="lgi-heading m-b-5">{{ $agenda->agenda_type_name }} : {{ $agenda->total }}</div>
 
                             <div class="progress">
-                                <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="{{ $agenda->total/$agenda_total_created*100 }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $agenda->total/$agenda_total_created*100 }}%">
+                                <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
                                     <span class="sr-only"></span>
                                 </div>
                             </div>
@@ -240,6 +269,7 @@
 <script src="{{ url('js/app/home-my-agenda.js') }}"></script>
 @endcan
 <script type="text/javascript">
+var myToken = $('meta[name="csrf-token"]').attr('content');
 $(document).ready(function(){
     $('#text').marquee({
         duration: 60000,
@@ -265,9 +295,38 @@ $(document).ready(function(){
     });
     @endcan
 
-    @can('Proposal-Read')
-    @endcan
+    
 
+    $('#dashboard-month').change(function(){
+        var month = $('#dashboard-month').val();
+        var year = $('#dashboard-year').val();
+
+        proposalRecap(month, year);
+    });
 });
+
+function proposalRecap(month, year) {
+    @can('Proposal-Read')
+    $.ajax({
+        url: base_url + 'api/proposalRecap',
+        type: 'POST',
+        data: {
+            'month' : month,
+            'year' : year,
+            _token: myToken
+        },
+        dataType: 'json',
+        error: function(){
+            console.log('Error loading data');
+        },
+        success:function(data) {
+            $('#dashboard_proposal_created').empty().append(data.proposal_created);
+            $('#dashboard_proposal_direct').empty().append(data.proposal_direct);
+            $('#dashboard_proposal_brief').empty().append(data.proposal_brief);
+            $('#dashboard_proposal_sold').empty().append(data.proposal_sold);
+        }
+    });
+    @endcan
+}
 </script>
 @endsection

@@ -52,7 +52,7 @@
                             </div>
                         </li>
 
-                        <li id="top-search">
+                        <!-- <li id="top-search">
                             <a href="#"><i class="tm-icon zmdi zmdi-search"></i></a>
                         </li>
 
@@ -61,7 +61,7 @@
                                 <i class="tm-icon zmdi zmdi-email"></i>
                                 <i class="tmn-counts">0</i>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="dropdown">
                             <a data-toggle="dropdown" href="#">
                                 <i class="tm-icon zmdi zmdi-notifications"></i>
@@ -79,7 +79,7 @@
                                         
                                     </div>
 
-                                    <!-- <a class="lv-footer" href="#">View Previous</a> -->
+                                    <a class="lv-footer" href="{{ url('notification/all') }}">View All</a>
                                 </div>
 
                             </div>

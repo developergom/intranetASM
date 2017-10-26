@@ -947,6 +947,23 @@ class SummaryController extends Controller
                 $sheet->setBorder('A2:M7', 'thin');
                 $sheet->setBorder('A9:M9', 'thin');
 
+                $user = new UserLibrary;
+                $sptd_sales = $user->getBoss($data->contract->proposal->created_by->user_id, 2);
+                $manager_sales = $user->getBoss($sptd_sales->user_id, 3);
+                $gm = $user->getBoss($manager_sales->user_id, 4);
+
+                $author_name = $data->contract->proposal->created_by->user_firstname . ' ' . $data->contract->proposal->created_by->user_lastname;
+                $sptd_sales_name = $sptd_sales->user_firstname . ' ' . $sptd_sales->user_lastname;
+                $manager_sales_name = $manager_sales->user_firstname . ' ' . $manager_sales->user_lastname;
+                $gm_name = $gm->user_firstname . ' ' . $gm->user_lastname;
+
+                $sheet->appendRow(array(''));
+                $sheet->appendRow(array('Menyetujui,','','','Mengetahui,','','','','','','Penyusun,',));
+                $sheet->appendRow(array(''));
+                $sheet->appendRow(array(''));
+                $sheet->appendRow(array(''));
+                $sheet->appendRow(array($gm_name,'','',$sptd_sales_name,'','',$manager_sales_name,'','',$author_name));
+                $sheet->appendRow(array('GM Sales & Marketing','','','Superintendent AE','','','Manager Sales & Marketing','','','Account Executive'));
 
             });
 

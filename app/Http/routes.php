@@ -22,6 +22,7 @@ Route::get('dropzone/getPreviousUploaded', 'DropzoneController@getPreviousUpload
 Route::get('/', 'HomeController@index')->middleware(['auth','menu']);
 Route::get('/api/loadPlan', 'HomeController@apiPlan')->middleware(['auth','menu']);
 Route::get('/api/loadUpcomingPlan/{mode}/{day}', 'HomeController@apiUpcomingPlan')->middleware(['auth','menu']);
+Route::post('/api/proposalRecap', 'HomeController@apiProposalRecap')->middleware(['auth','menu']);
 
 Route::get('/test', 'Test@index');
 Route::get('/handsontable', 'Test@handsontable');
@@ -29,8 +30,11 @@ Route::get('/import_data/{table}', 'Test@import_data');
 
 Route::get('/download/file/{id}', 'DownloadController@downloadFile');
 Route::get('/api/loadNotification', 'NotificationController@loadNotification');
+Route::get('/api/loadAllNotification', 'NotificationController@loadAllNotification');
 Route::post('/api/sendNotification', 'NotificationController@sendNotification');
 Route::post('/api/readNotification', 'NotificationController@readNotification');
+Route::post('/api/deleteNotification', 'NotificationController@deleteNotification');
+Route::get('/notification/all', 'NotificationController@viewAll');
 
 Route::auth();
 
@@ -506,6 +510,10 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('orderletter/action/{flow_no}/{id}', 'LetterController@postAction');
         Route::get('orderletter/approval/{flow_no}/{id}', 'LetterController@approve');
         Route::post('orderletter/approval/{flow_no}/{id}', 'LetterController@postApprove');
+
+        //View All Letter
+        Route::post('allletter/apiList', 'AllLetterController@apiList');
+        Route::resource('allletter', 'AllLetterController');
     });
 
     Route::group(['prefix' => 'grid'], function() {
