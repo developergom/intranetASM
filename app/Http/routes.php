@@ -23,6 +23,9 @@ Route::get('/', 'HomeController@index')->middleware(['auth','menu']);
 Route::get('/api/loadPlan', 'HomeController@apiPlan')->middleware(['auth','menu']);
 Route::get('/api/loadUpcomingPlan/{mode}/{day}', 'HomeController@apiUpcomingPlan')->middleware(['auth','menu']);
 Route::post('/api/proposalRecap', 'HomeController@apiProposalRecap')->middleware(['auth','menu']);
+Route::post('/api/inventoryRecap', 'HomeController@apiInventoryRecap')->middleware(['auth','menu']);
+Route::post('/api/agendaRecap', 'HomeController@apiAgendaRecap')->middleware(['auth','menu']);
+Route::post('/api/contactRecap', 'HomeController@apiContactRecap')->middleware(['auth','menu']);
 
 Route::get('/test', 'Test@index');
 Route::get('/handsontable', 'Test@handsontable');

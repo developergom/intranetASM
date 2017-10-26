@@ -8,6 +8,7 @@ use Auth;
 use App\User;
 use App\ActionPlan;
 use App\Agenda;
+use App\ClientContact;
 use App\InventoryPlanner;
 use App\Proposal;
 use DB;
@@ -66,109 +67,6 @@ class HomeController extends Controller
 
             $data['my_agenda_subordinate'] = User::whereIn('user_id',$subordinate)->orderBy('user_firstname')->get();
             $data['my_agenda_current'] = User::with('groups')->find($request->user()->user_id);
-
-            //total created
-            $data['agenda_total_created'] = Agenda::where(function($q) use ($subordinate, $request) {
-                                                    $q->whereIn('created_by', $subordinate)
-                                                        ->orWhere('created_by', $request->user()->user_id);
-                                                    })
-                                                ->where('active', '1')
-                                                ->count();
-            //total reported
-            $data['agenda_total_reported'] = Agenda::where(function($q) use ($subordinate, $request) {
-                                                    $q->whereIn('created_by', $subordinate)
-                                                        ->orWhere('created_by', $request->user()->user_id);
-                                                    })
-                                                ->where('active', '1')
-                                                ->where('agenda_is_report', '1')
-                                                ->count();
-
-            //detailing
-            $data['agenda_details'] = Agenda::select('agenda_type_name', DB::raw('COUNT(agendas.agenda_id) AS total'))
-                                                ->join('agenda_types', 'agenda_types.agenda_type_id', '=', 'agendas.agenda_type_id')
-                                                ->where(function($q) use ($subordinate, $request) {
-                                                    $q->whereIn('agendas.created_by', $subordinate)
-                                                        ->orWhere('agendas.created_by', $request->user()->user_id);
-                                                    })
-                                                ->where('agendas.active', '1')
-                                                ->get();
-        }
-
-        if(Gate::allows('Proposal-Read')) {
-            $u = new UserLibrary;
-            $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
-
-            $data['proposal_created'] = Proposal::where(function($q) use ($subordinate, $request) {
-                                                    $q->whereIn('created_by', $subordinate)
-                                                        ->orWhere('created_by', $request->user()->user_id);
-                                                    })
-                                                ->where('active', '1')
-                                                ->count();
-            $data['proposal_direct'] = Proposal::where(function($q) use ($subordinate, $request) {
-                                                    $q->whereIn('created_by', $subordinate)
-                                                        ->orWhere('created_by', $request->user()->user_id);
-                                                    })
-                                                ->where('active', '1')
-                                                ->where('proposal_method_id', '2')
-                                                ->count();
-            $data['proposal_brief'] = Proposal::where(function($q) use ($subordinate, $request) {
-                                                    $q->whereIn('created_by', $subordinate)
-                                                        ->orWhere('created_by', $request->user()->user_id);
-                                                    })
-                                                ->where('active', '1')
-                                                ->where('proposal_method_id', '1')
-                                                ->count();
-            $data['proposal_sold'] = Proposal::where(function($q) use ($subordinate, $request) {
-                                                    $q->whereIn('created_by', $subordinate)
-                                                        ->orWhere('created_by', $request->user()->user_id);
-                                                    })
-                                                ->where('active', '1')
-                                                ->where('flow_no', '98')
-                                                ->where('proposal_status_id', '1')
-                                                ->count();
-        }
-
-        if(Gate::allows('Inventory Planner-Read')) {
-            $u = new UserLibrary;
-            $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
-
-            $data['inventories_created'] = InventoryPlanner::where(function($q) use ($subordinate, $request) {
-                                                    $q->whereIn('created_by', $subordinate)
-                                                        ->orWhere('created_by', $request->user()->user_id);
-                                                    })
-                                                ->where('active', '1')
-                                                ->count();
-            $data['inventories_linked'] = InventoryPlanner::where(function($q) use ($subordinate, $request) {
-                                                    $q->whereIn('created_by', $subordinate)
-                                                        ->orWhere('created_by', $request->user()->user_id);
-                                                    })
-                                                ->whereHas('proposals', function($q) {
-                                                    $q->where('proposals.active', '1');
-                                                })
-                                                ->where('inventories_planner.active', '1')
-                                                ->count();
-            $data['inventories_not_sold'] = InventoryPlanner::where(function($q) use ($subordinate, $request) {
-                                                    $q->whereIn('created_by', $subordinate)
-                                                        ->orWhere('created_by', $request->user()->user_id);
-                                                    })
-                                                ->whereHas('proposals', function($q) {
-                                                    $q->where('proposals.active', '1')
-                                                        ->where('proposals.flow_no', '98')
-                                                        ->where('proposal_status_id', '2');
-                                                })
-                                                ->where('inventories_planner.active', '1')
-                                                ->count();
-            $data['inventories_sold'] = InventoryPlanner::where(function($q) use ($subordinate, $request) {
-                                                    $q->whereIn('created_by', $subordinate)
-                                                        ->orWhere('created_by', $request->user()->user_id);
-                                                    })
-                                                ->whereHas('proposals', function($q) {
-                                                    $q->where('proposals.active', '1')
-                                                        ->where('proposals.flow_no', '98')
-                                                        ->where('proposal_status_id', '1');
-                                                })
-                                                ->where('inventories_planner.active', '1')
-                                                ->count(); 
         }
 
         return view('home', $data);
@@ -396,6 +294,131 @@ class HomeController extends Controller
                                             ->whereBetween('created_at', [$param['start'], $param['end']])
                                             ->where('flow_no', '98')
                                             ->where('proposal_status_id', '1')
+                                            ->count();
+
+        return response()->json($data); 
+    }
+
+    public function apiInventoryRecap(Request $request)
+    {
+        $month = $request->input('month');
+        $year = $request->input('year');
+
+        $param = $this->gl->getMonthDate($month, $year);
+
+        $u = new UserLibrary;
+        $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+
+        $data['inventories_created'] = InventoryPlanner::where(function($q) use ($subordinate, $request) {
+                                                $q->whereIn('created_by', $subordinate)
+                                                    ->orWhere('created_by', $request->user()->user_id);
+                                                })
+                                            ->where('active', '1')
+                                            ->whereBetween('inventories_planner.created_at', [$param['start'], $param['end']])
+                                            ->count();
+        $data['inventories_linked'] = InventoryPlanner::where(function($q) use ($subordinate, $request) {
+                                                $q->whereIn('created_by', $subordinate)
+                                                    ->orWhere('created_by', $request->user()->user_id);
+                                                })
+                                            ->whereHas('proposals', function($q) {
+                                                $q->where('proposals.active', '1');
+                                            })
+                                            ->where('inventories_planner.active', '1')
+                                            ->whereBetween('inventories_planner.created_at', [$param['start'], $param['end']])
+                                            ->count();
+        $data['inventories_not_sold'] = InventoryPlanner::where(function($q) use ($subordinate, $request) {
+                                                $q->whereIn('created_by', $subordinate)
+                                                    ->orWhere('created_by', $request->user()->user_id);
+                                                })
+                                            ->whereHas('proposals', function($q) {
+                                                $q->where('proposals.active', '1')
+                                                    ->where('proposals.flow_no', '98')
+                                                    ->where('proposal_status_id', '2');
+                                            })
+                                            ->where('inventories_planner.active', '1')
+                                            ->whereBetween('inventories_planner.created_at', [$param['start'], $param['end']])
+                                            ->count();
+        $data['inventories_sold'] = InventoryPlanner::where(function($q) use ($subordinate, $request) {
+                                                $q->whereIn('created_by', $subordinate)
+                                                    ->orWhere('created_by', $request->user()->user_id);
+                                                })
+                                            ->whereHas('proposals', function($q) {
+                                                $q->where('proposals.active', '1')
+                                                    ->where('proposals.flow_no', '98')
+                                                    ->where('proposal_status_id', '1');
+                                            })
+                                            ->where('inventories_planner.active', '1')
+                                            ->whereBetween('inventories_planner.created_at', [$param['start'], $param['end']])
+                                            ->count(); 
+
+        return response()->json($data); 
+    }
+
+    public function apiAgendaRecap(Request $request)
+    {
+        $month = $request->input('month');
+        $year = $request->input('year');
+
+        $param = $this->gl->getMonthDate($month, $year);
+
+        $u = new UserLibrary;
+        $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+
+        //total created
+        $data['agenda_total_created'] = Agenda::where(function($q) use ($subordinate, $request) {
+                                                $q->whereIn('created_by', $subordinate)
+                                                    ->orWhere('created_by', $request->user()->user_id);
+                                                })
+                                            ->where('active', '1')
+                                            ->whereBetween('agendas.created_at', [$param['start'], $param['end']])
+                                            ->count();
+        //total reported
+        $data['agenda_total_reported'] = Agenda::where(function($q) use ($subordinate, $request) {
+                                                $q->whereIn('created_by', $subordinate)
+                                                    ->orWhere('created_by', $request->user()->user_id);
+                                                })
+                                            ->where('active', '1')
+                                            ->whereBetween('agendas.created_at', [$param['start'], $param['end']])
+                                            ->where('agenda_is_report', '1')
+                                            ->count();
+
+        //detailing
+        $data['agenda_details'] = Agenda::select('agenda_type_name', DB::raw('COUNT(agendas.agenda_id) AS total'))
+                                            ->join('agenda_types', 'agenda_types.agenda_type_id', '=', 'agendas.agenda_type_id')
+                                            ->where(function($q) use ($subordinate, $request) {
+                                                $q->whereIn('agendas.created_by', $subordinate)
+                                                    ->orWhere('agendas.created_by', $request->user()->user_id);
+                                                })
+                                            ->where('agendas.active', '1')
+                                            ->whereBetween('agendas.created_at', [$param['start'], $param['end']])
+                                            ->get();
+
+        return response()->json($data); 
+    }
+
+    public function apiContactRecap(Request $request)
+    {
+        $month = $request->input('month');
+        $year = $request->input('year');
+
+        $param = $this->gl->getMonthDate($month, $year);
+
+        $u = new UserLibrary;
+        $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+
+        $data['contact_created'] = ClientContact::where(function($q) use ($subordinate, $request) {
+                                                $q->whereIn('created_by', $subordinate)
+                                                    ->orWhere('created_by', $request->user()->user_id);
+                                                })
+                                            ->where('client_contacts.active', '1')
+                                            ->whereBetween('created_at', [$param['start'], $param['end']])
+                                            ->count();
+        $data['contact_updated'] = ClientContact::where(function($q) use ($subordinate, $request) {
+                                                $q->whereIn('updated_by', $subordinate)
+                                                    ->orWhere('updated_by', $request->user()->user_id);
+                                                })
+                                            ->where('client_contacts.active', '1')
+                                            ->whereBetween('updated_at', [$param['start'], $param['end']])
                                             ->count();
 
         return response()->json($data); 

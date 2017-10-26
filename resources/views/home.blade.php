@@ -70,7 +70,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Direct Proposals</small>
-                        <h2 title="Direct Proposals" id="dashboard_proposal_direct">{{ number_format($proposal_direct) }}</h2>
+                        <h2 title="Direct Proposals" id="dashboard_proposal_direct">0</h2>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Brief Proposals</small>
-                        <h2 title="Brief Proposals" id="dashboard_proposal_brief">{{ number_format($proposal_brief) }}</h2>
+                        <h2 title="Brief Proposals" id="dashboard_proposal_brief">0</h2>
                     </div>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Sold Proposals</small>
-                        <h2 title="Sold Proposals" id="dashboard_proposal_sold">{{ number_format($proposal_sold) }}</h2>
+                        <h2 title="Sold Proposals" id="dashboard_proposal_sold">0</h2>
                     </div>
                 </div>
             </div>
@@ -108,7 +108,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Inventories Created</small>
-                        <h2 title="Inventories Created">{{ number_format($inventories_created) }}</h2>
+                        <h2 title="Inventories Created" id="dashboard_inventories_created">0</h2>
                     </div>
                 </div>
             </div>
@@ -119,7 +119,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Inventories Linked with Proposal</small>
-                        <h2 title="Inventories Linked with Proposal">{{ number_format($inventories_linked) }}</h2>
+                        <h2 title="Inventories Linked with Proposal" id="dashboard_inventories_linked">0</h2>
                     </div>
                 </div>
             </div>
@@ -130,7 +130,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Inventories Not Sold</small>
-                        <h2 title="Inventories Not Sold">{{ number_format($inventories_not_sold) }}</h2>
+                        <h2 title="Inventories Not Sold" id="dashboard_inventories_not_sold">0</h2>
                     </div>
                 </div>
             </div>
@@ -141,7 +141,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Inventories Sold</small>
-                        <h2 title="Inventories Sold">{{ number_format($inventories_sold) }}</h2>
+                        <h2 title="Inventories Sold" id="dashboard_inventories_sold">0</h2>
                     </div>
                 </div>
             </div>
@@ -190,6 +190,36 @@
             </div>
         </div>
         <div class="col-sm-6">
+            @can('Clients Management-Create')
+            <div class="card">
+                <div class="card-header">
+                    <h2>Contacts Recap</h2>
+                </div>
+
+                <div class="card-body">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <div class="lgi-heading m-b-5" id="dashboard_contact_created">New Contact Created : 0</div>
+
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span class="sr-only">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="lgi-heading m-b-5" id="dashboard_contact_updated">Contact Updated : 0</div>
+
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span class="sr-only">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+            @endcan               
             <div class="card">
                 <div class="card-header">
                     <h2>Agenda Recap</h2>
@@ -198,34 +228,26 @@
                 <div class="card-body">
                     <div class="list-group">
                         <div class="list-group-item">
-                            <div class="lgi-heading m-b-5">Total Created : {{ $agenda_total_created }}</div>
+                            <div class="lgi-heading m-b-5" id="dashboard_agenda_created">Total Created : 0</div>
 
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                    <span class="sr-only">{{ $agenda_total_created }}</span>
+                                    <span class="sr-only">0</span>
                                 </div>
                             </div>
                         </div>
                         <div class="list-group-item">
-                            <div class="lgi-heading m-b-5">Total Reported : {{ $agenda_total_reported }}</div>
+                            <div class="lgi-heading m-b-5" id="dashboard_agenda_reported">Total Reported : 0</div>
 
                             <div class="progress">
                                 <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                    <span class="sr-only">{{ $agenda_total_reported }}</span>
+                                    <span class="sr-only">0</span>
                                 </div>
                             </div>
                         </div>
-                        @foreach($agenda_details as $agenda)
-                        <div class="list-group-item">
-                            <div class="lgi-heading m-b-5">{{ $agenda->agenda_type_name }} : {{ $agenda->total }}</div>
-
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                    <span class="sr-only"></span>
-                                </div>
-                            </div>
+                        <div id="agenda_recap_details">
+                        
                         </div>
-                        @endforeach
                     </div>
                 </div>
             </div>
@@ -295,13 +317,19 @@ $(document).ready(function(){
     });
     @endcan
 
-    
+    proposalRecap($('#dashboard-month').val(), $('#dashboard-year').val());
+    inventoryRecap($('#dashboard-month').val(), $('#dashboard-year').val());
+    agendaRecap($('#dashboard-month').val(), $('#dashboard-year').val());
+    contactRecap($('#dashboard-month').val(), $('#dashboard-year').val());
 
-    $('#dashboard-month').change(function(){
+    $('#dashboard-month, #dashboard-year').change(function(){
         var month = $('#dashboard-month').val();
         var year = $('#dashboard-year').val();
 
         proposalRecap(month, year);
+        inventoryRecap(month, year);
+        agendaRecap(month, year);
+        contactRecap(month, year);
     });
 });
 
@@ -324,6 +352,94 @@ function proposalRecap(month, year) {
             $('#dashboard_proposal_direct').empty().append(data.proposal_direct);
             $('#dashboard_proposal_brief').empty().append(data.proposal_brief);
             $('#dashboard_proposal_sold').empty().append(data.proposal_sold);
+        }
+    });
+    @endcan
+}
+
+function inventoryRecap(month, year) {
+    @can('Inventory Planner-Read')
+    $.ajax({
+        url: base_url + 'api/inventoryRecap',
+        type: 'POST',
+        data: {
+            'month' : month,
+            'year' : year,
+            _token: myToken
+        },
+        dataType: 'json',
+        error: function(){
+            console.log('Error loading data');
+        },
+        success:function(data) {
+            $('#dashboard_inventories_created').empty().append(data.inventories_created);
+            $('#dashboard_inventories_linked').empty().append(data.inventories_linked);
+            $('#dashboard_inventories_not_sold').empty().append(data.inventories_not_sold);
+            $('#dashboard_inventories_sold').empty().append(data.inventories_sold);
+        }
+    });
+    @endcan
+}
+
+function agendaRecap(month, year) {
+    @can('Agenda Plan-Read')
+    $.ajax({
+        url: base_url + 'api/agendaRecap',
+        type: 'POST',
+        data: {
+            'month' : month,
+            'year' : year,
+            _token: myToken
+        },
+        dataType: 'json',
+        error: function(e){
+            console.log('Error loading data');
+        },
+        success:function(data) {
+            $('#dashboard_agenda_created').empty().append("Total Created : " + data.agenda_total_created);
+            $('#dashboard_agenda_reported').empty().append("Total Reported : " + data.agenda_total_reported);
+            if(data.agenda_details.length > 0)
+            {
+                var html = '';
+                $.each(data.agenda_details, function(key, value){
+                    if(value.agenda_type_name!==null)
+                    {
+                        html += '<div class="list-group-item">';
+                            html += '<div class="lgi-heading m-b-5">' + value.agenda_type_name + ' : ' + value.total + '</div>';
+                                html += '<div class="progress">';
+                                    html += '<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">';
+                                    html += '<span class="sr-only"></span>';
+                                html += '</div>';
+                            html += '</div>';
+                        html += '</div>';
+                    }
+                });
+
+                $('#agenda_recap_details').empty().append(html);
+            }
+            
+        }
+    });
+    @endcan
+}
+
+function contactRecap(month, year) {
+    @can('Clients Management-Create')
+    $.ajax({
+        url: base_url + 'api/contactRecap',
+        type: 'POST',
+        data: {
+            'month' : month,
+            'year' : year,
+            _token: myToken
+        },
+        dataType: 'json',
+        error: function(e){
+            console.log('Error loading data');
+        },
+        success:function(data) {
+            $('#dashboard_contact_created').empty().append("New Contact Created : " + data.contact_created);
+            $('#dashboard_contact_updated').empty().append("Contact Updated : " + data.contact_updated);
         }
     });
     @endcan
