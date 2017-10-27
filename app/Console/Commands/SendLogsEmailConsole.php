@@ -46,7 +46,7 @@ class SendLogsEmailConsole extends Command
         $data['logs'] = DB::table('users')->select(DB::raw('user_name,user_firstname,user_lastname,count(log_id) AS total'))->join('logs', 'users.user_id', '=', 'logs.created_by')->whereBetween('logs.created_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->groupBy('users.user_name')->orderBy('users.user_name')->get();
 
         Mail::send('vendor.material.mail.logsemail', array('data'=>$data), function($message) {
-            $message->to('soni@gramedia-majalah.com', 'Soni Rahayu')->subject('Intranet ASM Logs');
+            $message->to('soni@gramedia-majalah.com', 'Soni Rahayu')->subject('iGOM Logs');
             //$message->bcc('soni@gramedia-majalah.com', 'Administrator');
             //$message->attach('public/img/profile-menu.png');
         });

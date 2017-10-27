@@ -37,7 +37,7 @@
 	                <label for="role_name" class="col-sm-2 control-label">Role Name</label>
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="role_name" id="role_name" placeholder="Role Name" required="true" maxlength="100" value="{{ $role->role_name }}">
+	                        <input type="text" class="form-control input-sm" name="role_name" id="role_name" placeholder="Role Name" required="true" maxlength="100" value="{{ $role->role_name }}" readonly="true">
 	                    </div>
 	                    @if ($errors->has('role_name'))
 			                <span class="help-block">

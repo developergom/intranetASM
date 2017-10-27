@@ -20,6 +20,7 @@ use App\Announcement;
 use Carbon\Carbon;
 
 use App\Ibrol\Libraries\GeneralLibrary;
+use App\Ibrol\Libraries\ReportXls;
 use App\Ibrol\Libraries\UserLibrary;
 
 class HomeController extends Controller
@@ -68,6 +69,16 @@ class HomeController extends Controller
             $data['my_agenda_subordinate'] = User::whereIn('user_id',$subordinate)->orderBy('user_firstname')->get();
             $data['my_agenda_current'] = User::with('groups')->find($request->user()->user_id);
         }
+
+        /*$report = new ReportXls;
+        $report->generateSalesPerformance('050894');*/
+
+        /*$data['waktu'] = date('Y-m-d H:i:s');
+        $data['logs'] = DB::table('users')->select(DB::raw('user_name,user_firstname,user_lastname,count(log_id) AS total'))->join('logs', 'users.user_id', '=', 'logs.created_by')->whereBetween('logs.created_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->groupBy('users.user_name')->orderBy('users.user_name')->get();
+
+        Mail::send('vendor.material.mail.logsemail', array('data'=>$data), function($message) {
+            $message->to('soni@citis.kompasgramedia.com', 'Soni Rahayu')->subject('Intranet ASM Logs');
+        });*/
 
         return view('home', $data);
     }

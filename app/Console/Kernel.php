@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         // Commands\Inspire::class,
         Commands\SendLogsEmailConsole::class,
+        Commands\SendSalesPerformanceEmail::class,
     ];
 
     /**
@@ -28,5 +29,6 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         $schedule->command('logsemail:send')->dailyAt('23:55');
+        $schedule->command('salesperformance:send')->monthlyOn(1, '1:00');;
     }
 }
