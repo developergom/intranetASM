@@ -2,7 +2,7 @@
 /node_modules
 /public/storage
 /public/uploads
-/storate/exports
+/storage/exports
 Homestead.yaml
 Homestead.json
 .env
