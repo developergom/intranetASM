@@ -11,6 +11,7 @@ use App\Agenda;
 use App\ClientContact;
 use App\InventoryPlanner;
 use App\Proposal;
+use App\SummaryItem;
 use DB;
 use Gate;
 use Mail;
@@ -68,6 +69,20 @@ class HomeController extends Controller
 
             $data['my_agenda_subordinate'] = User::whereIn('user_id',$subordinate)->orderBy('user_firstname')->get();
             $data['my_agenda_current'] = User::with('groups')->find($request->user()->user_id);
+        }
+
+        if(Gate::allows('TBC Item List-Read')) {
+            $u = new UserLibrary;
+            $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+
+            $data['summary_item_tbc'] = SummaryItem::select('summary_items.summary_id', DB::raw('DATE_FORMAT(summary_item_period_start, "%d-%b-%Y") AS summary_item_period_start'), 'summary_item_title', 'client_name', 'summary_item_nett')
+                            ->join('summaries','summaries.summary_id', '=', 'summary_items.summary_id')
+                            ->join('clients','clients.client_id', '=', 'summary_items.client_id')
+                            ->where(function($q) use ($subordinate, $request) {
+                                $q->whereIn('summaries.created_by', $subordinate)
+                                    ->orWhere('summaries.created_by', $request->user()->user_id);
+                            })->where('summary_item_viewed', 'TBC')
+                            ->where('summary_items.active', '1')->count();
         }
 
         /*$report = new ReportXls;

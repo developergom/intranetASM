@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Carbon\Carbon;
 
+use DB;
 use Excel;
 use File;
 use Gate;
@@ -1542,6 +1543,74 @@ class SummaryController extends Controller
         $request->session()->flash('status', 'Data has been saved!');
 
         return redirect('workorder/summary');
+    }
+
+    public function toBeConfirmedItemList()
+    {
+        if(Gate::denies('TBC Item List-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('vendor.material.workorder.summary.tbc_item_list');
+    }
+
+    public function apiToBeConfirmedItemList(Request $request)
+    {
+        $u = new UserLibrary;
+        $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+
+        $current = $request->input('current') or 1;
+        $rowCount = $request->input('rowCount') or 10;
+        $skip = ($current==1) ? 0 : (($current - 1) * $rowCount);
+        $searchPhrase = $request->input('searchPhrase') or '';
+        
+        $sort_column = 'summary_item_period_start';
+        $sort_type = 'asc';
+
+        if(is_array($request->input('sort'))) {
+            foreach($request->input('sort') as $key => $value)
+            {
+                $sort_column = $key;
+                $sort_type = $value;
+            }
+        }
+
+        $data = array();
+        $data['current'] = intval($current);
+        $data['rowCount'] = $rowCount;
+        $data['searchPhrase'] = $searchPhrase;
+        $data['rows'] = SummaryItem::select('summary_items.summary_id', DB::raw('DATE_FORMAT(summary_item_period_start, "%d-%b-%Y") AS summary_item_period_start'), 'summary_order_no', 'summary_item_title', 'client_name', 'summary_item_nett')
+                            ->join('summaries','summaries.summary_id', '=', 'summary_items.summary_id')
+                            ->join('clients','clients.client_id', '=', 'summary_items.client_id')
+                            ->where(function($q) use ($subordinate, $request) {
+                                $q->whereIn('summaries.created_by', $subordinate)
+                                    ->orWhere('summaries.created_by', $request->user()->user_id);
+                            })->where('summary_item_viewed', 'TBC')
+                            ->where('summary_items.active', '1')
+                            ->where(function($query) use($searchPhrase) {
+                                $query->where('summary_item_period_start','like','%' . $searchPhrase . '%')
+                                        ->orWhere('summary_item_title','like','%' . $searchPhrase . '%')
+                                        ->orWhere('client_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('summary_item_nett','like','%' . $searchPhrase . '%');
+                            })
+                            ->skip($skip)->take($rowCount)
+                            ->orderBy($sort_column, $sort_type)->get();
+        $data['total'] = SummaryItem::select('summary_items.summary_id', DB::raw('DATE_FORMAT(summary_item_period_start, "%d-%b-%Y") AS summary_item_period_start'), 'summary_item_title', 'client_name', 'summary_item_nett')
+                            ->join('summaries','summaries.summary_id', '=', 'summary_items.summary_id')
+                            ->join('clients','clients.client_id', '=', 'summary_items.client_id')
+                            ->where(function($q) use ($subordinate, $request) {
+                                $q->whereIn('summaries.created_by', $subordinate)
+                                    ->orWhere('summaries.created_by', $request->user()->user_id);
+                            })->where('summary_item_viewed', 'TBC')
+                            ->where('summary_items.active', '1')
+                            ->where(function($query) use($searchPhrase) {
+                                $query->where('summary_item_period_start','like','%' . $searchPhrase . '%')
+                                        ->orWhere('summary_item_title','like','%' . $searchPhrase . '%')
+                                        ->orWhere('client_name','like','%' . $searchPhrase . '%')
+                                        ->orWhere('summary_item_nett','like','%' . $searchPhrase . '%');
+                            })->count();
+
+        return response()->json($data);
     }
 
     public function apiGeneratePosisiIklan(Request $request)

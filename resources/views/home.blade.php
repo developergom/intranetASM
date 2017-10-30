@@ -6,6 +6,8 @@
 <link href="{{ url('css/monthly.css') }}" rel="stylesheet">
 <link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
 <link href="{{ url('css/ajax-bootstrap-select.min.css') }}" rel="stylesheet">
+<link href="{{ url('css/pygment_trac.css') }}" rel="stylesheet">
+<link href="{{ url('css/jquery.easy-pie-chart.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -251,6 +253,17 @@
                     </div>
                 </div>
             </div>
+            @can('TBC Item List-Read')
+            <div class="mini-charts-item bgm-bluegray">
+                <div class="clearfix">
+                    <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
+                    <div class="count">
+                        <small>To Be Confirmed Summary Items</small>
+                        <h2 title="TBC Items" id="dashboard_summary_item_tbc">{{ $summary_item_tbc }}</h2><a href="{{ url('workorder/tbc_item_list') }}"><span class="badge bgm-bluegray">View Details</span></a>
+                    </div>
+                </div>
+            </div>
+            @endcan
         </div>
         @endcan
     </div>
@@ -283,6 +296,7 @@
 <script src="{{ url('js/ajax-bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/jquery.marquee.min.js') }}"></script>
 <script src="{{ url('js/jquery.sparkline.min.js') }}"></script>
+<script src="{{ url('js/jquery.easypiechart.min.js') }}"></script>
 <script src="{{ url('js/monthly.js') }}"></script>
 @endsection
 
@@ -331,6 +345,10 @@ $(document).ready(function(){
         agendaRecap(month, year);
         contactRecap(month, year);
     });
+
+    @can('Summary-Create')
+        $('.main-pie').easyPieChart();
+    @endcan
 });
 
 function proposalRecap(month, year) {
