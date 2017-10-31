@@ -144,7 +144,7 @@ class GeneratorLibrary{
 				break;
 		}
 		
-		$return['letter_no'] = 'G' . $no . '/IKL-SEKR.' . $letter->lettertype->letter_type_code . '/' . $this->getMonthCode(date('n')) . '/' . date('Y');
+		$return['letter_no'] = 'G.' . $no . '/IKL-SEKR.' . $letter->lettertype->letter_type_code . '/' . $this->getMonthCode(date('n')) . '/' . date('Y');
 
 		return $return;
 	}

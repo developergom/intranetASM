@@ -103,6 +103,12 @@ class LetterController extends Controller
 
         $obj->save();
 
+        $fileArray = $this->upload_process($request, 0);
+
+        if(!empty($fileArray)) {
+            Letter::find($obj->letter_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
+        }
+
         if(!empty($request->input('contract_id'))) {
             Letter::find($obj->letter_id)->contracts()->sync($request->input('contract_id'));
         }
