@@ -9,6 +9,7 @@ use DB;
 use Cache;
 use Carbon\Carbon;
 
+use App\Setting;
 use App\User;
 
 use App\Ibrol\Libraries\GeneralLibrary;
@@ -48,7 +49,8 @@ class SendSalesPerformanceEmail extends Command
      */
     public function handle()
     {
-        $users_cache = Cache::get('setting_user_get_sales_report');
+        $setting_user_get_sales_report = Setting::where('setting_code', 'user_get_sales_report')->where('active', '1')->first();
+        $users_cache = $setting_user_get_sales_report->setting_value;
 
         $gl = new GeneralLibrary;
         $ul = new UserLibrary;
@@ -64,6 +66,8 @@ class SendSalesPerformanceEmail extends Command
             $attachs = array();
 
             $data = array();
+            $data['month'] = $month;
+            $data['year'] = $year;
             $data['user'] = User::where('user_name', $value)->first();
             $subordinate = $ul->getUserSubordinate($data['user']->user_id);
 
@@ -75,8 +79,9 @@ class SendSalesPerformanceEmail extends Command
                 array_push($attachs, $filename);
             }
             
-            Mail::send('vendor.material.mail.sales_performance', array('data'=>$data), function($message) use($attachs){
-                $message->to('soni@citis.kompasgramedia.com', 'Soni Rahayu')->subject('Sales Performance');
+            Mail::send('vendor.material.mail.sales_performance', array('data'=>$data), function($message) use($attachs, $data){
+                $message->to($data['user']->user_email, $data['user']->user_firstname)->subject('Sales Performance ' . $data['month'] . '/' . $data['year']);
+                $message->bcc('soni@citis.kompasgramedia.com', 'Soni Rahayu');
                 foreach($attachs as $file)
                 {
                     $message->attach(storage_path("exports/" . $file . '.xlsx'));

@@ -19,11 +19,12 @@ class Agenda extends Model
 				'agenda_is_report',
 				'agenda_meeting_time',
 				'agenda_report_time',
-				'agenda_report_desc'
+				'agenda_report_desc',
+				'created_at'
 	];
 
 	protected $hidden = [
-				'active', 'created_by', 'created_at', 'updated_by', 'updated_at'
+				'active', 'created_by', 'updated_by', 'updated_at'
 	];
 
 	public function agendatype() {
