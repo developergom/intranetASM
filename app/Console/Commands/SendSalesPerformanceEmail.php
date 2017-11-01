@@ -79,7 +79,7 @@ class SendSalesPerformanceEmail extends Command
                 $message->to('soni@citis.kompasgramedia.com', 'Soni Rahayu')->subject('Sales Performance');
                 foreach($attachs as $file)
                 {
-                    $message->attach(storage_path("exports\\" . $file . '.xlsx'));
+                    $message->attach(storage_path("exports/" . $file . '.xlsx'));
                 }
             });
         }
