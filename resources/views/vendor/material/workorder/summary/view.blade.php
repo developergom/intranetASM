@@ -197,8 +197,8 @@
                         @endif
                             <td>{{ $row->summary_item_type }}</td>
                             <td>{{ $row->rate->media->media_name }}</td>
-                            <td>{{ $row->summary_item_period_start }}</td>
-                            <td>{{ ($row->summary_item_period_end!='0000-00-00') ? $row->summary_item_period_end : '-' }}</td>
+                            <td>{{ Carbon\Carbon::createFromFormat('Y-m-d', $row->summary_item_period_start)->format('d-M-Y') }}</td>
+                            <td>{{ ($row->summary_item_period_end!='0000-00-00') ? Carbon\Carbon::createFromFormat('Y-m-d', $row->summary_item_period_end)->format('d-M-Y') : '-' }}</td>
                             <td>{{ $row->rate->rate_name }}</td>
                             <td>{{ $row->omzettype->omzet_type_name }}</td>
                             <td>{{ $row->summary_item_insertion }}</td>
@@ -305,7 +305,7 @@
                 }
                     body += '<td>' + value.summary_item_type + '</td>';
                     body += '<td>' + value.rate.media.media_name + '</td>';
-                    body += '<td>' + ((value.summary_item_period_start=='0000-00-00') ? '-' : value.summary_item_period_start) + '</td>';
+                    body += '<td>' + ((value.summary_item_period_start=='0000-00-00') ? '-' : formatSmallMonth(value.summary_item_period_start)) + '</td>';
                     body += '<td>' + ((value.summary_item_period_end=='0000-00-00') ? '-' : value.summary_item_period_end) + '</td>';
                     body += '<td>' + value.rate.rate_name + '</td>';
                     body += '<td>' + value.omzettype.omzet_type_name + '</td>';

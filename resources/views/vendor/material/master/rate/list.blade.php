@@ -15,7 +15,7 @@
                 <tr>
                     <th data-column-id="advertise_rate_type_name" data-order="asc">Type</th>
                     <th data-column-id="rate_name" data-order="asc">Name</th>
-                    <th data-column-id="end_valid_date" data-order="asc">Valid Until</th>
+                    <th data-column-id="end_valid_date" data-converter="datetime" data-order="asc">Valid Until</th>
                     <th data-column-id="gross_rate" data-converter="price" data-order="asc">Gross Rate</th>
                     @can('Rates Management-Update')
                         @can('Rates Management-Delete')
@@ -41,6 +41,7 @@
 
 @section('vendorjs')
 <script src="{{ url('js/jquery.price_format.min.js') }}"></script>
+<script src="{{ url('js/moment.min.js') }}"></script>
 @endsection
 
 @section('customjs')

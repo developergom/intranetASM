@@ -13,6 +13,10 @@ $("#grid-data").bootgrid({
         price: {
             from: function (value) { return value; },
             to: function (value) { return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."); }
+        },
+        datetime: {
+            from: function (value) { return moment(value); },
+            to: function (value) { return moment(value).format("DD/MM/YYYY"); }
         }
     },
     formatters: {
