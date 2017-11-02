@@ -38,6 +38,9 @@
 	            					<a href="#tab-proposals" aria-controls="tab-proposals" role="tab" data-toggle="tab" aria-expanded="true">Proposals&nbsp;<span class="badge" id="total-proposals">0</span></a>
 	            				</li>
 	            				<li>
+	            					<a href="#tab-contracts" aria-controls="tab-contracts" role="tab" data-toggle="tab" aria-expanded="true">Contracts&nbsp;<span class="badge" id="total-contracts">0</span></a>
+	            				</li>
+	            				<li>
 	            					<a href="#tab-summaries" aria-controls="tab-summaries" role="tab" data-toggle="tab" aria-expanded="true">Summaries&nbsp;<span class="badge" id="total-summaries">0</span></a>
 	            				</li>
 	            			</ul>
@@ -61,6 +64,19 @@
 	            							<thead>
 	            								<tr>
 	            									<th>Proposal Name</th>
+	            									<th>Assign To</th>
+	            								</tr>
+	            							</thead>
+	            							<tbody></tbody>
+	            						</table>
+	            					</div>
+	            				</div>
+	            				<div role="tabpanel" class="tab-pane" id="tab-contracts">
+	            					<div class="table-responsive">
+	            						<table class="table table-hover" id="table-contracts">
+	            							<thead>
+	            								<tr>
+	            									<th>Contract No</th>
 	            									<th>Assign To</th>
 	            								</tr>
 	            							</thead>

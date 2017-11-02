@@ -4,6 +4,7 @@ $(document).ready(function(){
 
         $('#table-inventories tbody').empty().append('Loading...');
         $('#table-proposals tbody').empty().append('Loading...');
+        $('#table-contracts tbody').empty().append('Loading...');
         $('#table-summaries tbody').empty().append('Loading...');
 
         $.ajax({
@@ -17,6 +18,7 @@ $(document).ready(function(){
             error: function(response){
                 $('#table-inventories tbody').empty().append('There is something problem with a connection...');
                 $('#table-proposals tbody').empty().append('There is something problem with a connection...');
+                $('#table-contracts tbody').empty().append('There is something problem with a connection...');
                 $('#table-summaries tbody').empty().append('There is something problem with a connection...');
             },
             success: function(response){
@@ -55,6 +57,23 @@ $(document).ready(function(){
                 $('#table-proposals tbody').empty().append(html);
 
                 html = '';
+                $.each(response.contracts, function(key, value){
+                    html += '<tr>';
+                    html += '<td>' + value.contract_no + '</td>';
+                    html += '<td>';
+                    html += '<input type="hidden" name="contract_id[]" value="' + value.contract_id + '">';
+                    html += '<select name="contract_assign_to[]" class="form-control">';
+                    $.each(response.users, function(index, val){
+                        html += '<option value="' + val.user_id + '">' + val.user_firstname + ' ' + val.user_lastname + ' - ' + val.user_name + '</option>';
+                    });
+                    html += '</select>';
+                    html += '</td>';
+                    html += '</tr>';
+                });
+
+                $('#table-contracts tbody').empty().append(html);
+
+                html = '';
                 $.each(response.summaries, function(key, value){
                     html += '<tr>';
                     html += '<td>' + value.summary_order_no + '</td>';
@@ -73,6 +92,7 @@ $(document).ready(function(){
 
                 $('#total-inventories').empty().append(response.inventories_planner.length);
                 $('#total-proposals').empty().append(response.proposals.length);
+                $('#total-contracts').empty().append(response.contracts.length);
                 $('#total-summaries').empty().append(response.summaries.length);
             }
         });

@@ -15,6 +15,7 @@
                     <th data-column-id="to_firstname" data-order="asc">To</th>
                     <th data-column-id="inventory_planner_title" data-order="asc">Inventory Planner</th>
                     <th data-column-id="proposal_name" data-order="asc">Proposal Name</th>
+                    <th data-column-id="contract_no" data-order="asc">Contract No</th>
                     <th data-column-id="summary_order_no" data-order="asc">Summary Order No</th>
                     <th data-column-id="created_at" data-order="asc">Created At</th>
                 </tr>

@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         $schedule->command('logsemail:send')->dailyAt('23:55');
-        $schedule->command('backupdatabase:execute')->dailyAt('10:30');
+        $schedule->command('backupdatabase:execute')->dailyAt('1:00');
         $schedule->command('salesperformance:send')->monthlyOn(2, '7:00');
     }
 }

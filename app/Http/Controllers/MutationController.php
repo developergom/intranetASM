@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 
 use Gate;
 use App\Http\Requests;
+use App\Contract;
 use App\InventoryPlanner;
 use App\Module;
 use App\Mutation;
@@ -18,21 +19,25 @@ class MutationController extends Controller
 {
 	private $proposal_uri = '/workorder/proposal';
 	private $inventory_uri = '/inventory/inventoryplanner';
+    private $contract_uri = '/workorder/contract';
 	private $summary_uri = '/workorder/summary';
 
 	private $proposal_module_id = 0;
 	private $inventory_module_id = 0;
-	private $summary_module_id = 0;
+    private $summary_module_id = 0;
+	private $contract_module_id = 0;
 
 	public function __construct(){
 		$proposal = Module::where('module_url', $this->proposal_uri)->first();
 		$inventory = Module::where('module_url', $this->inventory_uri)->first();
+        $contract = Module::where('module_url', $this->contract_uri)->first();
 		$summary = Module::where('module_url', $this->summary_uri)->first();
 
 		//dd($proposal);
 
 		$this->proposal_module_id = $proposal->module_id;
 		$this->inventory_module_id = $inventory->module_id;
+        $this->contract_module_id = $contract->module_id;
 		$this->summary_module_id = $summary->module_id;
 	}
     /**
@@ -131,6 +136,29 @@ class MutationController extends Controller
 	        }
         }
 
+        $contracts = $request->input('contract_id');
+        $contract_assign_to = $request->input('contract_assign_to');
+        if(count($contracts) > 0) {
+            foreach($contracts as $key => $value) {
+                $obj = Contract::find($value);
+                if($obj->current_user===$obj->created_by) {
+                    $obj->current_user = $contract_assign_to[$key];
+                }
+                $obj->created_by = $contract_assign_to[$key];
+                $obj->save();
+
+                $mut = new Mutation;
+                $mut->mutation_from = $request->input('mutation_from');
+                $mut->mutation_to = $contract_assign_to[$key];
+                $mut->mutation_desc = $request->input('mutation_desc');
+                $mut->module_id = $this->contract_module_id;
+                $mut->mutation_item_id = $value;
+                $mut->active = '1';
+                $mut->created_by = $request->user()->user_id;
+                $mut->save();
+            }
+        }
+
         $summaries = $request->input('summary_id');
         $summary_assign_to = $request->input('summary_assign_to');
         if(count($summaries) > 0) {
@@ -181,11 +209,12 @@ class MutationController extends Controller
         $data['current'] = intval($current);
         $data['rowCount'] = $rowCount;
         $data['searchPhrase'] = $searchPhrase;
-        $data['rows'] = Mutation::select('mutation_id', 'mutations.created_at AS created_at', 'a.user_firstname AS from_firstname', 'a.user_lastname AS from_lastname', 'b.user_firstname AS to_firstname', 'b.user_lastname AS to_lastname', 'inventory_planner_title', 'proposal_name', 'summary_order_no')
+        $data['rows'] = Mutation::select('mutation_id', 'mutations.created_at AS created_at', 'a.user_firstname AS from_firstname', 'a.user_lastname AS from_lastname', 'b.user_firstname AS to_firstname', 'b.user_lastname AS to_lastname', 'inventory_planner_title', 'proposal_name', 'contract_no', 'summary_order_no')
         					->join('users AS a', 'a.user_id', '=', 'mutations.mutation_from')
         					->join('users AS b', 'b.user_id', '=', 'mutations.mutation_to')
         					->leftJoin('inventories_planner', 'inventories_planner.inventory_planner_id', '=', 'mutation_item_id')
         					->leftJoin('proposals', 'proposals.proposal_id', '=', 'mutation_item_id')
+                            ->leftJoin('contracts', 'contracts.contract_id', '=', 'mutation_item_id')
         					->leftJoin('summaries', 'summaries.summary_id', '=', 'mutation_item_id')
         					->where('mutations.active','1')
                             ->where(function($query) use($searchPhrase) {
@@ -199,11 +228,12 @@ class MutationController extends Controller
                             })
                             ->skip($skip)->take($rowCount)
                             ->orderBy($sort_column, $sort_type)->get();
-        $data['total'] = Mutation::select('mutation_id', 'mutations.created_at AS created_at', 'a.user_firstname AS from_firstname', 'a.user_lastname AS from_lastname', 'b.user_firstname AS to_firstname', 'b.user_lastname AS to_lastname', 'inventory_planner_title', 'proposal_name', 'summary_order_no')
+        $data['total'] = Mutation::select('mutation_id', 'mutations.created_at AS created_at', 'a.user_firstname AS from_firstname', 'a.user_lastname AS from_lastname', 'b.user_firstname AS to_firstname', 'b.user_lastname AS to_lastname', 'inventory_planner_title', 'proposal_name', 'contract_no', 'summary_order_no')
         					->join('users AS a', 'a.user_id', '=', 'mutations.mutation_from')
         					->join('users AS b', 'b.user_id', '=', 'mutations.mutation_to')
         					->leftJoin('inventories_planner', 'inventories_planner.inventory_planner_id', '=', 'mutation_item_id')
         					->leftJoin('proposals', 'proposals.proposal_id', '=', 'mutation_item_id')
+                            ->leftJoin('contracts', 'contracts.contract_id', '=', 'mutation_item_id')
         					->leftJoin('summaries', 'summaries.summary_id', '=', 'mutation_item_id')
         					->where('mutations.active','1')
                             ->where(function($query) use($searchPhrase) {
@@ -233,6 +263,11 @@ class MutationController extends Controller
     													->where('active', '1')
     													->where('flow_no', '<>', '98')
     													->get();
+
+        $data['contracts'] = Contract::where('created_by', $mutation_from)
+                                                        ->where('active', '1')
+                                                        ->where('flow_no', '<>', '98')
+                                                        ->get();
 
     	$data['summaries'] = Summary::where('created_by', $mutation_from)
     													->where('active', '1')
