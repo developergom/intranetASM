@@ -162,6 +162,7 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        'Cornford\Backup\Providers\BackupServiceProvider',
 
     ],
 
@@ -213,6 +214,7 @@ return [
         'BrowserDetect' => hisorange\BrowserDetect\Facade\Parser::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Backup'         => 'Cornford\Backup\Facades\Backup',
     ],
 
 ];

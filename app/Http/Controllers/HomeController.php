@@ -12,6 +12,7 @@ use App\ClientContact;
 use App\InventoryPlanner;
 use App\Proposal;
 use App\SummaryItem;
+use Backup;
 use DB;
 use Gate;
 use Mail;
@@ -85,15 +86,6 @@ class HomeController extends Controller
                             ->where('summary_items.active', '1')->count();
         }
 
-        /*$report = new ReportXls;
-        $report->generateSalesPerformance('050894');*/
-
-        /*$data['waktu'] = date('Y-m-d H:i:s');
-        $data['logs'] = DB::table('users')->select(DB::raw('user_name,user_firstname,user_lastname,count(log_id) AS total'))->join('logs', 'users.user_id', '=', 'logs.created_by')->whereBetween('logs.created_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->groupBy('users.user_name')->orderBy('users.user_name')->get();
-
-        Mail::send('vendor.material.mail.logsemail', array('data'=>$data), function($message) {
-            $message->to('soni@citis.kompasgramedia.com', 'Soni Rahayu')->subject('Intranet ASM Logs');
-        });*/
 
         return view('home', $data);
     }
