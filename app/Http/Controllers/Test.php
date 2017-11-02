@@ -117,6 +117,11 @@ class Test extends Controller{
 	
 	}
 
+	public function vue()
+	{
+		return view('vue');
+	}
+
 	public function import_data($table) 
 	{
 		if($table == 'advertise_positions') {

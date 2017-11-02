@@ -28,6 +28,7 @@ Route::post('/api/agendaRecap', 'HomeController@apiAgendaRecap')->middleware(['a
 Route::post('/api/contactRecap', 'HomeController@apiContactRecap')->middleware(['auth','menu']);
 
 Route::get('/test', 'Test@index');
+Route::get('/vue', 'Test@vue');
 Route::get('/handsontable', 'Test@handsontable');
 Route::get('/import_data/{table}', 'Test@import_data');
 

@@ -780,6 +780,12 @@ class SummaryController extends Controller
         Excel::create('Summary - ' . $data->contract->proposal->proposal_name . ' Revision No = ' . $data->revision_no, function($excel) use($data, $po) {
 
             $excel->sheet('SUMMARY', function($sheet) use($data, $po) {
+                $sheet->setStyle(array(
+                    'font' => array(
+                        'name'      =>  'Calibri',
+                        'size'      =>  15
+                    )
+                ));
 
                 $summaryitems = array();
                 $no = 1;
