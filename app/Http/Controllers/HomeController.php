@@ -417,6 +417,7 @@ class HomeController extends Controller
                                                 })
                                             ->where('agendas.active', '1')
                                             ->whereBetween('agendas.created_at', [$param['start'], $param['end']])
+                                            ->groupBy('agenda_type_name')
                                             ->get();
 
         return response()->json($data); 
