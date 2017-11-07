@@ -8,6 +8,7 @@
 @endsection
 
 @section('content')
+	@if(!$expired)
     <div class="card">
         <div class="card-header"><h2>Agenda Plan<small>Do Report Plan</small></h2></div>
         <div class="card-body card-padding">
@@ -18,6 +19,14 @@
 	                <div class="col-sm-10">
 	                    <div class="fg-line">
                             <input type="text" class="form-control date-picker" name="agenda_date" id="agenda_date" placeholder="Agenda Date" required="true" maxlength="10" value="{{ $agenda_date }}" readonly="true">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="agenda_report_expired_date" class="col-sm-2 control-label">Report Expired Date</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+                            <input type="text" class="form-control date-picker" name="agenda_report_expired_date" id="agenda_report_expired_date" placeholder="Agenda Report Expired Date" required="true" maxlength="10" value="{{ $agenda_report_expired_date }}" readonly="true">
 	                    </div>
 	                </div>
 	            </div>
@@ -167,6 +176,15 @@
 	        </form>
         </div>
     </div>
+    @else
+    <div class="card">
+        <div class="card-header"><h2>Agenda Plan<small>Do Report Plan</small></h2></div>
+        <div class="card-body card-padding">
+        	<h5>You can't do this process, because your agenda has been expired on {{ $agenda_report_expired_date }}.</h5>
+        	<a href="{{ url('agenda/plan') }}" class="btn btn-danger btn-sm">Back</a>
+        </div>
+    </div>
+    @endif
 @endsection
 
 @section('vendorjs')

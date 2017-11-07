@@ -20,7 +20,7 @@
 	                        <div class="input-group form-group">
                                 <span class="input-group-addon"><i class="zmdi zmdi-calendar"></i></span>
                                 <div class="dtp-container fg-line">
-                                    <input type="text" class="form-control date-picker" name="agenda_date" id="agenda_date" placeholder="AGENDA DATE" required="true" maxlength="10" value="{{ $agenda_date }}">
+                                    <input type="text" class="form-control date-picker" name="agenda_date" id="agenda_date" placeholder="AGENDA DATE" required="true" maxlength="10" value="{{ $agenda_date }}" {{ $expired }}>
                                 </div>
                             </div>
 	                    </div>

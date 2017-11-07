@@ -18,6 +18,14 @@
 	                    </div>
 	                </div>
 	            </div>
+	            <div class="form-group">
+	                <label for="agenda_report_expired_date" class="col-sm-2 control-label">Report Expired Date</label>
+	                <div class="col-sm-10">
+	                    <div class="fg-line">
+                            <input type="text" class="form-control date-picker" name="agenda_report_expired_date" id="agenda_report_expired_date" placeholder="Agenda Report Expired Date" required="true" maxlength="10" value="{{ $agenda_report_expired_date }}" readonly="true">
+	                    </div>
+	                </div>
+	            </div>
         		<div class="form-group">
         			<label for="agenda_type_id" class="col-sm-2 control-label">Type</label>
         			<div class="col-sm-10">

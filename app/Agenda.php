@@ -14,6 +14,7 @@ class Agenda extends Model
 				'agenda_type_id', 
 				'agenda_parent', 
 				'agenda_date', 
+				'agenda_report_expired_date', 
 				'agenda_destination', 
 				'agenda_desc',
 				'agenda_is_report',

@@ -21,6 +21,7 @@
                         <thead>
                             <tr>
                                 <th data-column-id="agenda_date" data-converter="datetime" data-order="asc"><center>Date</center></th>
+                                <th data-column-id="agenda_report_expired_date" data-converter="datetime" data-order="asc"><center>Report Expired</center></th>
                                 <th data-column-id="agenda_type_name" data-order="asc"><center>Type</center></th>
                                 <th data-column-id="agenda_is_report" data-formatter="agenda-status"><center>Status</center></th>
                                 <!-- <th data-column-id="agenda_destination" data-order="asc">Destination</th> -->

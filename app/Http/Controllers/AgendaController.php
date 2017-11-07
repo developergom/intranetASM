@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-use Gate;
 use Auth;
+use Cache;
 use File;
+use Gate;
 use Carbon\Carbon;
 use App\Http\Requests;
 use App\Agenda;
 use App\AgendaType;
+use App\Holiday;
 use App\UploadFile;
 
 use App\Ibrol\Libraries\NotificationLibrary;
@@ -64,11 +66,10 @@ class AgendaController extends Controller
             //'agenda_destination' => 'required|max:100'
         ]);
 
-        /*dd($request->input());*/
-
         $obj = new Agenda;
 
         $obj->agenda_date = Carbon::createFromFormat('d/m/Y', $request->input('agenda_date'))->toDateString();
+        $obj->agenda_report_expired_date = $this->generateExpiredDate($request->input('agenda_date'));
         $obj->agenda_type_id = $request->input('agenda_type_id');
         $obj->agenda_parent = 0;
         //$obj->agenda_destination = $request->input('agenda_destination');
@@ -127,9 +128,11 @@ class AgendaController extends Controller
         
         $data['agenda'] = Agenda::with('agendatype','clients','clientcontacts','clientcontacts.client')->find($id);
         $agenda_date = Carbon::createFromFormat('Y-m-d', ($data['agenda']->agenda_date==null) ? date('Y-m-d') : $data['agenda']->agenda_date);
+        $agenda_report_expired_date = Carbon::createFromFormat('Y-m-d', ($data['agenda']->agenda_report_expired_date==null) ? date('Y-m-d') : $data['agenda']->agenda_report_expired_date);
         $agenda_meeting_time = Carbon::createFromFormat('Y-m-d H:i:s', ($data['agenda']->agenda_meeting_time==null) ? date('Y-m-d H:i:s') : $data['agenda']->agenda_meeting_time);
         $agenda_report_time = Carbon::createFromFormat('Y-m-d H:i:s', ($data['agenda']->agenda_report_time==null) ? date('Y-m-d H:i:s') : $data['agenda']->agenda_report_time);
         $data['agenda_date'] = $agenda_date->format('d/m/Y');
+        $data['agenda_report_expired_date'] = $agenda_report_expired_date->format('d/m/Y');
         $data['agenda_meeting_time'] = $agenda_meeting_time->format('d/m/Y H:i:s');
         $data['agenda_report_time'] = $agenda_report_time->format('d/m/Y H:i:s');
 
@@ -154,7 +157,10 @@ class AgendaController extends Controller
         $data = array();
         $data['agendatypes'] = AgendaType::where('active', '1')->get();
         $data['agenda'] = Agenda::find($id);
+        $today = Carbon::today();
         $agenda_date = Carbon::createFromFormat('Y-m-d', ($data['agenda']->agenda_date==null) ? date('Y-m-d') : $data['agenda']->agenda_date);
+        
+        $data['expired'] = ($today > $agenda_date) ? 'readonly' : '';
         $data['agenda_date'] = $agenda_date->format('d/m/Y');
         return view('vendor.material.agenda.agenda.edit', $data);
     }
@@ -179,6 +185,7 @@ class AgendaController extends Controller
         $obj = Agenda::find($id);
 
         $obj->agenda_date = Carbon::createFromFormat('d/m/Y', $request->input('agenda_date'))->toDateString();
+        $obj->agenda_report_expired_date = $this->generateExpiredDate($request->input('agenda_date'));
         $obj->agenda_type_id = $request->input('agenda_type_id');
         //$obj->agenda_destination = $request->input('agenda_destination');
         $obj->agenda_desc = $request->input('agenda_desc');
@@ -272,6 +279,7 @@ class AgendaController extends Controller
                                 })
                             ->where(function($query) use($searchPhrase) {
                                 $query->orWhere('agenda_date','like','%' . $searchPhrase . '%')
+                                        ->orWhere('agenda_report_expired_date','like','%' . $searchPhrase . '%')
                                         ->orWhere('agenda_type_name','like','%' . $searchPhrase . '%')
                                         //->orWhere('agenda_destination','like','%' . $searchPhrase . '%')
                                         ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
@@ -288,6 +296,7 @@ class AgendaController extends Controller
                                 })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('agenda_date','like','%' . $searchPhrase . '%')
+                                        ->orWhere('agenda_report_expired_date','like','%' . $searchPhrase . '%')
                                         ->orWhere('agenda_type_name','like','%' . $searchPhrase . '%')
                                         //->orWhere('agenda_destination','like','%' . $searchPhrase . '%')
                                         ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
@@ -335,6 +344,11 @@ class AgendaController extends Controller
 
         $created_at = Carbon::createFromFormat('Y-m-d H:i:s', ($data['agenda']->created_at==null) ? date('Y-m-d H:i:s') : $data['agenda']->created_at);        
         $data['created_at'] = $created_at->format('d/m/Y H:i:s');
+
+        $agenda_report_expired_date = Carbon::createFromFormat('Y-m-d', ($data['agenda']->agenda_report_expired_date==null) ? date('Y-m-d') : $data['agenda']->agenda_report_expired_date);
+        $today = Carbon::today();
+        $data['expired'] = ($today > $agenda_report_expired_date);
+        $data['agenda_report_expired_date'] = $agenda_report_expired_date->format('d/m/Y');
 
         return view('vendor.material.agenda.agenda.do_report', $data);
     }
@@ -497,5 +511,30 @@ class AgendaController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    private function generateExpiredDate($agenda_date)
+    {
+
+        $expired_days = Cache::get('setting_report_agenda_expired_day');
+
+        $expired = Carbon::createFromFormat('d/m/Y', $agenda_date);
+        for ($i = 1; $i <= $expired_days; $i++) {
+            $expired = $expired->addDays(1);
+            $count = Holiday::where('active', '1')->where('holiday_date', $expired->format('Y-m-d'))->count();
+
+            if($count > 0) {
+                $expired = $expired->addDays(1);
+            }
+
+            if($expired->isWeekend()) {
+                $expired = $expired->addDays(1);
+                if($expired->isWeekend()) {
+                    $expired = $expired->addDays(1);
+                }
+            }
+        }
+
+        return $expired;
     }
 }
