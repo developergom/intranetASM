@@ -189,6 +189,11 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('inventorycategory/apiDelete', 'InventoryCategoryController@apiDelete');
         Route::resource('inventorycategory', 'InventoryCategoryController');
 
+        //Inventory Source
+        Route::post('inventorysource/apiList', 'InventorySourceController@apiList');
+        Route::post('inventorysource/apiDelete', 'InventorySourceController@apiDelete');
+        Route::resource('inventorysource', 'InventorySourceController');
+
         //Inventory Type
         Route::post('inventorytype/apiList', 'InventoryTypeController@apiList');
         Route::post('inventorytype/apiDelete', 'InventoryTypeController@apiDelete');
