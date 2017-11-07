@@ -4,11 +4,13 @@ namespace App\Ibrol\Libraries;
 
 use App\Brand;
 use App\Contract;
+use App\Industry;
 use App\Letter;
 use App\LetterType;
 use App\Media;
 use App\Proposal;
 use App\Summary;
+use App\Target;
 
 class GeneratorLibrary{
 	public function brand_code($brand_id)
@@ -247,6 +249,23 @@ class GeneratorLibrary{
 		return $return;
 	}
 
+	public function target_code($media_id, $industry_id, $month, $year)
+	{
+		if(($media_id=='') || ($industry_id==''))
+			return '';
+
+		$media = Media::find($media_id);
+		$media_code = $media->media_code;
+		if(count($media) < 1)
+			$media_code = '---';
+
+		$industry = Industry::find($industry_id);
+		$industry_code = $industry->industry_code;
+		if(count($industry) < 1)
+			$industry_code = '---';
+
+		return $year . $month . $media_code . $industry_code;
+	}
 	
 
 	public function getMonthCode($month) {

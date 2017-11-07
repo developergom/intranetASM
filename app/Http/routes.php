@@ -320,6 +320,12 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::post('subindustry/apiGetOption', 'SubIndustryController@apiGetOption');
         Route::resource('subindustry', 'SubIndustryController');
 
+        //Target
+        Route::post('target/apiList', 'TargetController@apiList');
+        Route::post('target/apiDelete', 'TargetController@apiDelete');
+        Route::post('target/api/generateCode', 'TargetController@apiGenerateCode');
+        Route::resource('target', 'TargetController');
+
         //Unit
         Route::post('unit/apiList', 'UnitController@apiList');
         Route::post('unit/apiDelete', 'UnitController@apiDelete');

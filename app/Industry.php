@@ -36,4 +36,9 @@ class Industry extends Model
 	{
 		return $this->hasMany('App\SummaryItem', 'industry_id');
 	}
+
+	public function targets()
+	{
+		return $this->hasMany('App\Target', 'industry_id');
+	}
 }

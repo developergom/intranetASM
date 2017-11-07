@@ -138,4 +138,9 @@ class Media extends Model
 	{
 		return $this->hasMany('App\Rate', 'media_id');
 	}
+
+	public function targets()
+	{
+		return $this->hasMany('App\Target', 'media_id');
+	}
 }
