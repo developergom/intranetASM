@@ -13,6 +13,16 @@ function previewMoney(inputValue){
 	return inputValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+function formatMoney(source, target)
+{
+	$(target).append(previewMoney($(source).val()));
+	$(source).keyup(function() {
+		$(target).empty();
+		var res = previewMoney($(source).val());
+		$(target).append(res);
+	});
+}
+
 function formatSmallMonth(tanggal) { 
 	//tanggal format 2017-10-31
 	var smallMonth = [];

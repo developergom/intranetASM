@@ -19,6 +19,6 @@ class InventorySource extends Model
 
 	public function inventoriesplanner()
 	{
-		return $this->hasMany('App\InventoryPlanner', 'inventory_planner_id');
+		return $this->hasMany('App\InventoryPlanner', 'inventory_source_id');
 	}
 }

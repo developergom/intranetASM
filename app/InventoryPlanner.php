@@ -12,10 +12,16 @@ class InventoryPlanner extends Model
 	protected $fillable = [
 				'inventory_type_id', /*
 				'inventory_category_id', */
+				'inventory_source_id',
 				'inventory_planner_title',
 				'inventory_planner_deadline',
 				'inventory_planner_participants',
 				'inventory_planner_desc',
+				'inventory_planner_year',
+				'inventory_planner_cost',
+				'inventory_planner_media_cost_print',
+				'inventory_planner_media_cost_other',
+				'inventory_planner_total_offering',
 				'flow_no',
 				'revision_no',
 				'current_user',
@@ -40,6 +46,11 @@ class InventoryPlanner extends Model
 	public function inventorytype()
 	{
 		return $this->belongsTo('App\InventoryType', 'inventory_type_id');
+	}
+
+	public function inventorysource()
+	{
+		return $this->belongsTo('App\InventorySource', 'inventory_source_id');
 	}
 
 	public function proposaltype()
@@ -75,6 +86,11 @@ class InventoryPlanner extends Model
 	public function implementations()
 	{
 		return $this->belongsToMany('App\Implementation', 'inventory_planner_implementation');
+	}
+
+	public function sellperiods()
+	{
+		return $this->belongsToMany('App\SellPeriod', 'inventory_planner_sell_period');
 	}
 
 	public function inventoryplannerprices()

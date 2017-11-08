@@ -181,6 +181,59 @@ $(document).ready(function(){
         preserveSelected: true
     });
 
+    //add implementations
+    $('#btn_add_implementation').click(function(){
+    	var tr = '';
+    	tr += '<tr>';
+    	tr += '<td><input type="hidden" name="implementation_post_id[]" value="' + $('#implementation_id').val() + '"><input type="text" name="implementation_post_name[]" class="form-control" value="' + $('#implementation_id option:selected').text() + '" readonly></td>';
+    	tr += '<td><input type="text" name="implementation_post_year[]" class="form-control" value="' + $('#implementation_year').val() + '" readonly></td>';
+    	tr += '<td><a href="javascript:void(0)" class="btn btn-danger btn-implementation-delete">Remove</a></td>';
+    	tr += '</tr>';
+    	$('#implementation_post').append(tr);
+    });
+
+    //delete implementation
+    $('body').on('click','.btn-implementation-delete', function(e){
+		e.preventDefault();
+		$(this).closest('tr').remove();
+	});
+
+    //cost number format
+	formatMoney('#inventory_planner_cost', '#format_inventory_planner_cost');
+
+	//media cost print number format
+	formatMoney('#inventory_planner_media_cost_print', '#format_inventory_planner_media_cost_print');
+
+	//media cost other number format
+	formatMoney('#inventory_planner_media_cost_other', '#format_inventory_planner_media_cost_other');
+
+	//total offering number format
+	formatMoney('#inventory_planner_total_offering', '#format_inventory_planner_total_offering');
+
+	$('#inventory_planner_cost, #inventory_planner_media_cost_print, #inventory_planner_media_cost_other').keyup(function(){
+		var result = parseFloat($('#inventory_planner_cost').val()) + parseFloat($('#inventory_planner_media_cost_print').val()) + parseFloat($('#inventory_planner_media_cost_other').val());
+		$('#inventory_planner_total_offering').val(result);
+		var format_result = previewMoney($('#inventory_planner_total_offering').val());
+		$('#format_inventory_planner_total_offering').empty().append(format_result);
+	});
+
+	//add sell periods
+    $('#btn_add_sell_period').click(function(){
+    	var tr = '';
+    	tr += '<tr>';
+    	tr += '<td><input type="hidden" name="sell_period_post_id[]" value="' + $('#sell_period_id').val() + '"><input type="text" name="sell_period_post_name[]" class="form-control" value="' + $('#sell_period_id option:selected').text() + '" readonly></td>';
+    	tr += '<td><input type="text" name="sell_period_post_year[]" class="form-control" value="' + $('#sell_period_year').val() + '" readonly></td>';
+    	tr += '<td><a href="javascript:void(0)" class="btn btn-danger btn-sell-period-delete">Remove</a></td>';
+    	tr += '</tr>';
+    	$('#sell_period_post').append(tr);
+    });
+
+    //delete sell periods
+    $('body').on('click','.btn-sell-period-delete', function(e){
+		e.preventDefault();
+		$(this).closest('tr').remove();
+	});
+
 	//load all prices
 	load_all_prices();
 

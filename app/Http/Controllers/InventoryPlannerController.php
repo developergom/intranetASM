@@ -17,6 +17,7 @@ use App\AdvertiseSize;
 use App\EventPlan;
 use App\InventoryCategory;
 use App\InventoryPlanner;
+use App\InventorySource;
 use App\InventoryType;
 use App\InventoryPlannerHistory;
 use App\InventoryPlannerPrice;
@@ -32,6 +33,7 @@ use App\MediaEdition;
 use App\Paper;
 use App\PriceType;
 use App\ProposalType;
+use App\SellPeriod;
 use App\User;
 
 use App\Ibrol\Libraries\FlowLibrary;
@@ -79,7 +81,9 @@ class InventoryPlannerController extends Controller
 
         $data['proposal_types'] = ProposalType::where('active', '1')->orderBy('proposal_type_name')->get();
         $data['inventory_categories'] = InventoryCategory::where('active', '1')->orderBy('inventory_category_name')->get();
+        $data['inventory_sources'] = InventorySource::where('active', '1')->orderBy('inventory_source_name')->get();
         $data['implementations'] = Implementation::where('active', '1')->orderBy('implementation_month')->get();
+        $data['sell_periods'] = SellPeriod::where('active', '1')->orderBy('sell_period_month')->get();
         $data['medias'] = Media::whereHas('users', function($query) use($request){
 	                                $query->where('users_medias.user_id', '=', $request->user()->user_id);
 	                            })->where('medias.active', '1')->orderBy('media_name')->get();
@@ -98,18 +102,19 @@ class InventoryPlannerController extends Controller
     {
         $this->validate($request, [
             'proposal_type_id' => 'required',
-        	'inventory_category_id[]' => 'array',
+            'inventory_category_id[]' => 'array',
+        	'inventory_source_id' => 'required',
             'inventory_planner_title' => 'required|max:100',
             'inventory_planner_desc' => 'required',
-            'inventory_planner_year' => 'required|max:4',
-            //'inventory_planner_participants' => 'required|numeric|max:1000000000',
-            'inventory_planner_deadline' => 'required|date_format:"d/m/Y"',
-            'action_plan_pages' => 'numeric',
-            'action_plan_views' => 'numeric',
-            'implementation_id[]' => 'array',
+            'inventory_planner_cost' => 'required|numeric',
+            'inventory_planner_media_cost_print' => 'required|numeric',
+            'inventory_planner_media_cost_other' => 'required|numeric',
+            'inventory_planner_total_offering' => 'required|numeric',
+            'implementation_post_id[]' => 'array',
+            'implementation_post_year[]' => 'array',
+            'sell_period_post_id[]' => 'array',
+            'sell_period_post_year[]' => 'array',
             'media_id[]' => 'array',
-            /*'action_plan_id[]' => 'array',
-            'event_plan_id[]' => 'array',*/
         ]);
 
         $flow = new FlowLibrary;
@@ -117,12 +122,13 @@ class InventoryPlannerController extends Controller
 
         $obj = new InventoryPlanner;
         $obj->proposal_type_id = $request->input('proposal_type_id');
-        //$obj->inventory_category_id = $request->input('inventory_category_id');
+        $obj->inventory_source_id = $request->input('inventory_source_id');
         $obj->inventory_planner_title = $request->input('inventory_planner_title');
         $obj->inventory_planner_desc = $request->input('inventory_planner_desc');
-        $obj->inventory_planner_deadline = Carbon::createFromFormat('d/m/Y', $request->input('inventory_planner_deadline'))->toDateString();
-        $obj->inventory_planner_year = $request->input('inventory_planner_year');
-        //$obj->inventory_planner_participants = $request->input('inventory_planner_participants');
+        $obj->inventory_planner_cost = $request->input('inventory_planner_cost');
+        $obj->inventory_planner_media_cost_print = $request->input('inventory_planner_media_cost_print');
+        $obj->inventory_planner_media_cost_other = $request->input('inventory_planner_media_cost_other');
+        $obj->inventory_planner_total_offering = $request->input('inventory_planner_total_offering');
         $obj->flow_no = $nextFlow['flow_no'];
         $obj->current_user = $nextFlow['current_user'];
         $obj->revision_no = 0;
@@ -173,8 +179,30 @@ class InventoryPlannerController extends Controller
             InventoryPlanner::find($obj->inventory_planner_id)->inventorycategories()->sync($request->input('inventory_category_id'));
         }
 
-        if(!empty($request->input('implementation_id'))) {
-            InventoryPlanner::find($obj->inventory_planner_id)->implementations()->sync($request->input('implementation_id'));
+        if(!empty($request->input('implementation_post_id'))) {
+            $implementation_sync = array();
+            $implementation_post_id = $request->input('implementation_post_id');
+            $implementation_post_year = $request->input('implementation_post_year');
+            foreach($implementation_post_id as $key => $value)
+            {
+                array_push($implementation_sync, $value);
+                $implementation_sync[$value] = [ 'year' => $implementation_post_year[$key] ];
+            }
+
+            InventoryPlanner::find($obj->inventory_planner_id)->implementations()->sync($implementation_sync);
+        }
+
+        if(!empty($request->input('sell_period_post_id'))) {
+            $sell_period_sync = array();
+            $sell_period_post_id = $request->input('sell_period_post_id');
+            $sell_period_post_year = $request->input('sell_period_post_year');
+            foreach($sell_period_post_id as $key => $value)
+            {
+                array_push($sell_period_sync, $value);
+                $sell_period_sync[$value] = [ 'year' => $sell_period_post_year[$key] ];
+            }
+
+            InventoryPlanner::find($obj->inventory_planner_id)->sellperiods()->sync($sell_period_sync);
         }
 
         if(!empty($request->input('media_id'))) {
