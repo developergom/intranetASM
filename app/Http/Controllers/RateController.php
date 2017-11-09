@@ -349,7 +349,7 @@ class RateController extends Controller
 
     public function apiGetAll(Request $request)
     {
-        $pos = Rate::select('rate_id', 'rate_name')->where('active', '1')->where('rate_name','like','%' . $request->input('query') . '%')->orderBy('rate_name')->limit(5)->get();
+        $pos = Rate::select('rate_id', 'rate_name')->where('active', '1')->where('rate_name','like','%' . $request->input('query') . '%')->where('end_valid_date', '>', date('Y-m-d'))->orderBy('rate_name')->limit(5)->get();
 
         $result = array();
         foreach ($pos as $value) {
@@ -361,7 +361,7 @@ class RateController extends Controller
 
     public function apiGetByName(Request $request)
     {
-        $rate = Rate::with('media')->where('rate_name', $request->input('rate_name'))->first();
+        $rate = Rate::with('media')->where('rate_name', $request->input('rate_name'))->where('end_valid_date', '>', date('Y-m-d'))->first();
 
         return response()->json($rate);
     }
@@ -374,7 +374,7 @@ class RateController extends Controller
 
         $rate_name = $request->rate_name;
 
-        $result = Rate::where('rate_name','like','%' . $rate_name . '%')->where('active', '1')->take(5)->orderBy('rate_name')->get();
+        $result = Rate::where('rate_name','like','%' . $rate_name . '%')->where('end_valid_date', '>', date('Y-m-d'))->where('active', '1')->take(5)->orderBy('rate_name')->get();
 
         return response()->json($result, 200);
     }
@@ -383,7 +383,7 @@ class RateController extends Controller
     {
         $rate_id = $request->rate_id;
 
-        $result = Rate::select('rate_id','rate_name','media_name','gross_rate')->join('medias', 'medias.media_id', '=', 'rates.media_id')->where('rate_id', $rate_id)->where('rates.active', '1')->first();
+        $result = Rate::select('rate_id','rate_name','media_name','gross_rate')->join('medias', 'medias.media_id', '=', 'rates.media_id')->where('rate_id', $rate_id)->where('end_valid_date', '>', date('Y-m-d'))->where('rates.active', '1')->first();
 
         return response()->json($result);
     }

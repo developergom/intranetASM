@@ -19,6 +19,6 @@ class SellPeriod extends Model
 
 	public function inventoriesplanner()
     {
-    	return $this->belongsToMany('App\InventoryPlanner', 'inventory_planner_sell_period');
+    	return $this->belongsToMany('App\InventoryPlanner', 'inventory_planner_sell_period')->withPivot('year');;
     }
 }

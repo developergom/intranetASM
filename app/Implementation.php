@@ -24,6 +24,6 @@ class Implementation extends Model
 
     public function inventoriesplanner()
     {
-    	return $this->belongsToMany('App\InventoryPlanner', 'inventory_planner_implementation');
+    	return $this->belongsToMany('App\InventoryPlanner', 'inventory_planner_implementation')->withPivot('year');;
     }
 }

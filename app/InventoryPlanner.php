@@ -85,12 +85,12 @@ class InventoryPlanner extends Model
 
 	public function implementations()
 	{
-		return $this->belongsToMany('App\Implementation', 'inventory_planner_implementation');
+		return $this->belongsToMany('App\Implementation', 'inventory_planner_implementation')->withPivot('year');;
 	}
 
 	public function sellperiods()
 	{
-		return $this->belongsToMany('App\SellPeriod', 'inventory_planner_sell_period');
+		return $this->belongsToMany('App\SellPeriod', 'inventory_planner_sell_period')->withPivot('year');;
 	}
 
 	public function inventoryplannerprices()

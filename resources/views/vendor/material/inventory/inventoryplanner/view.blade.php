@@ -17,6 +17,14 @@
     </div>
 </div>
 <div class="form-group">
+    <label for="inventory_source_id" class="col-sm-2 control-label">Source</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <input class="form-control input-sm" placeholder="Source" readonly="true" value="{{ $inventoryplanner->inventorysource->inventory_source_name }}">
+        </div>
+    </div>
+</div>
+<div class="form-group">
     <label for="inventory_planner_title" class="col-sm-2 control-label">Title</label>
     <div class="col-sm-10">
         <div class="fg-line">
@@ -29,32 +37,18 @@
     <div class="col-sm-10">
         <div class="fg-line">
             @foreach($inventoryplanner->implementations as $row)
-            	<span class="badge">{{ $row->implementation_month_name }}</span>
+            	<span class="badge">{{ $row->implementation_month_name . ' ' . $row->pivot->year }}</span>
             @endforeach
         </div>
     </div>
 </div>
 <div class="form-group">
-    <label for="inventory_planner_year" class="col-sm-2 control-label">Year</label>
+    <label for="sell_period" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="right" title="Sell Period">Sell Period</label>
     <div class="col-sm-10">
         <div class="fg-line">
-            <input class="form-control input-sm" placeholder="Year" readonly="true" value="{{ $inventoryplanner->inventory_planner_year }}">
-        </div>
-    </div>
-</div>
-<div class="form-group">
-    <label for="inventory_planner_deadline" class="col-sm-2 control-label" data-toggle="tooltip" data-placement="right" title="This deadline is deadline which the inventory can be sold">Deadline</label>
-    <div class="col-sm-10">
-        <div class="fg-line">
-            <input class="form-control input-sm" placeholder="Deadline" readonly="true" value="{{ Carbon\Carbon::createFromFormat('Y-m-d', $inventoryplanner->inventory_planner_deadline)->format('d/m/Y') }}">
-        </div>
-    </div>
-</div>
-<div class="form-group">
-    <label for="inventory_planner_participants" class="col-sm-2 control-label">Participants</label>
-    <div class="col-sm-10">
-        <div class="fg-line">
-            <input class="form-control input-sm" placeholder="Participants" readonly="true" value="{{ $inventoryplanner->inventory_planner_participants }}">
+            @foreach($inventoryplanner->sellperiods as $row)
+                <span class="badge">{{ $row->sell_period_month_name . ' ' . $row->pivot->year }}</span>
+            @endforeach
         </div>
     </div>
 </div>
@@ -65,6 +59,38 @@
             @foreach($inventoryplanner->medias as $row)
             	<a href="{{ url('/master/media/' . $row->media_id) }}" target="_blank"><span class="badge">{{ $row->media_name }}</span></a>
             @endforeach
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="inventory_planner_cost" class="col-sm-2 control-label">Cost</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <span class="badge">{{ number_format($inventoryplanner->inventory_planner_cost) }}</span>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="inventory_planner_media_cost_print" class="col-sm-2 control-label">Media Cost Print</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <span class="badge">{{ number_format($inventoryplanner->inventory_planner_media_cost_print) }}</span>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="inventory_planner_media_cost_other" class="col-sm-2 control-label">Media Cost Digital/Other</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <span class="badge">{{ number_format($inventoryplanner->inventory_planner_media_cost_other) }}</span>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="inventory_planner_total_offering" class="col-sm-2 control-label">Total Offering</label>
+    <div class="col-sm-10">
+        <div class="fg-line">
+            <span class="badge">{{ number_format($inventoryplanner->inventory_planner_total_offering) }}</span>
         </div>
     </div>
 </div><!-- 

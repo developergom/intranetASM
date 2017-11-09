@@ -39,7 +39,7 @@
                                     <th data-column-id="media_name" data-order="asc">Media</th>
                                     <th data-column-id="inventory_category_name" data-order="asc">Category</th>
                                     <th data-column-id="implementation_month_name" data-order="asc">Implementation</th>
-                                    <th data-column-id="inventory_planner_year" data-order="asc">Year</th>
+                                    <th data-column-id="year" data-order="asc">Year</th>
                                     <th data-column-id="inventory_planner_title" data-order="asc">Title</th>
                                     <th data-column-id="user_firstname" data-order="asc">Created By</th>
                                     @can('Inventory Planner-Update')
@@ -71,7 +71,7 @@
                                     <th data-column-id="media_name" data-order="asc">Media</th>
                                     <th data-column-id="inventory_category_name" data-order="asc">Category</th>
                                     <th data-column-id="implementation_month_name" data-order="asc">Implementation</th>
-                                    <th data-column-id="inventory_planner_year" data-order="asc">Year</th>
+                                    <th data-column-id="year" data-order="asc">Year</th>
                                     <th data-column-id="inventory_planner_title" data-order="asc">Title</th>
                                     <th data-column-id="user_firstname" data-order="asc">Current User</th>
                                     @can('Inventory Planner-Delete')
@@ -98,7 +98,7 @@
                                     <th data-column-id="media_name" data-order="asc">Media</th>
                                     <th data-column-id="inventory_category_name" data-order="asc">Category</th>
                                     <th data-column-id="implementation_month_name" data-order="asc">Implementation</th>
-                                    <th data-column-id="inventory_planner_year" data-order="asc">Year</th>
+                                    <th data-column-id="year" data-order="asc">Year</th>
                                     <th data-column-id="inventory_planner_title" data-order="asc">Title</th>
                                     <th data-column-id="user_firstname" data-order="asc">Created By</th>
                                     <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>
@@ -121,7 +121,7 @@
                                     <th data-column-id="media_name" data-order="asc">Media</th>
                                     <th data-column-id="inventory_category_name" data-order="asc">Category</th>
                                     <th data-column-id="implementation_month_name" data-order="asc">Implementation</th>
-                                    <th data-column-id="inventory_planner_year" data-order="asc">Year</th>
+                                    <th data-column-id="year" data-order="asc">Year</th>
                                     <th data-column-id="inventory_planner_title" data-order="asc">Title</th>
                                     <th data-column-id="user_firstname" data-order="asc">Created By</th>
                                     <th data-column-id="link" data-formatter="link-r" data-sortable="false">Action</th>

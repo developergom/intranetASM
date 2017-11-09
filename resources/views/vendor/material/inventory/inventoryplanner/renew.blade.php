@@ -3,6 +3,7 @@
 @section('vendorcss')
 <link href="{{ url('css/chosen.css') }}" rel="stylesheet">
 <link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
+<link href="{{ url('css/ajax-bootstrap-select.min.css') }}" rel="stylesheet">
 <link href="{{ url('css/basic.min.css') }}" rel="stylesheet">
 <link href="{{ url('css/dropzone.min.css') }}" rel="stylesheet">
 <link href="{{ url('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
@@ -62,6 +63,29 @@
 		                </span>
 		            @endif
         		</div>
+
+        		<div class="form-group">
+        			<label for="inventory_source_id" class="col-sm-2 control-label">Source</label>
+        			<div class="col-sm-10">
+        				<div class="fg-line">
+	        				<select name="inventory_source_id" id="inventory_source_id" class="selectpicker" data-live-search="true" required="true">
+	        					<option value=""></option>
+	        					@foreach($inventory_sources as $row)
+	        						{!! $selected = '' !!}
+                                	@if($inventory->inventory_source_id==$row->inventory_source_id)
+	                                	{!! $selected = 'selected' !!}
+                                	@endif
+	        						<option value="{{ $row->inventory_source_id }}" {{ $selected }}>{{ $row->inventory_source_name }}</option>
+	        					@endforeach
+	        				</select>
+	        			</div>
+        			</div>
+        			@if ($errors->has('inventory_source_id'))
+		                <span class="help-block">
+		                    <strong>{{ $errors->first('inventory_source_id') }}</strong>
+		                </span>
+		            @endif
+        		</div>
 	            <div class="form-group">
 	                <label for="inventory_planner_title" class="col-sm-2 control-label">Title</label>
 	                <div class="col-sm-10">
@@ -74,71 +98,74 @@
 			                </span>
 			            @endif
 	                </div>
-	            </div>
-	            <div class="form-group">
+	            </div><div class="form-group">
 	                <label for="implementation_id" class="col-sm-2 control-label">Implementation</label>
-	                <div class="col-sm-10">
+	                <div class="col-sm-4">
 	                    <div class="fg-line">
-	                        <select name="implementation_id[]" id="implementation_id" class="selectpicker" data-live-search="true" multiple required="true" title="filled with month(s) of the inventory’s implementation">
+	                        <select name="implementation_id" id="implementation_id" class="selectpicker" data-live-search="true" title="filled with month(s) of the inventory’s implementation">
                                 @foreach ($implementations as $row)
                                 	{!! $selected = '' !!}
-                                	@if($inventory->implementations)
-	                                	@foreach ($inventory->implementations as $key => $value)
-	                                		@if($value->implementation_id==$row->implementation_id)
-	                                			{!! $selected = 'selected' !!}
-	                                		@endif
-	                                	@endforeach
-                                	@endif
 								    <option value="{{ $row->implementation_id }}" {{ $selected }}>{{ $row->implementation_month_name }}</option>
 								@endforeach
                             </select>
 	                    </div>
-	                    @if ($errors->has('implementation_id'))
-			                <span class="help-block">
-			                    <strong>{{ $errors->first('implementation_id') }}</strong>
-			                </span>
-			            @endif
+	                </div>
+	                <div class="col-sm-2">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm input-mask" name="implementation_year" id="implementation_year" placeholder="e.g 1945" maxlength="4" value="{{ old('implementation_year') }}" autocomplete="off" data-mask="0000">
+	                    </div>
+	                </div>
+	                <div class="col-sm-4">
+	                	<a href="javascript:void(0)" class="btn btn-warning waves-effect" id="btn_add_implementation">ADD IMPLEMENTATION</a>
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="inventory_planner_year" class="col-sm-2 control-label">Year</label>
-	                <div class="col-sm-10">
+	            	<div class="col-sm-offset-2 col-sm-10">
+	            		<table id="implementation_post" class="table">
+	            			@foreach($inventory->implementations as $row)
+	            			<tr>
+					    		<td><input type="hidden" name="implementation_post_id[]" value="{{ $row->implementation_id }}"><input type="text" name="implementation_post_name[]" class="form-control" value="{{ $row->implementation_month_name }}" readonly></td>
+					    		<td><input type="text" name="implementation_post_year[]" class="form-control" value="{{ $row->pivot->year }}" readonly></td>
+					    		<td><a href="javascript:void(0)" class="btn btn-danger btn-implementation-delete">Remove</a></td>
+					    	</tr>
+	            			@endforeach
+	            		</table>
+	            	</div>
+	            </div>
+	            <div class="form-group">
+	                <label for="sell_period_id" class="col-sm-2 control-label">Sell Period</label>
+	                <div class="col-sm-4">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm input-mask" name="inventory_planner_year" id="inventory_planner_year" placeholder="e.g 1945" required="true" maxlength="4" value="{{ $inventory->inventory_planner_year }}" autocomplete="off" data-mask="0000">
+	                        <select name="sell_period_id" id="sell_period_id" class="selectpicker" data-live-search="true" title="filled with month(s) of the inventory’s sell period">
+                                @foreach ($sell_periods as $row)
+                                	{!! $selected = '' !!}
+								    <option value="{{ $row->sell_period_id }}" {{ $selected }}>{{ $row->sell_period_month_name }}</option>
+								@endforeach
+                            </select>
 	                    </div>
-	                    @if ($errors->has('inventory_planner_year'))
-			                <span class="help-block">
-			                    <strong>{{ $errors->first('inventory_planner_year') }}</strong>
-			                </span>
-			            @endif
+	                </div>
+	                <div class="col-sm-2">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm input-mask" name="sell_period_year" id="sell_period_year" placeholder="e.g 1945" maxlength="4" value="{{ old('sell_period_year') }}" autocomplete="off" data-mask="0000">
+	                    </div>
+	                </div>
+	                <div class="col-sm-4">
+	                	<a href="javascript:void(0)" class="btn btn-warning waves-effect" id="btn_add_sell_period">ADD SELL PERIOD</a>
 	                </div>
 	            </div>
 	            <div class="form-group">
-	                <label for="inventory_planner_deadline" class="col-sm-2 control-label">Deadline</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm date-picker" name="inventory_planner_deadline" id="inventory_planner_deadline" placeholder="e.g 17/08/1945 (FILLED WITH THE DEADLINE WHICH THE INVENTORY CAN BE SOLD)" required="true" maxlength="10" value="{{ $inventory_deadline }}" data-toggle="tooltip" data-placement="bottom" title="filled with the deadline which the inventory can be sold">
-	                    </div>
-	                    @if ($errors->has('inventory_planner_deadline'))
-			                <span class="help-block">
-			                    <strong>{{ $errors->first('inventory_planner_deadline') }}</strong>
-			                </span>
-			            @endif
-	                </div>
-	            </div><!-- 
-	            <div class="form-group">
-	                <label for="inventory_planner_participants" class="col-sm-2 control-label">Participants</label>
-	                <div class="col-sm-10">
-	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="inventory_planner_participants" id="inventory_planner_participants" placeholder="Please input only numeric character" required="true" maxlength="12" value="{{ $inventory->inventory_planner_participants }}">
-	                    </div>
-	                    @if ($errors->has('inventory_planner_participants'))
-			                <span class="help-block">
-			                    <strong>{{ $errors->first('inventory_planner_participants') }}</strong>
-			                </span>
-			            @endif
-	                </div>
-	            </div> -->
+	            	<div class="col-sm-offset-2 col-sm-10">
+	            		<table id="sell_period_post" class="table">
+	            			@foreach($inventory->sellperiods as $row)
+	            			<tr>
+					    		<td><input type="hidden" name="sell_period_post_id[]" value="{{ $row->sell_period_id }}"><input type="text" name="sell_period_post_name[]" class="form-control" value="{{ $row->sell_period_month_name }}" readonly></td>
+					    		<td><input type="text" name="sell_period_post_year[]" class="form-control" value="{{ $row->pivot->year }}" readonly></td>
+					    		<td><a href="javascript:void(0)" class="btn btn-danger btn-sell-period-delete">Remove</a></td>
+					    	</tr>
+	            			@endforeach
+	            		</table>
+	            	</div>
+	            </div>
 	            <div class="form-group">
 	                <label for="media_id" class="col-sm-2 control-label">Media</label>
 	                <div class="col-sm-10">
@@ -162,6 +189,71 @@
 			                    <strong>{{ $errors->first('media_id') }}</strong>
 			                </span>
 			            @endif
+	                </div>
+	            </div>
+	            
+	            <div class="form-group">
+	                <label for="inventory_planner_cost" class="col-sm-2 control-label">Cost</label>
+	                <div class="col-sm-4">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="inventory_planner_cost" id="inventory_planner_cost" placeholder="Cost" maxlength="20" value="{{ $inventory->inventory_planner_cost }}" required="true">
+	                    </div>
+	                    @if ($errors->has('inventory_planner_cost'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('inventory_planner_cost') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	                <div class="col-sm-6">
+	                	<span class="badge" id="format_inventory_planner_cost"></span>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="inventory_planner_media_cost_print" class="col-sm-2 control-label">Media Cost Print</label>
+	                <div class="col-sm-4">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="inventory_planner_media_cost_print" id="inventory_planner_media_cost_print" placeholder="Media Cost Print" maxlength="20" value="{{ $inventory->inventory_planner_media_cost_print }}" required="true">
+	                    </div>
+	                    @if ($errors->has('inventory_planner_media_cost_print'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('inventory_planner_media_cost_print') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	                <div class="col-sm-6">
+	                	<span class="badge" id="format_inventory_planner_media_cost_print"></span>
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <label for="inventory_planner_media_cost_other" class="col-sm-2 control-label">Media Cost Digital/Other</label>
+	                <div class="col-sm-4">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="inventory_planner_media_cost_other" id="inventory_planner_media_cost_other" placeholder="Media Cost Other" maxlength="20" value="{{ $inventory->inventory_planner_media_cost_other }}" required="true">
+	                    </div>
+	                    @if ($errors->has('inventory_planner_media_cost_other'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('inventory_planner_media_cost_other') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	                <div class="col-sm-6">
+	                	<span class="badge" id="format_inventory_planner_media_cost_other"></span>
+	                </div>
+	            </div> 
+	            <div class="form-group">
+	                <label for="inventory_planner_total_offering" class="col-sm-2 control-label">Total Offering</label>
+	                <div class="col-sm-4">
+	                    <div class="fg-line">
+	                        <input type="text" class="form-control input-sm" name="inventory_planner_total_offering" id="inventory_planner_total_offering" placeholder="Total Offering" maxlength="20" value="{{ $inventory->inventory_planner_total_offering }}" required="true">
+	                    </div>
+	                    @if ($errors->has('inventory_planner_total_offering'))
+			                <span class="help-block">
+			                    <strong>{{ $errors->first('inventory_planner_total_offering') }}</strong>
+			                </span>
+			            @endif
+	                </div>
+	                <div class="col-sm-6">
+	                	<span class="badge" id="format_inventory_planner_total_offering"></span>
 	                </div>
 	            </div>
 	            <div class="form-group">
@@ -204,6 +296,7 @@
 @section('vendorjs')
 <script src="{{ url('js/chosen.jquery.js') }}"></script>
 <script src="{{ url('js/bootstrap-select.min.js') }}"></script>
+<script src="{{ url('js/ajax-bootstrap-select.min.js') }}"></script>
 <script src="{{ url('js/dropzone.min.js') }}"></script>
 <script src="{{ url('js/input-mask.min.js') }}"></script>
 <script src="{{ url('js/bootstrap-datetimepicker.min.js') }}"></script>
