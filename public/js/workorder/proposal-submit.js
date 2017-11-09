@@ -46,6 +46,25 @@ $(document).ready(function(){
 		});
 	});
 
+	//cost number format
+	formatMoney('#proposal_cost', '#format_proposal_cost');
+
+	//media cost print number format
+	formatMoney('#proposal_media_cost_print', '#format_proposal_media_cost_print');
+
+	//media cost other number format
+	formatMoney('#proposal_media_cost_other', '#format_proposal_media_cost_other');
+
+	//total offering number format
+	formatMoney('#proposal_total_offering', '#format_proposal_total_offering');
+
+	$('#proposal_cost, #proposal_media_cost_print, #proposal_media_cost_other').keyup(function(){
+		var result = parseFloat($('#proposal_cost').val()) + parseFloat($('#proposal_media_cost_print').val()) + parseFloat($('#proposal_media_cost_other').val());
+		$('#proposal_total_offering').val(result);
+		var format_result = previewMoney($('#proposal_total_offering').val());
+		$('#format_proposal_total_offering').empty().append(format_result);
+	});
+
 	function getPreviousUploaded() {
 		$('#uploadFileArea').empty();
 

@@ -762,6 +762,10 @@ class ProposalController extends Controller
     {
         $this->validate($request, [
             'comment' => 'required',
+            'proposal_cost' => 'required|numeric',
+            'proposal_media_cost_print' => 'required|numeric',
+            'proposal_media_cost_other' => 'required|numeric',
+            'proposal_total_offering' => 'required|numeric'
         ]);
 
         $proposal = Proposal::find($id);
@@ -775,6 +779,10 @@ class ProposalController extends Controller
 
         $proposal->flow_no = $nextFlow['flow_no'];
         $proposal->current_user = $nextFlow['current_user'];
+        $proposal->proposal_cost = $request->input('proposal_cost');
+        $proposal->proposal_media_cost_print = $request->input('proposal_media_cost_print');
+        $proposal->proposal_media_cost_other = $request->input('proposal_media_cost_other');
+        $proposal->proposal_total_offering = $request->input('proposal_total_offering');
         $proposal->proposal_no = $proposal_no;
         $proposal->proposal_ready_date = date('Y-m-d H:i:s');
         $proposal->proposal_status_id = 3;
@@ -846,7 +854,6 @@ class ProposalController extends Controller
         $data = array();
 
         $data['inventoryplanner'] = InventoryPlanner::find($inventory_planner_id);
-        //dd($data['inventoryplanner']->uploadfiles);
         $data['proposal_types'] = ProposalType::select('proposal_type_id','proposal_type_name', 'proposal_type_duration')->where('active', '1')->orderBy('proposal_type_name')->get();
         $data['industries'] = Industry::select('industry_id','industry_name')->where('active', '1')->orderBy('industry_name')->get();
         $data['medias'] = Media::select('media_id','media_name')->whereHas('users', function($query) use($request){
@@ -881,6 +888,10 @@ class ProposalController extends Controller
             $obj->proposal_deadline = $request->input('proposal_deadline');
             $obj->proposal_background = '';
             $obj->proposal_budget = 0;
+            $obj->proposal_cost = $inventoryplanner->inventory_planner_cost;
+            $obj->proposal_media_cost_print = $inventoryplanner->inventory_planner_media_cost_print;
+            $obj->proposal_media_cost_other = $inventoryplanner->inventory_planner_media_cost_other;
+            $obj->proposal_total_offering = $inventoryplanner->inventory_planner_total_offering;
             $obj->client_id = $contact->client_id;
             $obj->brand_id = $request->input('brand_id');
             $obj->flow_no = 98;
@@ -977,6 +988,10 @@ class ProposalController extends Controller
         $this->validate($request, [
             'status' => 'required',
             'comment' => 'required',
+            'proposal_deal_cost' => 'required|numeric',
+            'proposal_deal_media_cost_print' => 'required|numeric',
+            'proposal_deal_media_cost_other' => 'required|numeric',
+            'proposal_total_deal' => 'required|numeric'
         ]);
 
         $proposal = Proposal::find($id);
@@ -1006,6 +1021,11 @@ class ProposalController extends Controller
             //Nothing
         }
 
+
+        $proposal->proposal_deal_cost = $request->input('proposal_deal_cost');
+        $proposal->proposal_deal_media_cost_print = $request->input('proposal_deal_media_cost_print');
+        $proposal->proposal_deal_media_cost_other = $request->input('proposal_deal_media_cost_other');
+        $proposal->proposal_total_deal = $request->input('proposal_total_deal');
         $proposal->updated_by = $request->user()->user_id;
         $proposal->save();
 

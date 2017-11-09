@@ -40,6 +40,53 @@
         </div>
     </div>
 </div>
+@if($proposal->proposal_total_offering!=0)
+<hr/>
+<div class="form-group">
+    <label for="proposal_cost" class="col-sm-2 control-label">Cost</label>
+    <div class="col-sm-2">
+        <span class="badge">{{ number_format($proposal->proposal_cost) }}</span>
+    </div>
+    <label for="proposal_media_cost_print" class="col-sm-2 control-label">Media Cost Print</label>
+    <div class="col-sm-2">
+        <span class="badge">{{ number_format($proposal->proposal_media_cost_print) }}</span>
+    </div>
+    <label for="proposal_media_cost_other" class="col-sm-2 control-label">Media Cost Other</label>
+    <div class="col-sm-2">
+        <span class="badge">{{ number_format($proposal->proposal_media_cost_other) }}</span>
+    </div>
+</div>
+<div class="form-group">
+    <label for="proposal_total_offering" class="col-sm-2 control-label">Total Offering</label>
+    <div class="col-sm-2">
+        <span class="badge">{{ number_format($proposal->proposal_total_offering) }}</span>
+    </div>
+</div>
+@endif
+@if($proposal->proposal_total_deal!=0)
+<hr/>
+<div class="form-group">
+    <label for="proposal_deal_cost" class="col-sm-2 control-label">Deal Cost</label>
+    <div class="col-sm-2">
+        <span class="badge bgm-green">{{ number_format($proposal->proposal_deal_cost) }}</span>
+    </div>
+    <label for="proposal_deal_media_cost_print" class="col-sm-2 control-label">Deal Media Cost Print</label>
+    <div class="col-sm-2">
+        <span class="badge bgm-green">{{ number_format($proposal->proposal_deal_media_cost_print) }}</span>
+    </div>
+    <label for="proposal_deal_media_cost_other" class="col-sm-2 control-label">Deal Media Cost Other</label>
+    <div class="col-sm-2">
+        <span class="badge bgm-green">{{ number_format($proposal->proposal_deal_media_cost_other) }}</span>
+    </div>
+</div>
+<div class="form-group">
+    <label for="proposal_total_deal" class="col-sm-2 control-label">Total Deal</label>
+    <div class="col-sm-2">
+        <span class="badge bgm-green">{{ number_format($proposal->proposal_total_deal) }}</span>
+    </div>
+</div>
+@endif
+<hr/>
 <div class="form-group">
     <label for="client_id" class="col-sm-2 control-label">Client</label>
     <div class="col-sm-10">
