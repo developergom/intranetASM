@@ -83,6 +83,7 @@ class MenuLibrary{
             if(count($value['sub']) > 0) {
                 $obj = $value['data'];
                 $active = ($obj->module->module_url==$uri) ? 'active toggled' : '';
+                $active = ($obj->module->module_url==$this->uri_parent($uri)) ? 'active toggled' : '';
                 $icon = is_null($obj->menu_icon) ? 'zmdi zmdi-home' : $obj->menu_icon;
                 $gateName1 = $obj->menu_name . '-Read';
                 if(Gate::allows($gateName1)) {
@@ -94,6 +95,7 @@ class MenuLibrary{
                     if(count($v['sub']) > 0) {
                         $obj = $v['data'];
                         $active = ($obj->module->module_url==$uri) ? 'active' : '';
+                        $active = ($obj->module->module_url==$this->uri_parent($uri)) ? 'active toggled' : '';
                         $icon = is_null($obj->menu_icon) ? 'zmdi zmdi-home' : $obj->menu_icon;
                         $gateName2 = $obj->menu_name . '-Read';
                         if(Gate::allows($gateName2)) {
@@ -145,5 +147,19 @@ class MenuLibrary{
 
         return $menu;
         //return $tmp;
+    }
+
+    public function uri_parent($url)
+    {
+        $tmp = explode('/', $url);
+        $res = '';
+        for($i=0;$i<(count($tmp)-1);$i++)
+        {
+            $res .= $tmp[$i] . '/';
+        }
+
+        $res .= '#';
+
+        return $res;
     }
 }
