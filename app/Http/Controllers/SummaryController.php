@@ -762,7 +762,7 @@ class SummaryController extends Controller
                             'summaryitems.rate.media', 
                             'summaryitems.omzettype'
                         ])->find($summary_id);
-
+        
         $po = [];
         $po['sum'] = 0;
         foreach ($data->summaryitems as $value) {
@@ -798,16 +798,15 @@ class SummaryController extends Controller
                                     $no,
                                     $value->summary_item_type,
                                     $value->rate->media->media_name,
-                                    ($value->summary_item_period_end!='0000-00-00') ? $value->summary_item_period_start . ' s/d ' . $value->summary_item_period_end : $value->summary_item_period_start,
+                                    ($value->summary_item_period_end!='0000-00-00') ? Carbon::createFromFormat('Y-m-d', $value->summary_item_period_start)->format('d-M-Y') . ' s/d ' . Carbon::createFromFormat('Y-m-d', $value->summary_item_period_end)->format('d-M-Y') : Carbon::createFromFormat('Y-m-d', $value->summary_item_period_start)->format('d-M-Y'),
                                     $value->rate->rate_name,
                                     $value->omzettype->omzet_type_name,
                                     $value->summary_item_insertion,
-                                    $value->summary_item_gross,
-                                    $value->summary_item_disc,
-                                    $value->summary_item_nett,
-                                    ($value->summary_item_termin==$termin_before) ? $po[$value->summary_item_termin] : '',
-                                    $value->summary_item_internal_omzet,
-                                    $value->summary_item_remarks
+                                    number_format($value->summary_item_gross),
+                                    number_format($value->summary_item_disc),
+                                    number_format($value->summary_item_nett),
+                                    ($value->summary_item_termin==$termin_before) ? number_format($po[$value->summary_item_termin]) : '',
+                                    number_format($value->summary_item_internal_omzet)
                                 );
 
                         array_push($summaryitems, $item);
@@ -870,7 +869,7 @@ class SummaryController extends Controller
 
                 $sheet->prependRow(6, array(
                                         'Jl Panjang 8A Kebon Jeruk Jakarta Barat', '', '', '',
-                                        'Tgl Penyerahan', ': ', '',
+                                        'Tgl Penyerahan', ': ' . $data->updated_at->format('d-M-Y'),
                                         'ALAMAT', ': ', '',
                                         'JABATAN', ': ' . $client_contact_position, ''
                                     ));
@@ -898,36 +897,88 @@ class SummaryController extends Controller
                                         'Disc(%)', 
                                         'Netto',
                                         'PO Klien',
-                                        'Omzet Internal',
-                                        'Remarks'
+                                        'Omzet Internal'
                                     ));
+
+                $sheet->cells('A9:L9', function($cells) {
+
+                    // manipulate the range of cells
+                    $cells->setFontWeight('bold');
+
+                });
+
+                $x = 0;
+                $y = 10;
+                while($sheet->getCellByColumnAndRow($x, $y)!='')
+                {
+                    $sheet->cells('A' . $y, function($cells){
+                        $cells->setBorder('thin', 'thin', 'thin', 'thin');
+                    });
+                    $sheet->cells('B' . $y, function($cells){
+                        $cells->setBorder('thin', 'thin', 'thin', 'thin');
+                    });
+                    $sheet->cells('C' . $y, function($cells){
+                        $cells->setBorder('thin', 'thin', 'thin', 'thin');
+                    });
+                    $sheet->cells('D' . $y, function($cells){
+                        $cells->setBorder('thin', 'thin', 'thin', 'thin');
+                    });
+                    $sheet->cells('E' . $y, function($cells){
+                        $cells->setBorder('thin', 'thin', 'thin', 'thin');
+                    });
+                    $sheet->cells('F' . $y, function($cells){
+                        $cells->setBorder('thin', 'thin', 'thin', 'thin');
+                    });
+                    $sheet->cells('G' . $y, function($cells){
+                        $cells->setBorder('thin', 'thin', 'thin', 'thin');
+                    });
+                    $sheet->cells('H' . $y, function($cells){
+                        $cells->setBorder('thin', 'thin', 'thin', 'thin');
+                    });
+                    $sheet->cells('I' . $y, function($cells){
+                        $cells->setBorder('thin', 'thin', 'thin', 'thin');
+                    });
+                    $sheet->cells('J' . $y, function($cells){
+                        $cells->setBorder('thin', 'thin', 'thin', 'thin');
+                    });
+                    $sheet->cells('K' . $y, function($cells){
+                        $cells->setBorder('thin', 'thin', 'thin', 'thin');
+                    });
+                    $sheet->cells('L' . $y, function($cells){
+                        $cells->setBorder('thin', 'thin', 'thin', 'thin');
+                    });
+
+                    $y++;
+                }
 
                 $sheet->appendRow(array(
                                         '','','','','','',
                                         'Total',
-                                        $data->summary_total_gross,
+                                        number_format($data->summary_total_gross),
                                         $data->summary_total_disc,
-                                        $data->summary_total_nett,
-                                        $po['sum'],
-                                        $data->summary_total_internal_omzet,
+                                        number_format($data->summary_total_nett),
+                                        number_format($po['sum']),
+                                        number_format($data->summary_total_internal_omzet),
                                         ''
                                     ));
 
+                //$sheet->appendRow(array(''));
+                $sheet->appendRow(array('','','','','','','TERM OF PAYMENT', strtoupper($data->top_type)));
                 $sheet->appendRow(array(''));
 
                 $sheet->appendRow(array('Keterangan:'));
                 $sheet->appendRow(array(strip_tags($data->summary_notes)));
 
-                $sheet->mergeCells('A1:C1');
-                $sheet->mergeCells('A2:C2');
-                $sheet->mergeCells('A3:C3');
-                $sheet->mergeCells('A4:C4');
-                $sheet->mergeCells('A5:C5');
-                $sheet->mergeCells('A6:C6');
-                $sheet->mergeCells('A7:C7');
-                $sheet->mergeCells('A8:C8');
+                $sheet->mergeCells('A1:D1');
+                $sheet->mergeCells('A2:D2');
+                $sheet->mergeCells('A3:D3');
+                $sheet->mergeCells('A4:D4');
+                $sheet->mergeCells('A5:D5');
+                $sheet->mergeCells('A6:D6');
+                $sheet->mergeCells('A7:D7');
+                $sheet->mergeCells('A8:D8');
 
-                $sheet->mergeCells('E2:G2');
+                $sheet->mergeCells('F2:G2');
                 $sheet->mergeCells('F3:G3');
                 $sheet->mergeCells('F4:G4');
                 $sheet->mergeCells('F5:G5');
@@ -935,7 +986,7 @@ class SummaryController extends Controller
                 $sheet->mergeCells('F7:G7');
                 $sheet->mergeCells('F8:G8');
 
-                $sheet->mergeCells('H2:J2');
+                $sheet->mergeCells('I2:J2');
                 $sheet->mergeCells('I3:J3');
                 $sheet->mergeCells('I4:J4');
                 $sheet->mergeCells('I5:J5');
