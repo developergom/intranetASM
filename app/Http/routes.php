@@ -533,6 +533,13 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         Route::resource('allletter', 'AllLetterController');
     });
 
+    Route::group(['prefix' => 'report'], function() {
+        //Inventory Letter
+        Route::get('inventory', 'ReportController@inventory');
+        
+
+    });
+
     Route::group(['prefix' => 'grid'], function() {
         //Project
         Route::post('project/apiList/{listtype}', 'ProjectController@apiList');
