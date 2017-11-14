@@ -75,6 +75,10 @@ class MenuLibrary{
     public function generateMenu($data)
     {
         $uri = '/' . Route::getCurrentRoute()->getPath();
+        $currentUri = explode('/', $uri);
+        if (!array_key_exists(2, $currentUri)) {
+            $currentUri[2] = '';
+        }
         
         $menu = '<ul class="main-menu">';
         
@@ -83,7 +87,7 @@ class MenuLibrary{
             if(count($value['sub']) > 0) {
                 $obj = $value['data'];
                 $active = ($obj->module->module_url==$uri) ? 'active toggled' : '';
-                $active = ($obj->module->module_url==$this->uri_parent($uri)) ? 'active toggled' : '';
+                $active = ($obj->module->module_url==('/'.$currentUri[1].'/#')) ? 'active toggled' : '';
                 $icon = is_null($obj->menu_icon) ? 'zmdi zmdi-home' : $obj->menu_icon;
                 $gateName1 = $obj->menu_name . '-Read';
                 if(Gate::allows($gateName1)) {
@@ -95,7 +99,7 @@ class MenuLibrary{
                     if(count($v['sub']) > 0) {
                         $obj = $v['data'];
                         $active = ($obj->module->module_url==$uri) ? 'active' : '';
-                        $active = ($obj->module->module_url==$this->uri_parent($uri)) ? 'active toggled' : '';
+                        $active = ($obj->module->module_url==('/'.$currentUri[1].'/'.$currentUri[2])) ? 'active toggled' : '';
                         $icon = is_null($obj->menu_icon) ? 'zmdi zmdi-home' : $obj->menu_icon;
                         $gateName2 = $obj->menu_name . '-Read';
                         if(Gate::allows($gateName2)) {
@@ -120,6 +124,7 @@ class MenuLibrary{
                     }else{
                         $obj = $v['data'];
                         $active = ($obj->module->module_url==$uri) ? 'active' : '';
+                        $active = ($obj->module->module_url==('/'.$currentUri[1].'/'.$currentUri[2])) ? 'active toggled' : '';
                         $icon = is_null($obj->menu_icon) ? 'zmdi zmdi-home' : $obj->menu_icon;
                         $gateName2 = $obj->menu_name . '-Read';
                         if(Gate::allows($gateName2)) {
