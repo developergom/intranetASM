@@ -7,7 +7,7 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header"><h2>Inventory Report<small>Generate inventory report</small></h2></div>
+        <div class="card-header"><h2>Proposal Report<small>Generate proposal report</small></h2></div>
         <div class="card-body card-padding">
         	<div class="row">
         		<div class="col-md-3">
@@ -31,22 +31,6 @@
 						                <select name="industry_id" id="industry_id" class="form-control input-sm selectpicker" data-live-search="true" multiple>
 			                                @foreach ($industries as $key => $value)
 											    <option value="{{ $value->industry_id }}">{{ $value->industry_name }}</option>
-											@endforeach
-			                            </select>
-						            </div>
-						            <div class="form-group">
-						                <label for="sell_period_id">Sell Period Month(s)</label>
-						                <select name="sell_period_id" id="sell_period_id" class="form-control input-sm selectpicker" data-live-search="true" multiple>
-			                                @foreach ($sellperiods as $key => $value)
-											    <option value="{{ $value->sell_period_id }}">{{ $value->sell_period_month_name }}</option>
-											@endforeach
-			                            </select>
-						            </div>
-						            <div class="form-group">
-						                <label for="sell_period_year">Sell Period Year(s)</label>
-						                <select name="sell_period_year" id="sell_period_year" class="form-control input-sm selectpicker" data-live-search="true" multiple>
-			                                @foreach ($years as $key => $value)
-											    <option value="{{ $value }}">{{ $value }}</option>
 											@endforeach
 			                            </select>
 						            </div>
@@ -86,10 +70,7 @@
 							            <thead>
 							                <tr>
 							                    <th rowspan="2">No</th>
-							                    <th rowspan="2">Program</th>
-							                    <th rowspan="2">Title</th>
-							                    <th rowspan="2">Desc</th>
-							                    <th rowspan="2">Sell Period</th>
+							                    <th rowspan="2">Proposal Name</th>
 							                    <th rowspan="2">Media</th>
 							                    <th colspan="4"><center>Offer</center></th>
 							                    <th rowspan="2">Proposal No</th>
@@ -129,5 +110,5 @@
 @endsection
 
 @section('customjs')
-<script src="{{ url('js/report/inventory.js') }}"></script>
+<script src="{{ url('js/report/proposal.js') }}"></script>
 @endsection

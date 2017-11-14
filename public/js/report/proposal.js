@@ -1,8 +1,6 @@
 var myToken = $('meta[name="csrf-token"]').attr('content');
 var media_ids = [];
 var industry_ids = [];
-var sell_period_months = [];
-var sell_period_years = [];
 var offer_period_start = '';
 var offer_period_end = '';
 
@@ -19,8 +17,8 @@ $(document).ready(function() {
 	$('#btn_export_report').click(function() {
 		$('#grid-data-result').table2excel({
 			exclude: ".noExl",
-			name: "Report Inventory",
-			filename: "report_inventory"
+			name: "Report Proposal",
+			filename: "report_proposal"
 		});
 	});
 });
@@ -28,8 +26,6 @@ $(document).ready(function() {
 function generate_report() {
 	media_ids = $('#media_id').val();
 	industry_ids = $('#industry_id').val();
-	sell_period_months = $('#sell_period_id').val();
-	sell_period_years = $('#sell_period_year').val();
 	offer_period_start = $('#offer_period_start').val();
 	offer_period_end = $('#offer_period_end').val();
 
@@ -45,15 +41,13 @@ function generate_report() {
 		$('#offer_period_start').focus();
 	}else{
 		$.ajax({
-			url: base_url + 'report/api/generateInventoryReport',
+			url: base_url + 'report/api/generateProposalReport',
 			dataType: 'json',
 			type: 'POST',
 			data: {
 				_token: myToken,
 				media_ids : media_ids,
 				industry_ids : industry_ids,
-				sell_period_months : sell_period_months,
-				sell_period_years : sell_period_years,
 				offer_period_start : offer_period_start,
 				offer_period_end : offer_period_end
 			},
@@ -64,10 +58,10 @@ function generate_report() {
 				console.log(data);
 				var html = '';
 				var no = 1;
-				var total_inventory_planner_cost = 0;
-				var total_inventory_planner_media_cost_print = 0;
-				var total_inventory_planner_media_cost_other = 0;
-				var total_inventory_planner_total_offering = 0;
+				var total_proposal_cost = 0;
+				var total_proposal_media_cost_print = 0;
+				var total_proposal_media_cost_other = 0;
+				var total_proposal_total_offering = 0;
 				var total_proposal_deal_cost = 0;
 				var total_proposal_deal_media_cost_print = 0;
 				var total_proposal_deal_media_cost_other = 0;
@@ -76,15 +70,12 @@ function generate_report() {
 				$.each(data.result, function(key, value){
 					html += '<tr>';
 					html += '<td>'  + no + '</td>';
-					html += '<td>'  + value.inventory_source_name + '</td>';
-					html += '<td>'  + value.inventory_planner_title + '</td>';
-					html += '<td>'  + value.inventory_planner_desc + '</td>';
-					html += '<td>'  + value.inventory_planner_sell_period + '</td>';
-					html += '<td>'  + value.inventory_planner_media_name + '</td>';
-					html += '<td>'  + previewMoney(value.inventory_planner_cost) + '</td>';
-					html += '<td>'  + previewMoney(value.inventory_planner_media_cost_print) + '</td>';
-					html += '<td>'  + previewMoney(value.inventory_planner_media_cost_other) + '</td>';
-					html += '<td>'  + previewMoney(value.inventory_planner_total_offering) + '</td>';
+					html += '<td>'  + value.proposal_name + '</td>';
+					html += '<td>'  + value.proposal_media_name + '</td>';
+					html += '<td>'  + previewMoney(value.proposal_cost) + '</td>';
+					html += '<td>'  + previewMoney(value.proposal_media_cost_print) + '</td>';
+					html += '<td>'  + previewMoney(value.proposal_media_cost_other) + '</td>';
+					html += '<td>'  + previewMoney(value.proposal_total_offering) + '</td>';
 					html += '<td>'  + value.proposal_no + '</td>';
 					html += '<td>'  + value.industry_name + '</td>';
 					html += '<td>'  + value.brand_name + '</td>';
@@ -95,10 +86,10 @@ function generate_report() {
 					html += '<td>'  + previewMoney(value.proposal_total_deal) + '</td>';
 					html += '</tr>';
 
-					total_inventory_planner_cost += value.inventory_planner_cost;
-					total_inventory_planner_media_cost_print += value.inventory_planner_media_cost_print;
-					total_inventory_planner_media_cost_other += value.inventory_planner_media_cost_other;
-					total_inventory_planner_total_offering += value.inventory_planner_total_offering;
+					total_proposal_cost += value.proposal_cost;
+					total_proposal_media_cost_print += value.proposal_media_cost_print;
+					total_proposal_media_cost_other += value.proposal_media_cost_other;
+					total_proposal_total_offering += value.proposal_total_offering;
 					total_proposal_deal_cost += value.proposal_deal_cost;
 					total_proposal_deal_media_cost_print += value.proposal_deal_media_cost_print;
 					total_proposal_deal_media_cost_other += value.proposal_deal_media_cost_other;
@@ -107,11 +98,11 @@ function generate_report() {
 				});
 
 				html += '<tr>';
-				html += '<td colspan="6">Total</td>';
-				html += '<td>'  + previewMoney(total_inventory_planner_cost) + '</td>';
-				html += '<td>'  + previewMoney(total_inventory_planner_media_cost_other) + '</td>';
-				html += '<td>'  + previewMoney(total_inventory_planner_media_cost_print) + '</td>';
-				html += '<td>'  + previewMoney(total_inventory_planner_total_offering) + '</td>';
+				html += '<td colspan="3">Total</td>';
+				html += '<td>'  + previewMoney(total_proposal_cost) + '</td>';
+				html += '<td>'  + previewMoney(total_proposal_media_cost_other) + '</td>';
+				html += '<td>'  + previewMoney(total_proposal_media_cost_print) + '</td>';
+				html += '<td>'  + previewMoney(total_proposal_total_offering) + '</td>';
 				html += '<td colspan="4"></td>';
 				html += '<td>'  + previewMoney(total_proposal_deal_cost) + '</td>';
 				html += '<td>'  + previewMoney(total_proposal_deal_media_cost_print) + '</td>';
@@ -120,7 +111,7 @@ function generate_report() {
 				html += '</tr>';
 
 				html += '<tr>';
-				html += '<td colspan="17">Target</td>';
+				html += '<td colspan="14">Target</td>';
 				html += '<td>'  + ((data.target[0].total_target==null) ? '0' : previewMoney(data.target[0].total_target))  + '</td>';
 				html += '</tr>';
 
@@ -136,22 +127,16 @@ function generate_report() {
 function refresh_report_variable() {
 	media_ids = [];
 	industry_ids = [];
-	sell_period_months = [];
-	sell_period_years = [];
 	offer_period_start = '';
 	offer_period_end = '';
 
 	$('#media_id').val('');
 	$('#industry_id').val('');
-	$('#sell_period_id').val('');
-	$('#sell_period_year').val('');
 	$('#offer_period_start').val('');
 	$('#offer_period_end').val('');
 
 	$('#media_id').selectpicker('refresh');
 	$('#industry_id').selectpicker('refresh');
-	$('#sell_period_id').selectpicker('refresh');
-	$('#sell_period_year').selectpicker('refresh');
 
 	$('#grid-data-result tbody').empty();
 	$('#btn_export_report').attr('disabled', true);

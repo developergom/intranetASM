@@ -534,10 +534,13 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
     });
 
     Route::group(['prefix' => 'report'], function() {
-        //Inventory Letter
+        //Report Inventory
         Route::get('inventory', 'ReportController@inventory');
+        Route::post('api/generateInventoryReport', 'ReportController@apiGenerateInventoryReport');
         
-
+        //Report Proposal
+        Route::get('proposal', 'ReportController@proposal');
+        Route::post('api/generateProposalReport', 'ReportController@apiGenerateProposalReport');
     });
 
     Route::group(['prefix' => 'grid'], function() {
