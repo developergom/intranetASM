@@ -308,7 +308,7 @@
 var myToken = $('meta[name="csrf-token"]').attr('content');
 $(document).ready(function(){
     $('#text').marquee({
-        duration: 60000,
+        duration: 200000,
         startVisible: true,
         duplicated: true
       });
