@@ -103,6 +103,14 @@ class LetterController extends Controller
 
         $obj->save();
 
+        $generator = new GeneratorLibrary;
+        $code = $generator->letter_no($obj->letter_id);
+
+        $upd = Letter::find($obj->letter_id);
+        $upd->letter_no = $code['letter_no'];
+        $upd->param_no = $code['param_no'];
+        $upd->save();
+
         $fileArray = $this->upload_process($request, 0);
 
         if(!empty($fileArray)) {
@@ -459,15 +467,15 @@ class LetterController extends Controller
                 $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'orderletterapproval', 'You have to check Order Letter from ' . $request->user()->user_firstname . '.', $id);
             }else{
                 //generate letter no
-                $generator = new GeneratorLibrary;
+                /*$generator = new GeneratorLibrary;
                 $code = $generator->letter_no($id);
 
                 $upd = Letter::find($id);
                 $upd->letter_no = $code['letter_no'];
                 $upd->param_no = $code['param_no'];
-                $upd->save();
+                $upd->save();*/
 
-                $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'orderletterfinished', 'Order Letter ' . $code['letter_no'] . ' has been finished.', $id);
+                $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'orderletterfinished', 'Order Letter ' . $letter->letter_no . ' has been finished.', $id);
             }
             
             $request->session()->flash('status', 'Data has been saved!');

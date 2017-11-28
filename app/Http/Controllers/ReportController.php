@@ -239,7 +239,7 @@ class ReportController extends Controller
             $q .= " AND a.proposal_ready_date BETWEEN '" . $offer_period_start . "' AND '" . $offer_period_end . "'";
         }
 
-        $q .= ' ORDER BY proposal_name ASC';
+        $q .= ' GROUP BY a.proposal_id ORDER BY proposal_name ASC';
 
         $result = DB::select($q);
 

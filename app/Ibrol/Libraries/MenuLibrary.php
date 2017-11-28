@@ -140,6 +140,7 @@ class MenuLibrary{
             }else{
                 $obj = $value['data'];
                 $active = ($obj->module->module_url==$uri) ? 'active' : '';
+                $active = ($obj->module->module_url==('/'.$currentUri[1])) ? 'active toggled' : '';
                 $icon = is_null($obj->menu_icon) ? 'zmdi zmdi-home' : $obj->menu_icon;
                 $gateName1 = $obj->menu_name . '-Read';
                 if(Gate::allows($gateName1)) {
