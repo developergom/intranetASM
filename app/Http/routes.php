@@ -537,6 +537,10 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         //Report Inventory
         Route::get('inventory', 'ReportController@inventory');
         Route::post('api/generateInventoryReport', 'ReportController@apiGenerateInventoryReport');
+
+        //Report Proposal
+        Route::get('planner', 'ReportController@planner');
+        Route::post('api/generatePlannerReport', 'ReportController@apiGeneratePlannerReport');
         
         //Report Proposal
         Route::get('proposal', 'ReportController@proposal');

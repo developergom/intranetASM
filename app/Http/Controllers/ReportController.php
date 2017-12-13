@@ -57,6 +57,42 @@ class ReportController extends Controller
         return view('vendor.material.report.proposal.index', $data);
     }
 
+    public function planner(Request $request) {
+        if(Gate::denies('Planner Report-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+        $year = date('Y');
+
+        $user = User::find($request->user()->user_id);
+
+        $user_group = array();
+        foreach ($user->groups as $key => $value) {
+            array_push($user_group, $value['group_id']);
+        }
+
+        $role = 0;
+        foreach ($user->roles as $key => $value) {
+            if($role < $value['role_level_id'])
+                $role = $value['role_level_id'];
+        }
+
+        $data['years'] = [$year, $year-1, $year-2];
+
+        $data['users'] = User::join('users_groups', 'users_groups.user_id', '=', 'users.user_id')
+                        ->join('users_roles', 'users_roles.user_id', '=', 'users.user_id')
+                        ->join('roles', 'roles.role_id', '=', 'users_roles.role_id')
+                        ->whereIn('users_groups.group_id', $user_group)
+                        ->where('roles.role_level_id', '<', $role)
+                        ->where('users.user_id', '<>', $request->user()->user_id)
+                        ->orderBy('users.active', 'desc')
+                        ->orderBy('users.user_firstname', 'asc')
+                        ->get();
+
+        return view('vendor.material.report.planner.index', $data);
+    }
+
     public function apiGenerateInventoryReport(Request $request) {
         $media_ids = $request->input('media_ids');
         $industry_ids = $request->input('industry_ids');
@@ -282,6 +318,69 @@ class ReportController extends Controller
         return response()->json($data);
     }
 
+    public function apiGeneratePlannerReport(Request $request) {
+        $user_ids = $request->input('user_ids');
+        $year = $request->input('year');
+
+        $data = array();
+
+        //dd($this->countPlannerPerformancePerMonth(20, '2017', '11', '1', '1'));
+
+        foreach ($user_ids as $user_id) {
+            $tmp_user = User::find($user_id);
+            $tmp_data = array();
+            $tmp_data['full_name'] = $tmp_user->user_firstname . ' ' . $tmp_user->user_lastname . ' (' . $tmp_user->user_status . ')';
+
+            $months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+            foreach ($months as $month) {
+                $tmp_data[$month] = array();
+                $tmp_data[$month]['1sold'] = array();
+                $tmp_data[$month]['1sold']['2brief'] = $this->countPlannerPerformancePerMonth($user_id, $year, $month, '1', '1');
+                $tmp_data[$month]['1sold']['1direct'] = $this->countPlannerPerformancePerMonth($user_id, $year, $month, '1', '2');
+                $tmp_data[$month]['1sold']['3all'] = $this->countPlannerPerformancePerMonth($user_id, $year, $month, '1', 'all');
+                $tmp_data[$month]['2not_sold'] = array();
+                $tmp_data[$month]['2not_sold']['2brief'] = $this->countPlannerPerformancePerMonth($user_id, $year, $month, '2', '1');
+                $tmp_data[$month]['2not_sold']['1direct'] = $this->countPlannerPerformancePerMonth($user_id, $year, $month, '2', '2');
+                $tmp_data[$month]['2not_sold']['3all'] = $this->countPlannerPerformancePerMonth($user_id, $year, $month, '2', 'all');
+                $tmp_data[$month]['3on_process'] = array();
+                $tmp_data[$month]['3on_process']['2brief'] = $this->countPlannerPerformancePerMonth($user_id, $year, $month, '3', '1');
+                $tmp_data[$month]['3on_process']['1direct'] = $this->countPlannerPerformancePerMonth($user_id, $year, $month, '3', '2');
+                $tmp_data[$month]['3on_process']['3all'] = $this->countPlannerPerformancePerMonth($user_id, $year, $month, '3', 'all');
+                $tmp_data[$month]['4total'] = array();
+                $tmp_data[$month]['4total']['2brief'] = $this->countPlannerPerformancePerMonth($user_id, $year, $month, 'all', '1');
+                $tmp_data[$month]['4total']['1direct'] = $this->countPlannerPerformancePerMonth($user_id, $year, $month, 'all', '2');
+                $tmp_data[$month]['4total']['3all'] = $this->countPlannerPerformancePerMonth($user_id, $year, $month, 'all', 'all');
+            }
+
+            $tmp_data['total'] = array();
+            $tmp_data['total']['1sold'] = array();
+            $tmp_data['total']['1sold']['2brief'] = $this->countPlannerPerformancePerMonth($user_id, $year, 'all', '1', '1');
+            $tmp_data['total']['1sold']['1direct'] = $this->countPlannerPerformancePerMonth($user_id, $year, 'all', '1', '2');
+            $tmp_data['total']['1sold']['3all'] = $this->countPlannerPerformancePerMonth($user_id, $year, 'all', '1', 'all');
+            $tmp_data['total']['2not_sold'] = array();
+            $tmp_data['total']['2not_sold']['2brief'] = $this->countPlannerPerformancePerMonth($user_id, $year, 'all', '2', '1');
+            $tmp_data['total']['2not_sold']['1direct'] = $this->countPlannerPerformancePerMonth($user_id, $year, 'all', '2', '2');
+            $tmp_data['total']['2not_sold']['3all'] = $this->countPlannerPerformancePerMonth($user_id, $year, 'all', '2', 'all');
+            $tmp_data['total']['3on_process'] = array();
+            $tmp_data['total']['3on_process']['2brief'] = $this->countPlannerPerformancePerMonth($user_id, $year, 'all', '3', '1');
+            $tmp_data['total']['3on_process']['1direct'] = $this->countPlannerPerformancePerMonth($user_id, $year, 'all', '3', '2');
+            $tmp_data['total']['3on_process']['3all'] = $this->countPlannerPerformancePerMonth($user_id, $year, 'all', '3', 'all');
+            $tmp_data['total']['4total'] = array();
+            $tmp_data['total']['4total']['2brief'] = $this->countPlannerPerformancePerMonth($user_id, $year, 'all', 'all', '1');
+            $tmp_data['total']['4total']['1direct'] = $this->countPlannerPerformancePerMonth($user_id, $year, 'all', 'all', '2');
+            $tmp_data['total']['4total']['3all'] = $this->countPlannerPerformancePerMonth($user_id, $year, 'all', 'all', 'all');
+
+            //dd($tmp_data);
+
+            array_push($data, $tmp_data);
+        }
+
+        //dd($data);
+
+        return response()->json($data);
+
+    }
+
     private function generateStartEndDatePerYear($year) {
         $tgl = array();
         for($i = 1; $i <= 12; $i++) {
@@ -296,5 +395,117 @@ class ReportController extends Controller
         }
 
         return $tgl;
+    }
+
+    private function countPlannerPerformancePerMonth($user_id, $year, $month, $status, $method)
+    {
+        if($month!='all')
+        {
+            if($status!='all')
+            {
+                if($method!='all')
+                {
+                    $q = "SELECT 
+                            count(proposal_id) AS total 
+                        FROM 
+                            proposals
+                        where 
+                            active = '1' AND 
+                            pic = " . $user_id . " AND 
+                            proposal_status_id = " . $status . " AND
+                            proposal_method_id = " . $method . " AND
+                            YEAR(proposal_ready_date) = '" . $year . "' AND 
+                            MONTH(proposal_ready_date) = '" . $month . "'";
+                }else{
+                    $q = "SELECT 
+                            count(proposal_id) AS total 
+                        FROM 
+                            proposals
+                        where 
+                            active = '1' AND 
+                            pic = " . $user_id . " AND 
+                            proposal_status_id = " . $status . " AND
+                            YEAR(proposal_ready_date) = '" . $year . "' AND 
+                            MONTH(proposal_ready_date) = '" . $month . "'";
+                }
+            }else{
+                if($method!='all')
+                {
+                    $q = "SELECT 
+                            count(proposal_id) AS total 
+                        FROM 
+                            proposals
+                        where 
+                            active = '1' AND 
+                            pic = " . $user_id . " AND 
+                            proposal_method_id = " . $method . " AND
+                            YEAR(proposal_ready_date) = '" . $year . "' AND 
+                            MONTH(proposal_ready_date) = '" . $month . "'";
+                }else{
+                    $q = "SELECT 
+                            count(proposal_id) AS total 
+                        FROM 
+                            proposals
+                        where 
+                            active = '1' AND 
+                            pic = " . $user_id . " AND 
+                            YEAR(proposal_ready_date) = '" . $year . "' AND 
+                            MONTH(proposal_ready_date) = '" . $month . "'";
+                }
+            }
+        }else{
+            if($status!='all')
+            {
+                if($method!='all')
+                {
+                    $q = "SELECT 
+                            count(proposal_id) AS total 
+                        FROM 
+                            proposals
+                        where 
+                            active = '1' AND 
+                            pic = " . $user_id . " AND 
+                            proposal_status_id = " . $status . " AND
+                            proposal_method_id = " . $method . " AND
+                            YEAR(proposal_ready_date) = '" . $year . "'";
+                }else{
+                    $q = "SELECT 
+                            count(proposal_id) AS total 
+                        FROM 
+                            proposals
+                        where 
+                            active = '1' AND 
+                            pic = " . $user_id . " AND 
+                            proposal_status_id = " . $status . " AND
+                            YEAR(proposal_ready_date) = '" . $year . "'";
+                }
+            }else{
+                if($method!='all')
+                {
+                    $q = "SELECT 
+                            count(proposal_id) AS total 
+                        FROM 
+                            proposals
+                        where 
+                            active = '1' AND 
+                            pic = " . $user_id . " AND 
+                            proposal_method_id = " . $method . " AND
+                            YEAR(proposal_ready_date) = '" . $year . "'";
+                }else{
+                    $q = "SELECT 
+                            count(proposal_id) AS total 
+                        FROM 
+                            proposals
+                        where 
+                            active = '1' AND 
+                            pic = " . $user_id . " AND 
+                            YEAR(proposal_ready_date) = '" . $year . "'";
+                }
+            }
+        }
+
+        $result = DB::select($q);
+
+        return $result[0]->total;
     }
 }
