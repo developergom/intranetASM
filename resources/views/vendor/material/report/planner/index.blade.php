@@ -22,7 +22,7 @@
 						                <label for="user_id">Planner(s)</label>
 						                <select name="user_id" id="user_id" class="form-control input-sm selectpicker" data-live-search="true" multiple>
 			                                @foreach ($users as $key => $value)
-											    <option value="{{ $value->user_id }}">{{ $value->user_firstname . ' ' . $value->user_lastname . ' (' . $value->user_status . ')' }}</option>
+											    <option value="{{ $value->user_id }}" selected>{{ $value->user_firstname . ' ' . $value->user_lastname . ' (' . $value->user_status . ')' }}</option>
 											@endforeach
 			                            </select>
 						            </div>

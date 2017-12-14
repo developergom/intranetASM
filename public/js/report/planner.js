@@ -35,6 +35,8 @@ function generate_report() {
 		swal('Attention', 'Planner must be choosen.', 'warning');
 		$('#user_id').focus();
 	}else{
+		$('#grid-data-result tbody').empty().append('<tr><td colspan="159">Loading...</td></tr>');
+
 		var total_all = [];
 		for (var i = 1; i <= 156; i++) {
 			total_all[i] = 0;
@@ -57,7 +59,7 @@ function generate_report() {
 				var html = '';
 				var no = 1;
 
-				$('#grid-data-result tbody').empty();
+				//$('#grid-data-result tbody').empty().append('<tr><td colspan="159">Loading...</td></tr>');
 				$.each(data, function(key, value){
 					html += '<tr>';
 					html += '<td>'  + no + '</td>';
@@ -132,7 +134,7 @@ function generate_report() {
 				html += '<td><strong>Total</strong></td>';
 				html += '</tr>';
 
-				$('#grid-data-result tbody').append(html);
+				$('#grid-data-result tbody').empty().append(html);
 				$('#btn_export_report').attr('disabled', false);
 			}
 		});

@@ -80,12 +80,14 @@ class ReportController extends Controller
 
         $data['years'] = [$year, $year-1, $year-2];
 
-        $data['users'] = User::join('users_groups', 'users_groups.user_id', '=', 'users.user_id')
+        $data['users'] = User::select('users.user_id', 'users.user_firstname', 'users.user_lastname', 'user_status')
+                        ->join('users_groups', 'users_groups.user_id', '=', 'users.user_id')
                         ->join('users_roles', 'users_roles.user_id', '=', 'users.user_id')
                         ->join('roles', 'roles.role_id', '=', 'users_roles.role_id')
                         ->whereIn('users_groups.group_id', $user_group)
                         ->where('roles.role_level_id', '<', $role)
                         ->where('users.user_id', '<>', $request->user()->user_id)
+                        ->groupBy('users.user_id')
                         ->orderBy('users.active', 'desc')
                         ->orderBy('users.user_firstname', 'asc')
                         ->get();
