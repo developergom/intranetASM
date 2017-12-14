@@ -291,6 +291,7 @@
 							            </tbody>
 							            <tfoot>
 							            	<tr>
+							                	<th colspan="2">&nbsp;</th>
 							                	<th><center>Direct</center></th>
 							                	<th><center>Brief</center></th>
 							                	<th><center>All</center></th>
@@ -449,6 +450,7 @@
 							                	<th><center>All</center></th>
 							                </tr>
 							                <tr>
+							                	<th colspan="2">&nbsp;</th>
 							                	<th colspan="3"><center>Sold</center></th>
 							                	<th colspan="3"><center>Not Sold</center></th>
 							                	<th colspan="3"><center>On Process</center></th>
