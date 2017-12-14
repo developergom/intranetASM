@@ -290,6 +290,218 @@
 							            <tbody>
 							            </tbody>
 							            <tfoot>
+							            	<tr>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                	<th><center>Direct</center></th>
+							                	<th><center>Brief</center></th>
+							                	<th><center>All</center></th>
+							                </tr>
+							                <tr>
+							                	<th colspan="3"><center>Sold</center></th>
+							                	<th colspan="3"><center>Not Sold</center></th>
+							                	<th colspan="3"><center>On Process</center></th>
+							                	<th colspan="3"><center>Total</center></th>
+							                	<th colspan="3"><center>Sold</center></th>
+							                	<th colspan="3"><center>Not Sold</center></th>
+							                	<th colspan="3"><center>On Process</center></th>
+							                	<th colspan="3"><center>Total</center></th>
+							                	<th colspan="3"><center>Sold</center></th>
+							                	<th colspan="3"><center>Not Sold</center></th>
+							                	<th colspan="3"><center>On Process</center></th>
+							                	<th colspan="3"><center>Total</center></th>
+							                	<th colspan="3"><center>Sold</center></th>
+							                	<th colspan="3"><center>Not Sold</center></th>
+							                	<th colspan="3"><center>On Process</center></th>
+							                	<th colspan="3"><center>Total</center></th>
+							                	<th colspan="3"><center>Sold</center></th>
+							                	<th colspan="3"><center>Not Sold</center></th>
+							                	<th colspan="3"><center>On Process</center></th>
+							                	<th colspan="3"><center>Total</center></th>
+							                	<th colspan="3"><center>Sold</center></th>
+							                	<th colspan="3"><center>Not Sold</center></th>
+							                	<th colspan="3"><center>On Process</center></th>
+							                	<th colspan="3"><center>Total</center></th>
+							                	<th colspan="3"><center>Sold</center></th>
+							                	<th colspan="3"><center>Not Sold</center></th>
+							                	<th colspan="3"><center>On Process</center></th>
+							                	<th colspan="3"><center>Total</center></th>
+							                	<th colspan="3"><center>Sold</center></th>
+							                	<th colspan="3"><center>Not Sold</center></th>
+							                	<th colspan="3"><center>On Process</center></th>
+							                	<th colspan="3"><center>Total</center></th>
+							                	<th colspan="3"><center>Sold</center></th>
+							                	<th colspan="3"><center>Not Sold</center></th>
+							                	<th colspan="3"><center>On Process</center></th>
+							                	<th colspan="3"><center>Total</center></th>
+							                	<th colspan="3"><center>Sold</center></th>
+							                	<th colspan="3"><center>Not Sold</center></th>
+							                	<th colspan="3"><center>On Process</center></th>
+							                	<th colspan="3"><center>Total</center></th>
+							                	<th colspan="3"><center>Sold</center></th>
+							                	<th colspan="3"><center>Not Sold</center></th>
+							                	<th colspan="3"><center>On Process</center></th>
+							                	<th colspan="3"><center>Total</center></th>
+							                	<th colspan="3"><center>Sold</center></th>
+							                	<th colspan="3"><center>Not Sold</center></th>
+							                	<th colspan="3"><center>On Process</center></th>
+							                	<th colspan="3"><center>Total</center></th>
+							                	<th colspan="3"><center>Sold</center></th>
+							                	<th colspan="3"><center>Not Sold</center></th>
+							                	<th colspan="3"><center>On Process</center></th>
+							                	<th colspan="3"><center>Total</center></th>
+							                </tr>
 							                <tr>
 							                    <th rowspan="3"><center>No</center></th>
 							                    <th rowspan="3"><center>Planner Name</center></th>
@@ -307,218 +519,6 @@
 							                    <th colspan="12"><center>December</center></th>
 							                    <th colspan="12"><center>Total in Year</center></th>
 							                    <th rowspan="3"><center>Planner Name</center></th>
-							                </tr>
-							                <tr>
-							                	<th colspan="3"><center>Sold</center></th>
-							                	<th colspan="3"><center>Not Sold</center></th>
-							                	<th colspan="3"><center>On Process</center></th>
-							                	<th colspan="3"><center>Total</center></th>
-							                	<th colspan="3"><center>Sold</center></th>
-							                	<th colspan="3"><center>Not Sold</center></th>
-							                	<th colspan="3"><center>On Process</center></th>
-							                	<th colspan="3"><center>Total</center></th>
-							                	<th colspan="3"><center>Sold</center></th>
-							                	<th colspan="3"><center>Not Sold</center></th>
-							                	<th colspan="3"><center>On Process</center></th>
-							                	<th colspan="3"><center>Total</center></th>
-							                	<th colspan="3"><center>Sold</center></th>
-							                	<th colspan="3"><center>Not Sold</center></th>
-							                	<th colspan="3"><center>On Process</center></th>
-							                	<th colspan="3"><center>Total</center></th>
-							                	<th colspan="3"><center>Sold</center></th>
-							                	<th colspan="3"><center>Not Sold</center></th>
-							                	<th colspan="3"><center>On Process</center></th>
-							                	<th colspan="3"><center>Total</center></th>
-							                	<th colspan="3"><center>Sold</center></th>
-							                	<th colspan="3"><center>Not Sold</center></th>
-							                	<th colspan="3"><center>On Process</center></th>
-							                	<th colspan="3"><center>Total</center></th>
-							                	<th colspan="3"><center>Sold</center></th>
-							                	<th colspan="3"><center>Not Sold</center></th>
-							                	<th colspan="3"><center>On Process</center></th>
-							                	<th colspan="3"><center>Total</center></th>
-							                	<th colspan="3"><center>Sold</center></th>
-							                	<th colspan="3"><center>Not Sold</center></th>
-							                	<th colspan="3"><center>On Process</center></th>
-							                	<th colspan="3"><center>Total</center></th>
-							                	<th colspan="3"><center>Sold</center></th>
-							                	<th colspan="3"><center>Not Sold</center></th>
-							                	<th colspan="3"><center>On Process</center></th>
-							                	<th colspan="3"><center>Total</center></th>
-							                	<th colspan="3"><center>Sold</center></th>
-							                	<th colspan="3"><center>Not Sold</center></th>
-							                	<th colspan="3"><center>On Process</center></th>
-							                	<th colspan="3"><center>Total</center></th>
-							                	<th colspan="3"><center>Sold</center></th>
-							                	<th colspan="3"><center>Not Sold</center></th>
-							                	<th colspan="3"><center>On Process</center></th>
-							                	<th colspan="3"><center>Total</center></th>
-							                	<th colspan="3"><center>Sold</center></th>
-							                	<th colspan="3"><center>Not Sold</center></th>
-							                	<th colspan="3"><center>On Process</center></th>
-							                	<th colspan="3"><center>Total</center></th>
-							                	<th colspan="3"><center>Sold</center></th>
-							                	<th colspan="3"><center>Not Sold</center></th>
-							                	<th colspan="3"><center>On Process</center></th>
-							                	<th colspan="3"><center>Total</center></th>
-							                </tr>
-							                <tr>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
-							                	<th><center>Direct</center></th>
-							                	<th><center>Brief</center></th>
-							                	<th><center>All</center></th>
 							                </tr>
 							            </tfoot>
 							        </table>
