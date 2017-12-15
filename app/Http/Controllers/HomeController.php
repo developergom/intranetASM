@@ -12,6 +12,7 @@ use App\ClientContact;
 use App\InventoryPlanner;
 use App\Proposal;
 use App\SummaryItem;
+use App\UploadFile;
 
 use DB;
 use Gate;
@@ -86,6 +87,11 @@ class HomeController extends Controller
                             ->where('summary_items.active', '1')->count();
         }
 
+
+        if(Gate::allows('Users Management-Read')) {
+            $data['file_size'] = number_format(ceil(UploadFile::sum('upload_file_size')/1048576));
+            $data['file_total'] = number_format(UploadFile::count('upload_file_id'));
+        }
 
         return view('home', $data);
     }

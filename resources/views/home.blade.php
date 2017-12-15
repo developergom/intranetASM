@@ -289,6 +289,39 @@
         </div>
         @endcan
     </div>
+
+    @can('Users Management-Read')
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Server Storage</h2>
+                </div>
+
+                <div class="card-body">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <div class="lgi-heading m-b-5" id="dashboard_file_size">Total Uploaded Files Size : {{ $file_size }} MB</div>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span class="sr-only">{{ $file_size }} MB</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="lgi-heading m-b-5" id="dashboard_file_total">Total Files : {{ $file_total }} items</div>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span class="sr-only">{{ $file_total }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endcan
 @endsection
 
 @section('vendorjs')
