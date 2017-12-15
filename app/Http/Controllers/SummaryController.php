@@ -802,11 +802,11 @@ class SummaryController extends Controller
                                     $value->rate->rate_name,
                                     $value->omzettype->omzet_type_name,
                                     $value->summary_item_insertion,
-                                    number_format($value->summary_item_gross),
-                                    number_format($value->summary_item_disc),
-                                    number_format($value->summary_item_nett),
-                                    ($value->summary_item_termin==$termin_before) ? number_format($po[$value->summary_item_termin]) : '',
-                                    number_format($value->summary_item_internal_omzet)
+                                    $value->summary_item_gross,
+                                    $value->summary_item_disc,
+                                    $value->summary_item_nett,
+                                    ($value->summary_item_termin==$termin_before) ? $po[$value->summary_item_termin] : '',
+                                    $value->summary_item_internal_omzet
                                 );
 
                         array_push($summaryitems, $item);
@@ -869,9 +869,9 @@ class SummaryController extends Controller
 
                 $sheet->prependRow(6, array(
                                         'Jl Panjang 8A Kebon Jeruk Jakarta Barat', '', '', '',
-                                        'Tgl Penyerahan', ': ' . $data->updated_at->format('d-M-Y'),
-                                        'ALAMAT', ': ', '',
-                                        'JABATAN', ': ' . $client_contact_position, ''
+                                        'Tgl Penyerahan', ': ' . $data->updated_at->format('d-M-Y') . '', '',
+                                        'ALAMAT', ': ' . $data->contract->proposal->client->client_mail_address, '',
+                                        'JABATAN', ': ' . $client_contact_position
                                     ));
 
                 $sheet->prependRow(7, array(
@@ -954,11 +954,11 @@ class SummaryController extends Controller
                 $sheet->appendRow(array(
                                         '','','','','','',
                                         'Total',
-                                        number_format($data->summary_total_gross),
+                                        $data->summary_total_gross,
                                         $data->summary_total_disc,
-                                        number_format($data->summary_total_nett),
-                                        number_format($po['sum']),
-                                        number_format($data->summary_total_internal_omzet),
+                                        $data->summary_total_nett,
+                                        $po['sum'],
+                                        $data->summary_total_internal_omzet,
                                         ''
                                     ));
 
@@ -966,8 +966,20 @@ class SummaryController extends Controller
                 $sheet->appendRow(array('','','','','','','TERM OF PAYMENT', strtoupper($data->top_type)));
                 $sheet->appendRow(array(''));
 
+                //$keterangan = strip_tags(str_replace('&nbsp;', ' ', $data->summary_notes));
                 $sheet->appendRow(array('Keterangan:'));
-                $sheet->appendRow(array(strip_tags($data->summary_notes)));
+
+                $notestring = trim(preg_replace('/\s+/', ' ', $data->summary_notes));
+                $keterangan = explode('</p> <p>', $notestring);
+                //dd($keterangan);
+                foreach ($keterangan as $ket) {
+                    $tmp_ket = strip_tags(str_replace('&nbsp;', ' ', $ket));
+                    $tmp_ket_2 = strip_tags(str_replace('<p>', ' ', $tmp_ket));
+                    $tmp_ket_3 = strip_tags(str_replace('</p>', ' ', $tmp_ket_2));
+                    $sheet->appendRow(array($tmp_ket_3));
+                }
+                //$sheet->appendRow(array($keterangan));
+                //$sheet->appendRow(array(strip_tags($data->summary_notes)));
 
                 $sheet->mergeCells('A1:D1');
                 $sheet->mergeCells('A2:D2');
@@ -994,16 +1006,16 @@ class SummaryController extends Controller
                 $sheet->mergeCells('I7:J7');
                 $sheet->mergeCells('I8:J8');
 
-                $sheet->mergeCells('L2:M2');
+                /*$sheet->mergeCells('L2:M2');
                 $sheet->mergeCells('L3:M3');
                 $sheet->mergeCells('L4:M4');
                 $sheet->mergeCells('L5:M5');
                 $sheet->mergeCells('L6:M6');
                 $sheet->mergeCells('L7:M7');
-                $sheet->mergeCells('L8:M8');
+                $sheet->mergeCells('L8:M8');*/
 
-                $sheet->setBorder('A2:M7', 'thin');
-                $sheet->setBorder('A9:M9', 'thin');
+                $sheet->setBorder('A2:L7', 'thin');
+                $sheet->setBorder('A9:L9', 'thin');
 
                 $user = new UserLibrary;
                 $sptd_sales = $user->getBoss($data->contract->proposal->created_by->user_id, 2);
@@ -1015,13 +1027,17 @@ class SummaryController extends Controller
                 $manager_sales_name = $manager_sales->user_firstname . ' ' . $manager_sales->user_lastname;
                 $gm_name = $gm->user_firstname . ' ' . $gm->user_lastname;
 
+
+                $sptd_fo = $user->getCurrentSPTDFO();
+                $sptd_fo_name = $sptd_fo->user_firstname . ' ' .$sptd_fo->user_lastname;
+
                 $sheet->appendRow(array(''));
-                $sheet->appendRow(array('Menyetujui,','','','Mengetahui,','','','','','','Penyusun,',));
+                $sheet->appendRow(array('Penyusun,','','','Mengetahui,','','','Menyetujui,','','Mengetahui,'));
                 $sheet->appendRow(array(''));
                 $sheet->appendRow(array(''));
                 $sheet->appendRow(array(''));
-                $sheet->appendRow(array($gm_name,'','',$sptd_sales_name,'','',$manager_sales_name,'','',$author_name));
-                $sheet->appendRow(array('GM Sales & Marketing','','','Superintendent AE','','','Manager Sales & Marketing','','','Account Executive'));
+                $sheet->appendRow(array($author_name,'','',$sptd_sales_name,$manager_sales_name,'',$gm_name, '', $sptd_fo_name));
+                $sheet->appendRow(array('Account Executive','','','Superintendent AE','Manager Sales & Marketing','','GM Sales & Marketing', '', 'Superintendent FO'));
 
             });
 
