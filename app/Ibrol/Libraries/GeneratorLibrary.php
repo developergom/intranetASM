@@ -2,6 +2,7 @@
 
 namespace App\Ibrol\Libraries;
 
+use DB;
 use App\Brand;
 use App\Contract;
 use App\Industry;
