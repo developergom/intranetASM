@@ -21,10 +21,11 @@ class Letter extends Model
 				'flow_no',
 				'pic',
 				'updated_at',
+				'created_at'
 	];
 
 	protected $hidden = [
-				'active', 'created_by', 'created_at', 'updated_by'
+				'active', 'created_by', 'updated_by'
 	];
 
 	public function lettertype()
