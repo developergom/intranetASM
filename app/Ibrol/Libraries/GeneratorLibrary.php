@@ -114,7 +114,7 @@ class GeneratorLibrary{
 
 		$letter = Letter::with('lettertype')->find($letter_id);
 
-		$last = Letter::where('active', '1')->where('YEAR(created_at)', '=', date('Y')))->orderBy('param_no', 'desc')->first();
+		$last = Letter::where('active', '1')->where('YEAR(created_at)', '=', date('Y'))->orderBy('param_no', 'desc')->first();
 
 		dd($last);
 		$lastcode = $last->letter_no;
