@@ -1,7 +1,5 @@
 <!DOCTYPE html>
     <!--[if IE 9 ]><html class="ie9"><![endif]-->
-    
-<!-- Mirrored from byrushan.com/projects/ma/1-5-2/jquery/login.html by HTTrack Website Copier/3.x [XR&CO'2013], Wed, 11 May 2016 10:20:14 GMT -->
 <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -174,6 +172,4 @@
         </script>
         
     </body>
-
-<!-- Mirrored from byrushan.com/projects/ma/1-5-2/jquery/login.html by HTTrack Website Copier/3.x [XR&CO'2013], Wed, 11 May 2016 10:20:14 GMT -->
 </html>
