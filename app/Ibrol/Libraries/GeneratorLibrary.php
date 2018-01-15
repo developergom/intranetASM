@@ -116,7 +116,7 @@ class GeneratorLibrary{
 
 		$last = Letter::where('active', '1')->whereRaw('YEAR(created_at) = ' . date('Y'))->orderBy('param_no', 'desc')->first();
 
-		dd($last);
+		//dd($last);
 		$lastcode = $last->letter_no;
 
 		$no = 1;
