@@ -449,4 +449,146 @@ class HomeController extends Controller
 
         return response()->json($data); 
     }
+
+    public function apiStatisticsDetail(Request $request)
+    {
+        $month = $request->input('month');
+        $year = $request->input('year');
+        $statistics_type = $request->input('statistics_type');
+
+        $param = $this->gl->getMonthDate($month, $year);
+
+        $u = new UserLibrary;
+        $subordinate = $u->getSubOrdinateArrayID($request->user()->user_id);
+
+        $data = array();
+
+        switch ($statistics_type) {
+            case "proposals_created":
+                $data = Proposal::select('proposal_id', 'proposal_name', 'proposal_deadline', 'user_firstname', 'user_lastname')
+                                    ->join('users', 'users.user_id', '=', 'proposals.created_by')
+                                    ->where(function($q) use ($subordinate, $request) {
+                                        $q->whereIn('proposals.created_by', $subordinate)
+                                            ->orWhere('proposals.created_by', $request->user()->user_id);
+                                        })
+                                    ->where('proposals.active', '1')
+                                    ->whereBetween('proposals.created_at', [$param['start'], $param['end']])
+                                    ->orderBy('users.user_firstname','asc')
+                                    ->orderBy('proposal_name','asc')
+                                    ->get();
+                break;
+            case "direct_proposals":
+                $data = Proposal::select('proposal_id', 'proposal_name', 'proposal_deadline', 'user_firstname', 'user_lastname')
+                                ->join('users', 'users.user_id', '=', 'proposals.created_by')
+                                ->where(function($q) use ($subordinate, $request) {
+                                    $q->whereIn('proposals.created_by', $subordinate)
+                                        ->orWhere('proposals.created_by', $request->user()->user_id);
+                                    })
+                                ->where('proposals.active', '1')
+                                ->whereBetween('proposals.created_at', [$param['start'], $param['end']])
+                                ->where('proposal_method_id', '2')
+                                ->orderBy('users.user_firstname','asc')
+                                ->orderBy('proposal_name','asc')
+                                ->get();
+                break;
+            case "brief_proposals":
+                $data = Proposal::select('proposal_id', 'proposal_name', 'proposal_deadline', 'user_firstname', 'user_lastname')
+                                ->join('users', 'users.user_id', '=', 'proposals.created_by')
+                                ->where(function($q) use ($subordinate, $request) {
+                                    $q->whereIn('proposals.created_by', $subordinate)
+                                        ->orWhere('proposals.created_by', $request->user()->user_id);
+                                    })
+                                ->where('proposals.active', '1')
+                                ->whereBetween('proposals.created_at', [$param['start'], $param['end']])
+                                ->where('proposal_method_id', '1')
+                                ->orderBy('users.user_firstname','asc')
+                                ->orderBy('proposal_name','asc')
+                                ->get();
+                break;
+            case "sold_proposals":
+                $data = Proposal::select('proposal_id', 'proposal_name', 'proposal_deadline', 'user_firstname', 'user_lastname')
+                                ->join('users', 'users.user_id', '=', 'proposals.created_by')
+                                ->where(function($q) use ($subordinate, $request) {
+                                    $q->whereIn('proposals.created_by', $subordinate)
+                                        ->orWhere('proposals.created_by', $request->user()->user_id);
+                                    })
+                                ->where('proposals.active', '1')
+                                ->whereBetween('proposals.created_at', [$param['start'], $param['end']])
+                                ->where('flow_no', '98')
+                                ->where('proposal_status_id', '1')
+                                ->orderBy('users.user_firstname','asc')
+                                ->orderBy('proposal_name','asc')
+                                ->get();
+                break;
+            case "inventories_created":
+                $data = InventoryPlanner::select('inventory_planner_id', 'inventory_planner_title', 'user_firstname', 'user_lastname')
+                        ->join('users', 'users.user_id', '=', 'inventories_planner.created_by')
+                        ->where(function($q) use ($subordinate, $request) {
+                            $q->whereIn('inventories_planner.created_by', $subordinate)
+                                ->orWhere('inventories_planner.created_by', $request->user()->user_id);
+                            })
+                        ->where('inventories_planner.active', '1')
+                        ->whereBetween('inventories_planner.created_at', [$param['start'], $param['end']])
+                        ->orderBy('users.user_firstname','asc')
+                        ->orderBy('inventory_planner_title','asc')
+                        ->get();
+                break;
+            case "inventories_linked_with_proposal":
+                $data = InventoryPlanner::select('inventory_planner_id', 'inventory_planner_title', 'user_firstname', 'user_lastname')
+                        ->join('users', 'users.user_id', '=', 'inventories_planner.created_by')
+                        ->where(function($q) use ($subordinate, $request) {
+                            $q->whereIn('inventories_planner.created_by', $subordinate)
+                                ->orWhere('inventories_planner.created_by', $request->user()->user_id);
+                            })
+                        ->whereHas('proposals', function($q) {
+                            $q->where('proposals.active', '1');
+                        })
+                        ->where('inventories_planner.active', '1')
+                        ->whereBetween('inventories_planner.created_at', [$param['start'], $param['end']])
+                        ->orderBy('users.user_firstname','asc')
+                        ->orderBy('inventory_planner_title','asc')
+                        ->get();
+                break;
+            case "inventories_not_sold":
+                $data = InventoryPlanner::select('inventory_planner_id', 'inventory_planner_title', 'user_firstname', 'user_lastname')
+                        ->join('users', 'users.user_id', '=', 'inventories_planner.created_by')
+                        ->where(function($q) use ($subordinate, $request) {
+                            $q->whereIn('inventories_planner.created_by', $subordinate)
+                                ->orWhere('inventories_planner.created_by', $request->user()->user_id);
+                            })
+                        ->whereHas('proposals', function($q) {
+                            $q->where('proposals.active', '1')
+                                ->where('proposals.flow_no', '98')
+                                ->where('proposal_status_id', '2');
+                        })
+                        ->where('inventories_planner.active', '1')
+                        ->whereBetween('inventories_planner.created_at', [$param['start'], $param['end']])
+                        ->orderBy('users.user_firstname','asc')
+                        ->orderBy('inventory_planner_title','asc')
+                        ->get();
+                break;
+            case "inventories_sold":
+                $data = InventoryPlanner::select('inventory_planner_id', 'inventory_planner_title', 'user_firstname', 'user_lastname')
+                        ->join('users', 'users.user_id', '=', 'inventories_planner.created_by')
+                        ->where(function($q) use ($subordinate, $request) {
+                            $q->whereIn('inventories_planner.created_by', $subordinate)
+                                ->orWhere('inventories_planner.created_by', $request->user()->user_id);
+                            })
+                        ->whereHas('proposals', function($q) {
+                            $q->where('proposals.active', '1')
+                                ->where('proposals.flow_no', '98')
+                                ->where('proposal_status_id', '1');
+                        })
+                        ->where('inventories_planner.active', '1')
+                        ->whereBetween('inventories_planner.created_at', [$param['start'], $param['end']])
+                        ->orderBy('users.user_firstname','asc')
+                        ->orderBy('inventory_planner_title','asc')
+                        ->get();
+                break;
+            default:
+                break;
+        }
+
+        return response()->json($data); 
+    }
 }

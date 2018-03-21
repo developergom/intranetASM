@@ -102,7 +102,7 @@
 							                	<th>Cost</th>
 							                    <th>Media Cost Print</th>
 							                    <th>Media Cost Other</th>
-							                    <th>Total Cost</th>
+							                    <th>Total Offering</th>
 							                    <th>Cost</th>
 							                    <th>Media Cost Print</th>
 							                    <th>Media Cost Other</th>

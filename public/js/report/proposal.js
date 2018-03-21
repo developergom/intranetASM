@@ -15,10 +15,11 @@ $(document).ready(function() {
 	});
 
 	$('#btn_export_report').click(function() {
+		var currentTime = new Date($.now());
 		$('#grid-data-result').table2excel({
 			exclude: ".noExl",
 			name: "Report Proposal",
-			filename: "report_proposal"
+			filename: "report_proposal_" + currentTime.getDate() + currentTime.getMonth() + currentTime.getFullYear() + "_" + currentTime.getHours() + "_" + currentTime.getMinutes() + "_" + currentTime.getSeconds()
 		});
 	});
 });

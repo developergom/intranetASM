@@ -61,7 +61,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Proposals Created</small>
-                        <h2 title="Proposals Created" id="dashboard_proposal_created">0</h2>
+                        <h2 title="Proposals Created" id="dashboard_proposal_created" data-statistics-type="proposals_created" class="modal-statistics-trigger" data-toggle="modal" data-target="#modal-statistics-detail">0</h2>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Direct Proposals</small>
-                        <h2 title="Direct Proposals" id="dashboard_proposal_direct">0</h2>
+                        <h2 title="Direct Proposals" id="dashboard_proposal_direct" data-statistics-type="direct_proposals" class="modal-statistics-trigger" data-toggle="modal" data-target="#modal-statistics-detail">0</h2>
                     </div>
                 </div>
             </div>
@@ -83,7 +83,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Brief Proposals</small>
-                        <h2 title="Brief Proposals" id="dashboard_proposal_brief">0</h2>
+                        <h2 title="Brief Proposals" id="dashboard_proposal_brief" data-statistics-type="brief_proposals" class="modal-statistics-trigger" data-toggle="modal" data-target="#modal-statistics-detail">0</h2>
                     </div>
                 </div>
             </div>
@@ -94,7 +94,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Sold Proposals</small>
-                        <h2 title="Sold Proposals" id="dashboard_proposal_sold">0</h2>
+                        <h2 title="Sold Proposals" id="dashboard_proposal_sold" data-statistics-type="sold_proposals" class="modal-statistics-trigger" data-toggle="modal" data-target="#modal-statistics-detail">0</h2>
                     </div>
                 </div>
             </div>
@@ -110,7 +110,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Inventories Created</small>
-                        <h2 title="Inventories Created" id="dashboard_inventories_created">0</h2>
+                        <h2 title="Inventories Created" id="dashboard_inventories_created" data-statistics-type="inventories_created" class="modal-statistics-trigger" data-toggle="modal" data-target="#modal-statistics-detail">0</h2>
                     </div>
                 </div>
             </div>
@@ -121,7 +121,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Inventories Linked with Proposal</small>
-                        <h2 title="Inventories Linked with Proposal" id="dashboard_inventories_linked">0</h2>
+                        <h2 title="Inventories Linked with Proposal" id="dashboard_inventories_linked" data-statistics-type="inventories_linked_with_proposal" class="modal-statistics-trigger" data-toggle="modal" data-target="#modal-statistics-detail">0</h2>
                     </div>
                 </div>
             </div>
@@ -132,7 +132,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Inventories Not Sold</small>
-                        <h2 title="Inventories Not Sold" id="dashboard_inventories_not_sold">0</h2>
+                        <h2 title="Inventories Not Sold" id="dashboard_inventories_not_sold" data-statistics-type="inventories_not_sold" class="modal-statistics-trigger" data-toggle="modal" data-target="#modal-statistics-detail">0</h2>
                     </div>
                 </div>
             </div>
@@ -143,7 +143,7 @@
                     <div class="chart stats-bar"><canvas width="68" height="35" style="display: inline-block; width: 68px; height: 35px; vertical-align: top;"></canvas></div>
                     <div class="count">
                         <small>Inventories Sold</small>
-                        <h2 title="Inventories Sold" id="dashboard_inventories_sold">0</h2>
+                        <h2 title="Inventories Sold" id="dashboard_inventories_sold" data-statistics-type="inventories_sold" class="modal-statistics-trigger" data-toggle="modal" data-target="#modal-statistics-detail">0</h2>
                     </div>
                 </div>
             </div>
@@ -322,6 +322,33 @@
         </div>
     </div>
     @endcan
+
+    <div class="modal fade" id="modal-statistics-detail" tabindex="-1" role="dialog" aria-labelledby="modal-statistics-detail">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modal-statistics-detail-title">Modal title</h4>
+                </div>
+                <div class="modal-body" id="modal-statistics-detail-body">
+                    <table class="table table-bordered table-hover" id="table-statistics-detail">
+                        <thead>
+                            <tr>
+                                <th><center>Title</center></th>
+                                <th><center>Author</center></th>
+                                <th><center>Action</center></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" id="modal-statistics-detail-footer">
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('vendorjs')
@@ -334,6 +361,7 @@
 @endsection
 
 @section('customjs')
+<script src="{{ url('js/app/home-modal-statistics.js') }}"></script>
 @can('Agenda-Read')
 <script src="{{ url('js/app/home-my-agenda.js') }}"></script>
 @endcan
@@ -341,7 +369,7 @@
 var myToken = $('meta[name="csrf-token"]').attr('content');
 $(document).ready(function(){
     $('#text').marquee({
-        duration: 200000,
+        duration: 20000,
         startVisible: true,
         duplicated: true
       });

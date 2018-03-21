@@ -26,6 +26,7 @@ Route::post('/api/proposalRecap', 'HomeController@apiProposalRecap')->middleware
 Route::post('/api/inventoryRecap', 'HomeController@apiInventoryRecap')->middleware(['auth','menu']);
 Route::post('/api/agendaRecap', 'HomeController@apiAgendaRecap')->middleware(['auth','menu']);
 Route::post('/api/contactRecap', 'HomeController@apiContactRecap')->middleware(['auth','menu']);
+Route::post('/api/statisticsDetail', 'HomeController@apiStatisticsDetail')->middleware(['auth','menu']);
 
 Route::get('/test', 'Test@index');
 Route::get('/vue', 'Test@vue');
