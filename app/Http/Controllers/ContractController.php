@@ -13,8 +13,10 @@ use App\Http\Requests;
 use App\Client;
 use App\ClientContact;
 use App\Flow;
+use App\Industry;
 use App\Media;
 use App\Proposal;
+use App\ProposalType;
 use App\ProposalHistory;
 use App\Rate;
 use App\Contract;
@@ -47,13 +49,19 @@ class ContractController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if(Gate::denies('Contract-Read')) {
             abort(403, 'Unauthorized action.');
         }
 
         $data = array();
+
+        $data['proposal_types'] = ProposalType::select('proposal_type_id','proposal_type_name', 'proposal_type_duration')->where('active', '1')->orderBy('proposal_type_name')->get();
+        $data['industries'] = Industry::select('industry_id','industry_name')->where('active', '1')->orderBy('industry_name')->get();
+        $data['medias'] = Media::select('media_id','media_name')->whereHas('users', function($query) use($request){
+                                    $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                                })->where('medias.active', '1')->orderBy('media_name')->get();
 
         return view('vendor.material.workorder.contract.list', $data);
     }
@@ -339,10 +347,27 @@ class ContractController extends Controller
         if($listtype == 'onprocess') {
             $data['rows'] = Contract::select('contracts.contract_id', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
+                                ->join('proposal_media', 'proposal_media.proposal_id', '=', 'proposals.proposal_id')
+                                ->join('proposal_industry', 'proposal_industry.proposal_id', '=', 'proposals.proposal_id')
                                 ->join('users','users.user_id', '=', 'contracts.current_user')
                                 ->where('contracts.flow_no','<>','98')
                                 ->where('contracts.active', '=', '1')
                                 ->where('contracts.current_user', '<>' , $request->user()->user_id)
+                                ->where(function($query) use($request){
+                                    if($request->input('proposal_type_id')!=''){
+                                        $query->where('proposals.proposal_type_id', '=', $request->input('proposal_type_id'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('industry_id')!=''){
+                                        $query->where('proposal_industry.industry_id', '=', $request->input('industry_id'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('media_id')!=''){
+                                        $query->where('proposal_media.media_id', '=', $request->input('media_id'));
+                                    }
+                                })
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('contracts.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('contracts.created_by', $subordinate)
@@ -355,13 +380,31 @@ class ContractController extends Controller
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })
                                 ->skip($skip)->take($rowCount)
+                                ->groupBy('contracts.contract_id', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no')
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = Contract::select('contracts.contract_id', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no')
+            $data['total'] = count(Contract::select('contracts.contract_id', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
+                                ->join('proposal_media', 'proposal_media.proposal_id', '=', 'proposals.proposal_id')
+                                ->join('proposal_industry', 'proposal_industry.proposal_id', '=', 'proposals.proposal_id')
                                 ->join('users','users.user_id', '=', 'contracts.current_user')
                                 ->where('contracts.flow_no','<>','98')
                                 ->where('contracts.active', '=', '1')
                                 ->where('contracts.current_user', '<>' , $request->user()->user_id)
+                                ->where(function($query) use($request){
+                                    if($request->input('proposal_type_id')!=''){
+                                        $query->where('proposals.proposal_type_id', '=', $request->input('proposal_type_id'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('industry_id')!=''){
+                                        $query->where('proposal_industry.industry_id', '=', $request->input('industry_id'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('media_id')!=''){
+                                        $query->where('proposal_media.media_id', '=', $request->input('media_id'));
+                                    }
+                                })
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('contracts.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('contracts.created_by', $subordinate)
@@ -372,40 +415,96 @@ class ContractController extends Controller
                                     $query->orWhere('proposal_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('proposal_no','like','%' . $searchPhrase . '%')
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
-                                })->count();    
+                                })
+                                ->groupBy('contracts.contract_id', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no')
+                                ->get());    
         }elseif($listtype == 'needchecking') {
             $data['rows'] = Contract::select('contracts.contract_id', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
+                                ->join('proposal_media', 'proposal_media.proposal_id', '=', 'proposals.proposal_id')
+                                ->join('proposal_industry', 'proposal_industry.proposal_id', '=', 'proposals.proposal_id')
                                 ->join('users','users.user_id', '=', 'contracts.created_by')
                                 ->where('contracts.active','1')
                                 ->where('contracts.flow_no','<>','98')
                                 ->where('contracts.flow_no','<>','99')
                                 ->where('contracts.current_user', '=' , $request->user()->user_id)
+                                ->where(function($query) use($request){
+                                    if($request->input('proposal_type_id')!=''){
+                                        $query->where('proposals.proposal_type_id', '=', $request->input('proposal_type_id'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('industry_id')!=''){
+                                        $query->where('proposal_industry.industry_id', '=', $request->input('industry_id'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('media_id')!=''){
+                                        $query->where('proposal_media.media_id', '=', $request->input('media_id'));
+                                    }
+                                })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('proposal_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('proposal_no','like','%' . $searchPhrase . '%')
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })
                                 ->skip($skip)->take($rowCount)
+                                ->groupBy('contracts.contract_id', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no')
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = Contract::select('contracts.contract_id', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no')
+            $data['total'] = count(Contract::select('contracts.contract_id', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
+                                ->join('proposal_media', 'proposal_media.proposal_id', '=', 'proposals.proposal_id')
+                                ->join('proposal_industry', 'proposal_industry.proposal_id', '=', 'proposals.proposal_id')
                                 ->join('users','users.user_id', '=', 'contracts.created_by')
                                 ->where('contracts.active','1')
                                 ->where('contracts.flow_no','<>','98')
                                 ->where('contracts.flow_no','<>','99')
                                 ->where('contracts.current_user', '=' , $request->user()->user_id)
+                                ->where(function($query) use($request){
+                                    if($request->input('proposal_type_id')!=''){
+                                        $query->where('proposals.proposal_type_id', '=', $request->input('proposal_type_id'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('industry_id')!=''){
+                                        $query->where('proposal_industry.industry_id', '=', $request->input('industry_id'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('media_id')!=''){
+                                        $query->where('proposal_media.media_id', '=', $request->input('media_id'));
+                                    }
+                                })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('proposal_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('proposal_no','like','%' . $searchPhrase . '%')
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
-                                })->count();
+                                })
+                                ->groupBy('contracts.contract_id', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no')
+                                ->get());
         }elseif($listtype == 'finished') {
             $data['rows'] =  Contract::select('contracts.contract_id', 'contract_no', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no', 'users.user_id')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
+                                ->join('proposal_media', 'proposal_media.proposal_id', '=', 'proposals.proposal_id')
+                                ->join('proposal_industry', 'proposal_industry.proposal_id', '=', 'proposals.proposal_id')
                                 ->join('users','users.user_id', '=', 'contracts.created_by')
                                 ->where('contracts.active','1')
                                 ->where('contracts.flow_no','=','98')
+                                ->where(function($query) use($request){
+                                    if($request->input('proposal_type_id')!=''){
+                                        $query->where('proposals.proposal_type_id', '=', $request->input('proposal_type_id'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('industry_id')!=''){
+                                        $query->where('proposal_industry.industry_id', '=', $request->input('industry_id'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('media_id')!=''){
+                                        $query->where('proposal_media.media_id', '=', $request->input('media_id'));
+                                    }
+                                })
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('contracts.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('contracts.created_by', $subordinate);
@@ -417,12 +516,30 @@ class ContractController extends Controller
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })
                                 ->skip($skip)->take($rowCount)
+                                ->groupBy('contracts.contract_id', 'contract_no', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no', 'users.user_id')
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = Contract::select('contracts.contract_id', 'contract_no', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no', 'users.user_id')
+            $data['total'] = count(Contract::select('contracts.contract_id', 'contract_no', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no', 'users.user_id')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
+                                ->join('proposal_media', 'proposal_media.proposal_id', '=', 'proposals.proposal_id')
+                                ->join('proposal_industry', 'proposal_industry.proposal_id', '=', 'proposals.proposal_id')
                                 ->join('users','users.user_id', '=', 'contracts.created_by')
                                 ->where('contracts.active','1')
                                 ->where('contracts.flow_no','=','98')
+                                ->where(function($query) use($request){
+                                    if($request->input('proposal_type_id')!=''){
+                                        $query->where('proposals.proposal_type_id', '=', $request->input('proposal_type_id'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('industry_id')!=''){
+                                        $query->where('proposal_industry.industry_id', '=', $request->input('industry_id'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('media_id')!=''){
+                                        $query->where('proposal_media.media_id', '=', $request->input('media_id'));
+                                    }
+                                })
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('contracts.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('contracts.created_by', $subordinate);
@@ -432,12 +549,31 @@ class ContractController extends Controller
                                             ->orWhere('proposal_no','like','%' . $searchPhrase . '%')
                                             ->orWhere('contract_no','like','%' . $searchPhrase . '%')
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
-                                })->count();
+                                })
+                                ->groupBy('contracts.contract_id', 'contract_no', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no', 'users.user_id')
+                                ->get());
         }elseif($listtype == 'canceled') {
             $data['rows'] = Contract::select('contracts.contract_id', 'contract_no', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
+                                ->join('proposal_media', 'proposal_media.proposal_id', '=', 'proposals.proposal_id')
+                                ->join('proposal_industry', 'proposal_industry.proposal_id', '=', 'proposals.proposal_id')
                                 ->join('users','users.user_id', '=', 'contracts.created_by')
                                 ->where('contracts.active','0')
+                                ->where(function($query) use($request){
+                                    if($request->input('proposal_type_id')!=''){
+                                        $query->where('proposals.proposal_type_id', '=', $request->input('proposal_type_id'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('industry_id')!=''){
+                                        $query->where('proposal_industry.industry_id', '=', $request->input('industry_id'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('media_id')!=''){
+                                        $query->where('proposal_media.media_id', '=', $request->input('media_id'));
+                                    }
+                                })
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('contracts.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('contracts.created_by', $subordinate);
@@ -449,11 +585,29 @@ class ContractController extends Controller
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
                                 })
                                 ->skip($skip)->take($rowCount)
+                                ->groupBy('contracts.contract_id', 'contract_no', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no')
                                 ->orderBy($sort_column, $sort_type)->get();
-            $data['total'] = Contract::select('contracts.contract_id', 'contract_no', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no')
+            $data['total'] = count(Contract::select('contracts.contract_id', 'contract_no', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no')
                                 ->join('proposals', 'proposals.proposal_id', '=', 'contracts.proposal_id')
+                                ->join('proposal_media', 'proposal_media.proposal_id', '=', 'proposals.proposal_id')
+                                ->join('proposal_industry', 'proposal_industry.proposal_id', '=', 'proposals.proposal_id')
                                 ->join('users','users.user_id', '=', 'contracts.created_by')
                                 ->where('contracts.active','0')
+                                ->where(function($query) use($request){
+                                    if($request->input('proposal_type_id')!=''){
+                                        $query->where('proposals.proposal_type_id', '=', $request->input('proposal_type_id'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('industry_id')!=''){
+                                        $query->where('proposal_industry.industry_id', '=', $request->input('industry_id'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('media_id')!=''){
+                                        $query->where('proposal_media.media_id', '=', $request->input('media_id'));
+                                    }
+                                })
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('contracts.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('contracts.created_by', $subordinate);
@@ -463,7 +617,9 @@ class ContractController extends Controller
                                             ->orWhere('proposal_no','like','%' . $searchPhrase . '%')
                                             ->orWhere('contract_no','like','%' . $searchPhrase . '%')
                                             ->orWhere('user_firstname','like','%' . $searchPhrase . '%');
-                                })->count();
+                                })
+                                ->groupBy('contracts.contract_id', 'contract_no', 'proposal_name', 'proposal_no' ,'user_firstname', 'contracts.updated_at', 'proposals.proposal_id', 'contracts.flow_no')
+                                ->get());
         }
 
         
