@@ -82,11 +82,13 @@ function generate_report() {
 					html += '<td>'  + value.inventory_planner_desc + '</td>';
 					html += '<td>'  + value.inventory_planner_sell_period + '</td>';
 					html += '<td>'  + value.inventory_planner_media_name + '</td>';
+					html += '<td>'  + value.planner + '</td>';
 					html += '<td>'  + previewMoney(value.inventory_planner_cost) + '</td>';
 					html += '<td>'  + previewMoney(value.inventory_planner_media_cost_print) + '</td>';
 					html += '<td>'  + previewMoney(value.inventory_planner_media_cost_other) + '</td>';
 					html += '<td>'  + previewMoney(value.inventory_planner_total_offering) + '</td>';
 					html += '<td>'  + value.proposal_no + '</td>';
+					html += '<td>'  + value.sales_agent + '</td>';
 					html += '<td>'  + value.industry_name + '</td>';
 					html += '<td>'  + value.brand_name + '</td>';
 					html += '<td>'  + value.proposal_status_name + '</td>';
@@ -108,12 +110,12 @@ function generate_report() {
 				});
 
 				html += '<tr>';
-				html += '<td colspan="6">Total</td>';
+				html += '<td colspan="7">Total</td>';
 				html += '<td>'  + previewMoney(total_inventory_planner_cost) + '</td>';
 				html += '<td>'  + previewMoney(total_inventory_planner_media_cost_other) + '</td>';
 				html += '<td>'  + previewMoney(total_inventory_planner_media_cost_print) + '</td>';
 				html += '<td>'  + previewMoney(total_inventory_planner_total_offering) + '</td>';
-				html += '<td colspan="4"></td>';
+				html += '<td colspan="5"></td>';
 				html += '<td>'  + previewMoney(total_proposal_deal_cost) + '</td>';
 				html += '<td>'  + previewMoney(total_proposal_deal_media_cost_print) + '</td>';
 				html += '<td>'  + previewMoney(total_proposal_deal_media_cost_other) + '</td>';
@@ -121,7 +123,7 @@ function generate_report() {
 				html += '</tr>';
 
 				html += '<tr>';
-				html += '<td colspan="17">Target</td>';
+				html += '<td colspan="19">Target</td>';
 				html += '<td>'  + ((data.target[0].total_target==null) ? '0' : previewMoney(data.target[0].total_target))  + '</td>';
 				html += '</tr>';
 

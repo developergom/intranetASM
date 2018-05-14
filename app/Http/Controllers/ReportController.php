@@ -137,7 +137,9 @@ class ReportController extends Controller
                     proposal_deal_media_cost_print,
                     proposal_deal_media_cost_other,
                     proposal_total_deal,
-                    proposal_ready_date
+                    proposal_ready_date,
+                    CONCAT(m.user_firstname, ' ', m.user_lastname) AS sales_agent,
+                    CONCAT(n.user_firstname, ' ', n.user_lastname) AS planner
                 FROM 
                     inventories_planner a
                 LEFT JOIN inventory_sources b ON b.inventory_source_id = a.inventory_source_id
@@ -151,6 +153,8 @@ class ReportController extends Controller
                 LEFT JOIN proposal_status j ON j.proposal_status_id = f.proposal_status_id
                 LEFT JOIN inventory_planner_media k ON k.inventory_planner_id = a.inventory_planner_id
                 LEFT JOIN medias l ON l.media_id = k.media_id
+                JOIN users m ON m.user_id = f.created_by
+                JOIN users n ON n.user_id = a.created_by
                 WHERE
                     a.active = '1' AND
                     f.active = '1'";
@@ -250,7 +254,8 @@ class ReportController extends Controller
                     proposal_deal_media_cost_print,
                     proposal_deal_media_cost_other,
                     proposal_total_deal,
-                    proposal_ready_date
+                    proposal_ready_date,
+                    CONCAT(h.user_firstname, ' ', h.user_lastname) AS sales_agent
                 FROM 
                     proposals a
                 LEFT JOIN proposal_industry b ON b.proposal_id = a.proposal_id
@@ -259,6 +264,7 @@ class ReportController extends Controller
                 LEFT JOIN proposal_status e ON e.proposal_status_id = a.proposal_status_id
                 LEFT JOIN proposal_media f ON f.proposal_id = a.proposal_id
                 LEFT JOIN medias g ON g.media_id = f.media_id
+                JOIN users h ON h.user_id = a.created_by
                 WHERE
                     a.active = '1'";
 

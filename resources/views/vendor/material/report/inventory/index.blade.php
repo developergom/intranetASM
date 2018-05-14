@@ -20,7 +20,7 @@
 				            	<form class="form" role="form" action="javascript:void(0)">
 				            		<div class="form-group">
 						                <label for="media_id">Media(s)</label>
-						                <select name="media_id" id="media_id" class="form-control input-sm selectpicker" data-live-search="true" multiple>
+						                <select name="media_id" id="media_id" class="form-control input-sm selectpicker" data-size="5" data-live-search="true" multiple>
 			                                @foreach ($medias as $key => $value)
 											    <option value="{{ $value->media_id }}">{{ $value->media_name }}</option>
 											@endforeach
@@ -28,7 +28,7 @@
 						            </div>
 						            <div class="form-group">
 						                <label for="industry_id">Industry(s)</label>
-						                <select name="industry_id" id="industry_id" class="form-control input-sm selectpicker" data-live-search="true" multiple>
+						                <select name="industry_id" id="industry_id" class="form-control input-sm selectpicker" data-size="5" data-live-search="true" multiple>
 			                                @foreach ($industries as $key => $value)
 											    <option value="{{ $value->industry_id }}">{{ $value->industry_name }}</option>
 											@endforeach
@@ -36,7 +36,7 @@
 						            </div>
 						            <div class="form-group">
 						                <label for="sell_period_id">Sell Period Month(s)</label>
-						                <select name="sell_period_id" id="sell_period_id" class="form-control input-sm selectpicker" data-live-search="true" multiple>
+						                <select name="sell_period_id" id="sell_period_id" class="form-control input-sm selectpicker" data-size="5" data-live-search="true" multiple>
 			                                @foreach ($sellperiods as $key => $value)
 											    <option value="{{ $value->sell_period_id }}">{{ $value->sell_period_month_name }}</option>
 											@endforeach
@@ -44,7 +44,7 @@
 						            </div>
 						            <div class="form-group">
 						                <label for="sell_period_year">Sell Period Year(s)</label>
-						                <select name="sell_period_year" id="sell_period_year" class="form-control input-sm selectpicker" data-live-search="true" multiple>
+						                <select name="sell_period_year" id="sell_period_year" class="form-control input-sm selectpicker" data-size="5" data-live-search="true" multiple>
 			                                @foreach ($years as $key => $value)
 											    <option value="{{ $value }}">{{ $value }}</option>
 											@endforeach
@@ -91,8 +91,10 @@
 							                    <th rowspan="2">Desc</th>
 							                    <th rowspan="2">Sell Period</th>
 							                    <th rowspan="2">Media</th>
+							                    <th rowspan="2">Planner Created</th>
 							                    <th colspan="4"><center>Offer</center></th>
 							                    <th rowspan="2">Proposal No</th>
+							                    <th rowspan="2">Sales Agent</th>
 							                    <th rowspan="2">Industry</th>
 							                    <th rowspan="2">Brand</th>
 							                    <th rowspan="2">Status</th>

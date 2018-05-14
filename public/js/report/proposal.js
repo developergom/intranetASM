@@ -78,6 +78,7 @@ function generate_report() {
 					html += '<td>'  + previewMoney(value.proposal_media_cost_other) + '</td>';
 					html += '<td>'  + previewMoney(value.proposal_total_offering) + '</td>';
 					html += '<td>'  + value.proposal_no + '</td>';
+					html += '<td>'  + value.sales_agent + '</td>';
 					html += '<td>'  + value.industry_name + '</td>';
 					html += '<td>'  + value.brand_name + '</td>';
 					html += '<td>'  + value.proposal_status_name + '</td>';
@@ -104,7 +105,7 @@ function generate_report() {
 				html += '<td>'  + previewMoney(total_proposal_media_cost_other) + '</td>';
 				html += '<td>'  + previewMoney(total_proposal_media_cost_print) + '</td>';
 				html += '<td>'  + previewMoney(total_proposal_total_offering) + '</td>';
-				html += '<td colspan="4"></td>';
+				html += '<td colspan="5"></td>';
 				html += '<td>'  + previewMoney(total_proposal_deal_cost) + '</td>';
 				html += '<td>'  + previewMoney(total_proposal_deal_media_cost_print) + '</td>';
 				html += '<td>'  + previewMoney(total_proposal_deal_media_cost_other) + '</td>';
@@ -112,7 +113,7 @@ function generate_report() {
 				html += '</tr>';
 
 				html += '<tr>';
-				html += '<td colspan="14">Target</td>';
+				html += '<td colspan="15">Target</td>';
 				html += '<td>'  + ((data.target[0].total_target==null) ? '0' : previewMoney(data.target[0].total_target))  + '</td>';
 				html += '</tr>';
 

@@ -20,7 +20,7 @@
 				            	<form class="form" role="form" action="javascript:void(0)">
 				            		<div class="form-group">
 						                <label for="user_id">Planner(s)</label>
-						                <select name="user_id" id="user_id" class="form-control input-sm selectpicker" data-live-search="true" multiple>
+						                <select name="user_id" id="user_id" class="form-control input-sm selectpicker" data-size="5" data-live-search="true" multiple>
 			                                @foreach ($users as $key => $value)
 											    <option value="{{ $value->user_id }}" selected>{{ $value->user_firstname . ' ' . $value->user_lastname . ' (' . $value->user_status . ')' }}</option>
 											@endforeach
@@ -28,7 +28,7 @@
 						            </div>
 						            <div class="form-group">
 						                <label for="year">Year</label>
-						                <select name="year" id="year" class="form-control input-sm selectpicker" data-live-search="true">
+						                <select name="year" id="year" class="form-control input-sm selectpicker" data-size="5" data-live-search="true">
 			                                @foreach ($years as $key => $value)
 											    <option value="{{ $value }}">{{ $value }}</option>
 											@endforeach
