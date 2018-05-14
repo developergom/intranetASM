@@ -60,13 +60,20 @@ class InventoryPlannerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if(Gate::denies('Inventory Planner-Read')) {
             abort(403, 'Unauthorized action.');
         }
 
         $data = array();
+
+        $data['inventory_categories'] = InventoryCategory::where('active', '1')->orderBy('inventory_category_name')->get();
+        $data['implementations'] = Implementation::where('active', '1')->orderBy('implementation_month')->get();
+        $data['medias'] = Media::whereHas('users', function($query) use($request){
+                                    $query->where('users_medias.user_id', '=', $request->user()->user_id);
+                                })->where('medias.active', '1')->orderBy('media_name')->get();
+        $data['years'] = [date('Y')+1,date('Y'), date('Y')-1, date('Y')-2];
 
         return view('vendor.material.inventory.inventoryplanner.list', $data);
     }
@@ -559,6 +566,26 @@ class InventoryPlannerController extends Controller
                                 ->where('inventories_planner.flow_no','<>','98')
                                 ->where('inventories_planner.active', '=', '1')
                                 ->where('inventories_planner.current_user', '<>' , $request->user()->user_id)
+                                ->where(function($query) use($request){
+                                    if($request->input('medias')!=''){
+                                        $query->whereIn('medias.media_id',  $request->input('medias'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('categories')!=''){
+                                        $query->whereIn('inventory_categories.inventory_category_id',  $request->input('categories'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('implementations')!=''){
+                                        $query->whereIn('inventory_planner_implementation.implementation_id',  $request->input('implementations'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('years')!=''){
+                                        $query->whereIn('inventory_planner_implementation.year',  $request->input('years'));
+                                    }
+                                })
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('inventories_planner.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('inventories_planner.created_by', $subordinate);
@@ -585,6 +612,26 @@ class InventoryPlannerController extends Controller
                                 ->where('inventories_planner.flow_no','<>','98')
                                 ->where('inventories_planner.active', '=', '1')
                                 ->where('inventories_planner.current_user', '<>' , $request->user()->user_id)
+                                ->where(function($query) use($request){
+                                    if($request->input('medias')!=''){
+                                        $query->whereIn('medias.media_id',  $request->input('medias'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('categories')!=''){
+                                        $query->whereIn('inventory_categories.inventory_category_id',  $request->input('categories'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('implementations')!=''){
+                                        $query->whereIn('inventory_planner_implementation.implementation_id',  $request->input('implementations'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('years')!=''){
+                                        $query->whereIn('inventory_planner_implementation.year',  $request->input('years'));
+                                    }
+                                })
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('inventories_planner.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('inventories_planner.created_by', $subordinate);
@@ -611,6 +658,26 @@ class InventoryPlannerController extends Controller
                                 ->where('inventories_planner.flow_no','<>','98')
                                 ->where('inventories_planner.flow_no','<>','99')
                                 ->where('inventories_planner.current_user', '=' , $request->user()->user_id)
+                                ->where(function($query) use($request){
+                                    if($request->input('medias')!=''){
+                                        $query->whereIn('medias.media_id',  $request->input('medias'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('categories')!=''){
+                                        $query->whereIn('inventory_categories.inventory_category_id',  $request->input('categories'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('implementations')!=''){
+                                        $query->whereIn('inventory_planner_implementation.implementation_id',  $request->input('implementations'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('years')!=''){
+                                        $query->whereIn('inventory_planner_implementation.year',  $request->input('years'));
+                                    }
+                                })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_category_name', 'like', '%' . $searchPhrase . '%')
@@ -634,6 +701,26 @@ class InventoryPlannerController extends Controller
                                 ->where('inventories_planner.flow_no','<>','98')
                                 ->where('inventories_planner.flow_no','<>','99')
                                 ->where('inventories_planner.current_user', '=' , $request->user()->user_id)
+                                ->where(function($query) use($request){
+                                    if($request->input('medias')!=''){
+                                        $query->whereIn('medias.media_id',  $request->input('medias'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('categories')!=''){
+                                        $query->whereIn('inventory_categories.inventory_category_id',  $request->input('categories'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('implementations')!=''){
+                                        $query->whereIn('inventory_planner_implementation.implementation_id',  $request->input('implementations'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('years')!=''){
+                                        $query->whereIn('inventory_planner_implementation.year',  $request->input('years'));
+                                    }
+                                })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_category_name', 'like', '%' . $searchPhrase . '%')
@@ -658,6 +745,26 @@ class InventoryPlannerController extends Controller
                                     $query->where('inventories_planner.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('inventories_planner.created_by', $subordinate);
                                 })*/
+                                ->where(function($query) use($request){
+                                    if($request->input('medias')!=''){
+                                        $query->whereIn('medias.media_id',  $request->input('medias'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('categories')!=''){
+                                        $query->whereIn('inventory_categories.inventory_category_id',  $request->input('categories'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('implementations')!=''){
+                                        $query->whereIn('inventory_planner_implementation.implementation_id',  $request->input('implementations'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('years')!=''){
+                                        $query->whereIn('inventory_planner_implementation.year',  $request->input('years'));
+                                    }
+                                })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_category_name', 'like', '%' . $searchPhrase . '%')
@@ -683,6 +790,26 @@ class InventoryPlannerController extends Controller
                                     $query->where('inventories_planner.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('inventories_planner.created_by', $subordinate);
                                 })*/
+                                ->where(function($query) use($request){
+                                    if($request->input('medias')!=''){
+                                        $query->whereIn('medias.media_id',  $request->input('medias'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('categories')!=''){
+                                        $query->whereIn('inventory_categories.inventory_category_id',  $request->input('categories'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('implementations')!=''){
+                                        $query->whereIn('inventory_planner_implementation.implementation_id',  $request->input('implementations'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('years')!=''){
+                                        $query->whereIn('inventory_planner_implementation.year',  $request->input('years'));
+                                    }
+                                })
                                 ->where(function($query) use($searchPhrase) {
                                     $query->orWhere('media_name','like','%' . $searchPhrase . '%')
                                             ->orWhere('inventory_category_name', 'like', '%' . $searchPhrase . '%')
@@ -702,6 +829,26 @@ class InventoryPlannerController extends Controller
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.created_by')
                                 ->where('inventories_planner.active','0')
+                                ->where(function($query) use($request){
+                                    if($request->input('medias')!=''){
+                                        $query->whereIn('medias.media_id',  $request->input('medias'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('categories')!=''){
+                                        $query->whereIn('inventory_categories.inventory_category_id',  $request->input('categories'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('implementations')!=''){
+                                        $query->whereIn('inventory_planner_implementation.implementation_id',  $request->input('implementations'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('years')!=''){
+                                        $query->whereIn('inventory_planner_implementation.year',  $request->input('years'));
+                                    }
+                                })
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('inventories_planner.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('inventories_planner.created_by', $subordinate);
@@ -726,6 +873,26 @@ class InventoryPlannerController extends Controller
                                 ->join('implementations', 'implementations.implementation_id', '=', 'inventory_planner_implementation.implementation_id')
                                 ->join('users','users.user_id', '=', 'inventories_planner.created_by')
                                 ->where('inventories_planner.active','0')
+                                ->where(function($query) use($request){
+                                    if($request->input('medias')!=''){
+                                        $query->whereIn('medias.media_id',  $request->input('medias'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('categories')!=''){
+                                        $query->whereIn('inventory_categories.inventory_category_id',  $request->input('categories'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('implementations')!=''){
+                                        $query->whereIn('inventory_planner_implementation.implementation_id',  $request->input('implementations'));
+                                    }
+                                })
+                                ->where(function($query) use($request){
+                                    if($request->input('years')!=''){
+                                        $query->whereIn('inventory_planner_implementation.year',  $request->input('years'));
+                                    }
+                                })
                                 ->where(function($query) use($request, $subordinate){
                                     $query->where('inventories_planner.created_by', '=' , $request->user()->user_id)
                                             ->orWhereIn('inventories_planner.created_by', $subordinate);

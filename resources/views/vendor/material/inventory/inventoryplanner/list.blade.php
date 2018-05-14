@@ -1,5 +1,11 @@
 @extends('vendor.material.layouts.app')
 
+@section('vendorcss')
+<link href="{{ url('css/chosen.css') }}" rel="stylesheet">
+<link href="{{ url('css/bootstrap-select.min.css') }}" rel="stylesheet">
+<link href="{{ url('css/ajax-bootstrap-select.min.css') }}" rel="stylesheet">
+@endsection
+
 @section('content')
 <div class="card">
     <div class="card-header">
@@ -31,6 +37,66 @@
             <div class="tab-content">
                 @can('Inventory Planner-Approval')
                 <div role="tabpanel" class="tab-pane {!! ($active_tab_body==0) ? 'active' : '' !!}" id="needchecking">
+                    <div class="row">
+                        <div class="col-sm-3 m-b-20">
+                            <div class="form-group fg-line">
+                                <label>Media</label>
+                                <select id="need_checking_media_id" class="selectpicker" data-live-search="true" multiple required="true">
+                                    <!-- <option value="">ALL MEDIAS</option> -->
+                                    @foreach ($medias as $row)
+                                        {!! $selected = '' !!}
+                                        @if(old('media_id'))
+                                            @foreach (old('media_id') as $key => $value)
+                                                @if($value==$row->media_id)
+                                                    {!! $selected = 'selected' !!}
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                        <option value="{{ $row->media_id }}" {{ $selected }}>{{ $row->media_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 m-b-20">
+                            <div class="form-group fg-line">
+                                <label>Category</label>
+                                <select id="need_checking_inventory_category_id" class="selectpicker" multiple data-live-search="true">
+                                <!-- <option value="">ALL CATEGORIES</option> -->
+                                @foreach($inventory_categories as $row)
+                                    {!! $selected = '' !!}
+                                    @if(old('inventory_category_id')==$row->inventory_category_id)
+                                        {!! $selected = 'selected' !!}
+                                    @endif
+                                    <option value="{{ $row->inventory_category_id }}" {{ $selected }}>{{ $row->inventory_category_name }}</option>
+                                @endforeach
+                            </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 m-b-20">
+                            <div class="form-group fg-line">
+                                <label>Implementation</label>
+                                <select id="need_checking_implementation_id" class="selectpicker" multiple data-live-search="true">
+                                    <!-- <option value="">ALL IMPLEMENTATION</option> -->
+                                    @foreach ($implementations as $row)
+                                        {!! $selected = '' !!}
+                                        <option value="{{ $row->implementation_id }}" {{ $selected }}>{{ $row->implementation_month_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 m-b-20">
+                            <div class="form-group fg-line">
+                                <label>Year</label>
+                                <select id="need_checking_year" class="selectpicker" multiple data-live-search="true">
+                                    <!-- <option value="">ALL YEAR</option> -->
+                                    @foreach ($years as $row)
+                                        {!! $selected = '' !!}
+                                        <option value="{{ $row }}" {{ $selected }}>{{ $row }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                    <div class="table-responsive">
                         <table id="grid-data-needchecking" class="table table-hover">
                             <thead>
@@ -63,6 +129,66 @@
                     </div>                 
                 </div>
                 <div role="tabpanel" class="tab-pane" id="onprocess">
+                    <div class="row">
+                        <div class="col-sm-3 m-b-20">
+                            <div class="form-group fg-line">
+                                <label>Media</label>
+                                <select id="on_process_media_id" class="selectpicker" data-live-search="true" multiple required="true">
+                                    <!-- <option value="">ALL MEDIAS</option> -->
+                                    @foreach ($medias as $row)
+                                        {!! $selected = '' !!}
+                                        @if(old('media_id'))
+                                            @foreach (old('media_id') as $key => $value)
+                                                @if($value==$row->media_id)
+                                                    {!! $selected = 'selected' !!}
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                        <option value="{{ $row->media_id }}" {{ $selected }}>{{ $row->media_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 m-b-20">
+                            <div class="form-group fg-line">
+                                <label>Category</label>
+                                <select id="on_process_inventory_category_id" class="selectpicker" multiple data-live-search="true">
+                                <!-- <option value="">ALL CATEGORIES</option> -->
+                                @foreach($inventory_categories as $row)
+                                    {!! $selected = '' !!}
+                                    @if(old('inventory_category_id')==$row->inventory_category_id)
+                                        {!! $selected = 'selected' !!}
+                                    @endif
+                                    <option value="{{ $row->inventory_category_id }}" {{ $selected }}>{{ $row->inventory_category_name }}</option>
+                                @endforeach
+                            </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 m-b-20">
+                            <div class="form-group fg-line">
+                                <label>Implementation</label>
+                                <select id="on_process_implementation_id" class="selectpicker" multiple data-live-search="true">
+                                    <!-- <option value="">ALL IMPLEMENTATION</option> -->
+                                    @foreach ($implementations as $row)
+                                        {!! $selected = '' !!}
+                                        <option value="{{ $row->implementation_id }}" {{ $selected }}>{{ $row->implementation_month_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 m-b-20">
+                            <div class="form-group fg-line">
+                                <label>Year</label>
+                                <select id="on_process_year" class="selectpicker" multiple data-live-search="true">
+                                    <!-- <option value="">ALL YEAR</option> -->
+                                    @foreach ($years as $row)
+                                        {!! $selected = '' !!}
+                                        <option value="{{ $row }}" {{ $selected }}>{{ $row }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table id="grid-data-onprocess" class="table table-hover">
                             <thead>
@@ -90,6 +216,66 @@
                 @endcan
                 @can('Inventory Planner-Read')
                 <div role="tabpanel" class="tab-pane {!! ($active_tab_body==0) ? 'active' : '' !!}" id="finished">
+                    <div class="row">
+                        <div class="col-sm-3 m-b-20">
+                            <div class="form-group fg-line">
+                                <label>Media</label>
+                                <select id="finished_media_id" class="selectpicker" data-live-search="true" multiple required="true">
+                                    <!-- <option value="">ALL MEDIAS</option> -->
+                                    @foreach ($medias as $row)
+                                        {!! $selected = '' !!}
+                                        @if(old('media_id'))
+                                            @foreach (old('media_id') as $key => $value)
+                                                @if($value==$row->media_id)
+                                                    {!! $selected = 'selected' !!}
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                        <option value="{{ $row->media_id }}" {{ $selected }}>{{ $row->media_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 m-b-20">
+                            <div class="form-group fg-line">
+                                <label>Category</label>
+                                <select id="finished_inventory_category_id" class="selectpicker" multiple data-live-search="true">
+                                <!-- <option value="">ALL CATEGORIES</option> -->
+                                @foreach($inventory_categories as $row)
+                                    {!! $selected = '' !!}
+                                    @if(old('inventory_category_id')==$row->inventory_category_id)
+                                        {!! $selected = 'selected' !!}
+                                    @endif
+                                    <option value="{{ $row->inventory_category_id }}" {{ $selected }}>{{ $row->inventory_category_name }}</option>
+                                @endforeach
+                            </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 m-b-20">
+                            <div class="form-group fg-line">
+                                <label>Implementation</label>
+                                <select id="finished_implementation_id" class="selectpicker" multiple data-live-search="true">
+                                    <!-- <option value="">ALL IMPLEMENTATION</option> -->
+                                    @foreach ($implementations as $row)
+                                        {!! $selected = '' !!}
+                                        <option value="{{ $row->implementation_id }}" {{ $selected }}>{{ $row->implementation_month_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 m-b-20">
+                            <div class="form-group fg-line">
+                                <label>Year</label>
+                                <select id="finished_year" class="selectpicker" multiple data-live-search="true">
+                                    <!-- <option value="">ALL YEAR</option> -->
+                                    @foreach ($years as $row)
+                                        {!! $selected = '' !!}
+                                        <option value="{{ $row }}" {{ $selected }}>{{ $row }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table id="grid-data-finished" class="table table-hover">
                             <thead>
@@ -113,6 +299,66 @@
                 @endcan
                 @can('Inventory Planner-Create')
                 <div role="tabpanel" class="tab-pane {!! ($active_tab_body==0) ? 'active' : '' !!}" id="canceled">
+                    <div class="row">
+                        <div class="col-sm-3 m-b-20">
+                            <div class="form-group fg-line">
+                                <label>Media</label>
+                                <select id="canceled_media_id" class="selectpicker" data-live-search="true" multiple required="true">
+                                    <!-- <option value="">ALL MEDIAS</option> -->
+                                    @foreach ($medias as $row)
+                                        {!! $selected = '' !!}
+                                        @if(old('media_id'))
+                                            @foreach (old('media_id') as $key => $value)
+                                                @if($value==$row->media_id)
+                                                    {!! $selected = 'selected' !!}
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                        <option value="{{ $row->media_id }}" {{ $selected }}>{{ $row->media_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 m-b-20">
+                            <div class="form-group fg-line">
+                                <label>Category</label>
+                                <select id="canceled_inventory_category_id" class="selectpicker" multiple data-live-search="true">
+                                <!-- <option value="">ALL CATEGORIES</option> -->
+                                @foreach($inventory_categories as $row)
+                                    {!! $selected = '' !!}
+                                    @if(old('inventory_category_id')==$row->inventory_category_id)
+                                        {!! $selected = 'selected' !!}
+                                    @endif
+                                    <option value="{{ $row->inventory_category_id }}" {{ $selected }}>{{ $row->inventory_category_name }}</option>
+                                @endforeach
+                            </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 m-b-20">
+                            <div class="form-group fg-line">
+                                <label>Implementation</label>
+                                <select id="canceled_implementation_id" class="selectpicker" multiple data-live-search="true">
+                                    <!-- <option value="">ALL IMPLEMENTATION</option> -->
+                                    @foreach ($implementations as $row)
+                                        {!! $selected = '' !!}
+                                        <option value="{{ $row->implementation_id }}" {{ $selected }}>{{ $row->implementation_month_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 m-b-20">
+                            <div class="form-group fg-line">
+                                <label>Year</label>
+                                <select id="canceled_year" class="selectpicker" multiple data-live-search="true">
+                                    <!-- <option value="">ALL YEAR</option> -->
+                                    @foreach ($years as $row)
+                                        {!! $selected = '' !!}
+                                        <option value="{{ $row }}" {{ $selected }}>{{ $row }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table id="grid-data-canceled" class="table table-hover">
                             <thead>
@@ -139,6 +385,12 @@
         </div>
     </div>
 </div>    
+@endsection
+
+@section('vendorjs')
+<script src="{{ url('js/chosen.jquery.js') }}"></script>
+<script src="{{ url('js/bootstrap-select.min.js') }}"></script>
+<script src="{{ url('js/ajax-bootstrap-select.min.js') }}"></script>
 @endsection
 
 @section('customjs')

@@ -1,4 +1,17 @@
+var medias = [];
+var categories = [];
+var implementations = [];
+var years = [];
+
 //Need Checking
+$('#need_checking_media_id,#need_checking_inventory_inventory_category_id,#need_checking_implementation_id,#need_checking_year').change(function(){
+    medias = $('#need_checking_media_id').val();
+    categories = $('#need_checking_inventory_inventory_category_id').val();
+    implementations = $('#need_checking_implementation_id').val();
+    years = $('#need_checking_year').val();
+
+    $("#grid-data-needchecking").bootgrid("reload");
+});
 $("#grid-data-needchecking").bootgrid({
     rowCount: [10, 25, 50],
     ajax: true,
@@ -6,7 +19,11 @@ $("#grid-data-needchecking").bootgrid({
     {
         /* To accumulate custom parameter with the request object */
         return {
-            '_token': $('meta[name="csrf-token"]').attr('content')
+            '_token': $('meta[name="csrf-token"]').attr('content'),
+            'medias': medias,
+            'categories': categories,
+            'implementations': implementations,
+            'years': years
         };
     },
     url: base_url + "inventory/inventoryplanner/apiList/needchecking",
@@ -56,6 +73,14 @@ $("#grid-data-needchecking").bootgrid({
 });
 
 //On Process
+$('#on_process_media_id,#on_process_inventory_category_id,#on_process_implementation_id,#on_process_year').change(function(){
+    medias = $('#on_process_media_id').val();
+    categories = $('#on_process_inventory_category_id').val();
+    implementations = $('#on_process_implementation_id').val();
+    years = $('#on_process_year').val();
+
+    $("#grid-data-onprocess").bootgrid("reload");
+});
 $("#grid-data-onprocess").bootgrid({
     rowCount: [10, 25, 50],
     ajax: true,
@@ -63,7 +88,11 @@ $("#grid-data-onprocess").bootgrid({
     {
         /* To accumulate custom parameter with the request object */
         return {
-            '_token': $('meta[name="csrf-token"]').attr('content')
+            '_token': $('meta[name="csrf-token"]').attr('content'),
+            'medias': medias,
+            'categories': categories,
+            'implementations': implementations,
+            'years': years
         };
     },
     url: base_url + "inventory/inventoryplanner/apiList/onprocess",
@@ -130,6 +159,14 @@ $("#grid-data-onprocess").bootgrid({
 });
 
 //Finished
+$('#finished_media_id,#finished_inventory_category_id,#finished_implementation_id,#finished_year').change(function(){
+    medias = $('#finished_media_id').val();
+    categories = $('#finished_inventory_category_id').val();
+    implementations = $('#finished_implementation_id').val();
+    years = $('#finished_year').val();
+
+    $("#grid-data-finished").bootgrid("reload");
+});
 $("#grid-data-finished").bootgrid({
     rowCount: [10, 25, 50],
     ajax: true,
@@ -137,7 +174,11 @@ $("#grid-data-finished").bootgrid({
     {
         /* To accumulate custom parameter with the request object */
         return {
-            '_token': $('meta[name="csrf-token"]').attr('content')
+            '_token': $('meta[name="csrf-token"]').attr('content'),
+            'medias': medias,
+            'categories': categories,
+            'implementations': implementations,
+            'years': years
         };
     },
     url: base_url + "inventory/inventoryplanner/apiList/finished",
@@ -170,6 +211,14 @@ $("#grid-data-finished").bootgrid({
 });
 
 //Canceled
+$('#canceled_media_id,#canceled_inventory_category_id,#canceled_implementation_id,#canceled_year').change(function(){
+    medias = $('#canceled_media_id').val();
+    categories = $('#canceled_inventory_category_id').val();
+    implementations = $('#canceled_implementation_id').val();
+    years = $('#canceled_year').val();
+
+    $("#grid-data-canceled").bootgrid("reload");
+});
 $("#grid-data-canceled").bootgrid({
     rowCount: [10, 25, 50],
     ajax: true,
@@ -177,7 +226,11 @@ $("#grid-data-canceled").bootgrid({
     {
         /* To accumulate custom parameter with the request object */
         return {
-            '_token': $('meta[name="csrf-token"]').attr('content')
+            '_token': $('meta[name="csrf-token"]').attr('content'),
+            'medias': medias,
+            'categories': categories,
+            'implementations': implementations,
+            'years': years
         };
     },
     url: base_url + "inventory/inventoryplanner/apiList/canceled",
