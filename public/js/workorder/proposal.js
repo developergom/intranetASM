@@ -1,4 +1,7 @@
 //Need Checking
+$('#need_checking_proposal_type_id,#need_checking_media_id,#need_checking_industry_id').change(function(){
+    $("#grid-data-needchecking").bootgrid("reload");
+});
 $("#grid-data-needchecking").bootgrid({
     rowCount: [10, 25, 50],
     ajax: true,
@@ -6,7 +9,10 @@ $("#grid-data-needchecking").bootgrid({
     {
         /* To accumulate custom parameter with the request object */
         return {
-            '_token': $('meta[name="csrf-token"]').attr('content')
+            '_token': $('meta[name="csrf-token"]').attr('content'),
+            'proposal_type_id': $('#need_checking_proposal_type_id').val(),
+            'industry_id': $('#need_checking_industry_id').val(),
+            'media_id': $('#need_checking_media_id').val()
         };
     },
     url: base_url + "workorder/proposal/apiList/needchecking",
@@ -56,6 +62,9 @@ $("#grid-data-needchecking").bootgrid({
 });
 
 //On Process
+$('#on_process_proposal_type_id,#on_process_media_id,#on_process_industry_id').change(function(){
+    $("#grid-data-onprocess").bootgrid("reload");
+});
 $("#grid-data-onprocess").bootgrid({
     rowCount: [10, 25, 50],
     ajax: true,
@@ -63,7 +72,10 @@ $("#grid-data-onprocess").bootgrid({
     {
         /* To accumulate custom parameter with the request object */
         return {
-            '_token': $('meta[name="csrf-token"]').attr('content')
+            '_token': $('meta[name="csrf-token"]').attr('content'),
+            'proposal_type_id': $('#on_process_proposal_type_id').val(),
+            'industry_id': $('#on_process_industry_id').val(),
+            'media_id': $('#on_process_media_id').val()
         };
     },
     url: base_url + "workorder/proposal/apiList/onprocess",
@@ -130,6 +142,9 @@ $("#grid-data-onprocess").bootgrid({
 });
 
 //Finished
+$('#finished_proposal_type_id,#finished_media_id,#finished_industry_id').change(function(){
+    $("#grid-data-finished").bootgrid("reload");
+});
 $("#grid-data-finished").bootgrid({
     rowCount: [10, 25, 50],
     ajax: true,
@@ -137,7 +152,10 @@ $("#grid-data-finished").bootgrid({
     {
         /* To accumulate custom parameter with the request object */
         return {
-            '_token': $('meta[name="csrf-token"]').attr('content')
+            '_token': $('meta[name="csrf-token"]').attr('content'),
+            'proposal_type_id': $('#finished_proposal_type_id').val(),
+            'industry_id': $('#finished_industry_id').val(),
+            'media_id': $('#finished_media_id').val()
         };
     },
     url: base_url + "workorder/proposal/apiList/finished",
@@ -176,6 +194,9 @@ $("#grid-data-finished").bootgrid({
 });
 
 //Canceled
+$('#canceled_proposal_type_id,#canceled_media_id,#canceled_industry_id').change(function(){
+    $("#grid-data-canceled").bootgrid("reload");
+});
 $("#grid-data-canceled").bootgrid({
     rowCount: [10, 25, 50],
     ajax: true,
@@ -183,7 +204,10 @@ $("#grid-data-canceled").bootgrid({
     {
         /* To accumulate custom parameter with the request object */
         return {
-            '_token': $('meta[name="csrf-token"]').attr('content')
+            '_token': $('meta[name="csrf-token"]').attr('content'),
+            'proposal_type_id': $('#canceled_proposal_type_id').val(),
+            'industry_id': $('#canceled_industry_id').val(),
+            'media_id': $('#canceled_media_id').val()
         };
     },
     url: base_url + "workorder/proposal/apiList/canceled",
