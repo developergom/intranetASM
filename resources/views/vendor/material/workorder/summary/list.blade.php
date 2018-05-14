@@ -33,8 +33,8 @@
                         <div class="col-sm-4 m-b-20">
                             <div class="form-group fg-line">
                                 <label>Proposal Type</label>
-                                <select id="need_checking_proposal_type_id" class="selectpicker" data-live-search="true" required="true">
-                                    <option value="">ALL TYPES</option>
+                                <select id="need_checking_proposal_type_id" class="selectpicker" multiple data-live-search="true" required="true">
+                                    <!-- <option value="">ALL TYPES</option> -->
                                     @foreach($proposal_types as $row)
                                         {!! $selected = '' !!}
                                         @if(old('proposal_type_id')==$row->proposal_type_id)
@@ -48,8 +48,8 @@
                         <div class="col-sm-4 m-b-20">
                             <div class="form-group fg-line">
                                 <label>Industry</label>
-                                <select id="need_checking_industry_id" class="selectpicker" data-live-search="true" required="true">
-                                    <option value="">ALL INDUSTRIES</option>
+                                <select id="need_checking_industry_id" class="selectpicker" multiple data-live-search="true" required="true">
+                                    <!-- <option value="">ALL INDUSTRIES</option> -->
                                     @foreach ($industries as $row)
                                         {!! $selected = '' !!}
                                         @if(old('industry_id'))
@@ -67,8 +67,8 @@
                         <div class="col-sm-4 m-b-20">
                             <div class="form-group fg-line">
                                 <label>Media</label>
-                                <select id="need_checking_media_id" class="selectpicker" data-live-search="true" required="true">
-                                    <option value="">ALL MEDIAS</option>
+                                <select id="need_checking_media_id" class="selectpicker" multiple data-live-search="true" required="true">
+                                    <!-- <option value="">ALL MEDIAS</option> -->
                                     @foreach ($medias as $row)
                                         {!! $selected = '' !!}
                                         @if(old('media_id'))
@@ -117,8 +117,8 @@
                         <div class="col-sm-4 m-b-20">
                             <div class="form-group fg-line">
                                 <label>Proposal Type</label>
-                                <select id="on_process_proposal_type_id" class="selectpicker" data-live-search="true" required="true">
-                                    <option value="">ALL TYPES</option>
+                                <select id="on_process_proposal_type_id" class="selectpicker" multiple data-live-search="true" required="true">
+                                    <!-- <option value="">ALL TYPES</option> -->
                                     @foreach($proposal_types as $row)
                                         {!! $selected = '' !!}
                                         @if(old('proposal_type_id')==$row->proposal_type_id)
@@ -132,8 +132,8 @@
                         <div class="col-sm-4 m-b-20">
                             <div class="form-group fg-line">
                                 <label>Industry</label>
-                                <select id="on_process_industry_id" class="selectpicker" data-live-search="true" required="true">
-                                    <option value="">ALL INDUSTRIES</option>
+                                <select id="on_process_industry_id" class="selectpicker" multiple data-live-search="true" required="true">
+                                    <!-- multiple  -->
                                     @foreach ($industries as $row)
                                         {!! $selected = '' !!}
                                         @if(old('industry_id'))
@@ -151,8 +151,8 @@
                         <div class="col-sm-4 m-b-20">
                             <div class="form-group fg-line">
                                 <label>Media</label>
-                                <select id="on_process_media_id" class="selectpicker" data-live-search="true" required="true">
-                                    <option value="">ALL MEDIAS</option>
+                                <select id="on_process_media_id" class="selectpicker" multiple data-live-search="true" required="true">
+                                    <!-- <option value="">ALL MEDIAS</option> -->
                                     @foreach ($medias as $row)
                                         {!! $selected = '' !!}
                                         @if(old('media_id'))
@@ -195,8 +195,8 @@
                         <div class="col-sm-4 m-b-20">
                             <div class="form-group fg-line">
                                 <label>Proposal Type</label>
-                                <select id="finished_proposal_type_id" class="selectpicker" data-live-search="true" required="true">
-                                    <option value="">ALL TYPES</option>
+                                <select id="finished_proposal_type_id" class="selectpicker" multiple data-live-search="true" required="true">
+                                    <!-- <option value="">ALL TYPES</option> -->
                                     @foreach($proposal_types as $row)
                                         {!! $selected = '' !!}
                                         @if(old('proposal_type_id')==$row->proposal_type_id)
@@ -210,8 +210,8 @@
                         <div class="col-sm-4 m-b-20">
                             <div class="form-group fg-line">
                                 <label>Industry</label>
-                                <select id="finished_industry_id" class="selectpicker" data-live-search="true" required="true">
-                                    <option value="">ALL INDUSTRIES</option>
+                                <select id="finished_industry_id" class="selectpicker" multiple data-live-search="true" required="true">
+                                    <!-- <option value="">ALL INDUSTRIES</option> -->
                                     @foreach ($industries as $row)
                                         {!! $selected = '' !!}
                                         @if(old('industry_id'))
@@ -229,8 +229,8 @@
                         <div class="col-sm-4 m-b-20">
                             <div class="form-group fg-line">
                                 <label>Media</label>
-                                <select id="finished_media_id" class="selectpicker" data-live-search="true" required="true">
-                                    <option value="">ALL MEDIAS</option>
+                                <select id="finished_media_id" class="selectpicker" multiple data-live-search="true" required="true">
+                                    <!-- <option value="">ALL MEDIAS</option> -->
                                     @foreach ($medias as $row)
                                         {!! $selected = '' !!}
                                         @if(old('media_id'))
@@ -269,8 +269,8 @@
                         <div class="col-sm-4 m-b-20">
                             <div class="form-group fg-line">
                                 <label>Proposal Type</label>
-                                <select id="canceled_proposal_type_id" class="selectpicker" data-live-search="true" required="true">
-                                    <option value="">ALL TYPES</option>
+                                <select id="canceled_proposal_type_id" class="selectpicker" multiple data-live-search="true" required="true">
+                                    <!-- <option value="">ALL TYPES</option> -->
                                     @foreach($proposal_types as $row)
                                         {!! $selected = '' !!}
                                         @if(old('proposal_type_id')==$row->proposal_type_id)
@@ -284,8 +284,8 @@
                         <div class="col-sm-4 m-b-20">
                             <div class="form-group fg-line">
                                 <label>Industry</label>
-                                <select id="canceled_industry_id" class="selectpicker" data-live-search="true" required="true">
-                                    <option value="">ALL INDUSTRIES</option>
+                                <select id="canceled_industry_id" class="selectpicker" multiple data-live-search="true" required="true">
+                                    <!-- <option value="">ALL INDUSTRIES</option> -->
                                     @foreach ($industries as $row)
                                         {!! $selected = '' !!}
                                         @if(old('industry_id'))
@@ -303,8 +303,8 @@
                         <div class="col-sm-4 m-b-20">
                             <div class="form-group fg-line">
                                 <label>Media</label>
-                                <select id="canceled_media_id" class="selectpicker" data-live-search="true" required="true">
-                                    <option value="">ALL MEDIAS</option>
+                                <select id="canceled_media_id" class="selectpicker" multiple data-live-search="true" required="true">
+                                    <!-- <option value="">ALL MEDIAS</option> -->
                                     @foreach ($medias as $row)
                                         {!! $selected = '' !!}
                                         @if(old('media_id'))

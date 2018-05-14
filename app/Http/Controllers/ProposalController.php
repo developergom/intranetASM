@@ -408,17 +408,17 @@ class ProposalController extends Controller
                                 ->where('proposals.current_user', '<>' , $request->user()->user_id)
                                 ->where(function($query) use($request){
                                     if($request->input('proposal_type_id')!=''){
-                                        $query->where('proposals.proposal_type_id', '=', $request->input('proposal_type_id'));
+                                        $query->whereIn('proposals.proposal_type_id', $request->input('proposal_type_id'));
                                     }
                                 })
                                 ->where(function($query) use($request){
                                     if($request->input('industry_id')!=''){
-                                        $query->where('proposal_industry.industry_id', '=', $request->input('industry_id'));
+                                        $query->whereIn('proposal_industry.industry_id', $request->input('industry_id'));
                                     }
                                 })
                                 ->where(function($query) use($request){
                                     if($request->input('media_id')!=''){
-                                        $query->where('proposal_media.media_id', '=', $request->input('media_id'));
+                                        $query->whereIn('proposal_media.media_id', $request->input('media_id'));
                                     }
                                 })
                                 ->where(function($query) use($request, $subordinate){
@@ -444,17 +444,17 @@ class ProposalController extends Controller
                                 ->where('proposals.current_user', '<>' , $request->user()->user_id)
                                 ->where(function($query) use($request){
                                     if($request->input('proposal_type_id')!=''){
-                                        $query->where('proposals.proposal_type_id', '=', $request->input('proposal_type_id'));
+                                        $query->whereIn('proposals.proposal_type_id', $request->input('proposal_type_id'));
                                     }
                                 })
                                 ->where(function($query) use($request){
                                     if($request->input('industry_id')!=''){
-                                        $query->where('proposal_industry.industry_id', '=', $request->input('industry_id'));
+                                        $query->whereIn('proposal_industry.industry_id', $request->input('industry_id'));
                                     }
                                 })
                                 ->where(function($query) use($request){
                                     if($request->input('media_id')!=''){
-                                        $query->where('proposal_media.media_id', '=', $request->input('media_id'));
+                                        $query->whereIn('proposal_media.media_id', $request->input('media_id'));
                                     }
                                 })
                                 ->where(function($query) use($request, $subordinate){
@@ -481,17 +481,17 @@ class ProposalController extends Controller
                                 ->where('proposals.current_user', '=' , $request->user()->user_id)
                                 ->where(function($query) use($request){
                                     if($request->input('proposal_type_id')!=''){
-                                        $query->where('proposals.proposal_type_id', '=', $request->input('proposal_type_id'));
+                                        $query->whereIn('proposals.proposal_type_id', $request->input('proposal_type_id'));
                                     }
                                 })
                                 ->where(function($query) use($request){
                                     if($request->input('industry_id')!=''){
-                                        $query->where('proposal_industry.industry_id', '=', $request->input('industry_id'));
+                                        $query->whereIn('proposal_industry.industry_id', $request->input('industry_id'));
                                     }
                                 })
                                 ->where(function($query) use($request){
                                     if($request->input('media_id')!=''){
-                                        $query->where('proposal_media.media_id', '=', $request->input('media_id'));
+                                        $query->whereIn('proposal_media.media_id', $request->input('media_id'));
                                     }
                                 })
                                 ->where(function($query) use($searchPhrase) {
@@ -512,17 +512,17 @@ class ProposalController extends Controller
                                 ->where('proposals.current_user', '=' , $request->user()->user_id)
                                 ->where(function($query) use($request){
                                     if($request->input('proposal_type_id')!=''){
-                                        $query->where('proposals.proposal_type_id', '=', $request->input('proposal_type_id'));
+                                        $query->whereIn('proposals.proposal_type_id', $request->input('proposal_type_id'));
                                     }
                                 })
                                 ->where(function($query) use($request){
                                     if($request->input('industry_id')!=''){
-                                        $query->where('proposal_industry.industry_id', '=', $request->input('industry_id'));
+                                        $query->whereIn('proposal_industry.industry_id', $request->input('industry_id'));
                                     }
                                 })
                                 ->where(function($query) use($request){
                                     if($request->input('media_id')!=''){
-                                        $query->where('proposal_media.media_id', '=', $request->input('media_id'));
+                                        $query->whereIn('proposal_media.media_id', $request->input('media_id'));
                                     }
                                 })
                                 ->where(function($query) use($searchPhrase) {
@@ -542,17 +542,17 @@ class ProposalController extends Controller
                                 ->where('proposals.flow_no','=','98')
                                 ->where(function($query) use($request){
                                     if($request->input('proposal_type_id')!=''){
-                                        $query->where('proposals.proposal_type_id', '=', $request->input('proposal_type_id'));
+                                        $query->whereIn('proposals.proposal_type_id', $request->input('proposal_type_id'));
                                     }
                                 })
                                 ->where(function($query) use($request){
                                     if($request->input('industry_id')!=''){
-                                        $query->where('proposal_industry.industry_id', '=', $request->input('industry_id'));
+                                        $query->whereIn('proposal_industry.industry_id', $request->input('industry_id'));
                                     }
                                 })
                                 ->where(function($query) use($request){
                                     if($request->input('media_id')!=''){
-                                        $query->where('proposal_media.media_id', '=', $request->input('media_id'));
+                                        $query->whereIn('proposal_media.media_id', $request->input('media_id'));
                                     }
                                 })
                                 ->where(function($query) use($request, $subordinate){
@@ -577,17 +577,17 @@ class ProposalController extends Controller
                                 ->where('proposals.flow_no','=','98')
                                 ->where(function($query) use($request){
                                     if($request->input('proposal_type_id')!=''){
-                                        $query->where('proposals.proposal_type_id', '=', $request->input('proposal_type_id'));
+                                        $query->whereIn('proposals.proposal_type_id', $request->input('proposal_type_id'));
                                     }
                                 })
                                 ->where(function($query) use($request){
                                     if($request->input('industry_id')!=''){
-                                        $query->where('proposal_industry.industry_id', '=', $request->input('industry_id'));
+                                        $query->whereIn('proposal_industry.industry_id', $request->input('industry_id'));
                                     }
                                 })
                                 ->where(function($query) use($request){
                                     if($request->input('media_id')!=''){
-                                        $query->where('proposal_media.media_id', '=', $request->input('media_id'));
+                                        $query->whereIn('proposal_media.media_id', $request->input('media_id'));
                                     }
                                 })
                                 ->where(function($query) use($request, $subordinate){
@@ -609,17 +609,17 @@ class ProposalController extends Controller
                                 ->where('proposals.active','0')
                                 ->where(function($query) use($request){
                                     if($request->input('proposal_type_id')!=''){
-                                        $query->where('proposals.proposal_type_id', '=', $request->input('proposal_type_id'));
+                                        $query->whereIn('proposals.proposal_type_id', $request->input('proposal_type_id'));
                                     }
                                 })
                                 ->where(function($query) use($request){
                                     if($request->input('industry_id')!=''){
-                                        $query->where('proposal_industry.industry_id', '=', $request->input('industry_id'));
+                                        $query->whereIn('proposal_industry.industry_id', $request->input('industry_id'));
                                     }
                                 })
                                 ->where(function($query) use($request){
                                     if($request->input('media_id')!=''){
-                                        $query->where('proposal_media.media_id', '=', $request->input('media_id'));
+                                        $query->whereIn('proposal_media.media_id', $request->input('media_id'));
                                     }
                                 })
                                 ->where(function($query) use($request, $subordinate){
@@ -641,17 +641,17 @@ class ProposalController extends Controller
                                 ->where('proposals.active','0')
                                 ->where(function($query) use($request){
                                     if($request->input('proposal_type_id')!=''){
-                                        $query->where('proposals.proposal_type_id', '=', $request->input('proposal_type_id'));
+                                        $query->whereIn('proposals.proposal_type_id', $request->input('proposal_type_id'));
                                     }
                                 })
                                 ->where(function($query) use($request){
                                     if($request->input('industry_id')!=''){
-                                        $query->where('proposal_industry.industry_id', '=', $request->input('industry_id'));
+                                        $query->whereIn('proposal_industry.industry_id', $request->input('industry_id'));
                                     }
                                 })
                                 ->where(function($query) use($request){
                                     if($request->input('media_id')!=''){
-                                        $query->where('proposal_media.media_id', '=', $request->input('media_id'));
+                                        $query->whereIn('proposal_media.media_id', $request->input('media_id'));
                                     }
                                 })
                                 ->where(function($query) use($request, $subordinate){

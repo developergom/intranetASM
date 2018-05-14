@@ -1,5 +1,13 @@
+var proposal_types = [];
+var industries = [];
+var medias = [];
+
 //Need Checking
 $('#need_checking_proposal_type_id,#need_checking_media_id,#need_checking_industry_id').change(function(){
+    proposal_types = $('#need_checking_proposal_type_id').val();
+    industries = $('#need_checking_industry_id').val();
+    medias = $('#need_checking_media_id').val();
+
     $("#grid-data-needchecking").bootgrid("reload");
 });
 $("#grid-data-needchecking").bootgrid({
@@ -10,9 +18,9 @@ $("#grid-data-needchecking").bootgrid({
         /* To accumulate custom parameter with the request object */
         return {
             '_token': $('meta[name="csrf-token"]').attr('content'),
-            'proposal_type_id': $('#need_checking_proposal_type_id').val(),
-            'industry_id': $('#need_checking_industry_id').val(),
-            'media_id': $('#need_checking_media_id').val()
+            'proposal_type_id': proposal_types,
+            'industry_id': industries,
+            'media_id': medias
         };
     },
     url: base_url + "workorder/proposal/apiList/needchecking",
@@ -63,6 +71,10 @@ $("#grid-data-needchecking").bootgrid({
 
 //On Process
 $('#on_process_proposal_type_id,#on_process_media_id,#on_process_industry_id').change(function(){
+    proposal_types = $('#on_process_proposal_type_id').val();
+    industries = $('#on_process_industry_id').val();
+    medias = $('#on_process_media_id').val();
+
     $("#grid-data-onprocess").bootgrid("reload");
 });
 $("#grid-data-onprocess").bootgrid({
@@ -73,9 +85,9 @@ $("#grid-data-onprocess").bootgrid({
         /* To accumulate custom parameter with the request object */
         return {
             '_token': $('meta[name="csrf-token"]').attr('content'),
-            'proposal_type_id': $('#on_process_proposal_type_id').val(),
-            'industry_id': $('#on_process_industry_id').val(),
-            'media_id': $('#on_process_media_id').val()
+            'proposal_type_id': proposal_types,
+            'industry_id': industries,
+            'media_id': medias
         };
     },
     url: base_url + "workorder/proposal/apiList/onprocess",
@@ -143,6 +155,10 @@ $("#grid-data-onprocess").bootgrid({
 
 //Finished
 $('#finished_proposal_type_id,#finished_media_id,#finished_industry_id').change(function(){
+    proposal_types = $('#finished_proposal_type_id').val();
+    industries = $('#finished_industry_id').val();
+    medias = $('#finished_media_id').val();
+
     $("#grid-data-finished").bootgrid("reload");
 });
 $("#grid-data-finished").bootgrid({
@@ -153,9 +169,9 @@ $("#grid-data-finished").bootgrid({
         /* To accumulate custom parameter with the request object */
         return {
             '_token': $('meta[name="csrf-token"]').attr('content'),
-            'proposal_type_id': $('#finished_proposal_type_id').val(),
-            'industry_id': $('#finished_industry_id').val(),
-            'media_id': $('#finished_media_id').val()
+            'proposal_type_id': proposal_types,
+            'industry_id': industries,
+            'media_id': medias
         };
     },
     url: base_url + "workorder/proposal/apiList/finished",
@@ -195,6 +211,10 @@ $("#grid-data-finished").bootgrid({
 
 //Canceled
 $('#canceled_proposal_type_id,#canceled_media_id,#canceled_industry_id').change(function(){
+    proposal_types = $('#canceled_proposal_type_id').val();
+    industries = $('#canceled_industry_id').val();
+    medias = $('canceled_media_id').val();
+
     $("#grid-data-canceled").bootgrid("reload");
 });
 $("#grid-data-canceled").bootgrid({
@@ -205,9 +225,9 @@ $("#grid-data-canceled").bootgrid({
         /* To accumulate custom parameter with the request object */
         return {
             '_token': $('meta[name="csrf-token"]').attr('content'),
-            'proposal_type_id': $('#canceled_proposal_type_id').val(),
-            'industry_id': $('#canceled_industry_id').val(),
-            'media_id': $('#canceled_media_id').val()
+            'proposal_type_id': proposal_types,
+            'industry_id': industries,
+            'media_id': medias
         };
     },
     url: base_url + "workorder/proposal/apiList/canceled",
