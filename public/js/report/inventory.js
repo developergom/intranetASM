@@ -1,6 +1,8 @@
 var myToken = $('meta[name="csrf-token"]').attr('content');
 var media_ids = [];
 var industry_ids = [];
+var sales_agents = [];
+var marketing_planners = [];
 var sell_period_months = [];
 var sell_period_years = [];
 var offer_period_start = '';
@@ -29,6 +31,8 @@ $(document).ready(function() {
 function generate_report() {
 	media_ids = $('#media_id').val();
 	industry_ids = $('#industry_id').val();
+	sales_agents = $('#sales_agent').val();
+	marketing_planners = $('#marketing_planner').val();
 	sell_period_months = $('#sell_period_id').val();
 	sell_period_years = $('#sell_period_year').val();
 	offer_period_start = $('#offer_period_start').val();
@@ -53,6 +57,8 @@ function generate_report() {
 				_token: myToken,
 				media_ids : media_ids,
 				industry_ids : industry_ids,
+				sales_agents : sales_agents,
+				marketing_planners : marketing_planners,
 				sell_period_months : sell_period_months,
 				sell_period_years : sell_period_years,
 				offer_period_start : offer_period_start,
@@ -139,6 +145,8 @@ function generate_report() {
 function refresh_report_variable() {
 	media_ids = [];
 	industry_ids = [];
+	marketing_planners = [];
+	sales_agents = [];
 	sell_period_months = [];
 	sell_period_years = [];
 	offer_period_start = '';
@@ -146,6 +154,8 @@ function refresh_report_variable() {
 
 	$('#media_id').val('');
 	$('#industry_id').val('');
+	$('#marketing_planner').val('');
+	$('#sales_agent').val('');
 	$('#sell_period_id').val('');
 	$('#sell_period_year').val('');
 	$('#offer_period_start').val('');
@@ -153,6 +163,8 @@ function refresh_report_variable() {
 
 	$('#media_id').selectpicker('refresh');
 	$('#industry_id').selectpicker('refresh');
+	$('#sales_agent').selectpicker('refresh');
+	$('#marketing_planner').selectpicker('refresh');
 	$('#sell_period_id').selectpicker('refresh');
 	$('#sell_period_year').selectpicker('refresh');
 

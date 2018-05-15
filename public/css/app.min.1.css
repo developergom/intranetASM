@@ -11722,7 +11722,7 @@ a.lv-footer:hover {
   -moz-backface-visibility: hidden;
   backface-visibility: hidden;
   content: "";
-  width: 113px;
+  /* width: 113px; */
   height: 100%;
   background: rgba(0, 0, 0, 0.1);
   position: absolute;

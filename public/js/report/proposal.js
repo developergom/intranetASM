@@ -1,6 +1,7 @@
 var myToken = $('meta[name="csrf-token"]').attr('content');
 var media_ids = [];
 var industry_ids = [];
+var sales_agents = [];
 var offer_period_start = '';
 var offer_period_end = '';
 
@@ -29,6 +30,7 @@ function generate_report() {
 	industry_ids = $('#industry_id').val();
 	offer_period_start = $('#offer_period_start').val();
 	offer_period_end = $('#offer_period_end').val();
+	sales_agents = $('#sales_agent').val();
 
 	/*console.log("Media " + media_ids);
 	console.log("Offer period_start " + offer_period_start);
@@ -50,7 +52,8 @@ function generate_report() {
 				media_ids : media_ids,
 				industry_ids : industry_ids,
 				offer_period_start : offer_period_start,
-				offer_period_end : offer_period_end
+				offer_period_end : offer_period_end,
+				sales_agents: sales_agents
 			},
 			error: function(data) {
 				console.log('error');
@@ -129,16 +132,19 @@ function generate_report() {
 function refresh_report_variable() {
 	media_ids = [];
 	industry_ids = [];
+	sales_agents = [];
 	offer_period_start = '';
 	offer_period_end = '';
 
 	$('#media_id').val('');
 	$('#industry_id').val('');
+	$('#sales_agent').val('');
 	$('#offer_period_start').val('');
 	$('#offer_period_end').val('');
 
 	$('#media_id').selectpicker('refresh');
 	$('#industry_id').selectpicker('refresh');
+	$('#sales_agent').selectpicker('refresh');
 
 	$('#grid-data-result tbody').empty();
 	$('#btn_export_report').attr('disabled', true);

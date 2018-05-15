@@ -35,6 +35,14 @@
 			                            </select>
 						            </div>
 						            <div class="form-group">
+						                <label for="sales_agent">Sales Agent(s)</label>
+						                <select name="sales_agent" id="sales_agent" class="form-control input-sm selectpicker" data-size="5" data-live-search="true" multiple>
+			                                @foreach ($sales_agent as $key => $value)
+											    <option value="{{ $value->user_id }}">{{ $value->user_firstname . ' ' . $value->user_lastname }}</option>
+											@endforeach
+			                            </select>
+						            </div>
+						            <div class="form-group">
 						                <label for="sell_periode_start">Offer Period Start</label>
 					                    <div class="fg-line">
 					                        <input type="text" class="form-control input-sm date-picker" name="offer_period_start" id="offer_period_start" placeholder="Offer Period Start e.g 17/08/1945" maxlength="10" value="">

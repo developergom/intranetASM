@@ -35,6 +35,22 @@
 			                            </select>
 						            </div>
 						            <div class="form-group">
+						                <label for="sales_agent">Sales Agent(s)</label>
+						                <select name="sales_agent" id="sales_agent" class="form-control input-sm selectpicker" data-size="5" data-live-search="true" multiple>
+			                                @foreach ($sales_agent as $key => $value)
+											    <option value="{{ $value->user_id }}">{{ $value->user_firstname . ' ' . $value->user_lastname }}</option>
+											@endforeach
+			                            </select>
+						            </div>
+						            <div class="form-group">
+						                <label for="marketing_planner">Planner(s)</label>
+						                <select name="marketing_planner" id="marketing_planner" class="form-control input-sm selectpicker" data-size="5" data-live-search="true" multiple>
+			                                @foreach ($marketing_planners as $key => $value)
+											    <option value="{{ $value->user_id }}">{{ $value->user_firstname . ' ' . $value->user_lastname }}</option>
+											@endforeach
+			                            </select>
+						            </div>
+						            <div class="form-group">
 						                <label for="sell_period_id">Sell Period Month(s)</label>
 						                <select name="sell_period_id" id="sell_period_id" class="form-control input-sm selectpicker" data-size="5" data-live-search="true" multiple>
 			                                @foreach ($sellperiods as $key => $value)

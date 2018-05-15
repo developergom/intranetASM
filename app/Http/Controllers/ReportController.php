@@ -39,6 +39,10 @@ class ReportController extends Controller
         $data['sellperiods'] = SellPeriod::where('active', '1')->orderBy('sell_period_month')->get();
         $data['years'] = [$year, $year-1, $year-2];
 
+        $user_library = new UserLibrary();
+        $data['sales_agent'] = $user_library->getSalesAgents();
+        $data['marketing_planners'] = $user_library->getMarketingPlanners();
+
     	return view('vendor.material.report.inventory.index', $data);
     }
 
@@ -53,6 +57,8 @@ class ReportController extends Controller
 
         $data['industries'] = Industry::where('active', '1')->orderBy('industry_name')->get();
         $data['medias'] = Media::where('active', '1')->orderBy('media_name')->get();
+        $user_library = new UserLibrary();
+        $data['sales_agent'] = $user_library->getSalesAgents();
 
         return view('vendor.material.report.proposal.index', $data);
     }
@@ -98,6 +104,8 @@ class ReportController extends Controller
     public function apiGenerateInventoryReport(Request $request) {
         $media_ids = $request->input('media_ids');
         $industry_ids = $request->input('industry_ids');
+        $sales_agents = $request->input('sales_agents');
+        $marketing_planners = $request->input('marketing_planners');
         $sell_period_months = $request->input('sell_period_months');
     	$sell_period_years = $request->input('sell_period_years');
         $offer_period_start = $request->input('offer_period_start');
@@ -167,6 +175,14 @@ class ReportController extends Controller
             $q .= " AND h.industry_id IN (" . implode(', ', array_map(null, $industry_ids)) . ")";
         }
 
+        if($sales_agents != "") {
+            $q .= " AND f.created_by IN (" . implode(', ', array_map(null, $sales_agents)) . ")";
+        }
+
+        if($marketing_planners != "") {
+            $q .= " AND a.created_by IN (" . implode(', ', array_map(null, $marketing_planners)) . ")";
+        }
+
         if($sell_period_months != "") {
             $q .= " AND d.sell_period_id IN (" . implode(', ', array_map(null, $sell_period_months)) . ")";
         }
@@ -228,6 +244,7 @@ class ReportController extends Controller
     public function apiGenerateProposalReport(Request $request) {
         $media_ids = $request->input('media_ids');
         $industry_ids = $request->input('industry_ids');
+        $sales_agents = $request->input('sales_agents');
         $offer_period_start = $request->input('offer_period_start');
         $offer_period_end = $request->input('offer_period_end');
 
@@ -274,6 +291,10 @@ class ReportController extends Controller
 
         if($industry_ids != "") {
             $q .= " AND c.industry_id IN (" . implode(', ', array_map(null, $industry_ids)) . ")";
+        }
+
+        if($sales_agents != "") {
+            $q .= " AND a.created_by IN (" . implode(', ', array_map(null, $sales_agents)) . ")";
         }
 
         if($offer_period_start != "") {

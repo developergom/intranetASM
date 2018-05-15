@@ -79,4 +79,28 @@ class UserLibrary{
 
 		return $result;
 	}
+
+	public function getSalesAgents()
+	{
+		$result = User::join('users_roles', 'users_roles.user_id', '=', 'users.user_id')
+						->join('roles', 'roles.role_id', '=', 'users_roles.role_id')
+						->where('roles.role_name', '=', 'Sales Officer')
+						->orderBy('user_firstname')
+						->orderBy('user_lastname')
+						->get();
+
+		return $result;
+	}
+
+	public function getMarketingPlanners()
+	{
+		$result = User::join('users_roles', 'users_roles.user_id', '=', 'users.user_id')
+						->join('roles', 'roles.role_id', '=', 'users_roles.role_id')
+						->where('roles.role_name', '=', 'Planner Officer')
+						->orderBy('user_firstname')
+						->orderBy('user_lastname')
+						->get();
+
+		return $result;
+	}
 }
