@@ -29,7 +29,7 @@
 	                <label for="proposal_cost" class="col-sm-2 control-label">Cost</label>
 	                <div class="col-sm-4">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="proposal_cost" id="proposal_cost" placeholder="Cost" maxlength="20" value="{{ old('proposal_cost') }}" required="true">
+	                        <input type="text" class="form-control input-sm" name="proposal_cost" id="proposal_cost" placeholder="Cost" maxlength="20" value="{{ old('proposal_cost') }}">
 	                    </div>
 	                    @if ($errors->has('proposal_cost'))
 			                <span class="help-block">
@@ -45,7 +45,7 @@
 	                <label for="proposal_media_cost_print" class="col-sm-2 control-label">Media Cost Print</label>
 	                <div class="col-sm-4">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="proposal_media_cost_print" id="proposal_media_cost_print" placeholder="Media Cost Print" maxlength="20" value="{{ old('proposal_media_cost_print') }}" required="true">
+	                        <input type="text" class="form-control input-sm" name="proposal_media_cost_print" id="proposal_media_cost_print" placeholder="Media Cost Print" maxlength="20" value="{{ old('proposal_media_cost_print') }}">
 	                    </div>
 	                    @if ($errors->has('proposal_media_cost_print'))
 			                <span class="help-block">
@@ -61,7 +61,7 @@
 	                <label for="proposal_media_cost_other" class="col-sm-2 control-label">Media Cost Digital/Other</label>
 	                <div class="col-sm-4">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="proposal_media_cost_other" id="proposal_media_cost_other" placeholder="Media Cost Other" maxlength="20" value="{{ old('proposal_media_cost_other') }}" required="true">
+	                        <input type="text" class="form-control input-sm" name="proposal_media_cost_other" id="proposal_media_cost_other" placeholder="Media Cost Other" maxlength="20" value="{{ old('proposal_media_cost_other') }}">
 	                    </div>
 	                    @if ($errors->has('proposal_media_cost_other'))
 			                <span class="help-block">
@@ -77,7 +77,7 @@
 	                <label for="proposal_total_offering" class="col-sm-2 control-label">Total Offering</label>
 	                <div class="col-sm-4">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="proposal_total_offering" id="proposal_total_offering" placeholder="Total Offering" maxlength="20" value="{{ old('proposal_total_offering') }}" required="true">
+	                        <input type="text" class="form-control input-sm" name="proposal_total_offering" id="proposal_total_offering" placeholder="Total Offering" maxlength="20" value="{{ old('proposal_total_offering') }}">
 	                    </div>
 	                    @if ($errors->has('proposal_total_offering'))
 			                <span class="help-block">
@@ -88,6 +88,40 @@
 	                <div class="col-sm-6">
 	                	<span class="badge" id="format_proposal_total_offering">0</span>
 	                </div>
+	            </div>
+	            <div class="form-group">
+	            	<label for="" class="col-sm-2 control-label"></label>
+	            	<div class="col-sm-4" align="right">
+	            		<div class="fg-line">
+	            			<a href="javascript:void(0)" class="btn btn-warning waves-effect" id="btn_add_offering">ADD OFFERING</a>
+	            		</div>
+	            	</div>
+	            </div>
+	            <div class="form-group">
+	            	<div class="col-sm-offset-2 col-sm-10">
+	            		<table id="offering_post" class="table">
+	            			<thead>
+	            				<tr>
+	            					<th>Cost</th>
+	            					<th>Media Cost Print</th>
+	            					<th>Media Cost Digital/Other</th>
+	            					<th>Total Offering</th>
+	            				</tr>
+	            			</thead>
+	            			<tbody>
+		            			@foreach($proposal->costdetails_proposal as $row)
+		            			<tr>  	
+		            				<input type="hidden" name="offering_cost_details_id[]" value="{{ $row->proposal_cost_details_id }}" readonly>
+						    		<td><input type="text" name="offering_post_cost[]" class="form-control" value="{{ $row->proposal_cost }}" readonly></td>
+						    		<td><input type="text" name="offering_post_media_cost_print[]" class="form-control" value="{{ $row->proposal_media_cost_print }}" readonly></td>
+						    		<td><input type="text" name="offering_post_media_cost_other[]" class="form-control" value="{{ $row->proposal_media_cost_other }}" readonly></td>
+						    		<td><input type="text" name="offering_post_total_offering[]" class="form-control" value="{{ $row->proposal_total_offering }}" readonly></td>
+						    		<td><a href="javascript:void(0)" class="btn btn-danger btn-offering-delete">Remove</a></td>
+						    	</tr>
+		            			@endforeach
+	            			</tbody>
+	            		</table>
+	            	</div>
 	            </div>
 	            <div class="form-group">
 	                <label for="comment" class="col-sm-2 control-label">Message</label>

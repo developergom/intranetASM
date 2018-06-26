@@ -35,6 +35,8 @@ use App\ProposalOtherPrice;
 use App\ProposalStatus;
 use App\ProposalType;
 use App\User;
+use App\ProposalCostDetails;
+use App\InventoryPlannerCostDetails;
 
 use App\Ibrol\Libraries\FlowLibrary;
 use App\Ibrol\Libraries\GeneratorLibrary;
@@ -915,10 +917,15 @@ class ProposalController extends Controller
     {
         $this->validate($request, [
             'comment' => 'required',
+            /*
             'proposal_cost' => 'required|numeric',
             'proposal_media_cost_print' => 'required|numeric',
             'proposal_media_cost_other' => 'required|numeric',
-            'proposal_total_offering' => 'required|numeric'
+            'proposal_total_offering' => 'required|numeric' */
+            'offering_post_cost[]' => 'array',
+            'offering_post_media_cost_print[]' => 'array',
+            'offering_post_media_cost_other[]' => 'array',
+            'offering_post_total_offering[]' => 'array',
         ]);
 
         $proposal = Proposal::find($id);
@@ -932,10 +939,10 @@ class ProposalController extends Controller
 
         $proposal->flow_no = $nextFlow['flow_no'];
         $proposal->current_user = $nextFlow['current_user'];
-        $proposal->proposal_cost = $request->input('proposal_cost');
-        $proposal->proposal_media_cost_print = $request->input('proposal_media_cost_print');
-        $proposal->proposal_media_cost_other = $request->input('proposal_media_cost_other');
-        $proposal->proposal_total_offering = $request->input('proposal_total_offering');
+        $proposal->proposal_cost = 0;
+        $proposal->proposal_media_cost_print = 0;
+        $proposal->proposal_media_cost_other = 0;
+        $proposal->proposal_total_offering = 0;
         $proposal->proposal_no = $proposal_no;
         $proposal->proposal_ready_date = date('Y-m-d H:i:s');
         $proposal->proposal_status_id = 3;
@@ -980,6 +987,32 @@ class ProposalController extends Controller
             Proposal::find($proposal->proposal_id)->uploadfiles()->syncWithoutDetaching($fileArray);    
         }
 
+        if(!empty($request->input('offering_cost_details_id'))){
+            Proposal::find($proposal->proposal_id)->costdetails_proposal_auto()->sync($request->input('offering_cost_details_id'));
+        }
+
+        //Saving Cost Details
+        $data = $request->except('_token');
+        $costCount = count($data['offering_post_cost']);
+        for($i=0; $i < $costCount; $i++){
+            $dat = ProposalCostDetails::where('proposal_id', $proposal->proposal_id)
+                            ->where('proposal_cost', $data['offering_post_cost'][$i])
+                            ->where('proposal_media_cost_print', $data['offering_post_media_cost_print'][$i])
+                            ->where('proposal_media_cost_other', $data['offering_post_media_cost_other'][$i])
+                            ->where('proposal_total_offering', $data['offering_post_total_offering'][$i])
+                            ->first();
+            if($dat === null){
+                $costDetails = new ProposalCostDetails;
+                $costDetails->proposal_id = $proposal->proposal_id;
+                $costDetails->proposal_cost = $data['offering_post_cost'][$i];
+                $costDetails->proposal_media_cost_print = $data['offering_post_media_cost_print'][$i];
+                $costDetails->proposal_media_cost_other = $data['offering_post_media_cost_other'][$i];
+                $costDetails->proposal_total_offering = $data['offering_post_total_offering'][$i];
+                $costDetails->revision_no = 0;
+                $costDetails->save();
+            }
+        }
+
         $his = new ProposalHistory;
         $his->proposal_id = $id;
         $his->approval_type_id = 2;
@@ -991,7 +1024,7 @@ class ProposalController extends Controller
 
         $this->notif->remove($request->user()->user_id, 'proposalapproval', $proposal->proposal_id);
         $this->notif->remove($request->user()->user_id, 'proposalreject', $proposal->proposal_id);
-        $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'proposalapproval', 'You have to check proposal "' . $proposal->proposal_name . '".', $id);
+        //$this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'proposalapproval', 'You have to check proposal "' . $proposal->proposal_name . '".', $id);
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -1034,17 +1067,17 @@ class ProposalController extends Controller
         $client_contacts = $request->input('client_contact_id');
         foreach ($client_contacts as $value) {
             $contact = ClientContact::find($value);
-
-            $obj = new Proposal;
+           
+            $obj = new Proposal; 
             $obj->proposal_type_id = $request->input('proposal_type_id');
             $obj->proposal_name = $request->input('proposal_name');
             $obj->proposal_deadline = $request->input('proposal_deadline');
             $obj->proposal_background = '';
             $obj->proposal_budget = 0;
-            $obj->proposal_cost = $inventoryplanner->inventory_planner_cost;
-            $obj->proposal_media_cost_print = $inventoryplanner->inventory_planner_media_cost_print;
-            $obj->proposal_media_cost_other = $inventoryplanner->inventory_planner_media_cost_other;
-            $obj->proposal_total_offering = $inventoryplanner->inventory_planner_total_offering;
+            $obj->proposal_cost = 0;
+            $obj->proposal_media_cost_print = 0;
+            $obj->proposal_media_cost_other = 0;
+            $obj->proposal_total_offering = 0;
             $obj->client_id = $contact->client_id;
             $obj->brand_id = $request->input('brand_id');
             $obj->flow_no = 98;
@@ -1109,9 +1142,43 @@ class ProposalController extends Controller
             $his->created_by = $request->user()->user_id;
 
             $his->save();
-        }
+            /*
+            //Add Cost Details
+            $data = $request->except('_token');
+            $costCount = count($data['offering_post_cost']);
+            for($i=0; $i < $costCount; $i++){
+                
+                $costDetails = new InventoryPlannerCostDetails;
+                $costDetails->inventory_planner_id = $obj->inventory_planner_id;
+                $costDetails->inventory_planner_cost = $data['offering_post_cost'][$i];
+                $costDetails->inventory_planner_media_cost_print = $data['offering_post_media_cost_print'][$i];
+                $costDetails->inventory_planner_media_cost_other = $data['offering_post_media_cost_other'][$i];
+                $costDetails->inventory_planner_total_offering = $data['offering_post_total_offering'][$i];
+                $costDetails->revision_no = 0;
+                $costDetails->save();
+            }
 
-        
+            $det = InventoryPlannerCostDetails::where('inventory_planner_id', $inventoryplanner->inventory_planner_id)
+                            ->where('inventory_planner_cost', $request->costchoose)
+                            ->where('inventory_planner_media_cost_print', $request->mediacostprintchoose)
+                            ->where('inventory_planner_media_cost_other', $request->mediacostotherchoose)
+                            ->where('inventory_planner_total_offering', $request->totalofferingchoose)
+                            ->first(); 
+            */
+            $det = InventoryPlannerCostDetails::where('inventory_planner_id', $inventory_planner_id)->get();
+            $jum = count($det);
+            for($p=0;$p < $jum; $p++){
+                $offDetails = new ProposalCostDetails;
+                $offDetails->proposal_id = $obj->proposal_id;
+                $offDetails->proposal_cost = $det[$p]->inventory_planner_cost;
+                $offDetails->proposal_media_cost_print = $det[$p]->inventory_planner_media_cost_print;
+                $offDetails->proposal_media_cost_other = $det[$p]->inventory_planner_media_cost_other;
+                $offDetails->proposal_total_offering = $det[$p]->inventory_planner_total_offering;
+                $offDetails->revision_no = 0;
+                $offDetails->status = 0;
+                $offDetails->save();
+            }
+        }
 
         $request->session()->flash('status', 'Data has been saved!');
 
@@ -1152,10 +1219,18 @@ class ProposalController extends Controller
         if($request->input('status')=='1') {
             //Sold
             $proposal->proposal_status_id = 1;
+
+            $proposal->proposal_deal_cost = $request->input('proposal_deal_cost');
+            $proposal->proposal_deal_media_cost_print = $request->input('proposal_deal_media_cost_print');
+            $proposal->proposal_deal_media_cost_other = $request->input('proposal_deal_media_cost_other');
+            $proposal->proposal_total_deal = $request->input('proposal_total_deal');
+            $proposal->updated_by = $request->user()->user_id;
+            $proposal->save();
             
         }elseif($request->input('status')=='2') {
             //Not Sold
             $proposal->proposal_status_id = 2;
+            $proposal->save();
 
         }elseif($request->input('status')=='3') {
             //Revision
@@ -1170,17 +1245,39 @@ class ProposalController extends Controller
             $proposal->revision_no = $proposal->revision_no + 1;
 
             $this->notif->generate($request->user()->user_id, $proposal->pic, 'proposalapproval', 'You have to check proposal "' . $proposal->proposal_name . '".', $id);
+            $proposal->save();
         }else{
             //Nothing
         }
 
-
-        $proposal->proposal_deal_cost = $request->input('proposal_deal_cost');
-        $proposal->proposal_deal_media_cost_print = $request->input('proposal_deal_media_cost_print');
-        $proposal->proposal_deal_media_cost_other = $request->input('proposal_deal_media_cost_other');
-        $proposal->proposal_total_deal = $request->input('proposal_total_deal');
-        $proposal->updated_by = $request->user()->user_id;
-        $proposal->save();
+        if($request->proposal_deal_cost != 0 && $request->proposal_deal_media_cost_print != 0 && $request->proposal_deal_media_cost_other != 0 && $request->proposal_total_deal != 0 )
+        {
+            //Add Deal Cost Manual
+            $det = ProposalCostDetails::where('proposal_id', $proposal->proposal_id)
+                            ->where('proposal_cost', $request->proposal_deal_cost)
+                            ->where('proposal_media_cost_print', $request->proposal_deal_media_cost_print)
+                            ->where('proposal_media_cost_other', $request->proposal_deal_media_cost_other)
+                            ->where('proposal_total_offering', $request->proposal_total_deal)
+                            ->first();
+            if($det === null){
+                $dealCostManual = new ProposalCostDetails;
+                $dealCostManual->proposal_id = $proposal->proposal_id;
+                $dealCostManual->proposal_cost = $request->input('proposal_deal_cost');
+                $dealCostManual->proposal_media_cost_print = $request->input('proposal_deal_media_cost_print');
+                $dealCostManual->proposal_media_cost_other = $request->input('proposal_deal_media_cost_other');
+                $dealCostManual->proposal_total_offering = $request->input('proposal_total_deal');
+                $dealCostManual->status = 1;
+                $dealCostManual->revision_no = 0;
+                $dealCostManual->save();
+            } else {
+                if($request->input('status')=='1') {
+                    $det->status = 1;
+                } else {
+                    $det->status = 0;
+                }
+                $det->save();
+            }
+        }
 
         $his = new ProposalHistory;
         $his->proposal_id = $id;

@@ -98,7 +98,8 @@
 			                </span>
 			            @endif
 	                </div>
-	            </div><div class="form-group">
+	            </div>
+	            <div class="form-group">
 	                <label for="implementation_id" class="col-sm-2 control-label">Implementation</label>
 	                <div class="col-sm-4">
 	                    <div class="fg-line">
@@ -196,7 +197,7 @@
 	                <label for="inventory_planner_cost" class="col-sm-2 control-label">Cost</label>
 	                <div class="col-sm-4">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="inventory_planner_cost" id="inventory_planner_cost" placeholder="Cost" maxlength="20" value="{{ $inventory->inventory_planner_cost }}" required="true">
+	                        <input type="text" class="form-control input-sm" name="inventory_planner_cost" id="inventory_planner_cost" placeholder="Cost" maxlength="20" value="" required="true">
 	                    </div>
 	                    @if ($errors->has('inventory_planner_cost'))
 			                <span class="help-block">
@@ -212,7 +213,7 @@
 	                <label for="inventory_planner_media_cost_print" class="col-sm-2 control-label">Media Cost Print</label>
 	                <div class="col-sm-4">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="inventory_planner_media_cost_print" id="inventory_planner_media_cost_print" placeholder="Media Cost Print" maxlength="20" value="{{ $inventory->inventory_planner_media_cost_print }}" required="true">
+	                        <input type="text" class="form-control input-sm" name="inventory_planner_media_cost_print" id="inventory_planner_media_cost_print" placeholder="Media Cost Print" maxlength="20" value="" required="true">
 	                    </div>
 	                    @if ($errors->has('inventory_planner_media_cost_print'))
 			                <span class="help-block">
@@ -228,7 +229,7 @@
 	                <label for="inventory_planner_media_cost_other" class="col-sm-2 control-label">Media Cost Digital/Other</label>
 	                <div class="col-sm-4">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="inventory_planner_media_cost_other" id="inventory_planner_media_cost_other" placeholder="Media Cost Other" maxlength="20" value="{{ $inventory->inventory_planner_media_cost_other }}" required="true">
+	                        <input type="text" class="form-control input-sm" name="inventory_planner_media_cost_other" id="inventory_planner_media_cost_other" placeholder="Media Cost Other" maxlength="20" value="" required="true">
 	                    </div>
 	                    @if ($errors->has('inventory_planner_media_cost_other'))
 			                <span class="help-block">
@@ -244,7 +245,7 @@
 	                <label for="inventory_planner_total_offering" class="col-sm-2 control-label">Total Offering</label>
 	                <div class="col-sm-4">
 	                    <div class="fg-line">
-	                        <input type="text" class="form-control input-sm" name="inventory_planner_total_offering" id="inventory_planner_total_offering" placeholder="Total Offering" maxlength="20" value="{{ $inventory->inventory_planner_total_offering }}" required="true">
+	                        <input type="text" class="form-control input-sm" name="inventory_planner_total_offering" id="inventory_planner_total_offering" placeholder="Total Offering" maxlength="20" value="" required="true">
 	                    </div>
 	                    @if ($errors->has('inventory_planner_total_offering'))
 			                <span class="help-block">
@@ -255,6 +256,39 @@
 	                <div class="col-sm-6">
 	                	<span class="badge" id="format_inventory_planner_total_offering"></span>
 	                </div>
+	            </div>
+	            <div class="form-group">
+	            	<label for="" class="col-sm-2 control-label"></label>
+	            	<div class="col-sm-4" align="right">
+	            		<div class="fg-line">
+	            			<a href="javascript:void(0)" class="btn btn-warning waves-effect" id="btn_add_offering">ADD OFFERING</a>
+	            		</div>
+	            	</div>
+	            </div>
+	            <div class="form-group">
+	            	<div class="col-sm-offset-2 col-sm-10">
+	            		<table id="offering_post" class="table">
+	            			<thead>
+	            				<tr>
+	            					<th>Cost</th>
+	            					<th>Media Cost Print</th>
+	            					<th>Media Cost Digital/Other</th>
+	            					<th>Total Offering</th>
+	            				</tr>
+	            			</thead>
+	            			<tbody>	
+		            			@foreach($inventory->costdetails as $row)
+		            			<tr>  		
+						    		<td><input type="text" name="offering_post_cost[]" class="form-control" value="{{ $row->inventory_planner_cost }}" readonly></td>
+						    		<td><input type="text" name="offering_post_media_cost_print[]" class="form-control" value="{{ $row->inventory_planner_media_cost_print }}" readonly></td>
+						    		<td><input type="text" name="offering_post_media_cost_other[]" class="form-control" value="{{ $row->inventory_planner_media_cost_other }}" readonly></td>
+						    		<td><input type="text" name="offering_post_total_offering[]" class="form-control" value="{{ $row->inventory_planner_total_offering }}" readonly></td>
+						    		<td><a href="javascript:void(0)" class="btn btn-danger btn-offering-delete">Remove</a></td>
+						    	</tr>
+		            			@endforeach
+	            		</tbody>
+	            		</table>
+	            	</div>
 	            </div>
 	            <div class="form-group">
 	                <label for="inventory_planner_desc" class="col-sm-2 control-label">Description</label>

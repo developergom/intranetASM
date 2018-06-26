@@ -63,37 +63,53 @@
     </div>
 </div>
 <div class="form-group">
-    <label for="inventory_planner_cost" class="col-sm-2 control-label">Cost</label>
+    <label class="col-sm-2 control-label">Offering Cost</label>
     <div class="col-sm-10">
-        <div class="fg-line">
-            <span class="badge">{{ number_format($inventoryplanner->inventory_planner_cost) }}</span>
+        <div class="fg-line">      
+            <div class="table-responsive">
+                <table id="grid-data-onprocess" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th data-column-id="cost" data-order="asc"><span class="badge">Cost</span></th>
+                            <th data-column-id="media_cost_print" data-order="asc"><span class="badge">Media Cost Print</span></th>
+                            <th data-column-id="media_cost_other" data-order="asc"><span class="badge">Media Cost Other</span></th>
+                            <th data-column-id="total_offering" data-order="asc"><span class="badge">Total Offering</span></th>
+                            <!--<th data-column-id="" data-formatter="" data-sortable=""><span class="badge">Status</span></th>-->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                         
+                        $rowcount = count($inventoryplanner->costdetails);
+
+                        for($i=0; $i<$rowcount; $i++)
+                        {
+                        //echo $inventoryplanner->costdetails[$i]->inventory_planner_cost; 
+                        ?>
+                        <tr>
+                            @if($inventoryplanner->costdetails[$i]->status == "1")
+                                <th><span class="label label-success" id="cost_choose">{{ number_format($inventoryplanner->costdetails[$i]->inventory_planner_cost) }}</span></th>
+                                <th><span class="label label-success" id="media_cost_print_choose">{{ number_format($inventoryplanner->costdetails[$i]->inventory_planner_media_cost_print) }}</span></th>
+                                <th><span class="label label-success" id="media_cost_other_choose">{{ number_format($inventoryplanner->costdetails[$i]->inventory_planner_media_cost_other) }}</span></th>
+                                <th><span class="label label-success" id="total_offering_choose">{{ number_format($inventoryplanner->costdetails[$i]->inventory_planner_total_offering) }}</span></th>
+                                <!-- <th><label class="label label-success">SELECTED</label></th> -->
+                            @else
+                                <th><span id="cost_choose">{{ number_format($inventoryplanner->costdetails[$i]->inventory_planner_cost) }}</span></th>
+                                <th><span id="media_cost_print_choose">{{ number_format($inventoryplanner->costdetails[$i]->inventory_planner_media_cost_print) }}</span></th>
+                                <th><span id="media_cost_other_choose">{{ number_format($inventoryplanner->costdetails[$i]->inventory_planner_media_cost_other) }}</span></th>
+                                <th><span id="total_offering_choose">{{ number_format($inventoryplanner->costdetails[$i]->inventory_planner_total_offering) }}</span></th>
+                                <!-- <th><label class="label label-default">SELECTED</label></th> -->
+                            @endif
+                        </tr>   
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div> 
+                
         </div>
     </div>
 </div>
-<div class="form-group">
-    <label for="inventory_planner_media_cost_print" class="col-sm-2 control-label">Media Cost Print</label>
-    <div class="col-sm-10">
-        <div class="fg-line">
-            <span class="badge">{{ number_format($inventoryplanner->inventory_planner_media_cost_print) }}</span>
-        </div>
-    </div>
-</div>
-<div class="form-group">
-    <label for="inventory_planner_media_cost_other" class="col-sm-2 control-label">Media Cost Digital/Other</label>
-    <div class="col-sm-10">
-        <div class="fg-line">
-            <span class="badge">{{ number_format($inventoryplanner->inventory_planner_media_cost_other) }}</span>
-        </div>
-    </div>
-</div>
-<div class="form-group">
-    <label for="inventory_planner_total_offering" class="col-sm-2 control-label">Total Offering</label>
-    <div class="col-sm-10">
-        <div class="fg-line">
-            <span class="badge">{{ number_format($inventoryplanner->inventory_planner_total_offering) }}</span>
-        </div>
-    </div>
-</div><!-- 
+<!-- 
 <div class="form-group">
     <label for="action_plan_id" class="col-sm-2 control-label">Action Plan</label>
     <div class="col-sm-10">

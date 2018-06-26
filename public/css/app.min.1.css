@@ -3908,14 +3908,25 @@ fieldset[disabled] a.btn {
   pointer-events: none;
 }
 
+.btn-choose {
+  color: #000000;
+  background-color: #D3D3D3;
+}
+
+.btn-choose:focus,
+.btn-choose.focus {
+  color: #ffffff;
+  background-color: #3d8b40;
+  border-color: #1e441f;
+}
+
 .btn-default {
   color: #333333;
   background-color: #ffffff;
   border-color: #cccccc;
 }
 
-.btn-default:focus,
-.btn-default.focus {
+.btn-default:focus {
   color: #333333;
   background-color: #e6e6e6;
   border-color: #8c8c8c;

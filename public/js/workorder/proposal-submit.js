@@ -65,6 +65,26 @@ $(document).ready(function(){
 		$('#format_proposal_total_offering').empty().append(format_result);
 	});
 
+	//add offering
+	$('#btn_add_offering').click(function(){
+    	var tr = '';
+    	tr += '<tr>';   	
+    	tr += '<td><input type="text" name="offering_post_cost[]" class="form-control" value="' + $('#proposal_cost').val() + '" readonly></td>';
+    	tr += '<td><input type="text" name="offering_post_media_cost_print[]" class="form-control" value="' + $('#proposal_media_cost_print').val() + '" readonly></td>';
+    	tr += '<td><input type="text" name="offering_post_media_cost_other[]" class="form-control" value="' + $('#proposal_media_cost_other').val() + '" readonly></td>';
+    	tr += '<td><input type="text" name="offering_post_total_offering[]" class="form-control" value="' + $('#proposal_total_offering').val() + '" readonly></td>';
+    	tr += '<td><a href="javascript:void(0)" class="btn btn-danger btn-offering-delete">Remove</a></td>';
+    	tr += '</tr>';
+    	$('#offering_post tbody').append(tr);
+    });
+
+    //delete offering
+    $('body').on('click','.btn-offering-delete', function(e){
+		e.preventDefault();
+		$(this).closest('tr').remove();
+		$(this).closest('headInfo').remove();
+	});
+
 	function getPreviousUploaded() {
 		$('#uploadFileArea').empty();
 

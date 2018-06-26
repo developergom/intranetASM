@@ -82,6 +82,16 @@ class Proposal extends Model
 		return $this->belongsToMany('App\Media', 'proposal_media');
 	}
 
+	public function costdetails_proposal()
+	{
+		return $this->hasMany('App\ProposalCostDetails', 'proposal_id');
+	}
+
+	public function costdetails_proposal_auto()
+	{
+		return $this->belongsToMany('App\ProposalCostDetails', 'proposal_cost_details');
+	}
+
 	public function client_contacts()
 	{
 		return $this->belongsToMany('App\ClientContact', 'proposal_client_contact');
