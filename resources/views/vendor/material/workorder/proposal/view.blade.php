@@ -40,29 +40,63 @@
         </div>
     </div>
 </div>
-@if($proposal->proposal_total_offering!=0)
+@if($proposal->proposal_total_offering==0)
 <hr/>
+
 <div class="form-group">
-    <label for="proposal_cost" class="col-sm-2 control-label">Cost</label>
-    <div class="col-sm-2">
-        <span class="badge">{{ number_format($proposal->proposal_cost) }}</span>
-    </div>
-    <label for="proposal_media_cost_print" class="col-sm-2 control-label">Media Cost Print</label>
-    <div class="col-sm-2">
-        <span class="badge">{{ number_format($proposal->proposal_media_cost_print) }}</span>
-    </div>
-    <label for="proposal_media_cost_other" class="col-sm-2 control-label">Media Cost Other</label>
-    <div class="col-sm-2">
-        <span class="badge">{{ number_format($proposal->proposal_media_cost_other) }}</span>
-    </div>
-</div>
-<div class="form-group">
-    <label for="proposal_total_offering" class="col-sm-2 control-label">Total Offering</label>
-    <div class="col-sm-2">
-        <span class="badge">{{ number_format($proposal->proposal_total_offering) }}</span>
+    <label class="col-sm-2 control-label">Offering Cost</label>
+    <div class="col-sm-10">
+        <div class="fg-line">        
+            <div class="table-responsive">
+                <table id="grid-data-onprocess" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th data-column-id="cost" data-order="asc"><span class="badge">Cost</span></th>
+                            <th data-column-id="media_cost_print" data-order="asc"><span class="badge">Media Cost Print</span></th>
+                            <th data-column-id="media_cost_other" data-order="asc"><span class="badge">Media Cost Other</span></th>
+                            <th data-column-id="total_offering" data-order="asc"><span class="badge">Total Offering</span></th>
+                            <th data-column-id="" data-formatter="" data-sortable=""><span class="badge">Status</span></th>
+                        </tr>        
+                    </thead>
+                    <tbody>
+                        <?php 
+                        $rowcount = count($proposal->costdetails_proposal);
+                        ?>
+                        @if($rowcount == 0)
+                            <tr>
+                                <th colspan="5"><center><label style="font-size: 14px;">Cost Not Set</label></center></th>
+                            </tr>
+                        @else
+                            <?php
+                            for($i=0; $i<$rowcount; $i++)
+                            {
+                            //echo $inventoryplanner->costdetails[$i]->inventory_planner_cost; 
+                            ?>
+                            <tr>
+                                @if($proposal->costdetails_proposal[$i]->status == "1")
+                                    <th><span class="badge bgm-green" id="cost_choose">{{ number_format($proposal->costdetails_proposal[$i]->proposal_cost) }}</span></th>
+                                    <th><span class="badge bgm-green" id="media_cost_print_choose">{{ number_format($proposal->costdetails_proposal[$i]->proposal_media_cost_print) }}</span></th>
+                                    <th><span class="badge bgm-green" id="media_cost_other_choose">{{ number_format($proposal->costdetails_proposal[$i]->proposal_media_cost_other) }}</span></th>
+                                    <th><span class="badge bgm-green" id="total_offering_choose">{{ number_format($proposal->costdetails_proposal[$i]->proposal_total_offering) }}</span></th>
+                                    <th><label class="badge bgm-green">SELECTED</label></th>
+                                @else
+                                    <th><span id="cost_choose">{{ number_format($proposal->costdetails_proposal[$i]->proposal_cost) }}</span></th>
+                                    <th><span id="media_cost_print_choose">{{ number_format($proposal->costdetails_proposal[$i]->proposal_media_cost_print) }}</span></th>
+                                    <th><span id="media_cost_other_choose">{{ number_format($proposal->costdetails_proposal[$i]->proposal_media_cost_other) }}</span></th>
+                                    <th><span id="total_offering_choose">{{ number_format($proposal->costdetails_proposal[$i]->proposal_total_offering) }}</span></th>
+                                    <th><label class="badge bgm-gray">UNSELECTED</label></th>
+                                @endif
+                            </tr>   
+                            <?php } ?>
+                        @endif
+                    </tbody>
+                </table>
+            </div>  
+        </div>
     </div>
 </div>
 @endif
+<!--
 @if($proposal->proposal_total_deal!=0)
 <hr/>
 <div class="form-group">
@@ -86,6 +120,7 @@
     </div>
 </div>
 @endif
+-->
 <hr/>
 <div class="form-group">
     <label for="client_id" class="col-sm-2 control-label">Client</label>

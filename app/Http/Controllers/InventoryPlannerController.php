@@ -35,6 +35,7 @@ use App\PriceType;
 use App\ProposalType;
 use App\SellPeriod;
 use App\User;
+use App\InventoryPlannerCostDetails;
 
 use App\Ibrol\Libraries\FlowLibrary;
 use App\Ibrol\Libraries\NotificationLibrary;
@@ -111,10 +112,14 @@ class InventoryPlannerController extends Controller
         	'inventory_source_id' => 'required',
             'inventory_planner_title' => 'required|max:100',
             'inventory_planner_desc' => 'required',
-            'inventory_planner_cost' => 'required|numeric',
+            /*'inventory_planner_cost' => 'required|numeric',
             'inventory_planner_media_cost_print' => 'required|numeric',
             'inventory_planner_media_cost_other' => 'required|numeric',
-            'inventory_planner_total_offering' => 'required|numeric',
+            'inventory_planner_total_offering' => 'required|numeric',*/
+            'offering_post_cost[]' => 'array',
+            'offering_post_media_cost_print[]' => 'array',
+            'offering_post_media_cost_other[]' => 'array',
+            'offering_post_total_offering[]' => 'array',
             'implementation_post_id[]' => 'array',
             'implementation_post_year[]' => 'array',
             'sell_period_post_id[]' => 'array',
@@ -124,23 +129,37 @@ class InventoryPlannerController extends Controller
 
         $flow = new FlowLibrary;
         $nextFlow = $flow->getNextFlow($this->flow_group_id, 1, $request->user()->user_id);
-
+        
         $obj = new InventoryPlanner;
         $obj->proposal_type_id = $request->input('proposal_type_id');
         $obj->inventory_source_id = $request->input('inventory_source_id');
         $obj->inventory_planner_title = $request->input('inventory_planner_title');
         $obj->inventory_planner_desc = $request->input('inventory_planner_desc');
-        $obj->inventory_planner_cost = $request->input('inventory_planner_cost');
-        $obj->inventory_planner_media_cost_print = $request->input('inventory_planner_media_cost_print');
-        $obj->inventory_planner_media_cost_other = $request->input('inventory_planner_media_cost_other');
-        $obj->inventory_planner_total_offering = $request->input('inventory_planner_total_offering');
+        $obj->inventory_planner_cost = 0;
+        $obj->inventory_planner_media_cost_print = 0;
+        $obj->inventory_planner_media_cost_other = 0;
+        $obj->inventory_planner_total_offering = 0;
         $obj->flow_no = $nextFlow['flow_no'];
         $obj->current_user = $nextFlow['current_user'];
         $obj->revision_no = 0;
         $obj->active = '1';
-        $obj->created_by = $request->user()->user_id;
-
-        $obj->save();
+        $obj->created_by = $request->user()->user_id; 
+        $obj->save(); 
+        
+        //Saving Cost Details
+        $data = $request->except('_token');
+        $costCount = count($data['offering_post_cost']);
+        for($i=0; $i < $costCount; $i++){
+ 
+            $costDetails = new InventoryPlannerCostDetails;
+            $costDetails->inventory_planner_id = $obj->inventory_planner_id;
+            $costDetails->inventory_planner_cost = $data['offering_post_cost'][$i];
+            $costDetails->inventory_planner_media_cost_print = $data['offering_post_media_cost_print'][$i];
+            $costDetails->inventory_planner_media_cost_other = $data['offering_post_media_cost_other'][$i];
+            $costDetails->inventory_planner_total_offering = $data['offering_post_total_offering'][$i];
+            $costDetails->revision_no = 0;
+            $costDetails->save();
+        }
 
         //file saving
         $fileArray = array();
@@ -214,6 +233,8 @@ class InventoryPlannerController extends Controller
             InventoryPlanner::find($obj->inventory_planner_id)->medias()->sync($request->input('media_id'));
         }
 
+        
+
         $his = new InventoryPlannerHistory;
         $his->inventory_planner_id = $obj->inventory_planner_id;
         $his->approval_type_id = 1;
@@ -266,6 +287,7 @@ class InventoryPlannerController extends Controller
                                                     'inventorysource', 
                                                     'implementations',
                                                     'sellperiods',
+                                                    'costdetails',
                                                     'medias',
                                                     'actionplans',
                                                     'eventplans',
@@ -282,7 +304,7 @@ class InventoryPlannerController extends Controller
         $data['medias'] = Media::whereHas('users', function($query) use($request){
                                     $query->where('users_medias.user_id', '=', $request->user()->user_id);
                                 })->where('medias.active', '1')->orderBy('media_name')->get();
-
+        //$data['cost_details'] = InventoryPlannerCostDetails::->orderBy('inventory_planner_cost')->get();
         $data['advertise_sizes'] = AdvertiseSize::where('active', '1')->orderBy('advertise_size_name')->get();
         $data['advertise_positions'] = AdvertisePosition::where('active', '1')->orderBy('advertise_position_name')->get();
         $data['papers'] = Paper::where('active', '1')->orderBy('paper_name')->get();
@@ -299,10 +321,15 @@ class InventoryPlannerController extends Controller
             'inventory_source_id' => 'required',
             'inventory_planner_title' => 'required|max:100',
             'inventory_planner_desc' => 'required',
-            'inventory_planner_cost' => 'required|numeric',
-            'inventory_planner_media_cost_print' => 'required|numeric',
-            'inventory_planner_media_cost_other' => 'required|numeric',
-            'inventory_planner_total_offering' => 'required|numeric',
+            //'inventory_planner_cost' => 'required|numeric',
+            //'inventory_planner_media_cost_print' => 'required|numeric',
+            //'inventory_planner_media_cost_other' => 'required|numeric',
+            //'inventory_planner_total_offering' => 'required|numeric',
+            'offering_cost_details_id[]' => 'array',
+            'offering_post_cost[]' => 'array',
+            'offering_post_media_cost_print[]' => 'array',
+            'offering_post_media_cost_other[]' => 'array',
+            'offering_post_total_offering[]' => 'array',
             'implementation_post_id[]' => 'array',
             'implementation_post_year[]' => 'array',
             'sell_period_post_id[]' => 'array',
@@ -317,10 +344,10 @@ class InventoryPlannerController extends Controller
         $obj->inventory_source_id = $request->input('inventory_source_id');
         $obj->inventory_planner_title = $request->input('inventory_planner_title');
         $obj->inventory_planner_desc = $request->input('inventory_planner_desc');
-        $obj->inventory_planner_cost = $request->input('inventory_planner_cost');
-        $obj->inventory_planner_media_cost_print = $request->input('inventory_planner_media_cost_print');
-        $obj->inventory_planner_media_cost_other = $request->input('inventory_planner_media_cost_other');
-        $obj->inventory_planner_total_offering = $request->input('inventory_planner_total_offering');
+        $obj->inventory_planner_cost = 0;
+        $obj->inventory_planner_media_cost_print = 0;
+        $obj->inventory_planner_media_cost_other = 0;
+        $obj->inventory_planner_total_offering = 0;
         $obj->flow_no = $nextFlow['flow_no'];
         $obj->current_user = $nextFlow['current_user'];
         $obj->updated_by = $request->user()->user_id;
@@ -400,6 +427,43 @@ class InventoryPlannerController extends Controller
             InventoryPlanner::find($obj->inventory_planner_id)->medias()->sync($request->input('media_id'));
         }
 
+
+        if(!empty($request->input('offering_cost_details_id'))){
+            InventoryPlanner::find($obj->inventory_planner_id)->costdetails_auto()->sync($request->input('offering_cost_details_id'));
+        }
+        
+        /*
+
+        $ids = explode(",", $id);
+        // call delete on the query builder (no get())
+        InventoryPlannerCostDetails::whereIn('inventory_planner_id', $ids)->delete();   
+        */
+       
+        
+        //Cost Details
+        $data = $request->except('_token');
+        $costCount = count($data['offering_post_cost']);
+        for($i=0; $i < $costCount; $i++)
+        {
+            $dat = InventoryPlannerCostDetails::where('inventory_planner_id', $obj->inventory_planner_id)
+                            ->where('inventory_planner_cost', $data['offering_post_cost'][$i])
+                            ->where('inventory_planner_media_cost_print', $data['offering_post_media_cost_print'][$i])
+                            ->where('inventory_planner_media_cost_other', $data['offering_post_media_cost_other'][$i])
+                            ->where('inventory_planner_total_offering', $data['offering_post_total_offering'][$i])
+                            ->first();
+            if($dat === null){
+                $costDetails = new InventoryPlannerCostDetails;
+                $costDetails->inventory_planner_id = $obj->inventory_planner_id;
+                $costDetails->inventory_planner_cost = $data['offering_post_cost'][$i];
+                $costDetails->inventory_planner_media_cost_print = $data['offering_post_media_cost_print'][$i];
+                $costDetails->inventory_planner_media_cost_other = $data['offering_post_media_cost_other'][$i];
+                $costDetails->inventory_planner_total_offering = $data['offering_post_total_offering'][$i];
+                $costDetails->revision_no = 0;
+                $costDetails->save();
+            } 
+        }
+
+        
         $his = new InventoryPlannerHistory;
         $his->inventory_planner_id = $obj->inventory_planner_id;
         $his->approval_type_id = 1;
@@ -408,7 +472,7 @@ class InventoryPlannerController extends Controller
         $his->created_by = $request->user()->user_id;
 
         $his->save();
-
+        
         $this->notif->remove($request->user()->user_id, 'inventoryplannerreject', $obj->inventory_planner_id);
         $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'inventoryplannerapproval', 'Please check Inventory Planner "' . $obj->inventory_planner_title . '"', $obj->inventory_planner_id);
 
@@ -451,6 +515,7 @@ class InventoryPlannerController extends Controller
                                                         'inventorysource', 
                                                         'implementations',
                                                         'sellperiods',
+                                                        'costdetails',
                                                         'medias',
                                                         'actionplans',
                                                         'eventplans',
@@ -469,6 +534,11 @@ class InventoryPlannerController extends Controller
         $this->validate($request, [
             'approval' => 'required',
             'comment' => 'required',
+            //'costchoose' => 'required',
+            //'mediacostprintchoose' => 'required',
+            //'mediacostotherchoose' => 'required',
+            //'totalofferingchoose' => 'required'
+            //'status_cost' => 'required'
         ]);
 
         if($request->input('approval') == '1') 
@@ -493,6 +563,30 @@ class InventoryPlannerController extends Controller
 
             $his->save();
 
+            /*
+            //Update Status
+            $det = InventoryPlannerCostDetails::where('inventory_planner_id', $inventoryplanner->inventory_planner_id)
+                            ->where('inventory_planner_cost', $request->costchoose)
+                            ->where('inventory_planner_media_cost_print', $request->mediacostprintchoose)
+                            ->where('inventory_planner_media_cost_other', $request->mediacostotherchoose)
+                            ->where('inventory_planner_total_offering', $request->totalofferingchoose)
+                            ->first();
+            if($det === null){
+                $dealCostManual = new InventoryPlannerCostDetails;
+                $dealCostManual->inventory_planner_id = $inventoryplanner->inventory_planner_id;
+                $dealCostManual->inventory_planner_cost = $request->input('costchoose');
+                $dealCostManual->inventory_planner_media_cost_print = $request->input('mediacostprintchoose');
+                $dealCostManual->inventory_planner_media_cost_other = $request->input('mediacostotherchoose');
+                $dealCostManual->inventory_planner_total_offering = $request->input('totalofferingchoose');
+                $dealCostManual->status = 1;
+                $dealCostManual->revision_no = 0;
+                $dealCostManual->save();
+            } else {
+                $det->status = 1;
+                $det->save();
+            }
+            */
+
             $this->notif->remove($request->user()->user_id, 'inventoryplannerapproval', $inventoryplanner->inventory_planner_id);
             $this->notif->generate($request->user()->user_id, $nextFlow['current_user'], 'inventoryplannerfinished', 'Inventory Planner "' . $inventoryplanner->inventory_planner_title . '" has been approved.', $id);
 
@@ -500,6 +594,7 @@ class InventoryPlannerController extends Controller
 
         }else{
             //reject
+
             $inventoryplanner = InventoryPlanner::find($id);
 
             $flow = new FlowLibrary;
@@ -510,15 +605,20 @@ class InventoryPlannerController extends Controller
             $inventoryplanner->current_user = $prevFlow['current_user'];
             $inventoryplanner->updated_by = $request->user()->user_id;
             $inventoryplanner->save();
-
+            
             $his = new InventoryPlannerHistory;
             $his->inventory_planner_id = $id;
             $his->approval_type_id = 3;
             $his->inventory_planner_history_text = $request->input('comment');
             $his->active = '1';
             $his->created_by = $request->user()->user_id;
-
             $his->save();
+            
+            $obj = InventoryPlanner::find($id);
+            $obj->inventory_source_id = $request->input('inventory_source_id');
+            $obj->inventory_planner_title = $request->input('inventory_planner_title');
+            $obj->inventory_planner_desc = $request->input('inventory_planner_desc');
+            
 
             $this->notif->remove($request->user()->user_id, 'inventoryplannerapproval', $inventoryplanner->inventory_planner_id);
             $this->notif->generate($request->user()->user_id, $prevFlow['current_user'], 'inventoryplannerreject', 'Inventory Planner "' . $inventoryplanner->inventory_planner_title . '" rejected.', $id);
@@ -1525,10 +1625,14 @@ class InventoryPlannerController extends Controller
             'inventory_source_id' => 'required',
             'inventory_planner_title' => 'required|max:100',
             'inventory_planner_desc' => 'required',
-            'inventory_planner_cost' => 'required|numeric',
-            'inventory_planner_media_cost_print' => 'required|numeric',
-            'inventory_planner_media_cost_other' => 'required|numeric',
-            'inventory_planner_total_offering' => 'required|numeric',
+            //'inventory_planner_cost' => 'required|numeric',
+            //'inventory_planner_media_cost_print' => 'required|numeric',
+            //'inventory_planner_media_cost_other' => 'required|numeric',
+            //'inventory_planner_total_offering' => 'required|numeric',
+            'offering_post_cost[]' => 'array',
+            'offering_post_media_cost_print[]' => 'array',
+            'offering_post_media_cost_other[]' => 'array',
+            'offering_post_total_offering[]' => 'array',
             'implementation_post_id[]' => 'array',
             'implementation_post_year[]' => 'array',
             'sell_period_post_id[]' => 'array',
@@ -1541,10 +1645,10 @@ class InventoryPlannerController extends Controller
         $obj->inventory_source_id = $request->input('inventory_source_id');
         $obj->inventory_planner_title = $request->input('inventory_planner_title');
         $obj->inventory_planner_desc = $request->input('inventory_planner_desc');
-        $obj->inventory_planner_cost = $request->input('inventory_planner_cost');
-        $obj->inventory_planner_media_cost_print = $request->input('inventory_planner_media_cost_print');
-        $obj->inventory_planner_media_cost_other = $request->input('inventory_planner_media_cost_other');
-        $obj->inventory_planner_total_offering = $request->input('inventory_planner_total_offering');
+        $obj->inventory_planner_cost = 0; //$request->input('inventory_planner_cost');
+        $obj->inventory_planner_media_cost_print = 0; // $request->input('inventory_planner_media_cost_print');
+        $obj->inventory_planner_media_cost_other = 0; // $request->input('inventory_planner_media_cost_other');
+        $obj->inventory_planner_total_offering = 0; // $request->input('inventory_planner_total_offering');
         $obj->revision_no = $obj->revision_no + 1;
         $obj->updated_by = $request->user()->user_id;
 
@@ -1621,6 +1725,41 @@ class InventoryPlannerController extends Controller
 
         if(!empty($request->input('media_id'))) {
             InventoryPlanner::find($obj->inventory_planner_id)->medias()->sync($request->input('media_id'));
+        }
+
+        if(!empty($request->input('offering_cost_details_id'))){
+            InventoryPlanner::find($obj->inventory_planner_id)->costdetails_auto()->sync($request->input('offering_cost_details_id'));
+        }
+        
+        /*
+
+        $ids = explode(",", $id);
+        // call delete on the query builder (no get())
+        InventoryPlannerCostDetails::whereIn('inventory_planner_id', $ids)->delete();   
+        */
+       
+        
+        //Cost Details
+        $data = $request->except('_token');
+        $costCount = count($data['offering_post_cost']);
+        for($i=0; $i < $costCount; $i++)
+        {
+            $dat = InventoryPlannerCostDetails::where('inventory_planner_id', $obj->inventory_planner_id)
+                            ->where('inventory_planner_cost', $data['offering_post_cost'][$i])
+                            ->where('inventory_planner_media_cost_print', $data['offering_post_media_cost_print'][$i])
+                            ->where('inventory_planner_media_cost_other', $data['offering_post_media_cost_other'][$i])
+                            ->where('inventory_planner_total_offering', $data['offering_post_total_offering'][$i])
+                            ->first();
+            if($dat === null){
+                $costDetails = new InventoryPlannerCostDetails;
+                $costDetails->inventory_planner_id = $obj->inventory_planner_id;
+                $costDetails->inventory_planner_cost = $data['offering_post_cost'][$i];
+                $costDetails->inventory_planner_media_cost_print = $data['offering_post_media_cost_print'][$i];
+                $costDetails->inventory_planner_media_cost_other = $data['offering_post_media_cost_other'][$i];
+                $costDetails->inventory_planner_total_offering = $data['offering_post_total_offering'][$i];
+                $costDetails->revision_no = 0;
+                $costDetails->save();
+            } 
         }
 
         $his = new InventoryPlannerHistory;

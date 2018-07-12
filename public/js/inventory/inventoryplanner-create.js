@@ -20,8 +20,11 @@ var total_value = 0;
 var saving_value = 0;
 
 $(document).ready(function(){
+	//if (document.getElementById('DropzoneElementId')) {
+	//  var myDropzone = new Dropzone("div#DropzoneElementId", { url: "/dropzone/uploadFiles"});
+	  
 	Dropzone.autoDiscover = false;
-	
+
 	var myToken = $('meta[name="csrf-token"]').attr('content');
 	var myDropzone = new Dropzone("div#uploadFileArea", {
 		url: base_url + "/dropzone/uploadFiles",
@@ -197,6 +200,51 @@ $(document).ready(function(){
 		e.preventDefault();
 		$(this).closest('tr').remove();
 	});
+
+	//add offering
+	$('#btn_add_offering').click(function(){
+    	var tr = '';
+    	tr += '<tr>';   	
+    	tr += '<td><span>' + $('#format_inventory_planner_cost').text() + '</span><input type="hidden" id="offering_post_cost" name="offering_post_cost[]" class="form-control" value="' + $('#inventory_planner_cost').val() + '" readonly></td>';
+    	tr += '<td><span>' + $('#format_inventory_planner_media_cost_print').text() + '</span><input type="hidden" name="offering_post_media_cost_print[]" class="form-control" value="' + $('#inventory_planner_media_cost_print').val() + '" readonly></td>';
+    	tr += '<td><span>' + $('#format_inventory_planner_media_cost_other').text() + '</span><input type="hidden" name="offering_post_media_cost_other[]" class="form-control" value="' + $('#inventory_planner_media_cost_other').val() + '" readonly></td>';
+    	tr += '<td><span>' + $('#format_inventory_planner_total_offering').text() + '</span><input type="hidden" name="offering_post_total_offering[]" class="form-control" value="' + $('#inventory_planner_total_offering').val() + '" readonly></td>';
+    	tr += '<td><a href="javascript:void(0)" class="btn btn-danger btn-offering-delete">Remove</a></td>';
+    	tr += '</tr>';
+    	$('#offering_post tbody').append(tr);
+
+    	document.getElementById("inventory_planner_cost").value = '';
+    	document.getElementById("inventory_planner_media_cost_print").value = '';
+    	document.getElementById("inventory_planner_media_cost_other").value = '';
+    	document.getElementById("inventory_planner_total_offering").value = '';
+    	
+    	$("#format_inventory_planner_cost").html('');
+    	$("#format_inventory_planner_media_cost_print").html('');
+    	$("#format_inventory_planner_media_cost_other").html('');
+    	$("#format_inventory_planner_total_offering").html('');
+
+    	//var mysave = $('#format_inventory_planner_cost').html();
+   		//$("#offering_post_cost[]").val(mysave);
+    });
+
+    //delete offering
+    $('body').on('click','.btn-offering-delete', function(e){
+		e.preventDefault();
+		$(this).closest('tr').remove();
+		$(this).closest('headInfo').remove();
+	});
+
+	$('body').on('click','.btn-offering-delete-edit', function(e){
+		e.preventDefault();
+		$(this).closest('tr').remove();
+		$(this).closest('headInfo').remove();
+
+	});
+
+	//offering cost format
+	//formatMoney('#offering_post_cost', '#format_offering_cost')
+
+	
 
     //cost number format
 	formatMoney('#inventory_planner_cost', '#format_inventory_planner_cost');
@@ -1258,4 +1306,5 @@ $(document).ready(function(){
 	}
 
 	function convertNumber(value) { return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."); }
+//}
 });
