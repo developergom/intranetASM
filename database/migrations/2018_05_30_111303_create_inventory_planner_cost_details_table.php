@@ -16,7 +16,7 @@ class CreateInventoryPlannerCostDetailsTable extends Migration
             Schema::create('inventory_planner_cost_details', function(Blueprint $table){
                 $table->integer('inventory_planner_id');
                 $table->double('inventory_planner_cost');
-                $table->double('inventory_planner_media_cost');
+                $table->double('inventory_planner_media_cost_print');
                 $table->double('inventory_planner_media_cost_other');
                 $table->double('inventory_planner_total_offering');
                 $table->enum('status', ['0', '1'])->default('0');
