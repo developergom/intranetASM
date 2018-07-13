@@ -1211,7 +1211,7 @@ class ProposalController extends Controller
             'proposal_deal_cost' => 'required|numeric',
             'proposal_deal_media_cost_print' => 'required|numeric',
             'proposal_deal_media_cost_other' => 'required|numeric',
-            'proposal_total_deal' => 'required|numeric'
+            'proposal_total_deal' => 'required|numeric',
         ]);
 
         $proposal = Proposal::find($id);
@@ -1226,6 +1226,40 @@ class ProposalController extends Controller
             $proposal->proposal_total_deal = $request->input('proposal_total_deal');
             $proposal->updated_by = $request->user()->user_id;
             $proposal->save();
+
+            /*if($request->proposal_deal_cost != 0 && $request->proposal_deal_media_cost_print != 0 && $request->proposal_deal_media_cost_other != 0 && $request->proposal_total_deal != 0 )
+        {*/
+            //Add Deal Cost Manual
+            $det = ProposalCostDetails::where('proposal_id', $proposal->proposal_id)
+                            ->where('proposal_cost', $request->input('proposal_deal_cost'))
+                            ->where('proposal_media_cost_print', $request->input('proposal_deal_media_cost_print'))
+                            ->where('proposal_media_cost_other', $request->input('proposal_deal_media_cost_other'))
+                            ->where('proposal_total_offering', $request->input('proposal_total_deal'))
+                            ->first();
+
+            if($det === null){
+                $dealCostManual = new ProposalCostDetails;
+                $dealCostManual->proposal_id = $proposal->proposal_id;
+                $dealCostManual->proposal_cost = $request->input('proposal_deal_cost');
+                $dealCostManual->proposal_media_cost_print = $request->input('proposal_deal_media_cost_print');
+                $dealCostManual->proposal_media_cost_other = $request->input('proposal_deal_media_cost_other');
+                $dealCostManual->proposal_total_offering = $request->input('proposal_total_deal');
+                $dealCostManual->status = 1;
+                $dealCostManual->revision_no = 0;
+                $dealCostManual->save();
+                 
+            } else {
+                
+                if($request->input('status')=='1') {
+                    $det->status = 1;
+                    
+                } else {
+                    $det->status = 0;  
+                                 
+                }
+                $det->save(); 
+            }
+       // }
             
         }elseif($request->input('status')=='2') {
             //Not Sold
@@ -1250,34 +1284,7 @@ class ProposalController extends Controller
             //Nothing
         }
 
-        if($request->proposal_deal_cost != 0 && $request->proposal_deal_media_cost_print != 0 && $request->proposal_deal_media_cost_other != 0 && $request->proposal_total_deal != 0 )
-        {
-            //Add Deal Cost Manual
-            $det = ProposalCostDetails::where('proposal_id', $proposal->proposal_id)
-                            ->where('proposal_cost', $request->proposal_deal_cost)
-                            ->where('proposal_media_cost_print', $request->proposal_deal_media_cost_print)
-                            ->where('proposal_media_cost_other', $request->proposal_deal_media_cost_other)
-                            ->where('proposal_total_offering', $request->proposal_total_deal)
-                            ->first();
-            if($det === null){
-                $dealCostManual = new ProposalCostDetails;
-                $dealCostManual->proposal_id = $proposal->proposal_id;
-                $dealCostManual->proposal_cost = $request->input('proposal_deal_cost');
-                $dealCostManual->proposal_media_cost_print = $request->input('proposal_deal_media_cost_print');
-                $dealCostManual->proposal_media_cost_other = $request->input('proposal_deal_media_cost_other');
-                $dealCostManual->proposal_total_offering = $request->input('proposal_total_deal');
-                $dealCostManual->status = 1;
-                $dealCostManual->revision_no = 0;
-                $dealCostManual->save();
-            } else {
-                if($request->input('status')=='1') {
-                    $det->status = 1;
-                } else {
-                    $det->status = 0;
-                }
-                $det->save();
-            }
-        }
+        
 
         $his = new ProposalHistory;
         $his->proposal_id = $id;

@@ -335,7 +335,7 @@
 				                        //echo $inventoryplanner->costdetails[$i]->inventory_planner_cost; 
 				                        ?>
 				                        <tr>
-
+				                        	<th><span id="status_cost">{{ $proposal->costdetails_proposal[$i]->status }}</span></th>
 				                            <th><span id="cost_choose">{{ number_format($proposal->costdetails_proposal[$i]->proposal_cost) }}</span></th>
 				                            <th><span id="media_cost_print_choose">{{ number_format($proposal->costdetails_proposal[$i]->proposal_media_cost_print) }}</span></th>
 				                            <th><span id="media_cost_other_choose">{{ number_format($proposal->costdetails_proposal[$i]->proposal_media_cost_other) }}</span></th>
@@ -343,7 +343,8 @@
 				                            <th><a href="javascript:void(0)" class="btn btn-choose waves-effect" id="" onclick="myFunction({{ $proposal->costdetails_proposal[$i]->proposal_cost }}, {{ $proposal->costdetails_proposal[$i]->proposal_media_cost_print}},
 				                                        {{ $proposal->costdetails_proposal[$i]->proposal_media_cost_other }},
 				                                        {{ $proposal->costdetails_proposal[$i]->proposal_total_offering }}, 
-				                                        {{ $proposal->costdetails_proposal[$i]->proposal_cost_details_id }}
+				                                        {{ $proposal->costdetails_proposal[$i]->proposal_cost_details_id }},
+				                                        {{ $proposal->costdetails_proposal[$i]->status }}
 				                                        )">CHOOSE</a>
 				                                        </th>
 				                            <th><input type="hidden" name="" id="cost_details_id" value="{{ $proposal ->costdetails_proposal[$i]->proposal_cost_details_id }}"></th>
@@ -414,8 +415,9 @@
 	                <div class="col-sm-4">
 	                    <div class="fg-line">
 	                        <input type="text" class="form-control input-sm" name="proposal_total_deal" id="proposal_total_deal" placeholder="Total Deal" maxlength="20" value="{{ old('proposal_total_deal') }}" required="true" readonly="">
-	                        <input type="hidden" id="proposal_cost_details_id_deal" class="form-control input-sm" value="{{ $proposal->proposal_cost_details_id }}" readonly="">
-	                    </div>
+	                        <input type="hidden" id="proposal_cost_details_id_deal" class="form-control input-sm" value="" readonly="">
+	                        <input type="hidden" id="status_cost_deal" class="form-control input-sm" value="" readonly="">
+	                    </div>	
 	                    @if ($errors->has('proposal_total_deal'))
 			                <span class="help-block">
 			                    <strong>{{ $errors->first('proposal_total_deal') }}</strong>
