@@ -13,6 +13,7 @@ use DB;
 use Gate;
 use Mail;
 use Log;
+use App\AgendaType;
 
 use Carbon\Carbon;
 
@@ -23,6 +24,23 @@ class ReportController extends Controller
     public function index()
     {
 
+    }
+
+    public function agenda(){
+        if(Gate::denies('Agenda Report-Read')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = array();
+
+        $year = date('Y');
+
+        $user_library = new UserLibrary();
+        $data['sales_agent'] = $user_library->getSalesAgents();
+
+        $data['agenda_type'] = AgendaType::where('active', '1')->orderBy('agenda_type_name')->get();
+
+        return view('vendor.material.report.agenda.index', $data);
     }
 
     public function inventory() {
@@ -536,5 +554,58 @@ class ReportController extends Controller
         $result = DB::select($q);
 
         return $result[0]->total;
+    }
+
+    public function apiGenerateAgendaReport(Request $request) {
+        $sales_agents = $request->input('sales_agents');
+        $agenda_types = $request->input('agenda_types');
+        $agenda_start_date = $request->input('agenda_start_date');
+        $agenda_end_date = $request->input('agenda_end_date');
+
+        $q = "SELECT 
+                    a.agenda_id, 
+                    b.agenda_type_name, 
+                    a.agenda_date, 
+                    a.agenda_desc, 
+                    a.agenda_is_report, 
+                    a.agenda_meeting_time, 
+                    a.agenda_report_time, 
+                    a.agenda_report_desc, 
+                    c.user_firstname, 
+                    c.user_lastname, 
+                    e.client_name 
+                FROM agendas a 
+                JOIN agenda_types b ON b.agenda_type_id = a.agenda_type_id
+                JOIN users c ON c.user_id = a.created_by
+                JOIN agendas_clients d ON d.agenda_id = a.agenda_id
+                JOIN clients e ON e.client_id = d.client_id
+                WHERE
+                    a.active = '1'";
+
+
+        if($sales_agents != "") {
+            $q .= " AND a.created_by IN (" . implode(', ', array_map(null, $sales_agents)) . ")";
+        }
+
+        if($agenda_types != "") {
+            $q .= " AND b.agenda_type_id IN (" . implode(', ', array_map(null, $agenda_types)) . ")";
+        }
+
+        if($agenda_start_date != "") {
+            $agenda_start_date = Carbon::createFromFormat('d/m/Y', $request->input('agenda_start_date'))->toDateString();
+            $agenda_end_date = Carbon::createFromFormat('d/m/Y', $request->input('agenda_end_date'))->toDateString();
+
+            $q .= " AND a.agenda_date BETWEEN '" . $agenda_start_date . "' AND '" . $agenda_end_date . "'";
+        }
+
+        $q .= ' ORDER BY c.user_firstname, a.agenda_date';
+
+        $result = DB::select($q);
+
+        $data = array();
+
+        $data['result'] = $result;
+
+        return response()->json($data);
     }
 }

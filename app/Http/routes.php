@@ -546,6 +546,10 @@ Route::group(['middleware' => ['auth', 'menu']], function() {
         //Report Proposal
         Route::get('proposal', 'ReportController@proposal');
         Route::post('api/generateProposalReport', 'ReportController@apiGenerateProposalReport');
+
+        //Report Agenda
+        Route::get('agenda', 'ReportController@agenda');
+        Route::post('api/generateAgendaReport', 'ReportController@apiGenerateAgendaReport');
     });
 
     Route::group(['prefix' => 'grid'], function() {
